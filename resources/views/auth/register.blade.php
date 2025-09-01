@@ -1,115 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <style>
-        *{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: 1s ease-in-out;
-        }
-        body { 
-            font-family: Arial, sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; 
-        }
-        h1 {
-             text-align: center; color: #333; 
-            }
-     
-        form {
-             background: #f9f9f9; padding: 20px; border-radius: 8px; 
-            }
-        label {
-             display: block; margin-bottom: 5px; font-weight: bold; 
-            }
-        input[type="text"], input[type="email"], input[type="password"] {
-             width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; 
-            }
-        .danger{
-            color: red;
-            font-size: 10px;
-            margin-bottom: 5px;
-            font-style: italic;
-       }
-        input[type="submit"] { 
-            width: 100%; padding: 10px; background: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer; 
-        }
-        input[type="submit"]:hover { 
-            background: #005a87;
-         }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-         .msgsuccess{
-            color: #198754;
-            font-size: 13px;
-            text-align: center;
-            margin-bottom: 10px;
-            padding: 10px 20px ;
-            border-radius: 30px;
-            background-color: #8ef7c6ff;
-         }
-         .msgerror{
-            color: #dc3545;
-            font-size: 13px;
-            text-align: center;
-            margin-bottom: 10px;
-            padding: 10px 20px ;
-            border-radius: 30px;
-            background-color: #f8d7da;
-         }
-         .nodisplay{
-            display: none;
-         }
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
 
+    .container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .header {
+        background: #2c3e50;
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .form-content {
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin: 0;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #555;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e1e5e9;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+
+    input[type="submit"] {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s;
+        margin-top: 10px;
+    }
+
+    input[type="submit"]:hover {
+        transform: translateY(-2px);
+    }
+
+    .danger {
+        color: #e74c3c;
+        font-size: 12px;
+        margin-bottom: 15px;
+    }
+
+    .success {
+        background: #d4edda;
+        color: #155724;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #28a745;
+    }
+
+    .error {
+        background: #fee;
+        color: #c33;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #e74c3c;
+    }
     </style>
 </head>
+
 <body>
-    @if(session('success'))
-        <h2 class="msgsuccess">{{ session('success') }}</h2>
-    @endif
+    <div class="container">
+        <div class="header">
+            <h1>Admin Registration</h1>
+        </div>
+        <div class="form-content">
+            @if(session('success'))
+            <div class="success">{{ session('success') }}</div>
+            @endif
 
-    @if(session('error'))
-        <h2 class="msgerror">{{ session('error') }}</h2>
-    @endif
-    
-    <h1>Enter Admin Details</h1>
-    <form action="{{ route('register-user') }}" method="post">
-        @csrf
-        
-        <label for="first_name">First Name:</label>
-        <p class="danger"> @error('first_name')
-            * {{ $message }}
-        @enderror</p>
-        <input type="text" name="first_name" id="first_name" value="{{ old('first_name') }}">
-        
+            @if(session('error'))
+            <div class="error">{{ session('error') }}</div>
+            @endif
 
-        
-        <label for="last_name">Last Name:</label>
-         <p class="danger"> @error('last_name')
-            * {{ $message }}
-        @enderror</p>
-        <input type="text" name="last_name" id="last_name" value="{{ old('last_name')  }}">
-        
+            <form action="{{ route('register-user') }}" method="post">
+                @csrf
 
+                <label for="first_name">First Name:</label>
+                @error('first_name')
+                <div class="danger">{{ $message }}</div>
+                @enderror
+                <input type="text" name="first_name" id="first_name" value="{{ old('first_name') }}">
 
-        
-        <label for="email">Email:</label>
-        <p class="danger"> @error('email')
-            * {{ $message }}
-        @enderror</p>
-        <input type="email" name="email" id="email" value="{{ old('email') }}">
-       
+                <label for="last_name">Last Name:</label>
+                @error('last_name')
+                <div class="danger">{{ $message }}</div>
+                @enderror
+                <input type="text" name="last_name" id="last_name" value="{{ old('last_name') }}">
 
-        
-        <label for="password">Password:</label>
-        <p class="danger"> @error('password')
-            * {{ $message }}
-        @enderror</p>
-        <input type="password" name="password" id="password" >
-        
-        
-        <input type="submit" value="Submit">
-    </form>
+                <label for="email">Email:</label>
+                @error('email')
+                <div class="danger">{{ $message }}</div>
+                @enderror
+                <input type="email" name="email" id="email" value="{{ old('email') }}">
+
+                <label for="password">Password:</label>
+                @error('password')
+                <div class="danger">{{ $message }}</div>
+                @enderror
+                <input type="password" name="password" id="password">
+
+                <input type="submit" value="Register">
+            </form>
+        </div>
+    </div>
 </body>
+
 </html>
