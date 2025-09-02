@@ -117,6 +117,18 @@
         margin-bottom: 20px;
         border-left: 4px solid #e74c3c;
     }
+    .forgot-password {
+        text-align: right;
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+    .forgot-password a {
+        color: #667eea;
+        text-decoration: none;
+    }
+    .forgot-password a:hover {
+        text-decoration: underline;
+    }
     </style>
 </head>
 
@@ -144,9 +156,8 @@
                 @enderror
                 <input type="password" name="password" id="password">
 
-                <div class="checkbox-group">
-                    <input type="checkbox" name="remember_me" id="remember_me" value="Remember me">
-                    <label for="remember_me" class="checkbox-label">Remember Me</label>
+                <div class="forgot-password">
+                    <a href="{{ route('forgot.password') }}">Forgot Password?</a>
                 </div>
 
                 <input type="submit" value="Login">

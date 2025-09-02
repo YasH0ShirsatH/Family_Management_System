@@ -1,0 +1,13 @@
+#mariage_date{
+    margin-top: 5px;
+    margin-left: 10px;
+}
+#mrg_date_label{
+    display: none;
+}
+#mrg_date_div{
+    display: none;
+    justify-content: start;
+    align-items: center;
+    
+}
