@@ -3,6 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Head;
+use App\Models\User;
+use App\Models\Member;
+use App\Models\Hobby;
+
+
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -11,7 +19,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-        //
+        $heads = Head::all();
+        return view("admin.index", compact("heads"));
     }
 
     /**
@@ -35,7 +44,10 @@ class AdminController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $heads= Head::find($id);
+        $members = $heads->members;
+       
+        return view("admin.show", ["heads"=>$heads, "members"=>$members]);
     }
 
     /**

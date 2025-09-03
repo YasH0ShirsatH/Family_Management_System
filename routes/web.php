@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HeadController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\AdminController;
 use App\Http\Middleware\AuthCheck;
 use App\Http\Middleware\AlreadyIn;
 use App\Http\Middleware\BlockDirectAccess;
@@ -14,7 +15,7 @@ Route::post('/register-user', [AuthController::class, 'registerUser'])->name('re
 Route::post('/login-user', [AuthController::class, 'loginUser'])->name('login-user');
 
 Route::get('/dashboard',[AuthController::class,'dashboard'])->middleware('auth.check');
-Route::get('/logout/{id}',[AuthController::class,'logout']);
+Route::get('/logout',[AuthController::class,'logout']);
 Route::view('/','head')->name('head');
 
 
@@ -40,5 +41,9 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'forgotPasswor
 Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'resetPassword'])->name('reset.password');
 
 Route::post('/reset-password', [ForgotPasswordController::class, 'resetPasswordPost'])->name('reset.password.post');
+
+
+/// ADMIN SECTION
+Route::resource('/admin', AdminController::class)->middleware('auth.check');
 
 
