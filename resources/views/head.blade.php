@@ -6,19 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Family Head Information</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>
 
 
 
 <body class="bg-light">
+
+
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card shadow">
                     <div class="card-header bg-primary text-white">
-                        <h2 class="mb-0">Enter the Information of Head of the family</h2>
+                        <h2 class="mb-0">Enter the Information of <span class="text-body-emphasis">Head</span> of the
+                            family</h2>
                     </div>
+                    @if (session('error'))
+                    <div class="error alert alert-danger alert-dismissible m-3 fade show" role="alert">
+                        {{ session('error') }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    @endif
+                    @if (session('success'))
+                    <div class="error alert alert-success alert-dismissible m-3 fade show" role="alert">
+                        {{ session('success') }}<button type="button" class="btn-close"
+                            data-bs-dismiss="alert"></button></div>
+                    @endif
+
+
+
                     <div class="card-body">
                         <form action="head" method="post" enctype="multipart/form-data">
                             @csrf
@@ -66,7 +83,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Address</label>
                                 <textarea name="address" class="form-control" rows="2"
-                                    placeholder="Enter address"></textarea>
+                                    placeholder="Enter address">{{ old('address') }}</textarea>
                                 @error('address')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -77,9 +94,13 @@
                                     <label class="form-label">State</label>
                                     <select name="state" class="form-select">
                                         <option value="">Select State</option>
-                                        <option value="maharashtra">Maharashtra</option>
-                                        <option value="Uttar Pradesh">Uttar Pradesh</option>
-                                        <option value="Tamil Nadu">Tamil Nadu</option>
+                                        <option value="maharashtra"
+                                            {{ old('state') == 'maharashtra' ? 'selected' : '' }}>Maharashtra</option>
+                                        <option value="Uttar Pradesh"
+                                            {{ old('state') == 'Uttar Pradesh' ? 'selected' : '' }}>Uttar Pradesh
+                                        </option>
+                                        <option value="Tamil Nadu" {{ old('state') == 'Tamil Nadu' ? 'selected' : '' }}>
+                                            Tamil Nadu</option>
                                     </select>
                                     @error('state')
                                     <div class="text-danger">{{ $message }}</div>
@@ -89,9 +110,11 @@
                                     <label class="form-label">City</label>
                                     <select name="city" class="form-select">
                                         <option value="">Select City</option>
-                                        <option value="nashik">Nashik</option>
-                                        <option value="pune">Pune</option>
-                                        <option value="mumbai">Mumbai</option>
+                                        <option value="nashik" {{ old('city') == 'nashik' ? 'selected' : '' }}>Nashik
+                                        </option>
+                                        <option value="pune" {{ old('city') == 'pune' ? 'selected' : '' }}>Pune</option>
+                                        <option value="mumbai" {{ old('city') == 'mumbai' ? 'selected' : '' }}>Mumbai
+                                        </option>
                                     </select>
                                     @error('city')
                                     <div class="text-danger">{{ $message }}</div>
@@ -135,12 +158,26 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Hobbies</label>
-                                <input type="text" name="hobbies" class="form-control" placeholder="Enter hobbies"
-                                    value="{{ old('hobbies') }}">
+                                <label for="form-controll mb-3">Enter Hobby</label>
+                                <input type="text" name="hobbies[]" class="form-control mt-2" placeholder="Enter hobby. Click  ( + Add Hobby ) to add more hobbies">
+
+                                <button type="button" id="addHobbies" class="btn btn-primary btn-sm mt-3"> <i
+                                        class="bi bi-plus-circle"></i> Add Hobby</button>
+                                <button type="button" id="deleteHobbies" class="btn btn-danger btn-sm mt-3"> <i
+                                        class="bi bi-dash-circle"></i> Delete Hobby</button>
+
                                 @error('hobbies')
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
+                                @foreach ($errors->get('hobbies.*') as $messages)
+                                    @foreach ($messages as $msg)
+                                        <div class="text-danger">{{ $msg }}</div>
+                                        @break
+                                    @endforeach
+                                    @break
+                                @endforeach
+
+
                             </div>
 
                             <div class="mb-3">
@@ -160,12 +197,33 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const marriedRadio = document.getElementById('married');
     const unmarriedRadio = document.getElementById('unmarried');
     const marriageDateDiv = document.getElementById('mrg_date_div');
+    const addHobbyBtn = document.getElementById('addHobbies');
+
+    function createHobby() {
+        const hobbyInput = document.createElement('input');
+        hobbyInput.type = 'text';
+        hobbyInput.name = 'hobbies[]';
+        hobbyInput.className = 'form-control mt-2';
+        hobbyInput.placeholder = 'Enter hobbies';
+        document.getElementById('addHobbies').before(hobbyInput);
+        hobbyInput.focus();
+    }
+
+
+
+    function deleteHobby() {
+        const hobbyInputs = document.getElementsByName('hobbies[]');
+        if (hobbyInputs.length > 1) {
+            hobbyInputs[hobbyInputs.length - 1].remove();
+        }
+    }
 
     function toggleMarriageDate() {
         if (marriedRadio.checked) {
@@ -177,6 +235,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     marriedRadio.addEventListener('change', toggleMarriageDate);
     unmarriedRadio.addEventListener('change', toggleMarriageDate);
+    addHobbyBtn.addEventListener('click', createHobby);
+    document.getElementById('deleteHobbies').addEventListener('click', deleteHobby);
 });
 </script>
 

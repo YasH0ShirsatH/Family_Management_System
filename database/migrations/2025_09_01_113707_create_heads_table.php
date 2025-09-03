@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('pincode');
             $table->unsignedTinyInteger('marital_status');
             $table->date('mariage_date')->nullable();
-            $table->text('hobbies');
             $table->string('photo_path');
             $table->timestamps();
         });

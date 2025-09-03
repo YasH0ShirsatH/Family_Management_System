@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,57 +8,78 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        *{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; 
-        }
-        .card { 
-            border: none; box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
-        }
-        .card-header { 
-            background: linear-gradient(135deg, #2c3e50, #34495e); 
-        }
-        .btn-primary {
-             background: linear-gradient(135deg, #667eea, #764ba2); border: none; 
-            }
-        .btn-primary:hover {
-             background: linear-gradient(135deg, #764ba2, #667eea); transform: translateY(-2px); 
-            }
-        .member-card { 
-            transition: transform 0.3s; 
-        }
-        .member-card:hover { 
-            transform: translateY(-5px); 
-        }
-        .profile-img { 
-            width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 4px solid white; 
-        }
-        .member-img {
-             height: 200px; object-fit: cover; 
-        }
-        .card-img-top{
-            height: 250px; object-fit: cover;
-        }
-        
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #764ba2, #667eea);
+        transform: translateY(-2px);
+    }
+
+    .member-card {
+        transition: transform 0.3s;
+    }
+
+    .member-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .profile-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid white;
+    }
+
+    .member-img {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card-img-top {
+        height: 250px;
+        object-fit: cover;
+    }
     </style>
 </head>
+
 <body>
     <div class="container mt-5">
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
         @endif
         @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-circle me-2"></i>{{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle me-2"></i>{{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
         @endif
 
 
@@ -74,9 +96,11 @@
 
                             <div class="mb-3">
                                 <label class="form-label fw-bold"><i class="bi bi-person me-1"></i>Name</label>
-                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Enter name" value="{{ old('name') }}">
+                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                    placeholder="Enter name" value="{{ old('name') }}">
                                 @error('name')
-                                    <div class="invalid-feedback"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
+                                <div class="invalid-feedback"><i
+                                        class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -133,7 +157,8 @@
                             </div>
 
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-plus-circle me-2"></i>Add Member</button>
+                                <button type="submit" class="btn btn-primary btn-lg"><i
+                                        class="bi bi-plus-circle me-2"></i>Add Member</button>
                             </div>
                         </form>
                     </div>
@@ -150,24 +175,42 @@
                         <h2 class="">Head Information</h2>
                     </div>
                     <div class="card-body text-center">
-                        <img src="{{ asset('uploads/images/' . $users->photo_path) }}" class="rounded-circle border border-3 mb-3" style="width: 120px; height: 120px; object-fit: cover;" alt="Member Photo">
+                        <img src="{{ asset('uploads/images/' . $users->photo_path) }}"
+                            class="rounded-circle border border-3 mb-3"
+                            style="width: 120px; height: 120px; object-fit: cover;" alt="Member Photo">
                         <div class="row justify-content-center">
                             <div class="col-md-10">
                                 <ul class="list-group list-group-flush text-start">
                                     <li class="list-group-item"><strong>Name:</strong> {{ ucfirst($users->name) }}</li>
-                                    <li class="list-group-item"><strong>Birthdate:</strong> {{ ucfirst($users->birthdate) }}</li>
-                                    <li class="list-group-item"><strong>Marital Status:</strong> {{ $users->marital_status ? 'Married' : 'Unmarried' }}</li>
+                                    <li class="list-group-item"><strong>Birthdate:</strong>
+                                        {{ ucfirst($users->birthdate) }}</li>
+                                    <li class="list-group-item"><strong>Marital Status:</strong>
+                                        {{ $users->marital_status ? 'Married' : 'Unmarried' }}</li>
                                     @if($users->marital_status)
-                                        <li class="list-group-item"><strong>Marriage Date:</strong> {{ $users->mariage_date }}</li>
+                                    <li class="list-group-item"><strong>Marriage Date:</strong>
+                                        {{ $users->mariage_date }}</li>
                                     @endif
                                     <li class="list-group-item"><strong>Mobile:</strong> {{ $users->mobile }}</li>
-                                    <li class="list-group-item"><strong>Address:</strong> {{ ucfirst($users->address) }}</li>
-                                    <li class="list-group-item"><strong>State:</strong> {{ ucfirst($users->state) }}</li>
+                                    <li class="list-group-item"><strong>Address:</strong> {{ ucfirst($users->address) }}
+                                    </li>
+                                    <li class="list-group-item"><strong>State:</strong> {{ ucfirst($users->state) }}
+                                    </li>
                                     <li class="list-group-item"><strong>City:</strong> {{ ucfirst($users->city )}}</li>
                                     <li class="list-group-item"><strong>Pin Code:</strong> {{ $users->pincode }}</li>
-                                    <li class="list-group-item"><strong>Hobbies:</strong> {{ ucfirst($users->hobbies) }}</li>
+                                    <li class="list-group-item"><strong>Hobbies:</strong>
+                                        @foreach ($users->hobbies as $hobby)
+                                        {{ ucfirst($hobby->hobby_name) }} ,
+                                        @endforeach
+                                    </li>
                                     <div class="d-grid">
-                                <a href="" class="btn btn-danger btn-lg"><i class="bi bi-dash-circle me-2"></i>Log Out</a>
+
+                                        <a href="{{ route('logoutMember',$id) }}" class="btn btn-danger btn-lg" id="logout"><i
+                                                class="bi bi-dash-circle me-2"></i>&nbsp;&nbsp;All members added ? You can now
+                                            logout &nbsp;&nbsp;<i class="bi bi-dash-circle me-2"></i></a>
+
+
+
+
                                 </ul>
                             </div>
                         </div>
@@ -178,20 +221,24 @@
     </div>
 
     <div class="container mb-5 mt-5 justify-content-center">
-        @if(@empty($members))
-        <p class="text-danger">No family members added yet.</p>
-        @else
-        
+
+
+
         <h3 class="row mb-0 pt-2 pb-2 px-2 text-white rounded-top bg-primary">Family Members</h3>
         <div class="row  justify-content-center align-items-center bg-light p-4 rounded-bottom">
-            @foreach($members as $member)
+
+            @forelse($members as $member)
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-                    <img src="{{ asset('uploads/images/' . $member->photo_path) }}" class="card-img-top"
-                        alt="Member Photo">
+                    
+                    @if(empty($member->photo_path))
+                        <img src="{{ asset('uploads/images/noimage.png') }}" class="card-img-top" alt="No Image">
+                    @else
+                        <img src="{{ asset('uploads/images/' . $member->photo_path) }}" class="card-img-top" alt="Member Photo">
+                    @endif
                     <div class="card-body">
                         <h5 class="card-title">{{ $member->name }}</h5>
-                        <p class="card-text"><strong>Birthdate:</strong> {{ $member->  birthdate }}</p>
+                        <p class="card-text"><strong>Birthdate:</strong> {{ $member->birthdate }}</p>
                         <p class="card-text"><strong>Marital Status:</strong>
                             {{ $member->marital_status ? 'Married' : 'Unmarried' }}</p>
                         @if($member->marital_status)
@@ -201,13 +248,19 @@
                         @endif
                         @if($member->education)
                         <p class="card-text"><strong>Education:</strong> {{ $member->education }}</p>
+                        @else
+                        <p><strong>Education</strong> : <span class="text-danger">Not Provided</span></p>
                         @endif
                     </div>
                 </div>
             </div>
-            @endforeach
+            @empty
+            <p class="text-danger fw-bold">* No family members added yet.</p>
+            @endforelse
+
         </div>
-        @endif
+
+
 
     </div>
 
@@ -218,6 +271,13 @@
         const marriedRadio = document.getElementById('married');
         const unmarriedRadio = document.getElementById('unmarried');
         const marriageDateDiv = document.getElementById('mrg_date_div');
+        const logoutButton = document.getElementById('logout');
+
+        logoutButton.addEventListener('click', function() {
+            if (!confirm('Are you sure you want to logout? Make sure you have added all family members.')) {
+                event.preventDefault();
+            }
+        });
 
         function toggleMarriageDate() {
             if (marriedRadio.checked) {

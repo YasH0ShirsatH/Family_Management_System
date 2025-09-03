@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('marital_status');
             $table->date('mariage_date')->nullable();
             $table->string('education')->nullable();
-            $table->string('photo_path');
+            $table->string('photo_path')->nullable();
             $table->timestamps();
         });
     }

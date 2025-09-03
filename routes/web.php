@@ -6,14 +6,15 @@ use App\Http\Controllers\HeadController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Middleware\AuthCheck;
 use App\Http\Middleware\AlreadyIn;
+use App\Http\Middleware\BlockDirectAccess;
 
-Route::get('/login',[AuthController::class,'login'])->middleware(AlreadyIn::class);
+Route::get('/login',[AuthController::class,'login'])->middleware('already.in');
 Route::get('/register',[AuthController::class,'register']);
 Route::post('/register-user', [AuthController::class, 'registerUser'])->name('register-user');
 Route::post('/login-user', [AuthController::class, 'loginUser'])->name('login-user');
 
-Route::get('/dashboard',[AuthController::class,'dashboard'])->middleware(AuthCheck::class);
-Route::get('/logout',[AuthController::class,'logout']);
+Route::get('/dashboard',[AuthController::class,'dashboard'])->middleware('auth.check');
+Route::get('/logout/{id}',[AuthController::class,'logout']);
 Route::view('/','head')->name('head');
 
 
@@ -25,8 +26,9 @@ Route::post('/head',[HeadController::class,'post_data']);
 
 
 /// MEMBERS SECTION
-Route::get('/familySection/{id}',[HeadController::class,'familySection'])->name('familySection');
+Route::get('/familySection/{id}',[HeadController::class,'familySection'])->name('familySection')->middleware('block.direct');
 Route::post('/add-member/{id}',[HeadController::class,'addMember'])->name('addMember');
+Route::get('logout-member/{id}',[HeadController::class,'logoutMember'])->name('logoutMember');
 
 
 
