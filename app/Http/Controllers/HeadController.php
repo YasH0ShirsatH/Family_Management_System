@@ -86,6 +86,9 @@ class HeadController extends Controller
             'marital_status' => 'required',
             'mariage_date' => 'required_if:marital_status,1',
             'photo_path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]
+        ,[
+            'mariage_date.required_if' => 'The marriage date field is required when marital status is married.',
         ]);
         $user = Head::find($id);
         if (!$user) {

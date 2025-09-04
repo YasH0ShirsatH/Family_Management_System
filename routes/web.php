@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HeadController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminMemberController;
 use App\Http\Middleware\AuthCheck;
 use App\Http\Middleware\AlreadyIn;
 use App\Http\Middleware\BlockDirectAccess;
@@ -45,5 +46,8 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'resetPasswordP
 
 /// ADMIN SECTION
 Route::resource('/admin', AdminController::class)->middleware('auth.check');
+
+    /// Admin member section
+    Route::resource('/admin-member', AdminMemberController::class)->middleware('auth.check');
 
 

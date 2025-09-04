@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Head;
+use App\Models\Member;
 use Illuminate\Contracts\Auth\Factory;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\StatefulGuard;
@@ -48,6 +50,8 @@ class AuthController extends Controller
                 'password' => 'required',
             ]);
 
+          
+
             $user = User::where('email','=',$request->email)->first();
             if($user){
         
@@ -69,9 +73,13 @@ class AuthController extends Controller
         $data = array();
         if(Session::has('loginId')){
             $user = User::where('id','=',session::get('loginId'))->first();
+            $head = Head::all();
+            $member = Member::all();
+            $headcount = $head->count();
+            $membercount = $member->count();
         }
 
-        return view('dashboard',compact('user'));
+        return view('dashboard',compact('user','headcount','membercount'));
     }
 
     public function logout(){
