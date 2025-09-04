@@ -46,6 +46,7 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'resetPasswordP
 
 /// ADMIN SECTION
 Route::resource('/admin', AdminController::class)->middleware('auth.check');
+Route::get('/search',[AdminController::class,'search'])->name('search');
 
     /// Admin member section
     Route::resource('/admin-member', AdminMemberController::class)->middleware('auth.check');

@@ -27,11 +27,11 @@
                 </span>
                 <div>
                     <a href="logout" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-box-arrow-right me-1"></i>Logout
-                </a>
-                <a href="/" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-plus-circle"></i> Create Head
-                </a>
+                        <i class="bi bi-box-arrow-right me-1"></i>Logout
+                    </a>
+                    <a href="/" class="btn btn-outline-light btn-sm">
+                        <i class="bi bi-plus-circle"></i> Create Head
+                    </a>
                 </div>
             </div>
         </nav>
@@ -62,12 +62,19 @@
                 </div>
             </div>
         </div>
+        <form style="width : 84.4%; margin : 2px auto;" action="{{ route('search') }}" method="get" class="d-flex mt-2 mb-4 w-80">
+            @csrf
+            <input type="text" name="search" class="form-control me-2 w-80" placeholder="Search...(if empty click search to show all data)">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
 
         <!-- Family Cards -->
         <div class="container">
             @if($heads->count() > 0)
             <div class="row">
+
                 @foreach ($heads as $user)
+
                 <div class="col-lg-6 col-xl-4 mb-4">
                     <div class="card h-100 border-0 shadow-sm">
                         <div class="card-header bg-primary text-white text-center">
@@ -121,25 +128,25 @@
                         </div>
                     </div>
                 </div>
-                
+
                 @endforeach
             </div>
             <div class="row">
-            @else
-            <div class="text-center py-5">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body py-5">
-                        <i class="bi bi-house-x display-1 text-muted mb-3"></i>
-                        <h4 class="text-muted">No Families Found</h4>
-                        <p class="text-muted">There are currently no families registered in the system.</p>
+                @else
+                <div class="text-center py-5">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body py-5">
+                            <i class="bi bi-house-x display-1 text-muted mb-3"></i>
+                            <h4 class="text-muted">No Families Found</h4>
+                            <p class="text-muted">There are currently no families registered in the system.</p>
+                        </div>
                     </div>
                 </div>
+                @endif
             </div>
-            @endif
         </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

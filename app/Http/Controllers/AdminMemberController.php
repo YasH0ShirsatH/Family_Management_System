@@ -141,4 +141,6 @@ class AdminMemberController extends Controller
 
         return redirect()->route('admin-member.show',$parentId)->with('success', 'Member deleted successfully.')->with('name',$member->name)->with('surname',$member->surname);
     }
+
+    
 }

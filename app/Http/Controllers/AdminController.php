@@ -137,6 +137,19 @@ class AdminController extends Controller
             return redirect()->route('admin.index')->with('success', "Head deleted successfully.")->with('name', $head->name)->with('surname', $head->surname);
         }
     }
+
+    public function search(Request $request){
+        $heads = Head::where('name', 'like', '%' . $request->search . '%')
+             ->orWhere('surname', 'like', '%' . $request->search . '%')
+             ->orWhere('mobile', 'like', '%' . $request->search . '%')
+             ->orWhere('city', 'like', '%' . $request->search . '%')
+             ->orWhere('state', 'like', '%' . $request->search . '%')
+             ->get();
+
+        if($heads){
+            return view('admin.index' ,['heads'=>$heads]);
+        }
+    }
 }
 
     
