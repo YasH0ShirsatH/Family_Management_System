@@ -347,7 +347,12 @@
                                             <div class="member-detail">
                                                 <i class="bi bi-heart"></i>
                                                 {{ $member->marital_status ? 'Married' : 'Single' }}
+                                                @if($member->marital_status)
+                                                <i class="bi bi-calendar-heart "></i>{{ $member->mariage_date }}
+                                                @endif
+
                                             </div>
+
                                             @if($member->education)
                                             <div class="member-detail">
                                                 <i class="bi bi-mortarboard"></i>
@@ -388,7 +393,7 @@
             </div>
             @endif
         </div>
-        
+
 
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

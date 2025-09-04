@@ -49,5 +49,7 @@ Route::resource('/admin', AdminController::class)->middleware('auth.check');
 
     /// Admin member section
     Route::resource('/admin-member', AdminMemberController::class)->middleware('auth.check');
+    Route::get('/adminfamilySection/{id}',[AdminMemberController::class,'familySection'])->name('adminFamilySection');
+    Route::post('/admin.add-member/{id}',[AdminMemberController::class,'addMember'])->name('adminAddMember');
 
 

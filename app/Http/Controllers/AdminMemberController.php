@@ -21,17 +21,51 @@ class AdminMemberController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+    public function familySection($id){
+        $user = Head::find($id);
+        if (!$user) {
+            return redirect('/')->with('error', 'Head not found.');
+        }
+        $members = $user->members;
+        return view('member.create',['id'=>$id,'members'=>$members,'users'=>$user]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+
+
+    public function addMember(Request $request, $id) {
+        $request->validate([
+            'name' => 'required',
+            'birthdate' => 'required|date',
+            'marital_status' => 'required',
+            'mariage_date' => 'required_if:marital_status,1',
+            'photo_path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]
+        ,[
+            'mariage_date.required_if' => 'The marriage date field is required when marital status is married.',
+        ]);
+        $user = Head::find($id);
+        $familyid = $user->id;
+        if (!$user) {
+            return back()->with('error', 'Head not found.');
+        }
+
+        $filename = null;
+        if ($request->hasFile('photo_path')) {
+            $file = $request->file('photo_path');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('/uploads/images/'), $filename);
+        }
+
+        $user->members()->create([
+            'name' => $request->name,
+            'birthdate' => $request->birthdate,
+            'marital_status' => $request->marital_status,
+            'mariage_date' => $request->marital_status == 1 ? $request->mariage_date : null,
+            'education' => $request->education,
+            'photo_path' => $filename,
+        ]);
+
+        return redirect()->route('admin-member.show',$familyid)->with('success', 'Member added successfully.');
     }
 
     /**
@@ -40,8 +74,9 @@ class AdminMemberController extends Controller
     public function show(string $id)
     {
         $head = Head::find($id);
+        $id = $head->id;
         $members = $head->members()->get();
-        return view("member.index", compact("members"));
+        return view("member.index", compact("members",'id'));
     }
 
     /**
