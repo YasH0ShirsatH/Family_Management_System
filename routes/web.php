@@ -6,6 +6,7 @@ use App\Http\Controllers\HeadController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminMemberController;
+use App\Http\Controllers\CityStateController;
 use App\Http\Middleware\AuthCheck;
 use App\Http\Middleware\AlreadyIn;
 use App\Http\Middleware\BlockDirectAccess;
@@ -17,12 +18,15 @@ Route::post('/login-user', [AuthController::class, 'loginUser'])->name('login-us
 
 Route::get('/dashboard',[AuthController::class,'dashboard'])->middleware('auth.check');
 Route::get('/logout',[AuthController::class,'logout']);
-Route::view('/','head')->name('head');
+
 
 
 
 /// Head section
 Route::post('/head',[HeadController::class,'post_data']);
+Route::get('/headview',[HeadController::class,'headview'])->name('head');
+Route::get('/get-cities/{stateId}',[HeadController::class,'getCities']);
+Route::get('/',[HeadController::class,'dashboard']);
 
 
 
@@ -52,5 +56,14 @@ Route::get('/search',[AdminController::class,'search'])->name('search');
     Route::resource('/admin-member', AdminMemberController::class)->middleware('auth.check');
     Route::get('/adminfamilySection/{id}',[AdminMemberController::class,'familySection'])->name('adminFamilySection');
     Route::post('/admin.add-member/{id}',[AdminMemberController::class,'addMember'])->name('adminAddMember');
+
+/// STATE AND CITY SECTION
+Route::resource('/state-city',CityStateController::class)->middleware('auth.check');
+Route::get('admin/state-city/states',[CityStateController::class,'stateindex']);
+Route::get('admin/state-city/city',[CityStateController::class,'cityindex']);
+Route::get('admin/state-city/createcity',[CityStateController::class,'createCity'])->name('create.city');
+Route::get('admin/state-city/createState',[CityStateController::class,'createState'])->name('create.state');
+Route::post('admin/state-city/storecity',[CityStateController::class,'storeCity'])->name('store.city');
+Route::post('admin/state-city/storestate',[CityStateController::class,'storestate'])->name('store.state');
 
 

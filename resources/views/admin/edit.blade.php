@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
 </head>
+
 <body class="bg-light">
     <nav class="navbar navbar-dark bg-primary shadow">
         <div class="container">
@@ -42,16 +44,18 @@
                         <form action="{{ route('admin.update',$id) }}" method="post" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
-                            
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-semibold">First Name</label>
-                                    <input type="text" name="name" class="form-control" value="{{ $head->name }}" required>
+                                    <input type="text" name="name" class="form-control" value="{{ $head->name }}"
+                                        required>
                                     @error('name')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-semibold">Last Name</label>
-                                    <input type="text" name="surname" class="form-control" value="{{ $head->surname }}" required>
+                                    <input type="text" name="surname" class="form-control" value="{{ $head->surname }}"
+                                        required>
                                     @error('surname')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
                             </div>
@@ -59,46 +63,50 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-semibold">Date of Birth</label>
-                                    <input type="date" name="birthdate" class="form-control" value="{{ $head->birthdate }}" required>
+                                    <input type="date" name="birthdate" class="form-control"
+                                        value="{{ $head->birthdate }}" required>
                                     @error('birthdate')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-semibold">Mobile Number</label>
-                                    <input type="tel" name="mobile" class="form-control" value="{{ $head->mobile }}" required>
+                                    <input type="tel" name="mobile" class="form-control" value="{{ $head->mobile }}"
+                                        required>
                                     @error('mobile')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Address</label>
-                                <textarea name="address" class="form-control" rows="3" required>{{ $head->address }}</textarea>
+                                <textarea name="address" class="form-control" rows="3"
+                                    required>{{ $head->address }}</textarea>
                                 @error('address')<div class="text-danger">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label fw-semibold">State</label>
-                                    <select name="state" class="form-select">
+                                    <select name="state" id="stateSelect" class="form-select">
                                         <option value="">Select State</option>
-                                        <option value="maharashtra" {{ $head->state == 'maharashtra' ? 'selected' : '' }}>Maharashtra</option>
-                                        <option value="Uttar Pradesh" {{ $head->state == 'Uttar Pradesh' ? 'selected' : '' }}>Uttar Pradesh</option>
-                                        <option value="Tamil Nadu" {{ $head->state == 'Tamil Nadu' ? 'selected' : '' }}>Tamil Nadu</option>
+                                        @foreach ($states as $state)
+                                        <option value="{{ $state->name }}"  {{ $head->state == $state->name ? 'selected' : '' }}>{{ $state->name }}</option>
+                                        @endforeach
                                     </select>
                                     @error('state')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label fw-semibold">City</label>
-                                    <select name="city" class="form-select">
+                                    <select name="city" id="citySelect" class="form-select">
                                         <option value="">Select City</option>
-                                        <option value="nashik" {{ $head->city == 'nashik' ? 'selected' : '' }}>Nashik</option>
-                                        <option value="pune" {{ $head->city == 'pune' ? 'selected' : '' }}>Pune</option>
-                                        <option value="mumbai" {{ $head->city == 'mumbai' ? 'selected' : '' }}>Mumbai</option>
+                                        @foreach ($city as $cities)
+                                            <option value="{{ $cities->name }}" {{ $head->city == $cities->name ? 'selected' : '' }}>{{ $cities->name }}</option>
+                                        @endforeach
                                     </select>
                                     @error('city')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label fw-semibold">Pincode</label>
-                                    <input type="number" name="pincode" class="form-control" value="{{ $head->pincode }}" required>
+                                    <input type="number" name="pincode" class="form-control"
+                                        value="{{ $head->pincode }}" required>
                                     @error('pincode')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
                             </div>
@@ -110,22 +118,28 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="marital_status" id="married" value="1" {{ $head->marital_status == '1' ? 'checked' : ''}}>
+                                            <input class="form-check-input" type="radio" name="marital_status"
+                                                id="married" value="1"
+                                                {{ $head->marital_status == '1' ? 'checked' : ''}}>
                                             <label class="form-check-label" for="married">Married</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="marital_status" id="unmarried" value="0" {{ $head->marital_status == '0' ? 'checked' : ''}}>
+                                            <input class="form-check-input" type="radio" name="marital_status"
+                                                id="unmarried" value="0"
+                                                {{ $head->marital_status == '0' ? 'checked' : ''}}>
                                             <label class="form-check-label" for="unmarried">Unmarried</label>
                                         </div>
                                     </div>
                                 </div>
                                 @error('marital_status')<div class="text-danger">{{ $message }}</div>@enderror
 
-                                <div class="mt-3" id="mrg_date_div" style="display: {{ $head->marital_status == '1' ? 'block' : 'none' }}">
+                                <div class="mt-3" id="mrg_date_div"
+                                    style="display: {{ $head->marital_status == '1' ? 'block' : 'none' }}">
                                     <label class="form-label fw-semibold">Marriage Date</label>
-                                    <input type="date" name="mariage_date" class="form-control" value="{{ $head->mariage_date }}">
+                                    <input type="date" name="mariage_date" class="form-control"
+                                        value="{{ $head->mariage_date }}">
                                     @error('mariage_date')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
                             </div>
@@ -133,10 +147,12 @@
                             <!-- Hobby Section -->
                             <div class="card bg-light mb-4">
                                 <div class="card-body">
-                                    <h6 class="card-title text-primary fw-semibold"><i class="bi bi-star me-2"></i>Hobbies & Interests</h6>
+                                    <h6 class="card-title text-primary fw-semibold"><i
+                                            class="bi bi-star me-2"></i>Hobbies & Interests</h6>
                                     <div id="hobbyContainer">
                                         @foreach ($head->hobbies as $hobby)
-                                        <input type="text" name="hobbies[]" value="{{ $hobby->hobby_name }}" class="form-control mb-2" placeholder="Enter hobby">
+                                        <input type="text" name="hobbies[]" value="{{ $hobby->hobby_name }}"
+                                            class="form-control mb-2" placeholder="Enter hobby">
                                         @endforeach
                                     </div>
                                     <div class="d-flex gap-2">
@@ -201,7 +217,9 @@
 
         if (deleteButton) {
             deleteButton.addEventListener('click', function(event) {
-                if (!confirm('WARNING: This will permanently delete the head and ALL family members! This action cannot be undone. Are you sure?')) {
+                if (!confirm(
+                        'WARNING: This will permanently delete the head and ALL family members! This action cannot be undone. Are you sure?'
+                    )) {
                     event.preventDefault();
                 }
             });
@@ -234,5 +252,29 @@
         removeHobbyBtn.addEventListener('click', removeHobbyInput);
     });
     </script>
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <script>
+        jQuery(document).ready(function(){
+            jQuery('select[name="state"]').on('change',function(){
+                let stateID = jQuery(this).val();
+             
+                jQuery.ajax({
+                    url : '/get-cities/'+stateID,
+                    type : "GET",
+                    dataType : "json",
+                    success:function(data){
+                         
+                        jQuery('select[name="city"]').empty();
+                        jQuery.each(data, function(key,value){
+                            $('select[name="city"]').append('<option value="'+ value.name +'">'+ value.name +'</option>');
+                        });
+                    }
+            });
+        });
+    });
+
+    </script>
 </body>
+
 </html>

@@ -75,8 +75,8 @@ class AdminMemberController extends Controller
     {
         $head = Head::find($id);
         $id = $head->id;
-        $members = $head->members()->get();
-        return view("member.index", compact("members",'id'));
+        $members = $head->members()->paginate(4);
+        return view("member.index", data: compact("members",'id'));
     }
 
     /**

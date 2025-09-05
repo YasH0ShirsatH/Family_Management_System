@@ -4,10 +4,26 @@ namespace App\Http\Controllers;
 use App\Models\Head;
 use App\Models\Member;
 use App\Models\Hobby;
+use App\Models\City;
+use App\Models\State;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 class HeadController extends Controller
 {
+    public function headview(){
+        $states = State::where('country_id',101)->orderBy('name','asc')->get();
+        foreach ($states as $state) {
+            $city = $state->cities = City::where('state_id', $state->id)->orderBy('name', 'asc')->get();
+        }
+        
+        return view('head',compact('states','city'));
+    }
+
+    public function dashboard(){
+        return view('userDashboard');
+    }
+
+
     public function post_data(Request $request){
         
         $request->validate([
@@ -114,6 +130,17 @@ class HeadController extends Controller
         return back()->with('success', 'Member added successfully.');
     }
 
+
+    public function getCities($stateId) {
+        $state = State::where('name',$stateId)->first();
+        if ($state) {
+            $cities = City::where('state_id', $state->id)->get();
+            return response()->json($cities);
+            
+        }
+        
+        return response()->json([]);
+    }
 
     public function logoutMember(Request $request, $id){
         // Clear all session data

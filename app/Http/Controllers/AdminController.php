@@ -7,7 +7,8 @@ use App\Models\Head;
 use App\Models\User;
 use App\Models\Member;
 use App\Models\Hobby;
-
+use App\Models\City;
+use App\Models\State;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $heads = Head::all();
+        $heads = Head::paginate('3');
         return view("admin.index", compact("heads"));
     }
 
@@ -56,7 +57,12 @@ class AdminController extends Controller
     public function edit(string $id)
     {
         $head = Head::find($id);
-        return view("admin.edit", ["head"=>$head,'id'=>$id]);
+         $states = State::where('country_id',101)->orderBy('name','asc')->get();
+        foreach ($states as $state) {
+            $city = $state->cities = City::where('state_id', $state->id)->orderBy('name', 'asc')->get();
+        }
+        
+        return view("admin.edit", ["head"=>$head,'id'=>$id,'states'=>$states,'city'=>$city]);
     }
 
     /**
@@ -144,7 +150,7 @@ class AdminController extends Controller
              ->orWhere('mobile', 'like', '%' . $request->search . '%')
              ->orWhere('city', 'like', '%' . $request->search . '%')
              ->orWhere('state', 'like', '%' . $request->search . '%')
-             ->get();
+             ->paginate(3);
 
         if($heads){
             return view('admin.index' ,['heads'=>$heads]);
