@@ -64,7 +64,7 @@
         </div>
         <form style="width : 84.4%; margin : 2px auto;" action="{{ route('search') }}" method="get" class="d-flex mt-2 mb-4 w-80">
             @csrf
-            <input type="text" name="search" class="form-control me-2 w-80" placeholder="Search...(if empty click search to show all data)">
+            <input type="text" name="search" class="form-control me-2 w-80" placeholder="Search...(if empty click search/Enter btn to show all data)">
             <button type="submit" class="btn btn-primary">Search</button>
         </form>
 
