@@ -18,7 +18,7 @@
 
     <div class="container py-4">
         @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success alert-dismissible fade show rounded-pill" role="alert">
             <i class="bi bi-check-circle me-2"></i>({{ session('name') }} {{ session('surname') }}) : {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
@@ -26,8 +26,8 @@
 
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white text-center py-3">
+                <div class="card shadow rounded-4">
+                    <div class="card-header bg-primary text-white text-center py-3 rounded-top-4">
                         <h2 class="mb-1 fw-bold"><i class="bi bi-person-plus me-2"></i>Add Family Member</h2>
                         <p class="mb-0 opacity-75">Enter members of family (Admin Section)</p>
                     </div>
@@ -37,8 +37,8 @@
 
                             <div class="mb-3">
                                 <label class="form-label fw-semibold"><i class="bi bi-person me-2"></i>Full Name</label>
-                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                                    placeholder="Enter full name" value="{{ old('name') }}">
+                                <input type="text" name="name" class="form-control rounded-pill @error('name') is-invalid @enderror"
+                                    placeholder="Enter full name" value="{{ old('name') }}"
                                 @error('name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -47,8 +47,8 @@
                             <div class="mb-3">
                                 <label class="form-label fw-semibold"><i class="bi bi-calendar3 me-2"></i>Date of Birth</label>
                                 <input type="date" name="birthdate"
-                                    class="form-control @error('birthdate') is-invalid @enderror"
-                                    value="{{ old('birthdate') }}">
+                                    class="form-control rounded-pill @error('birthdate') is-invalid @enderror"
+                                    value="{{ old('birthdate') }}"
                                 @error('birthdate')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -74,8 +74,8 @@
                                     style="display: {{ old('marital_status') == '1' ? 'block' : 'none' }}">
                                     <label class="form-label fw-semibold"><i class="bi bi-calendar-heart me-2"></i>Marriage Date</label>
                                     <input type="date" name="mariage_date"
-                                        class="form-control @error('mariage_date') is-invalid @enderror"
-                                        value="{{ old('mariage_date') }}">
+                                        class="form-control rounded-pill @error('mariage_date') is-invalid @enderror"
+                                        value="{{ old('mariage_date') }}"
                                     @error('mariage_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -85,8 +85,8 @@
                             <div class="mb-3">
                                 <label class="form-label fw-semibold"><i class="bi bi-mortarboard me-2"></i>Education (Optional)</label>
                                 <input type="text" name="education"
-                                    class="form-control @error('education') is-invalid @enderror"
-                                    placeholder="Enter education qualification" value="{{ old('education') }}">
+                                    class="form-control rounded-pill @error('education') is-invalid @enderror"
+                                    placeholder="Enter education qualification" value="{{ old('education') }}"
                                 @error('education')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -95,7 +95,7 @@
                             <div class="mb-4">
                                 <label class="form-label fw-semibold"><i class="bi bi-camera me-2"></i>Photo (Optional)</label>
                                 <input type="file" name="photo_path"
-                                    class="form-control @error('photo_path') is-invalid @enderror" accept="image/*">
+                                    class="form-control rounded-pill @error('photo_path') is-invalid @enderror" accept="image/*">
                                 <small class="form-text text-muted">Upload a clear photo (JPG, PNG, max 2MB)</small>
                                 @error('photo_path')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -103,7 +103,7 @@
                             </div>
 
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg">
+                                <button type="submit" class="btn btn-primary btn-lg rounded-pill">
                                     <i class="bi bi-person-plus me-2"></i>Add Family Member
                                 </button>
                             </div>

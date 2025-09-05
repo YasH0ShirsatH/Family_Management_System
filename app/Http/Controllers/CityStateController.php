@@ -21,20 +21,22 @@ class CityStateController extends Controller
     public function cityindex()
     {
         
-        $cities = City::orderBy('name','asc')->paginate(20);
+        $cities = City::latest()->paginate(20);
 
         return view("state-city.city", compact("cities"));
     }
     public function stateindex()
     {
-        $states = State::orderBy('name','asc')->paginate(20);
+        $states = State::latest()->paginate(20);
 
         return view("state-city.state", compact("states"));
     }
 
     public function createCity(Request $request){
         $states  = State::all();
-        return view('state-city.addcity',['states'=>$states]);
+        // prefer query param, fall back to flashed session value
+        $selectedStateId = $request->query('state_id') ?? session('selected_state_id');
+        return view('state-city.addcity', ['states' => $states, 'selectedStateId' => $selectedStateId]);
     }
 
     public function storeCity(Request $request){
@@ -65,22 +67,21 @@ class CityStateController extends Controller
     }
 
     public function storeState(Request $request)
-{
-    
-    $request->validate([
-        'state' => 'required|string', // 
-    ]);
-    
-    
-    $state = State::firstOrCreate(['name' => $request->state]);
-    
-    
-    if ($state->wasRecentlyCreated) {
-        return redirect()->route('create.state')->with('success', 'State added successfully.');
-    }
-    
-    
-    return redirect()->route('create.state')->with('error', 'The State already exists.');
+    {
+        $request->validate([
+            'state' => 'required|string',
+        ]);
+
+        $states1 = State::firstOrCreate(['name' => $request->state]);
+
+        if ($states1->wasRecentlyCreated) {
+            // send the new state's id as query param and also flash to session
+            return redirect()->route('create.city', ['state_id' => $states1->id])
+                             ->with('success', 'State added successfully.')
+                             ->with('selected_state_id', $states1->id);
+        }
+
+        return redirect()->route('create.state')->with('error', 'The State already exists.');
 }
 
 

@@ -21,7 +21,8 @@ class AdminController extends Controller
     public function index()
     {
         $heads = Head::paginate('3');
-        return view("admin.index", compact("heads"));
+        $totalMembers = Member::count();
+        return view("admin.index", compact("heads",'totalMembers'));
     }
 
     /**
@@ -151,9 +152,18 @@ class AdminController extends Controller
              ->orWhere('city', 'like', '%' . $request->search . '%')
              ->orWhere('state', 'like', '%' . $request->search . '%')
              ->paginate(3);
+        
+        $searchedHeadIds = Head::where('name', 'like', '%' . $request->search . '%')
+             ->orWhere('surname', 'like', '%' . $request->search . '%')
+             ->orWhere('mobile', 'like', '%' . $request->search . '%')
+             ->orWhere('city', 'like', '%' . $request->search . '%')
+             ->orWhere('state', 'like', '%' . $request->search . '%')
+             ->pluck('id');
+        
+        $totalMembers = Member::whereIn('head_id', $searchedHeadIds)->count();
 
         if($heads){
-            return view('admin.index' ,['heads'=>$heads]);
+            return view('admin.index' ,['heads'=>$heads,'totalMembers'=>$totalMembers] );
         }
     }
 }

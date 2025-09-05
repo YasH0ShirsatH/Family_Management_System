@@ -22,7 +22,7 @@
 
     <div class="container py-4">
         @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show">
+        <div class="alert alert-danger alert-dismissible fade show rounded-pill">
             {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
@@ -31,14 +31,14 @@
         <!-- Quick Access Buttons -->
         <div class="row g-3 mb-4">
             <div class="col-md-6">
-                <a href="{{ route('admin.index') }}" class="btn btn-primary btn-lg w-100 py-3 shadow">
+                <a href="{{ route('admin.index') }}" class="btn btn-primary btn-lg w-100 py-3 shadow rounded-pill">
                     <i class="bi bi-people fs-3 d-block mb-2"></i>
                     <div class="fw-bold">Manage Families</div>
                     <small>View and manage all family records</small>
                 </a>
             </div>
             <div class="col-md-6">
-                <a href="logout" class="btn btn-danger btn-lg w-100 py-3 shadow">
+                <a href="logout" class="btn btn-danger btn-lg w-100 py-3 shadow rounded-pill">
                     <i class="bi bi-box-arrow-right fs-3 d-block mb-2"></i>
                     <div class="fw-bold">Logout</div>
                     <small>Sign out of your account</small>
@@ -47,8 +47,8 @@
         </div>
 
         <!-- Dashboard Overview -->
-        <div class="card shadow mb-4">
-            <div class="card-header bg-primary text-white py-3">
+        <div class="card shadow mb-4 rounded-4">
+            <div class="card-header bg-primary text-white py-3 rounded-top-4">
                 <h4 class="mb-0 fw-bold">
                     <i class="bi bi-speedometer2 me-2"></i>Dashboard Overview
                 </h4>
@@ -56,7 +56,7 @@
             <div class="card-body p-4">
                 <div class="row g-4 mb-4">
                     <div class="col-md-6">
-                        <div class="card border-0 bg-light text-center">
+                        <div class="card border-0 bg-light text-center rounded-4">
                             <div class="card-body p-4">
                                 <i class="bi bi-people text-primary fs-1 mb-2"></i>
                                 <h3 class="fw-bold text-primary mb-1">{{ $headcount }}</h3>
@@ -65,7 +65,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card border-0 bg-light text-center">
+                        <div class="card border-0 bg-light text-center rounded-4">
                             <div class="card-body p-4">
                                 <i class="bi bi-person-check text-success fs-1 mb-2"></i>
                                 <h3 class="fw-bold text-success mb-1">{{ $membercount }}</h3>
@@ -76,7 +76,7 @@
                 </div>
 
                 <!-- Account Info -->
-                <div class="card bg-light">
+                <div class="card bg-light rounded-4">
                     <div class="card-body p-4">
                         <h5 class="card-title text-center mb-4">
                             <i class="bi bi-person-badge text-info me-2"></i>Account Information

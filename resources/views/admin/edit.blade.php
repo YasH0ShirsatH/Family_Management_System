@@ -21,21 +21,21 @@
     <div class="container py-4">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white text-center py-4">
+                <div class="card shadow rounded-4">
+                    <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
                         <h2 class="mb-0 fw-bold"><i class="bi bi-person-badge me-2"></i>Edit Family Head</h2>
                         <p class="mb-0 mt-2">Update family head information</p>
                     </div>
 
                     <div class="card-body p-4">
                         @if (session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show">
+                        <div class="alert alert-danger alert-dismissible fade show rounded-pill">
                             {{ session('error') }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                         @endif
                         @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show">
+                        <div class="alert alert-success alert-dismissible fade show rounded-pill">
                             {{ session('success') }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
@@ -48,13 +48,13 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-semibold">First Name</label>
-                                    <input type="text" name="name" class="form-control" value="{{ $head->name }}"
+                                    <input type="text" name="name" class="form-control rounded-pill" value="{{ $head->name }}"
                                         required>
                                     @error('name')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-semibold">Last Name</label>
-                                    <input type="text" name="surname" class="form-control" value="{{ $head->surname }}"
+                                    <input type="text" name="surname" class="form-control rounded-pill" value="{{ $head->surname }}"
                                         required>
                                     @error('surname')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
@@ -63,13 +63,13 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-semibold">Date of Birth</label>
-                                    <input type="date" name="birthdate" class="form-control"
+                                    <input type="date" name="birthdate" class="form-control rounded-pill"
                                         value="{{ $head->birthdate }}" required>
                                     @error('birthdate')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-semibold">Mobile Number</label>
-                                    <input type="tel" name="mobile" class="form-control" value="{{ $head->mobile }}"
+                                    <input type="tel" name="mobile" class="form-control rounded-pill" value="{{ $head->mobile }}"
                                         required>
                                     @error('mobile')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
@@ -77,7 +77,7 @@
 
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Address</label>
-                                <textarea name="address" class="form-control" rows="3"
+                                <textarea name="address" class="form-control rounded-4" rows="3"
                                     required>{{ $head->address }}</textarea>
                                 @error('address')<div class="text-danger">{{ $message }}</div>@enderror
                             </div>
@@ -85,7 +85,7 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label fw-semibold">State</label>
-                                    <select name="state" id="stateSelect" class="form-select">
+                                    <select name="state" id="stateSelect" class="form-select rounded-pill">
                                         <option value="">Select State</option>
                                         @foreach ($states as $state)
                                         <option value="{{ $state->name }}"  {{ $head->state == $state->name ? 'selected' : '' }}>{{ $state->name }}</option>
@@ -95,7 +95,7 @@
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label fw-semibold">City</label>
-                                    <select name="city" id="citySelect" class="form-select">
+                                    <select name="city" id="citySelect" class="form-select rounded-pill">
                                         <option value="">Select City</option>
                                         @foreach ($city as $cities)
                                             <option value="{{ $cities->name }}" {{ $head->city == $cities->name ? 'selected' : '' }}>{{ $cities->name }}</option>
@@ -105,7 +105,7 @@
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label fw-semibold">Pincode</label>
-                                    <input type="number" name="pincode" class="form-control"
+                                    <input type="number" name="pincode" class="form-control rounded-pill"
                                         value="{{ $head->pincode }}" required>
                                     @error('pincode')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
@@ -138,28 +138,28 @@
                                 <div class="mt-3" id="mrg_date_div"
                                     style="display: {{ $head->marital_status == '1' ? 'block' : 'none' }}">
                                     <label class="form-label fw-semibold">Marriage Date</label>
-                                    <input type="date" name="mariage_date" class="form-control"
-                                        value="{{ $head->mariage_date }}">
+                                    <input type="date" name="mariage_date" class="form-control rounded-pill"
+                                        value="{{ $head->mariage_date }}"
                                     @error('mariage_date')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
                             </div>
 
                             <!-- Hobby Section -->
-                            <div class="card bg-light mb-4">
+                            <div class="card bg-light mb-4 rounded-4">
                                 <div class="card-body">
                                     <h6 class="card-title text-primary fw-semibold"><i
                                             class="bi bi-star me-2"></i>Hobbies & Interests</h6>
                                     <div id="hobbyContainer">
                                         @foreach ($head->hobbies as $hobby)
                                         <input type="text" name="hobbies[]" value="{{ $hobby->hobby_name }}"
-                                            class="form-control mb-2" placeholder="Enter hobby">
+                                            class="form-control rounded-pill mb-2" placeholder="Enter hobby">
                                         @endforeach
                                     </div>
                                     <div class="d-flex gap-2">
-                                        <button type="button" id="addHobby" class="btn btn-success btn-sm">
+                                        <button type="button" id="addHobby" class="btn btn-success btn-sm rounded-pill">
                                             <i class="bi bi-plus-circle me-1"></i>Add
                                         </button>
-                                        <button type="button" id="removeHobby" class="btn btn-danger btn-sm">
+                                        <button type="button" id="removeHobby" class="btn btn-danger btn-sm rounded-pill">
                                             <i class="bi bi-dash-circle me-1"></i>Remove
                                         </button>
                                     </div>
@@ -169,12 +169,12 @@
 
                             <div class="mb-4">
                                 <label class="form-label fw-semibold">Profile Picture</label>
-                                <input type="file" name="path" class="form-control" accept="image/*">
+                                <input type="file" name="path" class="form-control rounded-pill" accept="image/*">
                                 <small class="text-muted">Upload a clear photo (JPG, PNG, max 2MB)</small>
                                 @error('path')<div class="text-danger">{{ $message }}</div>@enderror
                             </div>
 
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary rounded-pill">
                                 <i class="bi bi-check-circle me-2"></i>Update Family Head
                             </button>
                         </form>
@@ -186,15 +186,15 @@
         <!-- Delete Section -->
         <div class="row justify-content-center mt-4">
             <div class="col-lg-8">
-                <div class="card border-danger shadow">
-                    <div class="card-header bg-danger text-white py-3">
+                <div class="card border-danger shadow rounded-4">
+                    <div class="card-header bg-danger text-white py-3 rounded-top-4">
                         <h5 class="mb-0 fw-bold">Danger Zone: Delete family head and all members</h5>
                     </div>
                     <div class="card-body text-center p-4">
                         <form action="{{ route('admin.destroy', $head->id) }}" method="post">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger" id="deleteBtn">
+                            <button type="submit" class="btn btn-danger rounded-pill" id="deleteBtn">
                                 <i class="bi bi-trash me-2"></i>Delete Head
                             </button>
                         </form>
@@ -229,7 +229,7 @@
             const input = document.createElement('input');
             input.type = 'text';
             input.name = 'hobbies[]';
-            input.className = 'form-control mb-2';
+            input.className = 'form-control rounded-pill mb-2';
             input.placeholder = 'Enter hobby';
             hobbyContainer.appendChild(input);
             input.focus();

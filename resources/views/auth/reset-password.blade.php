@@ -31,7 +31,7 @@
 
     .reset-container {
         background: white;
-        border-radius: 16px;
+        border-radius: 50px;
         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         overflow: hidden;
         width: 100%;
@@ -66,8 +66,8 @@
 
     .form-control {
         border: 2px solid var(--border-color);
-        border-radius: 8px;
-        padding: 0.75rem;
+        border-radius: 50px;
+        padding: 0.75rem 1.25rem;
         font-size: 0.95rem;
         transition: all 0.2s ease;
     }
@@ -80,7 +80,7 @@
     .btn-success {
         background: var(--success-color);
         border: none;
-        border-radius: 8px;
+        border-radius: 50px;
         padding: 0.75rem 1.5rem;
         font-weight: 500;
         font-size: 0.95rem;
@@ -94,7 +94,7 @@
 
     .alert {
         border: none;
-        border-radius: 8px;
+        border-radius: 50px;
         font-size: 0.9rem;
         margin-bottom: 1rem;
     }
@@ -114,7 +114,7 @@
 
     .password-requirements {
         background: #f1f5f9;
-        border-radius: 8px;
+        border-radius: 50px;
         padding: 1rem;
         margin-bottom: 1rem;
         font-size: 0.85rem;
