@@ -11,7 +11,7 @@
     <nav class="navbar navbar-dark bg-primary">
         <div class="container">
             <span class="navbar-brand mb-0 h1">
-                <i class="bi bi-building me-2"></i>City Management
+                <i class="bi bi-buildings me-2"></i>City Management
             </span>
             <div>
                 <a href="/admin" class="btn btn-outline-light btn-sm">
