@@ -20,7 +20,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $heads = Head::paginate('3');
+        $heads = Head::latest()->paginate('3');
         $totalMembers = Member::count();
         return view("admin.index", compact("heads",'totalMembers'));
     }

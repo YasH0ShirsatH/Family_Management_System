@@ -20,31 +20,28 @@ class CityStateController extends Controller
     }
     public function cityindex(Request $request)
     {
-        $search = $request->input('search');
-            $cities = City::where('name', 'like', "%{$search}%")
-                ->orWhere('id', 'like', '%' . $request->search . '%')
-                ->orWhere('state_id', 'like', '%' . $request->search . '%')
-                ->latest()
-                ->paginate(perPage: 10);
-        // Handle AJAX search requests
-        if ( $request->ajax()) {
-            return view("state-city.city", compact("cities"))->render();
+        // build base query
+        $query = City::query();
+
+        if ($request->filled('search')) {
+            $q = $request->input('search');
+            $query->where(function($builder) use ($q) {
+                $builder->where('name', 'like', "%{$q}%")
+                        ->orWhere('id', 'like', "{$q}")
+                        ->orWhere('state_id', 'like', "{$q}");
+            });
         }
-        
-        // Handle standard GET requests and pagination
-        if ($request->isMethod('get')) {
-            // Handle search functionality for standard GET requests
-            $query = City::query();
 
-            if ($request->filled('search')) {
-                $search = $request->input('search');
-                $query->where('name', 'like', "%{$search}%");
-            }
+        // always preserve query-string so pagination keeps search
+        $cities = $query->latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
 
-            $cities = $query->latest()->paginate(10)->withQueryString();
-
-            return view("state-city.city", compact("cities"));
+        // for AJAX return a partial (only table + pagination)
+        if ($request->ajax()) {
+            return view('state-city.partials.city-list', compact('cities'));
         }
+
+        // normal full page render
+        return view('state-city.city', compact('cities'));
     }
 
     public function stateindex(Request $request)
@@ -53,8 +50,6 @@ class CityStateController extends Controller
         $state_count = State::all()->count();
         if ($request->has('search') && $request->isMethod('post')) {
             $states = State::where('name', 'LIKE', '%' . $request->search . '%') 
-                    ->orWhere('type', 'LIKE', '%' . $request->search . '%')
-                    ->orWhere('level', 'LIKE', '%' . $request->search . '%')
                     ->orWhere('id', 'LIKE', '%' . $request->search . '%')
                     ->latest()
                     ->paginate(8);
