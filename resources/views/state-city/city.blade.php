@@ -12,6 +12,7 @@
 
 
 <body class="bg-light" id="cities">
+    <section id="searchResults">
     
     <nav class="navbar navbar-dark bg-primary">
         <div class="container">
@@ -54,6 +55,8 @@
                                 </span>
                                 <input type="text" name="search" class="form-control border-0 shadow-sm"
                                     placeholder="Search city... by ( #Id , Name , state_id )" id="searchInput" value="{{ request('search') }}" value="{{ request('search') }}">
+
+                                    
                             </div>
                         </div>
                     </div>
@@ -78,7 +81,7 @@
                                 <th scope="col"><i class="bi bi-trash me-1"></i>Delete</th>
                             </tr>
                         </thead>
-                        <tbody id="searchResults">
+                        <tbody >
                             @forelse ($cities as $index => $item)
                             <tr>
                                 <th scope="row">{{ $cities->firstItem() + $index }}</th>
@@ -118,18 +121,46 @@
     <script>
         $(document).ready(function () {
     // Live search
-    $('#searchInput').on('keyup', function () {
-        let query = $(this).val();
+    $(document).ready(function() {
+  const searchInput = $('#searchInput');
+  let timeout = null;
 
-        $.ajax({
-            url: "{{ route('city.index') }}",
-            method: 'GET',
-            data: { search: query },
-            success: function (response) {
-                $('#searchResults').html(response); // Expecting <tr>...</tr>
-            }
-        });
-    });
+  function setCursorPosition(input, pos) {
+    // This is a cross-browser way to restore the cursor position
+    if (input.setSelectionRange) {
+      input.setSelectionRange(pos, pos);
+    } else if (input.createTextRange) {
+      const range = input.createTextRange();
+      range.collapse(true);
+      range.moveStart('character', pos);
+      range.moveEnd('character', pos);
+      range.select();
+    }
+    input.focus(); // Ensure the element has focus
+  }
+
+  searchInput.on('keyup', function () {
+    let query = $(this).val();
+    let cursorPosition = this.selectionStart; // Get cursor position before AJAX
+
+    // Clear any previous timeout to debounce the function
+    clearTimeout(timeout);
+
+    // Set a new timeout
+    timeout = setTimeout(() => {
+      $.ajax({
+        url: "{{ route('city.index') }}",
+        method: 'GET',
+        data: { search: query },
+        success: function (response) {
+          $('#searchResults').html(response);
+          // Restore the cursor position after the DOM update
+          setCursorPosition(searchInput[0], cursorPosition);
+        }
+      });
+    }, 1000); 
+  });
+});
 
     // AJAX pagination
     $(document).on('click', '.pagination a', function (e) {
@@ -148,7 +179,7 @@
 });
 
     </script>
-   
+   </section>
 </body>
 
 </html>

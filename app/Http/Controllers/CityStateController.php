@@ -21,10 +21,11 @@ class CityStateController extends Controller
     public function cityindex(Request $request)
     {
         $search = $request->input('search');
-            $cities = City::query()
-                ->where('name', 'like', "%{$search}%")
+            $cities = City::where('name', 'like', "%{$search}%")
+                ->orWhere('id', 'like', '%' . $request->search . '%')
+                ->orWhere('state_id', 'like', '%' . $request->search . '%')
                 ->latest()
-                ->paginate(perPage: 20);
+                ->paginate(perPage: 10);
         // Handle AJAX search requests
         if ( $request->ajax()) {
             return view("state-city.city", compact("cities"))->render();
@@ -40,7 +41,7 @@ class CityStateController extends Controller
                 $query->where('name', 'like', "%{$search}%");
             }
 
-            $cities = $query->latest()->paginate(20)->withQueryString();
+            $cities = $query->latest()->paginate(10)->withQueryString();
 
             return view("state-city.city", compact("cities"));
         }
