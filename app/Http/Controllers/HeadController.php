@@ -151,9 +151,9 @@ class HeadController extends Controller
 
     public function logoutMember(Request $request, $id){
         // Clear all session data
-        $user = $request->session()->get('head_submitted_' . $id);
-        if($user){
-            session()->flush();
+        $head = $request->session()->get('head_submitted_' . $id);
+        if($head){
+            session()->forget('head_submitted_');
         }
         // Redirect to the homepage or login page
         return redirect('/')->with('success', 'You have been logged out successfully.');
