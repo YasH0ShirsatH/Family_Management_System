@@ -19,15 +19,15 @@
 
     <div class="container py-5">
         <div class="text-center mb-4">
-            <a href="{{ route('admin.index') }}" class="btn btn-outline-primary">
+            <a href="{{ route('admin.index') }}" class="btn btn-outline-primary rounded-pill">
                 <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
             </a>
         </div>
 
         <div class="row justify-content-center">
             <div class="col-lg-10">
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-header bg-primary text-white text-center py-4">
+                <div class="card shadow-sm border-0 mb-4 rounded-4">
+                    <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
                         <h2 class="mb-0">
                             <i class="bi bi-person-badge me-2"></i>
                             {{ $heads->name }} Family Details
@@ -43,7 +43,7 @@
                         
                         <div class="row g-4">
                             <div class="col-md-6">
-                                <div class="card bg-light border-0 h-100">
+                                <div class="card bg-light border-0 h-100 rounded-4">
                                     <div class="card-body p-4">
                                         <h5 class="card-title text-primary mb-3">
                                             <i class="bi bi-person-circle me-2"></i>Personal Information
@@ -75,7 +75,7 @@
                             </div>
                             
                             <div class="col-md-6">
-                                <div class="card bg-light border-0 h-100">
+                                <div class="card bg-light border-0 h-100 rounded-4">
                                     <div class="card-body p-4">
                                         <h5 class="card-title text-primary mb-3">
                                             <i class="bi bi-geo-alt me-2"></i>Address Information
@@ -111,7 +111,7 @@
                             </div>
                         </div>
                         
-                        <div class="card bg-light border-0 mt-4">
+                        <div class="card bg-light border-0 mt-4 rounded-4">
                             <div class="card-body p-4">
                                 <h5 class="card-title text-primary mb-3">
                                     <i class="bi bi-star me-2"></i>Hobbies & Interests
@@ -125,7 +125,7 @@
                         </div>
                         
                         <div class="mt-4">
-                            <span class="badge bg-success fs-6 px-4 py-3">
+                            <span class="badge bg-success fs-6 px-4 py-3 rounded-pill">
                                 <i class="bi bi-people me-2"></i>
                                 {{ $heads->members->count() }} Family Members
                             </span>
@@ -148,7 +148,7 @@
                             <div class="row">
                                 @foreach($heads->members as $member)
                                     <div class="col-md-6 col-lg-4 mb-4">
-                                        <div class="card border-0 shadow-sm h-100">
+                                        <div class="card border-0 shadow-sm h-100 rounded-4">
                                             @if(empty($member->photo_path))
                                                 <img src="{{ asset('uploads/images/noimage.png') }}" 
                                                      class="card-img-top" style="height: 200px; object-fit: cover;" alt="No Image">

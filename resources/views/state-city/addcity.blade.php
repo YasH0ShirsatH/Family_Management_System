@@ -21,11 +21,23 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
+
+
+        
 <body class="bg-light">
     <div class="container py-4">
+        
         <div class="row justify-content-center">
             <div class="col-md-6">
+                <div class="card-header bg-primary rounded mb-3 pt-2 pb-2 text-white text-center">
+                       <a href="/admin/state-city/city" class="text-white text-decoration-none">
+                         <h4 class="mb-0">
+                            <i class="bi bi-arrow-right me-2"></i>Go  back
+                        </h4>
+                       </a>
+                    </div>
                 <div class="card">
+                    
                     <div class="card-header bg-primary text-white text-center">
                         <h4 class="mb-0">
                             <i class="bi bi-plus-circle me-2"></i>Add City
@@ -43,9 +55,22 @@
                                 <select name="states" id="states" class="form-select">
                                     <option value="">Select State</option>
                                     @foreach ($states as $state)
-                                        <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                        <option value="{{ $state->id }}"
+
+                                            @if( (isset($selectedStateId) && $selectedStateId == $state->id) || old('states') == $state->id ) selected @endif>
+                                            {{ $state->name }}
+                                        </option>
                                     @endforeach
                                 </select>
+
+
+
+                                
+
+
+
+
+
                                 @error('states')
                                     <div class="text-danger mt-1">{{ $message }}</div>
                                 @enderror

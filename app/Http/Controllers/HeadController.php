@@ -6,6 +6,7 @@ use App\Models\Member;
 use App\Models\Hobby;
 use App\Models\City;
 use App\Models\State;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 class HeadController extends Controller
@@ -20,7 +21,13 @@ class HeadController extends Controller
     }
 
     public function dashboard(){
-        return view('userDashboard');
+        $head = Head::all();
+        $member = Member::all();
+        $user = User::all();
+        $headcount = $head->count();
+        $membercount = $member->count();
+        $usercount = $user->count();
+        return view('userDashboard',['headcount'=>$headcount,'membercount'=>$membercount,'usercount'=>$usercount]);
     }
 
 

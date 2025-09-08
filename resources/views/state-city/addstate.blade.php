@@ -23,6 +23,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
                 @endif
+                <div class="card-header bg-primary rounded mb-3 pt-2 pb-2 text-white text-center">
+                       <a href="/admin/state-city/states" class="text-white text-decoration-none">
+                         <h4 class="mb-0">
+                            <i class="bi bi-arrow-right me-2"></i>Go  back
+                        </h4>
+                       </a>
+                    </div>
 
                 <div class="card">
                     <div class="card-header bg-primary text-white text-center">

@@ -11,20 +11,20 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white text-center py-4">
+                <div class="card shadow rounded-4">
+                    <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
                         <h2 class="mb-0 fw-bold"><i class="bi bi-shield-lock me-2"></i>Admin Login</h2>
                     </div>
                     
                     <div class="card-body p-4">
                         @if (session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show">
+                        <div class="alert alert-danger alert-dismissible fade show rounded-pill">
                             {{ session('error') }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
                         @endif
                         @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show">
+                        <div class="alert alert-success alert-dismissible fade show rounded-pill">
                             {{ session('success') }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
@@ -36,7 +36,7 @@
                             <div class="mb-3">
                                 <label for="email" class="form-label fw-semibold">Email Address</label>
                                 <input type="email" name="email" value="{{ old('email') }}" id="email" 
-                                       class="form-control @error('email') is-invalid @enderror" 
+                                       class="form-control rounded-pill @error('email') is-invalid @enderror" 
                                        placeholder="Enter your email" required>
                                 @error('email')
                                 <div class="text-danger">{{ $message }}</div>
@@ -46,7 +46,7 @@
                             <div class="mb-3">
                                 <label for="password" class="form-label fw-semibold">Password</label>
                                 <input type="password" name="password" id="password" 
-                                       class="form-control @error('password') is-invalid @enderror" 
+                                       class="form-control rounded-pill @error('password') is-invalid @enderror" 
                                        placeholder="Enter your password" required>
                                 @error('password')
                                 <div class="text-danger">{{ $message }}</div>
@@ -60,7 +60,7 @@
                             </div>
 
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg">
+                                <button type="submit" class="btn btn-primary btn-lg rounded-pill">
                                     <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
                                 </button>
                             </div>

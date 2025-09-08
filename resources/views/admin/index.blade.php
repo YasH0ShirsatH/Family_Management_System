@@ -22,13 +22,13 @@
                 <i class="bi bi-house-heart me-2"></i>Family Management System
             </a>
             <div class="d-flex gap-2">
-                <a href="/headview" class="btn btn-success">
+                <a href="/headview" class="btn btn-success rounded-pill">
                     <i class="bi bi-plus-circle me-1"></i>Create Head
                 </a>
-                <a href="/state-city" class="btn btn-warning">
+                <a href="/state-city" class="btn btn-warning rounded-pill">
                     <i class="bi bi-plus-circle me-1"></i>Create State/City
                 </a>
-                <a href="logout" class="btn btn-danger">
+                <a href="logout" class="btn btn-danger rounded-pill">
                     <i class="bi bi-box-arrow-right me-1"></i>Logout
                 </a>
 
@@ -39,15 +39,15 @@
     <div class="container py-4">
         <!-- Success Alert -->
         @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show">
+        <div class="alert alert-success alert-dismissible fade show rounded-pill">
             <strong>{{ session('name') }} {{ session('surname') }}</strong>: {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
         @endif
 
         <!-- Dashboard Header -->
-        <div class="card shadow mb-4">
-            <div class="card-header bg-primary text-white py-3">
+        <div class="card shadow mb-4 rounded-4">
+            <div class="card-header bg-primary text-white py-3 rounded-top-4">
                 <h4 class="mb-0 fw-bold">
                     <i class="bi bi-speedometer2 me-2"></i>Admin Dashboard
                 </h4>
@@ -58,20 +58,19 @@
 
                 <div class="row g-3 mb-4">
                     <div class="col-md-6">
-                        <div class="card bg-primary text-white border-0">
+                        <div class="card bg-primary text-white border-0 rounded-4">
                             <div class="card-body text-center py-3">
                                 <i class="bi bi-house-door fs-1 mb-2"></i>
-                                <h4 class="mb-0">{{ $heads->count() }}</h4>
+                                <h4 class="mb-0">{{ $heads->total() }}</h4>
                                 <small>Total Families</small>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card bg-success text-white border-0">
+                        <div class="card bg-success text-white border-0 rounded-4">
                             <div class="card-body text-center py-3">
                                 <i class="bi bi-people-fill fs-1 mb-2"></i>
-                                <h4 class="mb-0">{{ $heads->sum(function($head) { return $head->members->count(); }) }}
-                                </h4>
+                                <h4 class="mb-0">{{ $totalMembers }}</h4>
                                 <small>Total Members</small>
                             </div>
                         </div>
@@ -80,136 +79,131 @@
                 </div>
 
 
-                <!-- Search Form using the pagination used in admincontroller -->
-                <form action="{{ route('search') }}" method="get" class="d-flex gap-2">
-                    @csrf
-                    <input type="text" name="search" value="{{ old('search', request()->input('search')) }}"
-                        class="form-control"
-                        placeholder="Search by Name, Mobile No, State, City. (leave empty to show all)">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-search me-1"></i>Search
-                    </button>
-                </form>
+                <!-- Search Form -->
+                <div class="card border-0 bg-light rounded-4 mb-4">
+                    <div class="card-body p-3">
+                        <form action="{{ route('search') }}" method="get" class="d-flex gap-3">
+                            @csrf
+                            <input type="text" name="search" value="{{ old('search', request()->input('search')) }}"
+                                class="form-control rounded-pill border-0 shadow-sm"
+                                placeholder="Search by Name, Mobile No, State, City..." style="padding: 12px 20px;">
+                            <button type="submit" class="btn btn-primary rounded-pill shadow-sm flex-shrink-0" style="padding: 12px 40px; min-width: 150px;">
+                                <i class="bi bi-search me-2"></i>Search
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- All Family Cards(foreach loop)  -->
+        <!-- Family List -->
         @if($heads->count() > 0)
-        <div class="row justify-content-center">
-            @foreach ($heads as $user)
-            <div class="col-lg-6 col-xl-4 mb-4">
-                <div class="card h-100 shadow-sm border-0"
-                    style="border-radius: 20px; transition: transform 0.2s; cursor: pointer;"
-                    onmouseover="this.style.transform='translateY(-5px)'"
-                    onmouseout="this.style.transform='translateY(0)'">
-                    <!-- Card Header with Gradient colors added -->
-                    <div class="text-center text-white py-3"
-                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px 20px 0 0;">
-                        <i class="bi bi-house-heart fs-2 mb-2"></i>
-                        <h6 class="mb-0 fw-bold">{{ $user->name }}'s Family</h6>
-                    </div>
-
-                    <div class="card-body text-center px-4 py-4">
-                        <!-- Profile Image -->
-                        <img src="{{ asset('uploads/images/' . $user->photo_path) }}"
-                            class="rounded-circle border border-3 border-primary shadow mb-3"
-                            style="width: 90px; height: 90px; object-fit: cover;" alt="Family Head Photo">
-                        <h5 class="fw-bold mb-3 text-dark">{{ ucfirst($user->name) }} {{ ucfirst($user->surname) }}</h5>
-
-                        <!-- Info Grid -->
-                        <div class="row g-2 mb-3 text-start">
-                            <div class="col-12">
-                                <div class="d-flex align-items-center p-2 bg-light rounded">
-                                    <i class="bi bi-calendar3 text-primary me-3"></i>
-                                    <div class="flex-grow-1">
-                                        <small class="text-muted d-block">Birth Date</small>
-                                        <span
-                                            class="fw-semibold">{{ date('M d, Y', strtotime($user->birthdate)) }}</span>
+        <div class="row">
+            <div class="col-12">
+                @foreach ($heads as $user)
+                <div class="card shadow-sm mb-3 rounded-4" style="transition: all 0.2s;" onmouseover="this.style.transform='scale(1.01)'" onmouseout="this.style.transform='scale(1)'">
+                    <div class="card-body p-4">
+                        <div class="row align-items-center g-3">
+                            <!-- Profile Image -->
+                            <div class="col-md-2 text-center">
+                                <img src="{{ asset('uploads/images/' . $user->photo_path) }}"
+                                     class="rounded-circle border border-3 border-primary shadow"
+                                     style="width: 90px; height: 90px; object-fit: cover;" alt="Family Head Photo">
+                            </div>
+                            
+                            <!-- Family Info -->
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge rounded-pill" style="background: linear-gradient(45deg, #667eea, #764ba2); padding: 8px 15px;">
+                                        <i class="bi bi-house-heart me-2"></i>{{ $user->name }}'s Family
+                                    </span>
+                                </div>
+                                <h5 class="fw-bold mb-3">{{ ucfirst($user->name) }} {{ ucfirst($user->surname) }}</h5>
+                                <div class="row g-2">
+                                    <div class="col-sm-6">
+                                        <small class="text-muted d-flex align-items-center">
+                                            <i class="bi bi-calendar3 text-primary me-2"></i>
+                                            {{ date('M d, Y', strtotime($user->birthdate)) }}
+                                        </small>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <small class="text-muted d-flex align-items-center">
+                                            <i class="bi bi-telephone text-success me-2"></i>
+                                            {{ $user->mobile }}
+                                        </small>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <small class="text-muted d-flex align-items-center">
+                                            <i class="bi bi-geo-alt text-info me-2"></i>
+                                            {{ ucfirst($user->city) }}, {{ ucfirst($user->state) }}
+                                        </small>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <span class="badge bg-success rounded-pill">
+                                            <i class="bi bi-people me-1"></i>{{ $user->members->count() + 1 }} Members
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12">
-                                <div class="d-flex align-items-center p-2 bg-light rounded">
-                                    <i class="bi bi-telephone text-success me-3"></i>
-                                    <div class="flex-grow-1">
-                                        <small class="text-muted d-block">Mobile</small>
-                                        <span class="fw-semibold">{{ $user->mobile }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="d-flex align-items-center p-2 bg-light rounded">
-                                    <i class="bi bi-geo-alt text-info me-3"></i>
-                                    <div class="flex-grow-1">
-                                        <small class="text-muted d-block">Location</small>
-                                        <span class="fw-semibold">{{ ucfirst($user->city) }},
-                                            {{ ucfirst($user->state) }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="d-flex align-items-center p-2 bg-light rounded">
-                                    <i class="bi bi-people text-warning me-3"></i>
-                                    <div class="flex-grow-1">
-                                        <small class="text-muted d-block">Total Members</small>
-                                        <span class="fw-semibold">{{ $user->members->count() + 1 }} (Including
-                                            Head)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Members Badge -->
-                        <div class="d-flex justify-content-center">
-                            <span class="badge bg-gradient"
-                                style="background: linear-gradient(45deg, #28a745, #20c997); font-size: 0.9rem; padding: 8px 16px;">
-                                <i class="bi bi-people me-2"></i>{{ $user->members->count() }} Members + 1 Head
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="card-footer bg-white border-0 p-3">
-                        <div class="d-grid gap-2">
-                            <a href="{{ route('admin.show', $user->id) }}" class="btn btn-primary btn-sm">
-                                <i class="bi bi-eye me-2"></i>View Family Details
-                            </a>
-                            <div class="row g-2">
-                                <div class="col-6">
-                                    <a href="{{ route('admin.edit', $user->id) }}" class="btn btn-success btn-sm w-100">
-                                        <i class="bi bi-pencil me-1"></i>Edit Head
+                            
+                            <!-- Action Buttons -->
+                            <div class="col-md-4">
+                                <div class="d-grid gap-3">
+                                    <a href="{{ route('admin.show', $user->id) }}" class="btn btn-primary" style="border-radius: 25px; padding: 12px 20px;">
+                                        <i class="bi bi-eye me-2"></i>View Details
                                     </a>
-                                </div>
-                                <div class="col-6">
-                                    <a href="{{ route('admin-member.show',$user->id) }}"
-                                        class="btn btn-info btn-sm w-100">
-                                        <i class="bi bi-people me-1"></i>Edit Members
-                                    </a>
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <a href="{{ route('admin.edit', $user->id) }}" class="btn btn-outline-warning w-100" style="border-radius: 25px; padding: 10px 15px;">
+                                                <i class="bi bi-pencil me-1"></i>Edit Head
+                                            </a>
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="{{ route('admin-member.show',$user->id) }}" class="btn btn-outline-info w-100" style="border-radius: 25px; padding: 10px 15px;">
+                                                <i class="bi bi-people me-1"></i>Edit Members
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
 
+        <!-- Pagination -->
         @if($heads->hasPages())
-        <div class="row justify-content-center mt-4">
-            <div class="col-lg-10">
-                <div class="d-flex justify-content-center">
-                    {{ $heads->links('pagination::bootstrap-4') }}
-                </div>
-            </div>
+        <div class="d-flex justify-content-center align-items-center mt-4 gap-2">
+            @if ($heads->onFirstPage())
+                <span class="btn btn-light disabled" style="border-radius: 20px;">« Previous</span>
+            @else
+                <a href="{{ $heads->previousPageUrl() }}" class="btn btn-primary" style="border-radius: 20px;">« Previous</a>
+            @endif
+
+            @for ($i = 1; $i <= $heads->lastPage(); $i++)
+                @if ($i == $heads->currentPage())
+                    <span class="btn btn-primary" style="border-radius: 20px;">{{ $i }}</span>
+                @else
+                    <a href="{{ $heads->url($i) }}" class="btn btn-outline-primary" style="border-radius: 20px;">{{ $i }}</a>
+                @endif
+            @endfor
+
+            @if ($heads->hasMorePages())
+                <a href="{{ $heads->nextPageUrl() }}" class="btn btn-primary" style="border-radius: 20px;">Next »</a>
+            @else
+                <span class="btn btn-light disabled" style="border-radius: 20px;">Next »</span>
+            @endif
         </div>
         @endif
         @else
-        <div class="card shadow">
+        <div class="card shadow rounded-4">
             <div class="card-body text-center py-5">
                 <i class="bi bi-house-x" style="font-size: 4rem;" class="text-muted mb-3"></i>
                 <h4 class="text-muted">No Families Found</h4>
                 <p class="text-muted">There are currently no families registered in the system.</p>
-                <a href="/" class="btn btn-primary">
+                <a href="/" class="btn btn-primary rounded-pill">
                     <i class="bi bi-plus-circle me-2"></i>Create First Family
                 </a>
             </div>

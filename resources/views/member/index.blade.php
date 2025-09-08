@@ -19,18 +19,18 @@
     <div class="container py-4">
         <div class="row mb-4">
             <div class="col-12">
-                <div class="card shadow">
-                    <div class="card-header bg-primary text-white py-3">
+                <div class="card shadow rounded-4">
+                    <div class="card-header bg-primary text-white py-3 rounded-top-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h2 class="text-white mb-1 fw-bold"><i class="bi bi-people-fill me-2"></i>Family Members</h2>
                                 <p class="text-white-50 mb-0">{{ $members->count() }} member{{ $members->count() !== 1 ? 's' : '' }} found</p>
                             </div>
                             <div class="d-flex gap-2">
-                                <a href="{{ route('admin.index') }}" class="btn btn-light">
+                                <a href="{{ route('admin.index') }}" class="btn btn-light rounded-pill">
                                     <i class="bi bi-arrow-left me-1"></i>Back
                                 </a>
-                                <a href="{{ route('adminFamilySection',$id) }}" class="btn btn-success">
+                                <a href="{{ route('adminFamilySection',$id) }}" class="btn btn-success rounded-pill">
                                     <i class="bi bi-plus-circle me-1"></i>Add Member
                                 </a>
                             </div>
@@ -41,7 +41,7 @@
         </div>
 
         @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show">
+        <div class="alert alert-success alert-dismissible fade show rounded-pill">
             <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
@@ -50,7 +50,7 @@
         <div class="row">
         @forelse($members as $member)
         <div class="col-lg-6 mb-4">
-            <div class="card shadow h-100">
+            <div class="card shadow h-100 rounded-4">
                 <div class="row g-0 h-100">
                     <div class="col-5">
                         <img src="{{ asset('uploads/images/' . ($member->photo_path ?: 'noimage.png')) }}"
@@ -96,10 +96,10 @@
                             
                             <div class="mt-auto">
                                 <div class="d-grid gap-2">
-                                    <a href="{{ route('admin-member.edit', $member->id) }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ route('admin-member.edit', $member->id) }}" class="btn btn-primary btn-sm rounded-pill">
                                         <i class="bi bi-pencil me-1"></i>Edit
                                     </a>
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteMember({{ $member->id }})">
+                                    <button type="button" class="btn btn-danger btn-sm rounded-pill" onclick="deleteMember({{ $member->id }})">
                                         <i class="bi bi-trash me-1"></i>Delete
                                     </button>
                                 </div>
@@ -116,14 +116,14 @@
         </div>
         @empty
         <div class="col-12">
-            <div class="card shadow">
+            <div class="card shadow rounded-4">
                 <div class="card-body text-center py-5">
                     <div class="mb-4">
                         <i class="bi bi-people display-1 text-muted opacity-50"></i>
                     </div>
                     <h4 class="text-muted mb-3 fw-semibold">No Family Members Yet</h4>
                     <p class="text-muted mb-4">Start building your family tree by adding the first member.</p>
-                    <a href="{{ route('adminFamilySection',$id) }}" class="btn btn-primary btn-lg">
+                    <a href="{{ route('adminFamilySection',$id) }}" class="btn btn-primary btn-lg rounded-pill">
                         <i class="bi bi-plus-circle me-2"></i>Add First Member
                     </a>
                 </div>
