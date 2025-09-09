@@ -121,24 +121,26 @@ class CityStateController extends Controller
 
     public function storeCity(Request $request){
         $request->validate([
-        'states' => 'required',
-        'city' => 'required',
-    ]);
+            'states' => 'required',
+            'city' => 'required',
+        ]);
 
-    // Find the state
-    $state = State::find($request->states);
+        
+        $state = State::findOrFail($request->states);
 
-    
-    $city = $state->cities()->firstOrCreate(
-        ['name' => $request->city], 
-        ['state_id' => $state->state_id]  
-    );
-    
-    if ($city->wasRecentlyCreated) {
-        return redirect()->route('create.city')->with('success', 'City added successfully.');
-    }
+        
+        $city = City::firstOrCreate(
+            ['name' => $request->city, 'state_id' => $state->id]
+        );
 
-    return redirect()->route('create.city')->with('error', 'The city already exists for this state.');
+        
+        if ($city->wasRecentlyCreated) {
+            return redirect()->route('create.city', ['state_id' => $state->id])
+                             ->with('success', 'City added successfully.');
+        }
+
+        return redirect()->route('create.city', ['state_id' => $state->id])
+                         ->with('error', 'The city already exists for this state.');
     }
 
     public function createState(Request $request){
@@ -155,7 +157,7 @@ class CityStateController extends Controller
         $states1 = State::firstOrCreate(['name' => $request->state]);
 
         if ($states1->wasRecentlyCreated) {
-            // send the new state's id as query param and also flash to session
+            
             return redirect()->route('create.city', ['state_id' => $states1->id])
                              ->with('success', 'State added successfully.');
 

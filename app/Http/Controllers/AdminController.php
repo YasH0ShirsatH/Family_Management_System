@@ -101,12 +101,25 @@ class AdminController extends Controller
     {
         $head = Head::find($id);
         
-         $states = State::where('country_id',101)->orderBy('name','asc')->get();
-        foreach ($states as $state) {
-            $city = $state->cities = City::where('state_id', $state->id)->orderBy('name', 'asc')->get();
+        $states = State::where('country_id',101)->orderBy('name','asc')->get();
+
+        // determine cities for the head's current state (head->state stores state name)
+        $city = collect();
+        if ($head && $head->state) {
+            $selectedState = State::where('name', $head->state)->first();
+            if ($selectedState) {
+                $city = City::where('state_id', $selectedState->id)
+                            ->orderBy('name', 'asc')
+                            ->get();
+            }
         }
-        
-        return view("admin.edit", ["head"=>$head,'id'=>$id,'states'=>$states,'city'=>$city]);
+
+        return view("admin.edit", [
+            'head' => $head,
+            'id' => $id,
+            'states' => $states,
+            'city' => $city
+        ]);
     }
 
     public function print_pdf($id){
@@ -218,5 +231,3 @@ class AdminController extends Controller
         }
     }
 }
-
-    
