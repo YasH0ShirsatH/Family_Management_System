@@ -28,14 +28,14 @@ class CityStateController extends Controller
             $query->where(function($builder) use ($q) {
                 $builder->where('name', 'like', "%{$q}%")
                         ->orWhere('id', 'like', "{$q}")
-                        ->orWhere('state_id', 'like', "{$q}");
+                        ->orWhere('state_new_id', 'like', "{$q}");
             });
         }
 
-        // always preserve query-string so pagination keeps search
+        //  preserve query-string 
         $cities = $query->latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
 
-        // for AJAX return a partial (only table + pagination)
+        // for AJAX return a partial
         if ($request->ajax()) {
             return view('state-city.partials.city-list', compact('cities'));
         }
@@ -48,16 +48,33 @@ class CityStateController extends Controller
     {
         $city_count = City::all()->count();
         $state_count = State::all()->count();
-        if ($request->has('search') && $request->isMethod('post')) {
-            $states = State::where('name', 'LIKE', '%' . $request->search . '%') 
-                    ->orWhere('id', 'LIKE', '%' . $request->search . '%')
-                    ->latest()
-                    ->paginate(8);
-            return view("state-city.state", compact("states",'city_count','state_count'));
-        } else if($request->isMethod('get')) {
-            $states = State::latest()->paginate(8);
-        return view("state-city.state", compact("states","city_count",'state_count'));
+
+        $query = State::query();
+
+        if ($request->filled('search')) {
+            $q = $request->input('search');
+            $query->where(function($builder) use ($q) {
+                $builder->where('name', 'like', "%{$q}%")
+                        ->orWhere('id', 'like', "{$q}")
+                        ->orWhere('type', 'like', "{$q}");
+            });
         }
+
+        //  preserve query-string 
+        $states = $query->latest()->orderBy('name', 'asc')->paginate(8)->withQueryString();
+
+        // for AJAX return a partial
+        if ($request->ajax()) {
+            return view('state-city.partials.state-list', compact('states','city_count','state_count'));
+        }
+
+        // normal full page render
+        return view('state-city.state', compact('states','city_count','state_count'));
+
+
+
+
+        
     }
 
     public function editstate(Request $request,$id)
@@ -140,8 +157,10 @@ class CityStateController extends Controller
         if ($states1->wasRecentlyCreated) {
             // send the new state's id as query param and also flash to session
             return redirect()->route('create.city', ['state_id' => $states1->id])
-                             ->with('success', 'State added successfully.')
-                             ->with('selected_state_id', $states1->id);
+                             ->with('success', 'State added successfully.');
+
+                             
+                             
         }
 
         return redirect()->route('create.state')->with('error', 'The State already exists.');

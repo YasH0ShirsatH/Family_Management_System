@@ -12,27 +12,111 @@
         text-decoration: none;
     }
     </style>
+    <style>
+    .offcanvas-body {
+        padding: 2rem;
+        background-color: #f8f9fa;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .offcanvas-body>div:first-child {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #343a40;
+        margin-bottom: 1.5rem;
+    }
+
+    .dropdown {
+        background-color: #ffffff;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .dropdown::before {
+        
+        display: block;
+        font-weight: 600;
+        font-size: 1.05rem;
+        margin-bottom: 0.75rem;
+        color: #0d6efd;
+    }
+
+    .dropdown-item {
+        padding: 0.5rem 1rem;
+        margin-bottom: 0.3rem;
+        border-radius: 0.375rem;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .dropdown-item:hover {
+        background-color: #ffc107;
+        color: black !important;
+    }
+
+    li {
+        list-style-type: none;
+    }
+
+    li {
+        transition: all 400ms;
+    }
+
+    li:has(a:hover) {
+        margin-left: 10px
+    }
+    </style>
 </head>
 
 <body class="bg-light">
     <!-- Navigation -->
     <nav class="navbar navbar-dark bg-primary shadow">
         <div class="container">
-            <a class="navbar-brand fs-4 fw-bold">
-                <i class="bi bi-house-heart me-2"></i>Family Management System
-            </a>
-            <div class="d-flex gap-2">
-                <a href="/headview" class="btn btn-success rounded-pill">
-                    <i class="bi bi-plus-circle me-1"></i>Create Head
+                <a class="navbar-brand fs-4 fw-bold">
+                    <i class="bi bi-house-heart me-2"></i>Family Management System
                 </a>
-                <a href="/state-city" class="btn btn-warning rounded-pill">
-                    <i class="bi bi-plus-circle me-1"></i>Create State/City
-                </a>
-                <a href="logout" class="btn btn-danger rounded-pill">
-                    <i class="bi bi-box-arrow-right me-1"></i>Logout
-                </a>
+                <span class="navbar-text text-white d-flex align-items-center justify-content-end " style="width: 24%;">
+                    
+                
+                <span>
+                    <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                    <i class="navbar-toggler-icon"></i>
+                    </a>
 
-            </div>
+                    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Family Management System</h5>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                        <div>
+                            This is a compilation of all the shortcuts we can use to efficiently perform various tasks on a Website
+                        </div>
+                        <div class="dropdown mt-3">
+                            <p class="text-primary fw-bold">Dashboard</p>
+                            <li><a class="dropdown-item text-dark" href="/dashboard"><i class="bi bi-speedometer2 text-primary  mb-2 mx-2"></i>Dashboard</a></li>
+                        </div>
+                        <div class="dropdown mt-3">
+                            <p class="text-primary fw-bold">Usefull Links</p>
+                            <li><a class="dropdown-item text-dark" href="/admin"><span><i class="bi bi-people  mb-2 mx-2 "></i>Manage Head</a></span></li>
+                            <li><a class="dropdown-item text-dark" href="{{ route('state.index') }}"><i class="bi bi-geo-alt  mb-2 mx-2"></i>Manage States</a></li>
+                            <li><a class="dropdown-item text-dark" href="{{ route('city.index') }}"><i class="bi bi-buildings  mb-2 mx-2"></i>Manage Cities</a></li>
+                            
+                            <li><a class="dropdown-item  bg-danger" href="/logout"><i class="bi bi-box-arrow-right  mb-2 mx-2"></i>Logout</a></li>
+                        </div>
+                        <div class="dropdown mt-3">
+                            <p class="text-primary fw-bold">Add Content</p>
+                            <li><a class="dropdown-item text-dark" href="/headview"><i class="bi bi-plus-square text-primary  mb-2 mx-2"></i>Create Head</a></li>
+
+                            <li><a class="dropdown-item text-dark" href="{{ route('create.state') }}"><i class="bi bi-plus-square text-primary  mb-2 mx-2"></i>Create State</a></li>
+                            <li><a class="dropdown-item  text-dark" href="{{ route('create.city') }}"><i class="bi bi-plus-square text-primary mb-2 mx-2"></i>Create City</a></li>
+                            
+                        </div>
+                    </div>
+                    </div>
+                </span>
+           
+            
         </div>
     </nav>
 
@@ -80,139 +164,147 @@
 
 
                 <!-- Search Form -->
-                <div class="card border-0 bg-light rounded-4 mb-4">
-                    <div class="card-body p-3">
-                        <form action="{{ route('search') }}" method="get" class="d-flex gap-3">
-                            @csrf
-                            <input type="text" name="search" value="{{ old('search', request()->input('search')) }}"
-                                class="form-control rounded-pill border-0 shadow-sm"
-                                placeholder="Search by Name, Mobile No, State, City..." style="padding: 12px 20px;">
-                            <button type="submit" class="btn btn-primary rounded-pill shadow-sm flex-shrink-0" style="padding: 12px 40px; min-width: 150px;">
-                                <i class="bi bi-search me-2"></i>Search
-                            </button>
-                        </form>
+                <div class="card shadow-sm mb-4 border-0 rounded-4">
+                    <div class="card-header bg-gradient bg-primary text-white py-3 border-0 rounded-top-4">
+                        <h5 class="mb-0 fw-bold">
+                            <i class="bi bi-search me-2"></i>Search Heads
+                        </h5>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Family List -->
-        @if($heads->count() > 0)
-        <div class="row">
-            <div class="col-12">
-                @foreach ($heads as $user)
-                <div class="card shadow-sm mb-3 rounded-4" style="transition: all 0.2s;" onmouseover="this.style.transform='scale(1.01)'" onmouseout="this.style.transform='scale(1)'">
                     <div class="card-body p-4">
-                        <div class="row align-items-center g-3">
-                            <!-- Profile Image -->
-                            <div class="col-md-2 text-center">
-                                <img src="{{ asset('uploads/images/' . $user->photo_path) }}"
-                                     class="rounded-circle border border-3 border-primary shadow"
-                                     style="width: 90px; height: 90px; object-fit: cover;" alt="Family Head Photo">
-                            </div>
-                            
-                            <!-- Family Info -->
-                            <div class="col-md-6">
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="badge rounded-pill" style="background: linear-gradient(45deg, #667eea, #764ba2); padding: 8px 15px;">
-                                        <i class="bi bi-house-heart me-2"></i>{{ $user->name }}'s Family
+                        <div class="row align-items-center">
+                            <div class="col-lg-8 col-md-10">
+                                <div class="input-group">
+                                    <span
+                                        class="input-group-text bg-primary text-white border-0 rounded-start-pill px-4">
+                                        <i class="bi bi-search fs-5"></i>
+                                    </span>
+                                    <input type="text" id="searchInput"
+                                        class="form-control border-0 rounded-end-pill py-3 px-4 shadow-sm"
+                                        placeholder="Search by ➡️ Name, Surname, Mobile, City, State ..."
+                                        value="{{ request('search') }}">
+                                    <span id="searchLoading"
+                                        class="position-absolute top-50 end-0 translate-middle-y me-4 d-none"
+                                        style="z-index: 10;">
+                                        <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
                                     </span>
                                 </div>
-                                <h5 class="fw-bold mb-3">{{ ucfirst($user->name) }} {{ ucfirst($user->surname) }}</h5>
-                                <div class="row g-2">
-                                    <div class="col-sm-6">
-                                        <small class="text-muted d-flex align-items-center">
-                                            <i class="bi bi-calendar3 text-primary me-2"></i>
-                                            {{ date('M d, Y', strtotime($user->birthdate)) }}
-                                        </small>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <small class="text-muted d-flex align-items-center">
-                                            <i class="bi bi-telephone text-success me-2"></i>
-                                            {{ $user->mobile }}
-                                        </small>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <small class="text-muted d-flex align-items-center">
-                                            <i class="bi bi-geo-alt text-info me-2"></i>
-                                            {{ ucfirst($user->city) }}, {{ ucfirst($user->state) }}
-                                        </small>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <span class="badge bg-success rounded-pill">
-                                            <i class="bi bi-people me-1"></i>{{ $user->members->count() + 1 }} Members
-                                        </span>
-                                    </div>
-                                </div>
+
                             </div>
-                            
-                            <!-- Action Buttons -->
-                            <div class="col-md-4">
-                                <div class="d-grid gap-3">
-                                    <a href="{{ route('admin.show', $user->id) }}" class="btn btn-primary" style="border-radius: 25px; padding: 12px 20px;">
-                                        <i class="bi bi-eye me-2"></i>View Details
-                                    </a>
-                                    <div class="row g-2">
-                                        <div class="col-6">
-                                            <a href="{{ route('admin.edit', $user->id) }}" class="btn btn-outline-warning w-100" style="border-radius: 25px; padding: 10px 15px;">
-                                                <i class="bi bi-pencil me-1"></i>Edit Head
-                                            </a>
-                                        </div>
-                                        <div class="col-6">
-                                            <a href="{{ route('admin-member.show',$user->id) }}" class="btn btn-outline-info w-100" style="border-radius: 25px; padding: 10px 15px;">
-                                                <i class="bi bi-people me-1"></i>Edit Members
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
-                @endforeach
+
+                <div>
+                    <!-- /// done via https://www.youtube.com/watch?v=8kZ2BVCfalA -->
+                    <select style="width : 20%" name="category" id="category"
+                        class="form-select rounded-pill w-20 mb-3 " role="button">
+                        <option value="name">Select Category</option>
+
+                        <option value="updated_at">Updated At(Latest)</option>
+                        <option value="updated_at_asc">Updated At(Oldest)</option>
+                        <option value="created_at">Created At(Latest)</option>
+                        <option value="created_at_asc">Created At(Oldest)</option>
+                    </select>
+                </div>
+
+                <!-- Family List with pagination-->
+                <div id="tableResults">
+                    @include('admin.partials.index-search', ['heads' => $heads])
+                </div>
             </div>
         </div>
 
-        <!-- Pagination -->
-        @if($heads->hasPages())
-        <div class="d-flex justify-content-center align-items-center mt-4 gap-2">
-            @if ($heads->onFirstPage())
-                <span class="btn btn-light disabled" style="border-radius: 20px;">« Previous</span>
-            @else
-                <a href="{{ $heads->previousPageUrl() }}" class="btn btn-primary" style="border-radius: 20px;">« Previous</a>
-            @endif
+        <!-- Family List with pagination-->
 
-            @for ($i = 1; $i <= $heads->lastPage(); $i++)
-                @if ($i == $heads->currentPage())
-                    <span class="btn btn-primary" style="border-radius: 20px;">{{ $i }}</span>
-                @else
-                    <a href="{{ $heads->url($i) }}" class="btn btn-outline-primary" style="border-radius: 20px;">{{ $i }}</a>
-                @endif
-            @endfor
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script>
+        $(function() {
+            const listUrl = "{{ url('/admin') }}";
+            let debounceTimeout = null;
 
-            @if ($heads->hasMorePages())
-                <a href="{{ $heads->nextPageUrl() }}" class="btn btn-primary" style="border-radius: 20px;">Next »</a>
-            @else
-                <span class="btn btn-light disabled" style="border-radius: 20px;">Next »</span>
-            @endif
-        </div>
-        @endif
-        @else
-        <div class="card shadow rounded-4">
-            <div class="card-body text-center py-5">
-                <i class="bi bi-house-x" style="font-size: 4rem;" class="text-muted mb-3"></i>
-                <h4 class="text-muted">No Families Found</h4>
-                <p class="text-muted">There are currently no families registered in the system.</p>
-                <a href="/" class="btn btn-primary rounded-pill">
-                    <i class="bi bi-plus-circle me-2"></i>Create First Family
-                </a>
-            </div>
-        </div>
-        @endif
-    </div>
+            function showLoading() {
+                $('#searchLoading').removeClass('d-none');
+                $('#searchInput').prop('disabled', true);
+            }
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            function hideLoading() {
+                $('#searchLoading').addClass('d-none');
+                $('#searchInput').prop('disabled', false);
+            }
 
+            function fetchList(params = {}) {
+                showLoading();
+                $.get(listUrl, params)
+                    .done(function(response) {
+                        // replace only the table + pagination area
+                        $('#tableResults').html(response);
+                    })
+                    .fail(function() {
+                        // optional: show a brief message or console error
+                        console.error('Failed to fetch list');
+                    })
+                    .always(function() {
+                        hideLoading();
+                    });
+            }
+
+            // Live search (debounced)
+            $(document).on('keyup', '#searchInput', function() {
+                const query = $(this).val();
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(function() {
+                    fetchList({
+                        search: query
+                    });
+                }, 800);
+            });
+
+            // AJAX pagination — delegated to the table container
+            $(document).on('click', '#tableResults .pagination a', function(e) {
+                e.preventDefault();
+                const url = new URL($(this).attr('href'), window.location.origin);
+                const params = Object.fromEntries(url.searchParams.entries());
+                params.search = $('#searchInput').val() || params.search;
+                fetchList(params);
+                window.history.pushState({}, '', $(this).attr('href'));
+            });
+
+            // restore on back/forward
+            window.addEventListener('popstate', function() {
+                const params = Object.fromEntries(new URLSearchParams(location.search));
+                fetchList(params);
+            });
+        });
+        </script>
+
+        <!--Script for Categories-->
+        <script>
+        $(document).ready(function() {
+            $('#category').on('change', function() {
+                var selectedValue = $(this).val();
+                if (selectedValue) {
+                    $.ajax({
+                        url: "{{ url('/admin') }}",
+                        type: 'GET',
+                        data: {
+                            category: selectedValue
+                        },
+                        success: function(response) {
+                            $('#tableResults').html(response);
+                            console.log(selectedValue)
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+        </script>
 </body>
 
 </html>

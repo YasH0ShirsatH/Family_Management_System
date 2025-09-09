@@ -7,6 +7,8 @@
     <title>State Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
+
 </head>
 
 @if(session('success'))
@@ -17,9 +19,58 @@
 @endif
 
 <body class="bg-light">
+    <nav class="navbar navbar-dark bg-primary shadow">
+        <div class="container">
+                <a class="navbar-brand fs-4 fw-bold">
+                    <i class="bi bi-house-heart me-2"></i>Family Management System
+                </a>
+                <span class="navbar-text text-white d-flex align-items-center justify-content-end " style="width: 24%;">
+                    
+                
+                <span>
+                    <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                    <i class="navbar-toggler-icon"></i>
+                    </a>
+
+                    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Family Management System</h5>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                        <div>
+                            This is a compilation of all the shortcuts we can use to efficiently perform various tasks on a Website
+                        </div>
+                        <div class="dropdown mt-3">
+                            <p class="text-primary fw-bold">Dashboard</p>
+                            <li><a class="dropdown-item text-dark" href="/dashboard"><i class="bi bi-speedometer2 text-primary  mb-2 mx-2"></i>Dashboard</a></li>
+                        </div>
+                        <div class="dropdown mt-3">
+                            <p class="text-primary fw-bold">Usefull Links</p>
+                            <li><a class="dropdown-item text-dark" href="/admin"><span><i class="bi bi-people  mb-2 mx-2 "></i>Manage Head</a></span></li>
+                            <li><a class="dropdown-item text-dark" href="{{ route('state.index') }}"><i class="bi bi-geo-alt  mb-2 mx-2"></i>Manage States</a></li>
+                            <li><a class="dropdown-item text-dark" href="{{ route('city.index') }}"><i class="bi bi-buildings  mb-2 mx-2"></i>Manage Cities</a></li>
+                            
+                            <li><a class="dropdown-item  bg-danger" href="/logout"><i class="bi bi-box-arrow-right  mb-2 mx-2"></i>Logout</a></li>
+                        </div>
+                        <div class="dropdown mt-3">
+                            <p class="text-primary fw-bold">Add Content</p>
+                            <li><a class="dropdown-item text-dark" href="/headview"><i class="bi bi-plus-square text-primary  mb-2 mx-2"></i>Create Head</a></li>
+
+                            <li><a class="dropdown-item text-dark" href="{{ route('create.state') }}"><i class="bi bi-plus-square text-primary  mb-2 mx-2"></i>Create State</a></li>
+                            <li><a class="dropdown-item  text-dark" href="{{ route('create.city') }}"><i class="bi bi-plus-square text-primary mb-2 mx-2"></i>Create City</a></li>
+                            
+                        </div>
+                    </div>
+                    </div>
+                </span>
+           
+            
+        </div>
+    </nav>
     <div class="container py-4">
         <!-- Header Card -->
-        <div class="card shadow mb-4 border-0" style="border-radius: 20px;">
+        <!-- <div class="card shadow mb-4 border-0" style="border-radius: 20px;">
             <div class="card-header bg-gradient bg-primary text-white py-4 border-0"
                 style="border-radius: 20px 20px 0 0;">
                 <div class="d-flex justify-content-between align-items-center flex-wrap">
@@ -43,31 +94,39 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- Search Bar -->
-        <div class="card shadow mb-4 border-0" style="border-radius: 20px;">
+         <div class="card shadow-sm mb-4 border-0 rounded-4">
+            <div class="card-header bg-gradient bg-primary text-white py-3 border-0 rounded-top-4">
+                <h5 class="mb-0 fw-bold">
+                    <i class="bi bi-search me-2"></i>Search States
+                </h5>
+            </div>
             <div class="card-body p-4">
-                <form action="{{ route('state.index') }}" method="post">
-                    @csrf
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
-                            <div class="input-group input-group-lg">
-                                <span class="input-group-text bg-primary text-white border-0">
-                                    <i class="bi bi-search"></i>
-                                </span>
-                                <input type="text" name="search" class="form-control border-0 shadow-sm"
-                                    placeholder="Search states... by ( #Id , Name , Type , Level )" value="{{ request('search') }}">
-                            </div>
+                <div class="row align-items-center">
+                    <div class="col-lg-8 col-md-10">
+                        <div class="input-group">
+                            <span class="input-group-text bg-primary text-white border-0 rounded-start-pill px-4">
+                                <i class="bi bi-search fs-5"></i>
+                            </span>
+                            <input type="text" id="searchInput" class="form-control border-0 rounded-end-pill py-3 px-4 shadow-sm"
+                                placeholder="Search by ID, Name, or type..." value="{{ request('search') }}">
+                            <span id="searchLoading" class="position-absolute top-50 end-0 translate-middle-y me-4 d-none" style="z-index: 10;">
+                                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </span>
                         </div>
-                        <div class="col-md-4">
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-semibold">
-                                    <i class="bi bi-search me-2"></i>Search States 
-                                </button>
-                            </div>
+                       
+                    </div>
+                    <div class="col-lg-4 col-md-2 mt-3 mt-md-0">
+                        <div class="d-flex gap-2 justify-content-md-end">
+                            <button type="button" class="btn btn-outline-secondary rounded-pill px-3" onclick="$('#searchInput').val('').trigger('keyup')">
+                                <i class="bi bi-x-circle me-1"></i>Clear
+                            </button>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
 
@@ -97,146 +156,71 @@
 
 
         <!-- States List -->
-        <div class="row">
-            @foreach ($states as $index => $item)
-            <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                <div class="card shadow-sm border-0 h-100" style="border-radius: 20px; transition: all 0.3s;"
-                    onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.15)'"
-                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow=''">
-                    <div class="card-body p-4 d-flex flex-column">
-                        <div class="d-flex align-items-center mb-4">
-                            <div class="bg-gradient bg-primary rounded-circle p-3 me-3">
-                                <i class="bi bi-geo-alt text-white fs-5"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <h5 class="mb-1 fw-bold text-dark">{{ $item->name }}</h5>
-                                <small class="text-muted">State #{{ $item->id }}</small>
-                            </div>
-                        </div>
+        
 
-                        <div class="mt-auto">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="badge bg-success rounded-pill px-3 py-2 fs-6">
-                                    <i class="bi bi-buildings me-1"></i>{{ $item->cities->count() }} Cities
-                                </span>
-                                @if($item->cities->count() > 0)
-                                <small class="text-success fw-semibold"><i
-                                        class="bi bi-check-circle me-1"></i>Active</small>
-                                @else
-                                <small class="text-warning fw-semibold"><i class="bi bi-exclamation-circle me-1"></i>No
-                                    Cities</small>
-                                @endif
-                            </div>
-
-                            <div class="d-grid">
-                                <a href="{{ route('show.city', $item->id)  }}"
-                                    class="btn btn-outline-primary rounded-pill py-2 fw-semibold">
-                                    <i class="bi bi-eye me-2"></i>View Cities
-                                </a>
-                                <a href="{{ route('state.edit', $item->id)  }}"
-                                    class="btn mt-2 btn-outline-info rounded-pill py-2 fw-semibold">
-                                    <i class="bi bi-pen me-2"></i>Edit State
-                                </a>
-                                <form action="{{ route('state.delete', $item->id)   }}" class="w-100" method="post">   
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit" class="btn mt-2 w-100 btn-outline-danger rounded-pill py-2 fw-semibold">
-                                        <i class="bi bi-trash me-2"></i>Delete State
-                                    </button>
-
-                                </form> 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endforeach
+    <div id="tableResults">
+            @include('state-city.partials.state-list', ['states' => $states])
         </div>
-
-        <!-- Pagination -->
-        @if($states->hasPages())
-        <div class="card shadow border-0 mt-5" style="border-radius: 20px;">
-            <div class="card-body p-4">
-                <div class="row align-items-center mb-4">
-                    <div class="col-md-6">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-light rounded-pill px-3 py-2 me-3">
-                                <i class="bi bi-info-circle text-primary me-1"></i>
-                                <small class="fw-semibold">Showing {{ $states->firstItem() }} to
-                                    {{ $states->lastItem() }} of {{ $states->total() }} states</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 text-md-end">
-                        <div class="bg-primary bg-gradient text-white rounded-pill px-3 py-2 d-inline-block">
-                            <i class="bi bi-bookmark me-1"></i>
-                            <small class="fw-semibold">Page {{ $states->currentPage() }} of
-                                {{ $states->lastPage() }}</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-center align-items-center flex-wrap gap-2">
-                    @if ($states->onFirstPage())
-                    <span class="btn btn-light disabled rounded-pill px-4 py-2 fw-semibold">
-                        <i class="bi bi-chevron-double-left me-2"></i>Previous
-                    </span>
-                    @else
-                    <a href="{{ $states->previousPageUrl() }}"
-                        class="btn btn-primary rounded-pill px-4 py-2 fw-semibold shadow-sm">
-                        <i class="bi bi-chevron-double-left me-2"></i>Previous
-                    </a>
-                    @endif
-
-                    <div class="d-flex gap-1 mx-2">
-                        @php
-                        $start = max(1, $states->currentPage() - 2);
-                        $end = min($states->lastPage(), $states->currentPage() + 2);
-                        @endphp
-
-                        @if($start > 1)
-                        <a href="{{ $states->url(1) }}"
-                            class="btn btn-outline-primary rounded-pill px-3 py-2 fw-semibold">1</a>
-                        @if($start > 2)
-                        <span class="btn btn-light disabled rounded-pill px-2 py-2">•••</span>
-                        @endif
-                        @endif
-
-                        @for ($i = $start; $i <= $end; $i++) @if ($i==$states->currentPage())
-                            <span class="btn btn-primary rounded-pill px-3 py-2 shadow fw-bold">{{ $i }}</span>
-                            @else
-                            <a href="{{ $states->url($i) }}"
-                                class="btn btn-outline-primary rounded-pill px-3 py-2 fw-semibold">{{ $i }}</a>
-                            @endif
-                            @endfor
-
-                            @if($end < $states->lastPage())
-                                @if($end < $states->lastPage() - 1)
-                                    <span class="btn btn-light disabled rounded-pill px-2 py-2">•••</span>
-                                    @endif
-                                    <a href="{{ $states->url($states->lastPage()) }}"
-                                        class="btn btn-outline-primary rounded-pill px-3 py-2 fw-semibold">{{ $states->lastPage() }}</a>
-                                    @endif
-                    </div>
-
-                    @if ($states->hasMorePages())
-                    <a href="{{ $states->nextPageUrl() }}"
-                        class="btn btn-primary rounded-pill px-4 py-2 fw-semibold shadow-sm">
-                        Next<i class="bi bi-chevron-double-right ms-2"></i>
-                    </a>
-                    @else
-                    <span class="btn btn-light disabled rounded-pill px-4 py-2 fw-semibold">
-                        Next<i class="bi bi-chevron-double-right ms-2"></i>
-                    </span>
-                    @endif
-                </div>
-            </div>
-        </div>
-        @endif
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+    $(function () {
+        const listUrl = "{{ url('admin/state-city/states') }}";
+        let debounceTimeout = null;
+
+        function showLoading() {
+            $('#searchLoading').removeClass('d-none');
+            $('#searchInput').prop('disabled', true);
+        }
+        function hideLoading() {
+            $('#searchLoading').addClass('d-none');
+            $('#searchInput').prop('disabled', false);
+        }
+
+        function fetchList(params = {}) {
+            showLoading();
+            $.get(listUrl, params)
+                .done(function (response) {
+                    // replace only the table + pagination area
+                    $('#tableResults').html(response);
+                })
+                .fail(function () {
+                    // optional: show a brief message or console error
+                    console.error('Failed to fetch list');
+                })
+                .always(function () {
+                    hideLoading();
+                });
+        }
+
+        // Live search  method applied here
+        $(document).on('keyup', '#searchInput', function () {
+            const query = $(this).val();
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(function () {
+                fetchList({search: query});
+            }, 800);
+        });
+
+        // AJAX pagination done here via https://youtu.be/g0EWWgtA0a0?si=sug4h_xrzTOrmngb
+        $(document).on('click', '#tableResults .pagination a', function (e) {
+            e.preventDefault();
+            const url = new URL($(this).attr('href'), window.location.origin);
+            const params = Object.fromEntries(url.searchParams.entries());
+            params.search = $('#searchInput').val() || params.search;
+            fetchList(params);
+            window.history.pushState({}, '', $(this).attr('href'));
+        });
+
+        // restore on back/forward
+        window.addEventListener('popstate', function () {
+            const params = Object.fromEntries(new URLSearchParams(location.search));
+            fetchList(params);
+        });
+    });
+    </script>
 
 </html>

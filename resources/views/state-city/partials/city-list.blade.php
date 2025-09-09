@@ -1,4 +1,4 @@
-{{-- ...existing code... --}}
+
 <div class="card shadow" >
     <div class="card-header bg-white">
         <h4 class="mb-0 text-primary">
@@ -48,4 +48,3 @@
     {{ $cities->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
 </div>
 @endif
-{{-- ...existing code... --}}

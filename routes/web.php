@@ -50,6 +50,7 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'resetPasswordP
 
 /// ADMIN SECTION
 Route::resource('/admin', AdminController::class)->middleware('auth.check');
+Route::get('/download/{id}',[AdminController::class,'print_pdf'])->name('download');
 Route::get('/search',[AdminController::class,'search'])->name('search');
 
     /// Admin member section

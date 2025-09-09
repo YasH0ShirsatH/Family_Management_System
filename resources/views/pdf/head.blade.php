@@ -3,70 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Family Details - Family Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
+    <link href="{{ public_path('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <title>Document</title>
 </head>
-<body class="bg-light">
-    <nav class="navbar navbar-dark bg-primary shadow">
-        <div class="container">
-                <a class="navbar-brand fs-4 fw-bold">
-                    <i class="bi bi-house-heart me-2"></i>Family Management System
-                </a>
-                <span class="navbar-text text-white d-flex align-items-center justify-content-end " style="width: 24%;">
-                    
-                
-                <span>
-                    <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-                    <i class="navbar-toggler-icon"></i>
-                    </a>
-
-                    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                        <div class="offcanvas-header">
-                            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Family Management System</h5>
-                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body">
-                        <div>
-                            This is a compilation of all the shortcuts we can use to efficiently perform various tasks on a Website
-                        </div>
-                        <div class="dropdown mt-3">
-                            <p class="text-primary fw-bold">Dashboard</p>
-                            <li><a class="dropdown-item text-dark" href="/dashboard"><i class="bi bi-speedometer2 text-primary  mb-2 mx-2"></i>Dashboard</a></li>
-                        </div>
-                        <div class="dropdown mt-3">
-                            <p class="text-primary fw-bold">Usefull Links</p>
-                            <li><a class="dropdown-item text-dark" href="/admin"><span><i class="bi bi-people  mb-2 mx-2 "></i>Manage Head</a></span></li>
-                            <li><a class="dropdown-item text-dark" href="{{ route('state.index') }}"><i class="bi bi-geo-alt  mb-2 mx-2"></i>Manage States</a></li>
-                            <li><a class="dropdown-item text-dark" href="{{ route('city.index') }}"><i class="bi bi-buildings  mb-2 mx-2"></i>Manage Cities</a></li>
-                            
-                            <li><a class="dropdown-item  bg-danger" href="/logout"><i class="bi bi-box-arrow-right  mb-2 mx-2"></i>Logout</a></li>
-                        </div>
-                        <div class="dropdown mt-3">
-                            <p class="text-primary fw-bold">Add Content</p>
-                            <li><a class="dropdown-item text-dark" href="/headview"><i class="bi bi-plus-square text-primary  mb-2 mx-2"></i>Create Head</a></li>
-
-                            <li><a class="dropdown-item text-dark" href="{{ route('create.state') }}"><i class="bi bi-plus-square text-primary  mb-2 mx-2"></i>Create State</a></li>
-                            <li><a class="dropdown-item  text-dark" href="{{ route('create.city') }}"><i class="bi bi-plus-square text-primary mb-2 mx-2"></i>Create City</a></li>
-                            
-                        </div>
-                    </div>
-                    </div>
-                </span>
-           
-            
-        </div>
-    </nav>
-
-    <div class="container py-5">
-        <div class="text-center mb-4">
-            <a href="{{ route('admin.index') }}" class="btn btn-outline-primary rounded-pill">
-                <i class="bi bi-arrow-left me-2"></i>Back to Head Dashboard
-            </a>
-        </div>
-
-        <div class="row justify-content-center">
+<body>
+    <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="card shadow-sm border-0 mb-4 rounded-4">
                     <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
@@ -75,7 +18,6 @@
                             {{ $heads->name }} Family Details
                         </h2>
                     </div>
-                    
                     <div class="card-body p-5 text-center">
                         <img src="{{ asset('uploads/images/' . $heads->photo_path) }}"
                              class="rounded-circle mb-4  border-4 border-light shadow"
@@ -172,12 +114,6 @@
                                 {{ $heads->members->count() }} Family Members
                             </span>
                         </div>
-                        <div class="mt-4">
-                            <a href="{{ route('download', $heads->id) }}" class="btn btn-outline-danger px-4 w-40" style="border-radius: 25px; padding: 10px 15px;">
-                                <i class="bi bi-download me-1"></i>Download PDF
-                            </span>
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -233,30 +169,10 @@
                     </div>
                 </div>
             </div>
-        @else
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-header bg-success text-white text-center py-3">
-                            <h3 class="mb-0">
-                                <i class="bi bi-people-fill me-2"></i>Family Members
-                            </h3>
-                        </div>
-                        <div class="card-body text-center py-5">
-                            <i class="bi bi-people display-1 text-muted mb-3"></i>
-                            <h5 class="text-muted">No Family Members</h5>
-                            <p class="text-muted">This family hasn't added any members yet.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
-        
-        
-    </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-
+            @endif
 </body>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
+
 </html>

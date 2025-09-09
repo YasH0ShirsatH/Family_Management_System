@@ -12,18 +12,60 @@ use App\Models\State;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $heads = Head::latest()->paginate('3');
-        $totalMembers = Member::count();
-        return view("admin.index", compact("heads",'totalMembers'));
+    public function index(Request $request)
+{
+    // Start with a new query builder instance
+    $query = Head::query();
+
+    // 1. Apply the search filter if it exists
+    if ($request->filled('search')) {
+        $q = $request->input('search');
+        $query->where('name', 'like', "%{$q}%")
+              ->orWhere('surname', 'like', "%{$q}%")
+              ->orWhere('mobile', 'like', "%{$q}%")
+              ->orWhere('city', 'like', "%{$q}%")
+              ->orWhere('state', 'like', "%{$q}%");
     }
+
+    
+    if ($request->category == "created_at") {
+       $query->orderBy('created_at', 'desc');
+    } elseif ($request->category == "updated_at") {
+        $query->orderBy('updated_at', 'desc');
+    } 
+     elseif ($request->category == "updated_at_asc") {
+        $query->orderBy('updated_at', 'asc');
+    } 
+    elseif ($request->category == "created_at_asc") {
+        $query->orderBy('created_at', 'asc');
+    }
+    else { 
+        
+         $query->orderBy('name', 'asc'); 
+    }
+
+    
+    $heads = $query->paginate(3)->withQueryString();
+
+    
+    $totalMembers = Member::count();
+
+    
+    if ($request->ajax()) {
+        return view('admin.partials.index-search', compact('heads', 'totalMembers'));
+    }
+
+    
+    return view("admin.index", compact("heads", 'totalMembers'));
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -58,12 +100,21 @@ class AdminController extends Controller
     public function edit(string $id)
     {
         $head = Head::find($id);
+        
          $states = State::where('country_id',101)->orderBy('name','asc')->get();
         foreach ($states as $state) {
             $city = $state->cities = City::where('state_id', $state->id)->orderBy('name', 'asc')->get();
         }
         
         return view("admin.edit", ["head"=>$head,'id'=>$id,'states'=>$states,'city'=>$city]);
+    }
+
+    public function print_pdf($id){
+        $heads = Head::find($id);
+        $pdf = Pdf::loadView('pdf.head', compact('heads'));
+        $pdf->showImageErrors = true;
+        $pdf->curlAllowUnsafeSslRequests = true;
+        return $pdf->download($heads->name . '_head.pdf');
     }
 
     /**

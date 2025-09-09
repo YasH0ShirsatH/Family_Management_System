@@ -7,6 +7,8 @@
     <title>City Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
+
 
 
 </head>
@@ -14,22 +16,53 @@
 
 
 <body class="bg-light" id="cities">
-    <nav class="navbar navbar-dark bg-primary">
+    <nav class="navbar navbar-dark bg-primary shadow">
         <div class="container">
-            <span class="navbar-brand mb-0 h1">
-                <i class="bi bi-buildings me-2"></i>City Management
-            </span>
-            <div>
-                <a href="/admin" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-arrow-left me-1"></i>Back
+                <a class="navbar-brand fs-4 fw-bold">
+                    <i class="bi bi-house-heart me-2"></i>Family Management System
                 </a>
-                <a href="/admin/state-city/createcity" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-plus-circle me-1"></i>Add Cities
-                </a>
-                <a href="/admin/state-city/states" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-arrow-right me-1"></i>Go to States
-                </a>
-            </div>
+                <span class="navbar-text text-white d-flex align-items-center justify-content-end " style="width: 24%;">
+                    
+                
+                <span>
+                    <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                    <i class="navbar-toggler-icon"></i>
+                    </a>
+
+                    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Family Management System</h5>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                        <div>
+                            Family management system website centralizes data collection for all members
+                        </div>
+                        <div class="dropdown mt-3">
+                            <p class="text-primary  fw-bold">Dashboard</p>
+                            <li><a class="dropdown-item text-dark" href="/dashboard"><i class="bi bi-speedometer2 text-primary  mb-2 mx-2"></i>Dashboard</a></li>
+                        </div>
+                        <div class="dropdown mt-3">
+                            <p class="text-primary fw-bold">Usefull Links</p>
+                            <li><a class="dropdown-item text-dark" href="/admin"><span><i class="bi bi-people  mb-2 mx-2 "></i>Manage Head</a></span></li>
+                            <li><a class="dropdown-item text-dark" href="{{ route('state.index') }}"><i class="bi bi-geo-alt  mb-2 mx-2"></i>Manage States</a></li>
+                            <li><a class="dropdown-item text-dark" href="{{ route('city.index') }}"><i class="bi bi-buildings  mb-2 mx-2"></i>Manage Cities</a></li>
+                            
+                            <li><a class="dropdown-item  bg-danger" href="/logout"><i class="bi bi-box-arrow-right  mb-2 mx-2"></i>Logout</a></li>
+                        </div>
+                        <div class="dropdown mt-3">
+                            <p class="text-primary fw-bold">Add Content</p>
+                            <li><a class="dropdown-item text-dark" href="/headview"><i class="bi bi-plus-square text-primary  mb-2 mx-2"></i>Create Head</a></li>
+
+                            <li><a class="dropdown-item text-dark" href="{{ route('create.state') }}"><i class="bi bi-plus-square text-primary  mb-2 mx-2"></i>Create State</a></li>
+                            <li><a class="dropdown-item  text-dark" href="{{ route('create.city') }}"><i class="bi bi-plus-square text-primary mb-2 mx-2"></i>Create City</a></li>
+                            
+                        </div>
+                    </div>
+                    </div>
+                </span>
+           
+            
         </div>
     </nav>
 
@@ -56,17 +89,14 @@
                                 <i class="bi bi-search fs-5"></i>
                             </span>
                             <input type="text" id="searchInput" class="form-control border-0 rounded-end-pill py-3 px-4 shadow-sm"
-                                placeholder="Search by ID, Name, or State..." value="{{ request('search') }}">
+                                placeholder="Search by ID, Name, or State New ID ('SID' + state_id)..." value="{{ request('search') }}">
                             <span id="searchLoading" class="position-absolute top-50 end-0 translate-middle-y me-4 d-none" style="z-index: 10;">
                                 <div class="spinner-border spinner-border-sm text-primary" role="status">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
                             </span>
                         </div>
-                        <div class="form-text mt-2 ms-3">
-                            <i class="bi bi-info-circle me-1"></i>
-                            Search by city ID, name, or state ID for quick results
-                        </div>
+                       
                     </div>
                     <div class="col-lg-4 col-md-2 mt-3 mt-md-0">
                         <div class="d-flex gap-2 justify-content-md-end">
@@ -122,7 +152,7 @@
             clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(function () {
                 fetchList({search: query});
-            }, 400);
+            }, 800);
         });
 
         // AJAX pagination — delegated to the table container
@@ -142,5 +172,8 @@
         });
     });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

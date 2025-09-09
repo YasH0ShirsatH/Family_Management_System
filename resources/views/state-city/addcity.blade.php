@@ -56,8 +56,7 @@
                                     <option value="">Select State</option>
                                     @foreach ($states as $state)
                                         <option value="{{ $state->id }}"
-
-                                            @if( (isset($selectedStateId) && $selectedStateId == $state->id) || old('states') == $state->id ) selected @endif>
+                                            {{ old('states', $selectedStateId ?? '') == $state->id ? 'selected' : '' }}>
                                             {{ $state->name }}
                                         </option>
                                     @endforeach

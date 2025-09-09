@@ -27,17 +27,22 @@
 
 
     <div class="container py-4">
+        <div class="card-header bg-gradient bg-primary text-white py-3 border-0 rounded-top-4">
+                <h5 class="mx-4 mb-0 fw-bold">
+                    <i class="bi bi-search me-2"></i>Search Cities
+                </h5>
+            </div>
         <div class="card shadow mb-4 border-0" style="border-radius: 20px;">
-            <div class="card-body p-4">
+            <div class="card-body p-4 rounded-pill">
                 <form action="{{ route('show.city',$state->id) }}" method="post">
                     @csrf
-                    <div class="row align-items-center">
+                    <div class="row align-items-center ">
                         <div class="col-md-8">
                             <div class="input-group input-group-lg">
-                                <span class="input-group-text bg-primary text-white border-0">
+                                <span class="input-group-text rounded-start-pill bg-primary text-white border-0">
                                     <i class="bi bi-search"></i>
                                 </span>
-                                <input type="text" name="search" class="form-control border-0 shadow-sm"
+                                <input type="text" name="search" class="form-control rounded-end-pill border-0 shadow-sm"
                                     placeholder="Search city... by ( #Id , Name , state_id )" value="{{ request('search') }}">
                             </div>
                         </div>
@@ -51,6 +56,25 @@
                     </div>
                 </form>
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
         <div class="card shadow">
             <div class="card-header bg-white">
@@ -68,7 +92,7 @@
                                 <th scope="col"><i class="bi bi-map me-1"></i>State</th>
                                 <th scope="col"><i class="bi bi-calendar me-1"></i>Added On</th>
                                 <th scope="col" class="text-primary"><i class="bi bi-pen me-1"></i>Edit</th>
-                                <th scope="col" class="text-danger"><i class="bi bi-trash me-1"></i>delete</th>
+                                <th scope="col" class="text-danger"><i class="bi bi-trash me-1"></i>Delete</th>
                             </tr>
                         </thead>
                         <tbody>
