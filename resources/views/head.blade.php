@@ -80,9 +80,7 @@
                                     <label class="form-label fw-semibold">City</label>
                                     <select name="city" id="citySelect" class="form-select rounded-pill">
                                         <option value="">Select City</option>
-                                        @foreach ($city as $cities)
-                                        <option value="{{ $cities->name }}" {{ old('city') == $cities->name ? 'selected' : '' }}>{{ $cities->name }}</option>
-                                        @endforeach
+                                        
                                     </select>
                                     @error('city')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
@@ -196,22 +194,34 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
     <script>
-        jQuery(document).ready(function(){
-            jQuery('select[name="state"]').on('change',function(){
-                let stateID = jQuery(this).val();
-                jQuery.ajax({
-                    url : '/get-cities/'+stateID,
-                    type : "GET",
-                    dataType : "json",
-                    success:function(data){
-                        jQuery('select[name="city"]').empty();
-                        jQuery.each(data, function(key,value){
-                            $('select[name="city"]').append('<option value="'+ value.name +'">'+ value.name +'</option>');
-                        });
+    
+    const oldCity = @json(old('city'));
+
+    jQuery(document).ready(function(){
+        jQuery('select[name="state"]').on('change',function(){
+            let stateID = jQuery(this).val();
+            jQuery.ajax({
+                url : '/get-cities/'+stateID,
+                type : "GET",
+                dataType : "json",
+                success:function(data){
+                    const cityDropdown = jQuery('select[name="city"]');
+                    cityDropdown.empty().append('<option value="">Select City</option>');
+                    jQuery.each(data, function(key,value){
+                        cityDropdown.append('<option value="'+ value.name +'">'+ value.name +'</option>');
+                    });
+                    
+                    // Add this logic to check and set the old value
+                    if (oldCity) {
+                        cityDropdown.val(oldCity);
                     }
-                });
+                }
             });
         });
-    </script>
+        if (jQuery('select[name="state"]').val()) {
+            jQuery('select[name="state"]').trigger('change');
+        }
+    });
+</script>
 </body>
 </html>

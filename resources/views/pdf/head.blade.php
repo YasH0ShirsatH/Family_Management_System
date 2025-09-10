@@ -1,178 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="{{ public_path('css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
-    <title>Document</title>
+    <title>Family Details</title>
 </head>
-<body>
-    <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="card shadow-sm border-0 mb-4 rounded-4">
-                    <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
-                        <h2 class="mb-0">
-                            <i class="bi bi-person-badge me-2"></i>
-                            {{ $heads->name }} Family Details
-                        </h2>
-                    </div>
-                    <div class="card-body p-5 text-center">
-                        <img src="{{ asset('uploads/images/' . $heads->photo_path) }}"
-                             class="rounded-circle mb-4  border-4 border-light shadow"
-                             style="width: 150px; height: 150px; object-fit: cover;" alt="Family Head Photo">
-                        
-                        <h3 class="fw-bold mb-4 text-dark">{{ $heads->name }} {{ $heads->surname }}</h3>
-                        
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <div class="card bg-light border-0 h-100 rounded-4">
-                                    <div class="card-body p-4">
-                                        <h5 class="card-title text-primary mb-3">
-                                            <i class="bi bi-person-circle me-2"></i>Personal Information
-                                        </h5>
-                                        <div class="list-group list-group-flush">
-                                            <div class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
-                                                <span class="text-muted">
-                                                    <i class="bi bi-calendar3 text-primary me-2"></i>Date of Birth
-                                                </span>
-                                                <span class="fw-semibold">{{ date('M d, Y', strtotime($heads->birthdate)) }}</span>
-                                            </div>
-                                            <div class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
-                                                <span class="text-muted">
-                                                    <i class="bi bi-telephone text-primary me-2"></i>Mobile
-                                                </span>
-                                                <span class="fw-semibold">{{ $heads->mobile }}</span>
-                                            </div>
-                                            @if($heads->marital_status)
-                                            <div class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
-                                                <span class="text-muted">
-                                                    <i class="bi bi-heart text-danger me-2"></i>Marriage Date
-                                                </span>
-                                                <span class="fw-semibold">{{ date('M d, Y', strtotime($heads->mariage_date)) }}</span>
-                                            </div>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6">
-                                <div class="card bg-light border-0 h-100 rounded-4">
-                                    <div class="card-body p-4">
-                                        <h5 class="card-title text-primary mb-3">
-                                            <i class="bi bi-geo-alt me-2"></i>Address Information
-                                        </h5>
-                                        <div class="list-group list-group-flush">
-                                            <div class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
-                                                <span class="text-muted">
-                                                    <i class="bi bi-house text-primary me-2"></i>Address
-                                                </span>
-                                                <span class="fw-semibold text-end">{{ $heads->address }}</span>
-                                            </div>
-                                            <div class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
-                                                <span class="text-muted">
-                                                    <i class="bi bi-building text-primary me-2"></i>City
-                                                </span>
-                                                <span class="fw-semibold">{{ ucfirst($heads->city) }}</span>
-                                            </div>
-                                            <div class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
-                                                <span class="text-muted">
-                                                    <i class="bi bi-map text-primary me-2"></i>State
-                                                </span>
-                                                <span class="fw-semibold">{{ ucfirst($heads->state) }}</span>
-                                            </div>
-                                            <div class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
-                                                <span class="text-muted">
-                                                    <i class="bi bi-mailbox text-primary me-2"></i>Pincode
-                                                </span>
-                                                <span class="fw-semibold">{{ $heads->pincode }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card bg-light border-0 mt-4 rounded-4">
-                            <div class="card-body p-4">
-                                <h5 class="card-title text-primary mb-3">
-                                    <i class="bi bi-star me-2"></i>Hobbies & Interests
-                                </h5>
-                                <p class="mb-0 fw-semibold">
-                                    @foreach ($heads->hobbies as $hobby)
-                                        <span class="badge bg-secondary me-2 mb-2">{{ ucfirst($hobby->hobby_name) }}</span>
-                                    @endforeach
-                                </p>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-4">
-                            <span class="badge bg-success fs-6 px-4 py-3 rounded-pill">
-                                <i class="bi bi-people me-2"></i>
-                                {{ $heads->members->count() }} Family Members
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        @if($heads->members->count() > 0)
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-header bg-success text-white text-center py-3">
-                            <h3 class="mb-0">
-                                <i class="bi bi-people-fill me-2"></i>Family Members
-                            </h3>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="row">
-                                @foreach($heads->members as $member)
-                                    <div class="col-md-6 col-lg-4 mb-4">
-                                        <div class="card border-0 shadow-sm h-100 rounded-4">
-                                            @if(empty($member->photo_path))
-                                                <img src="{{ asset('uploads/images/noimage.png') }}" 
-                                                     class="card-img-top" style="height: 200px; object-fit: cover;" alt="No Image">
-                                            @else
-                                                <img src="{{ asset('uploads/images/' . $member->photo_path) }}" 
-                                                     class="card-img-top" style="height: 200px; object-fit: cover;" alt="Member Photo">
-                                            @endif
-                                            <div class="card-body p-3">
-                                                <h6 class="card-title fw-bold text-primary mb-3">{{ $member->name }}</h6>
-                                                <div class="small">
-                                                    <p class="mb-2 d-flex align-items-center">
-                                                        <i class="bi bi-calendar3 text-muted me-2"></i>
-                                                        <span>{{ date('M d, Y', strtotime($member->birthdate)) }}</span>
-                                                    </p>
-                                                    <p class="mb-2 d-flex align-items-center">
-                                                        <i class="bi bi-heart text-muted me-2"></i>
-                                                        <span>{{ $member->marital_status ? 'Married' : 'Single' }}</span>
-                                                    </p>
-                                                    <p class="mb-0 d-flex align-items-center">
-                                                        <i class="bi bi-mortarboard text-muted me-2"></i>
-                                                        @if($member->education)
-                                                            <span>{{ $member->education }}</span>
-                                                        @else
-                                                            <span class="text-muted fst-italic">Not provided</span>
-                                                        @endif
-                                                    </p>
+<body style="font-family: 'Segoe UI', Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 0;">
+    <div style="max-width: 900px; margin: 30px auto; padding: 0 15px;">
+        <div
+            style="box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-radius: 16px; margin-bottom: 24px; background-color: #fff;">
+            <div
+                style="background-color: #0d6efd; color: #fff; text-align: center; padding: 32px 0 24px 0; border-radius: 16px 16px 0 0;">
+                <h2 style="margin: 0; font-size: 1.5em;">
+                    <span style="font-size: 1.5em; vertical-align: middle;"></span> {{ $heads->name }} Family
+                    Details
+                </h2>
+            </div>
+            <div style="padding: 32px; text-align: center;">
+                <img src="{{ $pdf_actual_path }}" alt="Family Head Photo"
+                    style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 24px;">
+                <h3 style="font-weight: bold; margin-bottom: 24px; color: #212529;">{{ $heads->name }}
+                    {{ $heads->surname }}</h3>
+                <div style="display: flex; flex-wrap: wrap; margin: -12px;">
+                    <div style="width: 100%; padding: 12px; box-sizing: border-box; display: inline-block;">
+                        <div
+                            style="background-color: #f8f9fa; border-radius: 16px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                            <div style="padding: 24px;">
+                                <h5 style="color: #0d6efd; margin-bottom: 16px; font-size: 1.2em;">
+                                    <span style="font-size: 1.2em; vertical-align: middle;"></span> Personal
+                                    Information
+                                </h5>
+                                <div style="margin: 0; padding: 0; list-style: none;">
+                                    <div
+                                        style="display: flex; justify-content: space-between; align-items: center; background-color: transparent; padding: 8px 0; font-size: 1em;">
+                                        <span style="color: #6c757d;">
+                                            <span style="font-size: 1em; vertical-align: middle;"> </span> Date
+                                            of Birth
+                                        </span>
+                                        <span
+                                            style="font-weight: 600;">{{ date('M d, Y', strtotime($heads->birthdate)) }}</span>
+                                    </div>
+                                    <div
+                                        style="display: flex; justify-content: space-between; align-items: center; background-color: transparent; padding: 8px 0; font-size: 1em;">
+                                        <span style="color: #6c757d;">
+                                            <span style="font-size: 1em; vertical-align: middle;"></span>
+                                            Mobile
+                                        </span>
+                                        <span style="font-weight: 600;">{{ $heads->mobile }}</span>
+                                    </div>
+                                    @if($heads->marital_status)
+                                    <div
+                                        style="display: flex; justify-content: space-between; align-items: center; background-color: transparent; padding: 8px 0; font-size: 1em;">
+                                        <span style="color: #6c757d;">
+                                            <span
+                                                style="font-size: 1em; vertical-align: middle;"></span>
+                                            Marriage Date
+                                        </span>
+                                        <span
+                                            style="font-weight: 600;">{{ date('M d, Y', strtotime($heads->mariage_date)) }}</span>
+                                    </div>
+                                    @endif
+                                    <div>
+                                        <div
+                                            style="background-color: #f8f9fa; border-radius: 16px; height: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                                            <div style="padding: 24px;">
+                                                <h5 style="color: #0d6efd; margin-bottom: 16px; font-size: 1.2em;">
+                                                    <span style="font-size: 1.2em; vertical-align: middle;"></span> Address
+                                                    Information
+                                                </h5>
+                                                <div style="margin: 0; padding: 0; list-style: none;">
+                                                    <div
+                                                        style="display: flex; justify-content: space-between; align-items: center; background-color: transparent; padding: 8px 0; font-size: 1em;">
+                                                        <span style="color: #6c757d;">
+                                                            <span style="font-size: 1em; vertical-align: middle;"></span>
+                                                            Address
+                                                        </span>
+                                                        <span style="font-weight: 600; text-align: right;">{{ $heads->address }}</span>
+                                                    </div>
+                                                    <div
+                                                        style="display: flex; justify-content: space-between; align-items: center; background-color: transparent; padding: 8px 0; font-size: 1em;">
+                                                        <span style="color: #6c757d;">
+                                                            <span style="font-size: 1em; vertical-align: middle;"></span> City
+                                                        </span>
+                                                        <span style="font-weight: 600;">{{ ucfirst($heads->city) }}</span>
+                                                    </div>
+                                                    <div
+                                                        style="display: flex; justify-content: space-between; align-items: center; background-color: transparent; padding: 8px 0; font-size: 1em;">
+                                                        <span style="color: #6c757d;">
+                                                            <span style="font-size: 1em; vertical-align: middle;"></span> State
+                                                        </span>
+                                                        <span style="font-weight: 600;">{{ ucfirst($heads->state) }}</span>
+                                                    </div>
+                                                    <div
+                                                        style="display: flex; justify-content: space-between; align-items: center; background-color: transparent; padding: 8px 0; font-size: 1em;">
+                                                        <span style="color: #6c757d;">
+                                                            <span style="font-size: 1em; vertical-align: middle;"></span>
+                                                            Pincode
+                                                        </span>
+                                                        <span style="font-weight: 600;">{{ $heads->pincode }}</span>
+                                                    </div>
+                                                    <div
+                                                        style="background-color: #f8f9fa; border-radius: 16px; margin-top: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                                                        <div style="padding: 24px;">
+                                                            <h5 style="color: #0d6efd; margin-bottom: 16px; font-size: 1.2em;">
+                                                                <span style="font-size: 1.2em; vertical-align: middle;"></span> Hobbies & Interests
+                                                            </h5>
+                                                            <p style="margin: 0; font-weight: 600;">
+                                                                @foreach ($heads->hobbies as $hobby)
+                                                                <span
+                                                                    style="display: inline-block; padding: 6px 14px; font-size: 0.95em; border-radius: 12px; background-color: #6c757d; color: #fff; margin-right: 8px; margin-bottom: 8px;">{{ ucfirst($hobby->hobby_name) }}</span>
+                                                                @endforeach
+                                                            </p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                @endforeach
+                                    
+                                </div>
                             </div>
                         </div>
                     </div>
+                    
+                        
+                    
+                </div>
+                
+            </div>
+        </div>
+
+        @if($heads->members->count() > 0)
+        <div
+            style="box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-radius: 16px; margin-bottom: 24px; background-color: #fff;">
+            <div
+                style="background-color: #198754; color: #fff; text-align: center; padding: 16px 0; border-radius: 16px 16px 0 0;">
+                <h1 style="margin: 0; font-size: 1.5em;">
+                    <span style="font-size: 1.5em; vertical-align: middle;"></span> Family Members
+                </h1>
+            </div>
+            <div style="padding: 24px;">
+                <div style="display: flex; flex-wrap: wrap; margin: -12px;">
+                    @foreach($heads->members as $member)
+                    <div style="width: 100%; padding: 12px; box-sizing: border-box; display: inline-block;">
+                        <div
+                            style="border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); height: 100%; background-color: #fff;">
+                            @if(empty($member->photo_path))
+                            <img src="{{ '/home/dev83/Desktop/Assignment-Family_Management_System/Family_Management_System/public/uploads/images/noimage.png' }}"
+                                alt="No Image"
+                                style="height: 200px; object-fit: cover; width: 100%; border-radius: 16px 16px 0 0;">
+                            @else
+                            <img src="{{ '/home/dev83/Desktop/Assignment-Family_Management_System/Family_Management_System/public/uploads/images/' . $member->photo_path }}"
+                                alt="Member Photo"
+                                style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 24px;">
+                                 
+                            @endif
+                            <div style="padding: 16px;">
+                                <h2 style="font-weight: bold; color: #0d6efd; margin-bottom: 16px; font-size: 1.2em;">
+                                    {{ $member->name }}</h2>
+                                <div style="font-size: 0.95em;">
+                                    <p style="margin-bottom: 8px; display: flex; align-items: center;">
+                                        
+                                        <span>Birth Date: {{ date('M d, Y', strtotime($member->birthdate)) }}</span>
+                                    </p>
+                                    <p style="margin-bottom: 8px; display: flex; align-items: center;">
+                                        <span
+                                            style="font-size: 1em; vertical-align: middle; margin-right: 8px;"></span>
+                                        <span>Marital Status:
+                                            {{ $member->marital_status ? 'Married' : 'Single' }}</span>
+                                        @if($member->marital_status == 1)
+                                        <span style="margin-left: 4px;"> (Date: {{ $member->mariage_date }})</span>
+                                        @endif
+                                    </p>
+                                    <p style="margin-bottom: 0; display: flex; align-items: center;">
+                                        <span
+                                            style="font-size: 1em; vertical-align: middle; margin-right: 8px;"></span>
+                                        Education:
+                                        @if($member->education)
+                                        <span style="margin-left: 4px;">{{ $member->education }}</span>
+                                        @else
+                                        <span style="color: #6c757d; font-style: italic; margin-left: 4px;">Not
+                                            provided</span>
+                                        @endif
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
                 </div>
             </div>
-            @endif
+        </div>
+        @endif
+    </div>
 </body>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('js/bootstrap.js') }}"></script>
 
 </html>

@@ -63,57 +63,7 @@
 </head>
 <body class="bg-light">
     <!-- Navigation -->
-    <nav class="navbar navbar-dark bg-primary shadow">
-        <div class="container">
-                <a class="navbar-brand fs-4 fw-bold">
-                    <i class="bi bi-house-heart me-2"></i>Family Management System
-                </a>
-                <span class="navbar-text text-white d-flex align-items-center justify-content-end " style="width: 24%;">
-                    <span class="me-2">
-                        <i class="bi bi-person-circle me-2"></i>{{ $user->first_name }} {{ $user->last_name }}
-                    </span>
-                
-                <span>
-                    <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-                    <i class="navbar-toggler-icon"></i>
-                    </a>
-
-                    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                        <div class="offcanvas-header">
-                            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Family Management System</h5>
-                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body">
-                        <div>
-                            This is a compilation of all the shortcuts we can use to efficiently perform various tasks on a Website
-                        </div>
-                        <div class="dropdown mt-3">
-                            <p class="text-primary fw-bold">Dashboard</p>
-                            <li><a class="dropdown-item text-dark" href="/dashboard"><i class="bi bi-speedometer2 text-primary  mb-2 mx-2"></i>Dashboard</a></li>
-                        </div>
-                        <div class="dropdown mt-3">
-                            <p class="text-primary fw-bold">Usefull Links</p>
-                            <li><a class="dropdown-item text-dark" href="/admin"><span><i class="bi bi-people  mb-2 mx-2 "></i>Manage Head</a></span></li>
-                            <li><a class="dropdown-item text-dark" href="{{ route('state.index') }}"><i class="bi bi-geo-alt  mb-2 mx-2"></i>Manage States</a></li>
-                            <li><a class="dropdown-item text-dark" href="{{ route('city.index') }}"><i class="bi bi-buildings  mb-2 mx-2"></i>Manage Cities</a></li>
-                            
-                            <li><a class="dropdown-item  bg-danger" href="/logout"><i class="bi bi-box-arrow-right  mb-2 mx-2"></i>Logout</a></li>
-                        </div>
-                        <div class="dropdown mt-3">
-                            <p class="text-primary fw-bold">Add Content</p>
-                            <li><a class="dropdown-item text-dark" href="/headview"><i class="bi bi-plus-square text-primary  mb-2 mx-2"></i>Create Head</a></li>
-
-                            <li><a class="dropdown-item text-dark" href="{{ route('create.state') }}"><i class="bi bi-plus-square text-primary  mb-2 mx-2"></i>Create State</a></li>
-                            <li><a class="dropdown-item  text-dark" href="{{ route('create.city') }}"><i class="bi bi-plus-square text-primary mb-2 mx-2"></i>Create City</a></li>
-                            
-                        </div>
-                    </div>
-                    </div>
-                </span>
-           
-            
-        </div>
-    </nav>
+    @include('partials.navbar2',['shouldShowDiv' => true])
 
 
 
@@ -170,7 +120,7 @@
             </div>
             <div class="card-body p-4">
                 <div class="row g-4 mb-4">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="card border-0 bg-light text-center rounded-4">
                             <div class="card-body p-4">
                                 <i class="bi bi-people text-primary fs-1 mb-2"></i>
@@ -179,7 +129,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="card border-0 bg-light text-center rounded-4">
                             <div class="card-body p-4">
                                 <i class="bi bi-person-check text-success fs-1 mb-2"></i>
@@ -188,6 +138,25 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 bg-light text-center rounded-4">
+                            <div class="card-body p-4">
+                                <i class="bi bi-geo-alt text-warning fs-1 mb-2"></i>
+                                <h3 class="fw-bold text-warning mb-1">{{ $statecount }}</h3>
+                                <p class="text-muted mb-0">Total States</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-0 bg-light text-center rounded-4">
+                            <div class="card-body p-4">
+                                <i class="bi bi-geo-fill text-danger fs-1 mb-2"></i>
+                                <h3 class="fw-bold text-danger mb-1">{{ $citycount }}</h3>
+                                <p class="text-muted mb-0">Total Cities</p>
+                            </div>
+                        </div>
+                    </div>
+                   
                 </div>
 
                 <!-- Account Info -->

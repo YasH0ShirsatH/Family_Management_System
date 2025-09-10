@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Head;
 use App\Models\Member;
+use App\Models\State;
+use App\Models\City;
 use Illuminate\Contracts\Auth\Factory;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\StatefulGuard;
@@ -54,14 +56,24 @@ class AuthController extends Controller
 
             $user = User::where('email','=',$request->email)->first();
             if($user){
-        
-                if(hash::check($request->password,$user->password) )
-                {
-                    $request->session()->put('loginId',$user->id);
-                    return redirect('dashboard');
+                
+                if($user->status == '0'){
+                    Session::pull('loginId');
+                    return back()->with('error', 'Your account is inactive');
+                }
+                else if($user->status == '9'){
+                    Session::pull('loginId');
+                    return back()->with('error', 'Your account has been blocked/deleted');
                 }
                 else{
-                    return back()->with('error','password incorrect');
+                    if(hash::check($request->password,$user->password) )
+                    {
+                        $request->session()->put('loginId',$user->id);
+                        return redirect('dashboard');
+                    }
+                    else{
+                        return back()->with('error','password incorrect');
+                    }
                 }
             }
             else{
@@ -72,14 +84,26 @@ class AuthController extends Controller
     public function dashboard(){
         $data = array();
         if(Session::has('loginId')){
-            $user = User::where('id','=',session::get('loginId'))->first();
+            if($user = User::where('id','=',session::get('loginId'))
+                        ->where('status','1')
+                        ->first())
+                        {
             $head = Head::all();
             $member = Member::all();
+            $state = State::all();
+            $city = City::all();
             $headcount = $head->count();
             $membercount = $member->count();
+            $statecount = $state->count(); 
+            $citycount = $city->count();
+            return view('dashboard',compact('user','headcount','membercount','statecount','citycount'));
+        }
+        else{
+            return redirect('/login')->with('error', 'You are not allowed to log in');
         }
 
-        return view('dashboard',compact('user','headcount','membercount'));
+        
+    }
     }
 
     public function logout(){

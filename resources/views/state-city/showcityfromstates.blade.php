@@ -6,23 +6,12 @@
     <title>Cities by State</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
+
 </head>
 <body class="bg-light">
-    <nav class="navbar navbar-dark bg-primary">
-        <div class="container">
-            <span class="navbar-brand mb-0 h1">
-                <i class="bi bi-geo-alt me-2"></i>Cities by State({{ $state->name }})
-            </span>
-            <div>
-                <a href="{{ route('state.index') }}" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-arrow-left me-1"></i>Back
-                </a>
-                <a href="{{ route('create.city', ['state_id' => $state->id,'selected_state_id'=>$state->id])}}" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-plus-circle me-1"></i>Add City
-                </a>
-            </div>
-        </div>
-    </nav>
+           @include('partials.navbar2',['shouldShowDiv' => true])
+
 
 
 

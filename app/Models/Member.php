@@ -13,6 +13,7 @@ class Member extends Model
         'mariage_date',    
         'education',
         'photo_path',
+        'status'
 ];
     public function head(){
         return $this->belongsTo(Head::class);

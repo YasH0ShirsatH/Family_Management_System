@@ -25,6 +25,7 @@ class CreateCitiesTable extends Migration
             $table->timestamps();
             $table->boolean('flag')->default(false);
             $table->string('wikiDataId')->nullable();
+            $table->enum('status', ['0', '1', '9'])->default('1'); 
         });
     }
 

@@ -25,6 +25,7 @@ class CreateStatesTable extends Migration
             $table->timestamps();
             $table->boolean('flag')->default(0);
             $table->text('wikiDataId')->nullable();
+            $table->enum('status', ['0', '1', '9'])->default('1'); // Defines an enum column named 'status'
         });
     }
 

@@ -109,7 +109,9 @@
         }
     </style>
 </head>
+@include('partials.navbar2')
 <body>
+    
     <div class="register-container">
         <div class="register-header">
             <h1><i class="bi bi-person-plus"></i> Admin Registration</h1>

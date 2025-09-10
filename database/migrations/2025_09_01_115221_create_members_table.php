@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('mariage_date')->nullable();
             $table->string('education')->nullable();
             $table->string('photo_path')->nullable();
+            $table->enum('status', ['0', '1', '9'])->default('1'); 
             $table->timestamps();
         });
     }

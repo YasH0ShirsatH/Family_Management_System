@@ -7,118 +7,14 @@
     <title>Family Management - Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-    a {
-        text-decoration: none;
-    }
-    </style>
-    <style>
-    .offcanvas-body {
-        padding: 2rem;
-        background-color: #f8f9fa;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .offcanvas-body>div:first-child {
-        font-size: 1.1rem;
-        font-weight: 500;
-        color: #343a40;
-        margin-bottom: 1.5rem;
-    }
-
-    .dropdown {
-        background-color: #ffffff;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .dropdown::before {
-        
-        display: block;
-        font-weight: 600;
-        font-size: 1.05rem;
-        margin-bottom: 0.75rem;
-        color: #0d6efd;
-    }
-
-    .dropdown-item {
-        padding: 0.5rem 1rem;
-        margin-bottom: 0.3rem;
-        border-radius: 0.375rem;
-        transition: background-color 0.2s ease, color 0.2s ease;
-    }
-
-    .dropdown-item:hover {
-        background-color: #ffc107;
-        color: black !important;
-    }
-
-    li {
-        list-style-type: none;
-    }
-
-    li {
-        transition: all 400ms;
-    }
-
-    li:has(a:hover) {
-        margin-left: 10px
-    }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
+    
 </head>
 
 <body class="bg-light">
     <!-- Navigation -->
-    <nav class="navbar navbar-dark bg-primary shadow">
-        <div class="container">
-                <a class="navbar-brand fs-4 fw-bold">
-                    <i class="bi bi-house-heart me-2"></i>Family Management System
-                </a>
-                <span class="navbar-text text-white d-flex align-items-center justify-content-end " style="width: 24%;">
-                    
-                
-                <span>
-                    <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
-                    <i class="navbar-toggler-icon"></i>
-                    </a>
+       @include('partials.navbar2',['shouldShowDiv' => true])
 
-                    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                        <div class="offcanvas-header">
-                            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Family Management System</h5>
-                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body">
-                        <div>
-                            This is a compilation of all the shortcuts we can use to efficiently perform various tasks on a Website
-                        </div>
-                        <div class="dropdown mt-3">
-                            <p class="text-primary fw-bold">Dashboard</p>
-                            <li><a class="dropdown-item text-dark" href="/dashboard"><i class="bi bi-speedometer2 text-primary  mb-2 mx-2"></i>Dashboard</a></li>
-                        </div>
-                        <div class="dropdown mt-3">
-                            <p class="text-primary fw-bold">Usefull Links</p>
-                            <li><a class="dropdown-item text-dark" href="/admin"><span><i class="bi bi-people  mb-2 mx-2 "></i>Manage Head</a></span></li>
-                            <li><a class="dropdown-item text-dark" href="{{ route('state.index') }}"><i class="bi bi-geo-alt  mb-2 mx-2"></i>Manage States</a></li>
-                            <li><a class="dropdown-item text-dark" href="{{ route('city.index') }}"><i class="bi bi-buildings  mb-2 mx-2"></i>Manage Cities</a></li>
-                            
-                            <li><a class="dropdown-item  bg-danger" href="/logout"><i class="bi bi-box-arrow-right  mb-2 mx-2"></i>Logout</a></li>
-                        </div>
-                        <div class="dropdown mt-3">
-                            <p class="text-primary fw-bold">Add Content</p>
-                            <li><a class="dropdown-item text-dark" href="/headview"><i class="bi bi-plus-square text-primary  mb-2 mx-2"></i>Create Head</a></li>
-
-                            <li><a class="dropdown-item text-dark" href="{{ route('create.state') }}"><i class="bi bi-plus-square text-primary  mb-2 mx-2"></i>Create State</a></li>
-                            <li><a class="dropdown-item  text-dark" href="{{ route('create.city') }}"><i class="bi bi-plus-square text-primary mb-2 mx-2"></i>Create City</a></li>
-                            
-                        </div>
-                    </div>
-                    </div>
-                </span>
-           
-            
-        </div>
-    </nav>
 
     <div class="container py-4">
         <!-- Success Alert -->
@@ -144,18 +40,18 @@
                     <div class="col-md-6">
                         <div class="card bg-primary text-white border-0 rounded-4">
                             <div class="card-body text-center py-3">
-                                <i class="bi bi-house-door fs-1 mb-2"></i>
-                                <h4 class="mb-0">{{ $heads->total() }}</h4>
-                                <small>Total Families</small>
+                                <i class="me-2 bi bi-house-door fs-4 "></i>
+                                 <span class="mb-0 fs-4 ">( {{ $heads->total() }}</span>
+                                <small class="fs-4"> Total Families )</small> 
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="card bg-success text-white border-0 rounded-4">
                             <div class="card-body text-center py-3">
-                                <i class="bi bi-people-fill fs-1 mb-2"></i>
-                                <h4 class="mb-0">{{ $totalMembers }}</h4>
-                                <small>Total Members</small>
+                                <i class="me-2 bi bi-people-fill fs-4 "></i>
+                                 <span class="mb-0 fs-4 ">( {{ $totalMembers }}</span>
+                                <small class="fs-4">Total Members )</small> 
                             </div>
                         </div>
                     </div>
@@ -184,7 +80,7 @@
                                         value="{{ request('search') }}">
                                     <span id="searchLoading"
                                         class="position-absolute top-50 end-0 translate-middle-y me-4 d-none"
-                                        style="z-index: 10;">
+                                        style="z-index: 234234;">
                                         <div class="spinner-border spinner-border-sm text-primary" role="status">
                                             <span class="visually-hidden">Loading...</span>
                                         </div>

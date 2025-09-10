@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Head extends Model
 {
+    protected $fillable = ['name','status'];
+   
     public function members(){
         return $this->hasMany(Member::class);
     }

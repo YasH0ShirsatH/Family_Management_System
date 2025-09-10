@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
+
 
     <title>Edit city</title>
 
@@ -47,12 +49,13 @@
 
 <body>
 
+       @include('partials.navbar2',['shouldShowDiv' => true])
 
 
     <section>
         <div class="col-lg-5 justify-content-center">
             <div class="card shadow rounded-4 justify-content-center" style="top: 20px;">
-                <div class="card-header bg-success text-white py-3 rounded-top-4">
+                <div class="card-header bg-primary text-white py-3 rounded-top-4">
                     <h5 class="mb-0 fw-bold"><i class="bi bi-geo-alt-fill me-2"></i>Edit city ({{ $city->name  }})</h5>
                 </div>
                 <div class="card-body p-4">
@@ -94,7 +97,7 @@
 
                         </div>
 
-                        <button type="submit" class="btn btn-success w-100 rounded-pill py-2">
+                        <button type="submit" class="btn btn-primary w-100 rounded-pill py-2">
                             <i class="bi bi-geo-alt-fill me-2"></i>Update city
                         </button>
                     </form>

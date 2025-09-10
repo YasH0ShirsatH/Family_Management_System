@@ -7,7 +7,12 @@
     <title>State & City Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
+
 </head>
+
+       @include('partials.navbar2',['shouldShowDiv' => true])
+
 
 <div class="text-center  mt-5">
             <a href="/dashboard" class="btn btn-outline-secondary rounded-pill">
@@ -17,7 +22,7 @@
 
 
 
-<body class="bg-light">
+<body class="bg-light" id="main">
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -52,12 +57,23 @@
                         </div>
                         
                         <div class="d-grid gap-3">
-                            <a href="admin/state-city/states" class="btn btn-primary btn-lg rounded-pill">
-                                <i class="bi bi-map me-2"></i>Manage States
-                            </a>
-                            <a href="admin/state-city/city" class="btn btn-success btn-lg rounded-pill">
-                                <i class="bi bi-buildings me-2"></i>Manage Cities
-                            </a>
+                            <span class="w-100 d-flex justify-content-between">
+                                <a style="  width: 48%;" href="admin/state-city/states" class="btn btn-primary btn-lg rounded-pill">
+                                    <i class="bi bi-map me-2"></i>Manage States
+                                </a>
+                                <a href="admin/state-city/city" style="  width: 48%;" class="btn  btn-success btn-lg rounded-pill">
+                                    <i class="bi bi-buildings me-2"></i>Manage Cities
+                                </a>
+                                
+                            </span>
+                            <span class="w-100 d-flex justify-content-between">
+                                <a style="  width: 48%;" href="admin/state-city/createState" class="btn btn-primary btn-lg rounded-pill">
+                                    <i class="bi bi-plus me-2"></i>Add States
+                                </a>
+                                <a href="admin/state-city/createcity" style="  width: 48%;" class="btn btn-success btn-lg rounded-pill">
+                                    <i class="bi bi-plus me-2"></i>Add Cities
+                                </a>
+                            </span>
                         </div>
                     </div>
                 </div>

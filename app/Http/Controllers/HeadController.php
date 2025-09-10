@@ -14,7 +14,7 @@ class HeadController extends Controller
     public function headview(){
         $states = State::where('country_id',101)->orderBy('name','asc')->get();
         foreach ($states as $state) {
-            $city = $state->cities = City::where('state_id', $state->id)->orderBy('name', 'asc')->get();
+            $city = City::where('state_id', $state->id)->orderBy('name', 'asc')->get();
         }
         
         return view('head',compact('states','city'));
@@ -23,9 +23,11 @@ class HeadController extends Controller
     public function dashboard(){
         $head = Head::all();
         $member = Member::all();
+        
         $user = User::all();
         $headcount = $head->count();
         $membercount = $member->count();
+        
         $usercount = $user->count();
         return view('userDashboard',['headcount'=>$headcount,'membercount'=>$membercount,'usercount'=>$usercount]);
     }

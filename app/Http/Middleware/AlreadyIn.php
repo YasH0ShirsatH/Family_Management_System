@@ -15,10 +15,12 @@ class AlreadyIn
      */
     public function handle(Request $request, Closure $next): Response
     {
+        
         if(Session()->has('loginId') && (url('/login') ==  $request->url()))
         {
             return redirect('dashboard')->with('error','You are already logged in, logout to login with different account');
         }
+        
         return $next($request);
     }
 }

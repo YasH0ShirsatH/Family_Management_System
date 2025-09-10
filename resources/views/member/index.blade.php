@@ -6,15 +6,12 @@
     <title>Family Members - Family Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
+
 </head>
 <body class="bg-light">
-    <nav class="navbar navbar-dark bg-primary shadow">
-        <div class="container">
-            <a class="navbar-brand fs-4 fw-bold">
-                <i class="bi bi-house-heart me-2"></i>Family Management System
-            </a>
-        </div>
-    </nav>
+           @include('partials.navbar2',['shouldShowDiv' => true])
+
 
     <div class="container py-4">
         <div class="row mb-4">
@@ -99,9 +96,9 @@
                                     <a href="{{ route('admin-member.edit', $member->id) }}" class="btn btn-primary btn-sm rounded-pill">
                                         <i class="bi bi-pencil me-1"></i>Edit
                                     </a>
-                                    <button type="button" class="btn btn-danger btn-sm rounded-pill" onclick="deleteMember({{ $member->id }})">
+                                    <a href="{{ route('member.delete', $member->id) }}" class="btn btn-danger btn-sm rounded-pill">
                                         <i class="bi bi-trash me-1"></i>Delete
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -109,10 +106,7 @@
                 </div>
             </div>
             
-            <form id="deleteForm{{ $member->id }}" action="{{ route('admin-member.destroy', $member->id) }}" method="post" class="d-none">
-                @csrf
-                @method('DELETE')
-            </form>
+           
         </div>
         @empty
         <div class="col-12">
@@ -138,11 +132,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    function deleteMember(memberId) {
-        if (confirm('WARNING: This will permanently delete the member!\n\nThis action cannot be undone. Are you sure?')) {
-            document.getElementById('deleteForm' + memberId).submit();
-        }
-    }
+    
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 

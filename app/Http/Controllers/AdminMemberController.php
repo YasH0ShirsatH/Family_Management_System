@@ -75,7 +75,7 @@ class AdminMemberController extends Controller
     {
         $head = Head::find($id);
         $id = $head->id;
-        $members = $head->members()->paginate(4);
+        $members = $head->members()->where('status','1')->paginate(4);
         return view("member.index", data: compact("members",'id'));
     }
 
@@ -85,7 +85,7 @@ class AdminMemberController extends Controller
     public function edit(string $id)
     {
         
-        $member = Member::find($id);
+        $member = Member::where('status','1')->find($id);
         return view('member.edit',compact('member'));
     }
 
@@ -138,6 +138,14 @@ class AdminMemberController extends Controller
         $member = Member::find($id);
         $parentId = $member->head->id;
         $member->delete();
+
+        return redirect()->route('admin-member.show',$parentId)->with('success', 'Member deleted successfully.')->with('name',$member->name)->with('surname',$member->surname);
+    }
+    public function delete(string $id)
+    {
+        $member = Member::find($id);
+        $parentId = $member->head->id;
+        $member->update(['status' => '9']);
 
         return redirect()->route('admin-member.show',$parentId)->with('success', 'Member deleted successfully.')->with('name',$member->name)->with('surname',$member->surname);
     }
