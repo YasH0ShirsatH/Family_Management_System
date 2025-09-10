@@ -3,7 +3,9 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-
+use App\Http\Middleware\AuthCheck;
+use App\Http\Middleware\BlockDirectAccess;
+use App\Http\Middleware\AlreadyIn;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -11,7 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'auth.check' => AuthCheck::class,
+            'block.direct' => BlockDirectAccess::class,
+            'already.in' => AlreadyIn::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
