@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Head;
 use App\Models\Member;
 use App\Models\Hobby;
-
+use App\Models\User;
+use Session;
 
 class AdminMemberController extends Controller
 {
@@ -23,11 +24,12 @@ class AdminMemberController extends Controller
      */
     public function familySection($id){
         $user = Head::find($id);
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
         if (!$user) {
             return redirect('/')->with('error', 'Head not found.');
         }
         $members = $user->members;
-        return view('member.create',['id'=>$id,'members'=>$members,'users'=>$user]);
+        return view('member.create',['id'=>$id,'members'=>$members,'users'=>$user,'admin1'=>$admin1]);
     }
 
 
@@ -44,6 +46,7 @@ class AdminMemberController extends Controller
             'mariage_date.required_if' => 'The marriage date field is required when marital status is married.',
         ]);
         $user = Head::find($id);
+        
         $familyid = $user->id;
         if (!$user) {
             return back()->with('error', 'Head not found.');
@@ -75,8 +78,9 @@ class AdminMemberController extends Controller
     {
         $head = Head::find($id);
         $id = $head->id;
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $members = $head->members()->where('status','1')->paginate(4);
-        return view("member.index", data: compact("members",'id'));
+        return view("member.index", data: compact("members",'id','admin1'));
     }
 
     /**
@@ -86,7 +90,8 @@ class AdminMemberController extends Controller
     {
         
         $member = Member::where('status','1')->find($id);
-        return view('member.edit',compact('member'));
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+        return view('member.edit',compact('member','admin1'));
     }
 
     /**

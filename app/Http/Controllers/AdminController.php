@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Head;
 use App\Models\User;
 use App\Models\Member;
+use App\Models\Category;
 use App\Models\Hobby;
 use App\Models\City;
 use App\Models\State;
@@ -13,7 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Session;
 class AdminController extends Controller
 {
     /**
@@ -23,6 +24,8 @@ class AdminController extends Controller
     {
         // Start with a new query builder instance
         $query = Head::query();
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+
 
         // 1. Group the search filter if it exists
         if ($request->filled('search')) {
@@ -38,8 +41,11 @@ class AdminController extends Controller
 
 
         $query->where('status', '1');
-
-
+            $category = Category::find(1);
+           
+            $category1 = $category->category;
+            
+        
         if ($request->category == "created_at") {
             $query->orderBy('created_at', 'desc');
         } elseif ($request->category == "updated_at") {
@@ -58,11 +64,14 @@ class AdminController extends Controller
 
 
         if ($request->ajax()) {
-            return view('admin.partials.index-search', compact('heads', 'totalMembers'));
+             $category = Category::find(1);
+            $category->update(['category' => $request->category ?? 'name']);
+            $category1 = $category->category;
+            return view('admin.partials.index-search', compact('heads', 'totalMembers','admin1','category1'));
         }
 
 
-        return view("admin.index", compact("heads", 'totalMembers'));
+        return view("admin.index", compact("heads", 'totalMembers','admin1','category1'));
     }
 
 
@@ -89,8 +98,10 @@ class AdminController extends Controller
     {
         $heads = Head::find($id);
         $members = $heads->members;
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
-        return view("admin.show", ["heads" => $heads, "members" => $members]);
+
+        return view("admin.show", ["heads" => $heads, "members" => $members,'admin1'=>$admin1]);
     }
 
     /**
@@ -99,6 +110,7 @@ class AdminController extends Controller
     public function edit(string $id)
     {
         $head = Head::where('status','1')->find($id);
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
         $states = State::where('country_id', 101)->orderBy('name', 'asc')->get();
 
@@ -117,7 +129,8 @@ class AdminController extends Controller
             'head' => $head,
             'id' => $id,
             'states' => $states,
-            'city' => $city
+            'city' => $city,
+            'admin1' => $admin1
         ]);
     }
 
@@ -170,6 +183,7 @@ class AdminController extends Controller
 
 
         $user = Head::find($id);
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
         $user->name = $request->name;
         $user->surname = $request->surname;

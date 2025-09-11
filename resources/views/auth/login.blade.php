@@ -7,10 +7,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
 </head>
-    @include('partials.navbar2',['shouldShowDiv' => false])
+   
 
-<body class="bg-light  align-items-center min-vh-100">
-    <div class="container" style="margin-top : 100px">
+<body class="bg-light d-flex align-items-center min-vh-100">
+    <div class="container" >
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
                 <div class="card shadow rounded-4">

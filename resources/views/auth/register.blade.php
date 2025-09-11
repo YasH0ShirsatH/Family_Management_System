@@ -109,7 +109,7 @@
         }
     </style>
 </head>
-@include('partials.navbar2')
+
 <body>
     
     <div class="register-container">

@@ -92,17 +92,17 @@
                         </div>
                     </div>
                 </div>
-
+               
                 <div>
                     <!-- /// done via https://www.youtube.com/watch?v=8kZ2BVCfalA -->
                     <select style="width : 20%" name="category" id="category"
                         class="form-select rounded-pill w-20 mb-3 " role="button">
-                        <option value="name">Select Category</option>
+                        <option value="name" {{ $category1 == 'name' ? 'selected' : '' }}>Select Category</option>
 
-                        <option value="updated_at">Updated At(Latest)</option>
-                        <option value="updated_at_asc">Updated At(Oldest)</option>
-                        <option value="created_at">Created At(Latest)</option>
-                        <option value="created_at_asc">Created At(Oldest)</option>
+                        <option value="updated_at" {{ $category1 == 'updated_at' ? 'selected' : '' }} >Updated At(Latest)</option>
+                        <option value="updated_at_asc" {{ $category1 == 'updated_at_asc' ? 'selected' : '' }} >Updated At(Oldest)</option>
+                        <option value="created_at" {{ $category1 == 'created_at' ? 'selected' : '' }} >Created At(Latest)</option>
+                        <option value="created_at_asc" {{ $category1 == 'created_at_asc' ? 'selected' : '' }} >Created At(Oldest)</option>
                     </select>
                 </div>
 

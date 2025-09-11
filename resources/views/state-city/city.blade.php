@@ -9,7 +9,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
-
+    <style>
+        .statelinks{
+            text-decoration: none;
+            color: #6c757d;
+        }
+        .statelinks:hover{
+            text-decoration: underline;
+            color: #0d6efd;
+        }
+    </style>
 
 </head>
 

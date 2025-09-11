@@ -18,7 +18,7 @@
                         <div class="mt-auto">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <span class="badge bg-success rounded-pill px-3 py-2 fs-6">
-                                    <i class="bi bi-buildings me-1"></i>{{ $item->cities->count() }} Cities
+                                    <i class="bi bi-buildings me-1"></i>{{ $item->cities->where('status','1')->count() }} Cities
                                 </span>
                                 @if($item->cities->count() > 0)
                                 <small class="text-success fw-semibold"><i
@@ -37,14 +37,10 @@
                                 <a href="{{ route('state.edit', $item->id)  }}"
                                     class="btn mt-2 btn-outline-info rounded-pill py-2 fw-semibold">
                                     <i class="bi bi-pen me-2"></i>Edit State
-                                </a>
-                                <form action="{{ route('state.delete', $item->id)   }}" class="w-100" method="post">   
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit" class="btn mt-2 w-100 btn-outline-danger rounded-pill py-2 fw-semibold">
+                                </a>                                       
+                                <a href="{{ route('state.delete', $item->id) }}" class="deleteBtn btn mt-2 btn-outline-danger rounded-pill py-2 fw-semibold"  >
                                         <i class="bi bi-trash me-2"></i>Delete State
-                                    </button>
+                                </a>
 
                                 </form> 
                             </div>
@@ -67,3 +63,18 @@
             {{ $states->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
         </div>
         @endif
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtons = document.getElementsByClassName('deleteBtn');
+
+    for (let i = 0; i < deleteButtons.length; i++) {
+        deleteButtons[i].addEventListener('click', function(event) {
+        if (!confirm(
+            'WARNING: This will permanently delete the "STATE" and all included "CITIES"! This action cannot be undone. Are you sure?'
+            )) {
+            event.preventDefault();
+        }
+        });
+    }
+    });
+</script>

@@ -67,12 +67,12 @@ Route::match(['get', 'post'], 'admin/state-city/states', [CityStateController::c
 //* FOR STATE
 Route::get('admin/state-city/editstate/{id}', [CityStateController::class, 'editstate'])->name('state.edit');
 Route::put('admin/state-city/updatestate/{id}', [CityStateController::class, 'updatestate'])->name('state.update');
-Route::delete('admin/state-city/deletestate/{id}', [CityStateController::class, 'deletestate'])->name('state.delete');
+Route::get('admin/state-city/deletestate/{id}', [CityStateController::class, 'deletestate'])->name('state.delete');
 
 //* FOR CITY
 Route::get('admin/state-city/editcity/{id}', [CityStateController::class, 'editcity'])->name('city.edit');
 Route::put('admin/state-city/updatecity/{id}', [CityStateController::class, 'updatecity'])->name('city.update');
-Route::delete('admin/state-city/deletecity/{id}', [CityStateController::class, 'deletecity'])->name('city.delete');
+Route::get('admin/state-city/deletecity/{id}', [CityStateController::class, 'deletecity'])->name('city.delete');
 
 
 Route::get('admin/state-city/city', [CityStateController::class, 'cityindex'])->name('city.index')->middleware('auth.check');
@@ -80,6 +80,6 @@ Route::get('admin/state-city/createcity', [CityStateController::class, 'createCi
 Route::get('admin/state-city/createState', [CityStateController::class, 'createState'])->name('create.state')->middleware('auth.check');
 Route::post('admin/state-city/storecity', [CityStateController::class, 'storeCity'])->name('store.city');
 Route::post('admin/state-city/storestate', [CityStateController::class, 'storestate'])->name('store.state');
-Route::match(['get', 'post'], 'admin/state-city/showcity/{id}', [CityStateController::class, 'showcity'])->name('show.city');
-
+Route::get( 'admin/state-city/showcity/{id}', [CityStateController::class, 'showcity'])->name('show.city');
+Route::get('admin/state-city/createViaShowCity/{id}', [CityStateController::class, 'createViaShowCity'])->name('show.createViaShowCity');
 
