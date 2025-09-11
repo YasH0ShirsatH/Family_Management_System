@@ -81,5 +81,3 @@ Route::get('admin/state-city/createState', [CityStateController::class, 'createS
 Route::post('admin/state-city/storecity', [CityStateController::class, 'storeCity'])->name('store.city');
 Route::post('admin/state-city/storestate', [CityStateController::class, 'storestate'])->name('store.state');
 Route::match(['get', 'post'], 'admin/state-city/showcity/{id}', [CityStateController::class, 'showcity'])->name('show.city');
-
-

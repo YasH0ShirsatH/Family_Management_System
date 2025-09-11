@@ -109,7 +109,7 @@
         }
     </style>
 </head>
-@include('partials.navbar2')
+@include('partials.navbar2',['shouldShowDiv' => false])
 <body>
     
     <div class="register-container">
