@@ -98,25 +98,28 @@
                                 ['label' => 'Active Heads', 'count' => $headcount],
                                 ['label' => 'Inactive Heads', 'count' => $inactiveheadcount],
                                 ['label' => 'Deleted Heads', 'count' => $deletedheadcount],
-                            ]],
+                            ],'link'=> '/admin',],
                             ['title' => 'Members Status', 'icon' => 'people-fill', 'total' => $totalmembercount, 'data' => [
                                 ['label' => 'Total Members', 'count' => $totalmembercount],
                                 ['label' => 'Active Members', 'count' => $membercount],
                                 ['label' => 'Inactive Members', 'count' => $inactivemembercount],
                                 ['label' => 'Deleted Members', 'count' => $deletedmembercount],
-                            ]],
+                            ],'link'=> '#',],
                             ['title' => 'City Status', 'icon' => 'buildings-fill', 'total' => $totalcitycount, 'data' => [
                                 ['label' => 'Total Cities', 'count' => $totalcitycount],
                                 ['label' => 'Active Cities', 'count' => $citycount],
                                 ['label' => 'Inactive Cities', 'count' => $inactivecitycount],
                                 ['label' => 'Deleted Cities', 'count' => $deletedcitycount],
-                            ]],
+                            ]
+                            ,'link'=> '/admin/state-city/city',],
                             ['title' => 'States Status', 'icon' => 'geo-fill', 'total' => $totalstatecount, 'data' => [
                                 ['label' => 'Total States', 'count' => $totalstatecount],
                                 ['label' => 'Active States', 'count' => $statecount],
                                 ['label' => 'Inactive States', 'count' => $inactivestatecount],
                                 ['label' => 'Deleted States', 'count' => $deletedstatecount],
-                            ]],
+                            ],'link'=> '/admin/state-city/states',
+                            ],
+
                         ];
                     @endphp
 
@@ -125,7 +128,7 @@
                             <div class="card h-100 shadow-sm">
                                 <div class="card-body">
                                     <h6 class="d-flex align-items-center mb-3 text-info fw-bold">
-                                        <i class="bi bi-{{ $item['icon'] }} me-2"></i>{{ $item['title'] }}
+                                        <i class="bi bi-{{ $item['icon'] }} me-2"></i><a href="{{ $item['link'] }}" class="text-decoration-none" href="">{{ $item['title'] }}</a>
                                     </h6>
                                     @foreach ($item['data'] as $status)
                                         <small>{{ $status['label'] }} : ({{ $status['count'] }})</small>
