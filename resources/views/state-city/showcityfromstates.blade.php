@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,119 +8,131 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
+    
 
 </head>
+
 <body class="bg-light">
-           @include('partials.navbar2',['shouldShowDiv' => true])
+    @include('partials.navbar2', ['shouldShowDiv' => true])
 
-
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show rounded-pill mt-4 mx-5">
+            <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
 
     <div class="container py-4">
-        <div class="card-header bg-gradient bg-primary text-white py-3 border-0 rounded-top-4">
-                <h5 class="mx-4 mb-0 fw-bold">
-                    <i class="bi bi-search me-2"></i>Search Cities
+        <div class="card shadow-sm mb-4 border-0 rounded-4">
+            <div class="card-header bg-gradient bg-primary text-white py-3 border-0 rounded-top-4">
+                <h5 class="mb-0 fw-bold">
+                    <i class="bi bi-search me-2"></i>Search States
                 </h5>
             </div>
-        <div class="card shadow mb-4 border-0" style="border-radius: 20px;">
-            <div class="card-body p-4 rounded-pill">
-                <form action="{{ route('show.city',$state->id) }}" method="post">
-                    @csrf
-                    <div class="row align-items-center ">
-                        <div class="col-md-8">
-                            <div class="input-group input-group-lg">
-                                <span class="input-group-text rounded-start-pill bg-primary text-white border-0">
-                                    <i class="bi bi-search"></i>
-                                </span>
-                                <input type="text" name="search" class="form-control rounded-end-pill border-0 shadow-sm"
-                                    placeholder="Search city... by ( #Id , Name , state_id )" value="{{ request('search') }}">
-                            </div>
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-lg-8 col-md-10">
+                        <div class="input-group">
+                            <span class="input-group-text bg-primary text-white border-0 rounded-start-pill px-4">
+                                <i class="bi bi-search fs-5"></i>
+                            </span>
+                            <input type="text" id="searchInput" 
+                                class="form-control border-0 rounded-end-pill py-3 px-4 shadow-sm"
+                                placeholder="Search by ID, Name ..." value="{{ request('search') }}">
+                            <span id="searchLoading"
+                                class="position-absolute top-50 end-0 translate-middle-y me-4 d-none"
+                                style="z-index: 10;">
+                                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </span>
                         </div>
-                        <div class="col-md-4">
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-semibold">
-                                    <i class="bi bi-search me-2"></i>Search City 
-                                </button>
-                            </div>
+
+                    </div>
+                    <div class="col-lg-4 col-md-2 mt-3 mt-md-0">
+                        <div class="d-flex gap-2 justify-content-md-end">
+                            <button type="button" class="btn btn-outline-secondary rounded-pill px-3"
+                                onclick="$('#searchInput').val('').trigger('keyup')">
+                                <i class="bi bi-x-circle me-1"></i>Clear
+                            </button>
                         </div>
                     </div>
-                </form>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        </div>
-        <div class="card shadow">
-            <div class="card-header bg-white">
-                <h4 class="mb-0 text-primary">
-                    <i class="bi bi-list me-2"></i>City List ({{ count($city) }})
-                </h4>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-primary">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col"><i class="bi bi-buildings me-1"></i>City Name</th>
-                                <th scope="col"><i class="bi bi-map me-1"></i>State</th>
-                                <th scope="col"><i class="bi bi-calendar me-1"></i>Added On</th>
-                                <th scope="col" class="text-primary"><i class="bi bi-pen me-1"></i>Edit</th>
-                                <th scope="col" class="text-danger"><i class="bi bi-trash me-1"></i>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($city as $index => $item)
-                            <tr>
-                                <th scope="row">{{ $index + 1 }}</th>
-                                <td>{{ $item->name }}</td>
-                                <td>{{ $item->state->name ?? 'N/A' }}</td>
-                                <td>{{ $item->created_at->format('M d, Y') }}</td>
-                                <td><a href="{{ route('city.edit',$item->id) }}">Edit</a></td>
-                                <td >
-                                    <form action="{{ route('city.delete', $item->id) }}" method="post" >
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type='submit' style="background-color: transparent; border:none;text-decoration : underline"   class="text-danger" href="{{ route('city.delete',$item->id) }}">Delete</button>
-                                    </form>
-
-                                </td>
-                            </tr>
-
-                            @empty
-                            <tr>
-                                <td colspan="6" class="text-center text-danger">No city found</td>
-                            </tr>
-                            
-                            @endforelse
-
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="d-flex justify-content-center mt-4">
-            {{ $city->links('pagination::bootstrap-4') }}
+        <div id="tableResults">
+            @include('state-city.partials.show-state-list', ['city' => $city])
         </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+
+
+
+
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $(function () {
+        const listUrl = "{{ Route('show.city',$state->id) }}";
+        let debounceTimeout = null;
+
+        function showLoading() {
+            $('#searchLoading').removeClass('d-none');
+            $('#searchInput').prop('disabled', true);
+        }
+
+        function hideLoading() {
+            $('#searchLoading').addClass('d-none');
+            $('#searchInput').prop('disabled', false);
+        }
+
+        function fetchList(params = {}) {
+            showLoading();
+            $.get(listUrl, params)
+                .done(function (response) {
+                    // replace only the table + pagination area
+                    $('#tableResults').html(response);
+                })
+                .fail(function () {
+                    // optional: show a brief message or console error
+                    console.error('Failed to fetch list');
+                })
+                .always(function () {
+                    hideLoading();
+                });
+        }
+
+        // Live search  method applied here
+        $(document).on('keyup', '#searchInput', function () {
+            const query = $(this).val();
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(function () {
+                fetchList({
+                    search: query
+                });
+            }, 800);
+        });
+
+        // AJAX pagination done here via https://youtu.be/g0EWWgtA0a0?si=sug4h_xrzTOrmngb
+        $(document).on('click', '#tableResults .pagination a', function (e) {
+            e.preventDefault();
+            const url = new URL($(this).attr('href'), window.location.origin);
+            const params = Object.fromEntries(url.searchParams.entries());
+            params.search = $('#searchInput').val() || params.search;
+            fetchList(params);
+            window.history.pushState({}, '', $(this).attr('href'));
+        });
+
+        // restore on back/forward
+        window.addEventListener('popstate', function () {
+            const params = Object.fromEntries(new URLSearchParams(location.search));
+            fetchList(params);
+        });
+    });
+</script>
+
 </html>

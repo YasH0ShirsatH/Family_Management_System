@@ -19,7 +19,8 @@ class BlockDirectAccess
     {
         if ($request->route()->getName() === 'familySection') {
             $familyId = $request->route('id');
-            $sessionKey = 'head_submitted_' . $familyId;
+            $submission_key = 'head_submitted_' . $familyId;
+            $sessionKey = $submission_key;
             $sessionRoute = 'admin-member.show';            
             if (!session()->has($sessionKey)) {
                 return redirect('/')->with('error', 'Direct access not allowed. Please submit head information first.');

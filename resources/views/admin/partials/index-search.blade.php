@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <span class="badge bg-success rounded-pill">
-                                            <i class="bi bi-people me-1"></i>{{ $user->members->count() + 1 }} Members ( Including Head )
+                                            <i class="bi bi-people me-1"></i>{{ $user->members->where('status','1')->count() + 1 }} Members ( Including Head )
                                         </span>
                                     </div>
                                 </div>

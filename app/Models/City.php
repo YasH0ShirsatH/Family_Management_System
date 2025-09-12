@@ -11,6 +11,7 @@ class City extends Model
         'state_id',
         'latitude',
         'longitude',
+        'status'
     ];
     
     public function state(){

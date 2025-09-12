@@ -12,10 +12,12 @@ use Illuminate\Contracts\Auth\Factory;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Session;
 class AuthController extends Controller
 {
     public function login(Request $request){
+       
         return view("auth.login");
     }
 
@@ -83,28 +85,37 @@ class AuthController extends Controller
 
     public function dashboard(){
         $data = array();
+        Log::info('A request was received for processing.');
+        try{
         if(Session::has('loginId')){
             if($user = User::where('id','=',session::get('loginId'))
                         ->where('status','1')
                         ->first())
                         {
-            $head = Head::all();
-            $member = Member::all();
-            $state = State::all();
-            $city = City::all();
+            $head = Head::where('status','1')->get();
+            $member = Member::where('status','1')->get();
+            $state = State::where('status','1')->get();
+            $city = City::where('status','1')->get();
+            $admin1 = User::where('id', '=', session::get('loginId'))->first();
             $headcount = $head->count();
             $membercount = $member->count();
             $statecount = $state->count(); 
             $citycount = $city->count();
-            return view('dashboard',compact('user','headcount','membercount','statecount','citycount'));
+            Log::debug('Admin returned to dashboard');
+            return view('dashboard',compact('user','headcount','membercount','statecount','citycount','admin1'));
+                }
+            }
         }
-        else{
+        catch (\Exception $e){
+            Log::debug('returned to login cause of status issue or  '.$e->getMessage());
             return redirect('/login')->with('error', 'You are not allowed to log in');
         }
+        
+        
 
         
     }
-    }
+    
 
     public function logout(){
         if(Session::has('loginId')){

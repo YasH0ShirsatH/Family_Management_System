@@ -1,3 +1,35 @@
+
+@php
+        $allSessionData = session()->all();
+        $lastMatchingKey = null;
+        $session_number = 0;
+      
+        foreach (array_reverse($allSessionData) as $key => $value) {
+            if (str_starts_with($key, 'head_submitted_')) { 
+                $lastMatchingKey = $key;
+                break; 
+            }
+        }
+
+        
+        if ($lastMatchingKey) {
+            $number = preg_replace('/[^0-9]/', '', $lastMatchingKey);
+            $session_number = $number;
+        }
+
+    @endphp
+    @if (@session('head_submitted_'.$session_number))
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet"></div>
+        <div class="alert alert-danger mt-5 alert-dismissible fade show rounded-pill">
+            Your Session Still Exist Complete it  : <a href="{{ 
+            route('familySection',$session_number) }}">Click here</a>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+@else
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -129,3 +161,5 @@
 </body>
 
 </html>
+
+@endif
