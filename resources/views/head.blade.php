@@ -169,8 +169,11 @@
                                     <h6 class="card-title text-primary fw-semibold mb-3"><i
                                             class="bi bi-star me-2"></i>Hobbies & Interests</h6>
                                     <div id="hobbyContainer">
-                                        <input type="text" name="hobbies[]" class="form-control rounded-pill mb-2"
-                                            placeholder="Enter hobby">
+                                        @php $oldHobbies = old('hobbies', ['']); @endphp
+                                        @foreach($oldHobbies as $hobby)
+                                            <input type="text" name="hobbies[]" class="form-control rounded-pill mb-2"
+                                                   placeholder="Enter hobby" value="{{ $hobby }}">
+                                        @endforeach
                                     </div>
                                     <div class="d-flex gap-2">
                                         <button type="button" id="addHobby" class="btn btn-success btn-sm rounded-pill">

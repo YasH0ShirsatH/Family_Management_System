@@ -169,7 +169,7 @@ class AdminController extends Controller
             'pincode' => 'required|digits:6',
             'marital_status' => 'required',
             'mariage_date' => 'required_if:marital_status,1',
-            'hobbies' => 'required|min:1',
+            'hobbies' => 'required|array|min:1',
             'hobbies.*' => ['required', 'distinct', 'min:1', 'string'],
             'path' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
