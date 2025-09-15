@@ -15,7 +15,7 @@
     <div class="container py-5">
         <div class="text-center mb-4">
             <a href="{{ route('admin.index') }}" class="btn btn-outline-primary rounded-pill">
-                <i class="bi bi-arrow-left me-2"></i>Back to Head Dashboard
+                <i class="bi bi-arrow-left me-2"></i>Back to Manage Families
             </a>
         </div>
 

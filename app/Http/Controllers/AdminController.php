@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\HeadsImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use App\Models\Head;
 use App\Models\User;
@@ -39,6 +41,8 @@ class AdminController extends Controller
             });
         }
 
+        
+
 
         $query->where('status', '1');
             $category = Category::find(1);
@@ -58,10 +62,10 @@ class AdminController extends Controller
             $query->orderBy('name', 'asc');
         }
 
-        $heads = $query->paginate(5)->withQueryString();
+        $heads = $query->paginate(10)->withQueryString();
 
         $totalMembers = Member::where('status','1')->count();
-
+        
 
         if ($request->ajax()) {
              $category = Category::find(1);
@@ -72,6 +76,19 @@ class AdminController extends Controller
 
 
         return view("admin.index", compact("heads", 'totalMembers','admin1','category1'));
+    }
+
+    public function print_all_pdf()
+    {
+        $heads = Head::where('status','1')->get();
+
+        ///home/dev83/Desktop/Assignment-Family_Management_System/Family_Management_System/public/uploads/images/1757081895_WhatsApp Image 2025-04-02 at 11.24.38_5fb74118.jpg
+        
+
+        $pdf = Pdf::loadView('pdf.all', compact('heads'));
+        $pdf->showImageErrors = true;
+        $pdf->curlAllowUnsafeSslRequests = true;
+        return $pdf->download('All_Family\'s_family.pdf');
     }
 
 
@@ -144,6 +161,12 @@ class AdminController extends Controller
         if ($pdf_path == null) {
             $pdf_actual_path = '/home/dev83/Desktop/Assignment-Family_Management_System/Family_Management_System/public/uploads/images/noimage.png';
         } else {
+            $pdf_actual_path = '/home/dev83/Desktop/Assignment-Family_Management_System/Family_Management_System/public/uploads/images/';
+        }
+        $pdf_actual_path = null;
+        if ($pdf_path == null) {
+            $pdf_actual_path = '/home/dev83/Desktop/Assignment-Family_Management_System/Family_Management_System/public/uploads/images/noimage.png';
+        } else {
             $pdf_actual_path = '/home/dev83/Desktop/Assignment-Family_Management_System/Family_Management_System/public/uploads/images/' . $pdf_path;
         }
 
@@ -156,6 +179,12 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
+    public function export() 
+    {
+        return Excel::download(new HeadsImport, 'heads.xlsx');
+    }
+
     public function update(Request $request, string $id)
     {
         $request->validate([

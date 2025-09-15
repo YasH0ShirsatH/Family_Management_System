@@ -74,7 +74,7 @@
             </div>
             <div class="card-body p-4">
                 <div class="row g-4">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="card bg-primary text-white border-0 h-100 rounded-4">
                             <div class="card-body text-center py-4">
                                 <i class="bi bi-house-door fs-1 mb-3"></i>
@@ -84,7 +84,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="card bg-success text-white border-0 h-100 rounded-4">
                             <div class="card-body text-center py-4">
                                 <i class="bi bi-people-fill fs-1 mb-3"></i>
@@ -94,16 +94,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card bg-info text-white border-0 h-100 rounded-4">
-                            <div class="card-body text-center py-4">
-                                <i class="bi bi-shield-check fs-1 mb-3"></i>
-                                <h3 class="mb-2">{{$usercount}}</h3>
-                                <h6 class="mb-0">System Administrators</h6>
-                                <small class="opacity-75">Authorized admin users</small>
-                            </div>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
         </div>

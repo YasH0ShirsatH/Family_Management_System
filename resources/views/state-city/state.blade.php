@@ -85,7 +85,7 @@
 
         <!-- Stats Cards -->
         <div class="row justify-content-center mb-4">
-            <div class="col-md-6 mb-3">
+            <div class="col-md-4 mb-3">
                 <div class="card bg-primary text-white border-0 h-100" style="border-radius: 20px;">
                     <div class="card-body text-center py-4">
                         <i class="bi bi-geo-alt display-4 mb-3"></i>
@@ -94,7 +94,18 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-4 mb-3">
+                <div class="card bg-danger  text-white border-0 h-100" style="border-radius: 20px;">
+                   <a href="{{ route('create.state') }}" class="text-decoration-none text-light">
+                     <div class="card-body text-center py-4 " role="button">
+                        <i class="bi bi-plus display-4 mb-3"></i>
+                        <h3 class="fw-bold mb-1">Add States</h3>
+                
+                    </div>
+                   </a>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
                 <div class="card bg-success text-white border-0 h-100" style="border-radius: 20px;">
                     <div class="card-body text-center py-4">
                         <i class="bi bi-buildings display-4 mb-3"></i>

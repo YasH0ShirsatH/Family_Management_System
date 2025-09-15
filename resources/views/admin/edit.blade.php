@@ -25,7 +25,7 @@
 
     <div class="text-center mb-4 mt-4">
         <a href="{{ route('admin.index') }}" class="btn btn-outline-primary rounded-pill">
-            <i class="bi bi-arrow-left me-2"></i>Back to Head Dashboard
+            <i class="bi bi-arrow-left me-2"></i>Back to Manage Families
         </a>
     </div>
     <div class="container py-4">
@@ -76,7 +76,7 @@
                                 <div class="col-md-6 mb-3 form-group">
                                     <label class="form-label fw-semibold">Date of Birth</label>
                                     <input type="date" name="birthdate" class="form-control rounded-pill"
-                                        value="{{ $head->birthdate }}" required>
+                                        value="{{ $head->birthdate}}" required>
                                     <div class="validation-error"></div>
                                     @error('birthdate')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>

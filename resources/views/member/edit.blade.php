@@ -85,7 +85,7 @@
                                 <input type="text" name="education"
                                     class="form-control rounded-pill @error('education') is-invalid @enderror"
                                     placeholder="Enter education qualification" value="{{ $member->education }}"
-                                @error('education')
+                                @error('education')>
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -126,6 +126,7 @@
                 marriageDateDiv.style.display = 'none';
             }
         }
+        
        
         marriedRadio.addEventListener('change', toggleMarriageDate);
         unmarriedRadio.addEventListener('change', toggleMarriageDate);

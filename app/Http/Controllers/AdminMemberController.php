@@ -7,6 +7,10 @@ use App\Models\Head;
 use App\Models\Member;
 use App\Models\Hobby;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MembersExport;
+
 use Session;
 
 class AdminMemberController extends Controller
@@ -30,6 +34,17 @@ class AdminMemberController extends Controller
         }
         $members = $user->members;
         return view('member.create',['id'=>$id,'members'=>$members,'users'=>$user,'admin1'=>$admin1]);
+    }
+
+    public function print_member_all_pdf()
+    {
+        $members = Member::where('status','1')->get();
+
+        ///home/dev83/Desktop/Assignment-Family_Management_System/Family_Management_System/public/uploads/images/1757081895_WhatsApp Image 2025-04-02 at 11.24.38_5fb74118.jpg
+        $pdf = Pdf::loadView('pdf.member_all', compact('members'));
+        $pdf->showImageErrors = true;
+        $pdf->curlAllowUnsafeSslRequests = true;
+        return $pdf->download('All_Family\'s_members.pdf');
     }
 
 
@@ -153,6 +168,11 @@ class AdminMemberController extends Controller
         $member->update(['status' => '9']);
 
         return redirect()->route('admin-member.show',$parentId)->with('success', 'Member deleted successfully.')->with('name',$member->name)->with('surname',$member->surname);
+    }
+
+    public function export() 
+    {
+        return Excel::download(new MembersExport, 'members.xlsx');
     }
 
     
