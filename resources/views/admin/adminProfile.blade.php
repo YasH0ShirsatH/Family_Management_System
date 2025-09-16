@@ -198,6 +198,32 @@
                         </li>
                     </ul>
                 </div>
+                {{-- Admin Logs Section --}}
+                <div class="card mb-4 mt-5">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0 text-success">
+                            <i class="bi bi-journal-text me-2"></i>Admin Logs
+                        </h6>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            @forelse($logs as $log)
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="text-muted small">( {{  Str::before($admin1->email, '@')  }} )</span> :
+                                            <span class="fw-bold">{{ $log->logs }}</span>
+                                            
+                                        </div>
+                                        
+                                </li>
+                            @empty
+                                <li class="list-group-item text-center text-muted">No logs found.</li>
+                            @endforelse
+                        </ul>
+                    </div>
+                </div>
+                
             </div>
 
             <div class="col-md-8">

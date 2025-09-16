@@ -7,29 +7,32 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use App\Models\Head;
 use App\Models\User;
+use Illuminate\Validation\Rule;
+
 use App\Models\Member;
 use App\Models\Category;
 use App\Models\Hobby;
 use App\Models\City;
+use App\Models\Logg;
 use App\Models\State;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Session;
+use Illuminate\Support\Facades\Log;
+
 class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
     public function index(Request $request)
     {
-        // Start with a new query builder instance
         $query = Head::query();
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
-
-        // 1. Group the search filter if it exists
         if ($request->filled('search')) {
             $q = $request->input('search');
             $query->where(function ($subQuery) use ($q) {
@@ -41,49 +44,37 @@ class AdminController extends Controller
             });
         }
 
-        
-
-
         $query->where('status', '1');
-            $category = Category::find(1);
-           
-            $category1 = $category->category;
-            
-        
-        if ($request->category == "created_at") {
+        $category1 = $request->category ?? 'name';
+
+        if ($category1 == "created_at") {
             $query->orderBy('created_at', 'desc');
-        } elseif ($request->category == "updated_at") {
+        } elseif ($category1 == "updated_at") {
             $query->orderBy('updated_at', 'desc');
-        } elseif ($request->category == "updated_at_asc") {
+        } elseif ($category1 == "updated_at_asc") {
             $query->orderBy('updated_at', 'asc');
-        } elseif ($request->category == "created_at_asc") {
+        } elseif ($category1 == "created_at_asc") {
             $query->orderBy('created_at', 'asc');
         } else {
             $query->orderBy('name', 'asc');
         }
 
         $heads = $query->paginate(10)->withQueryString();
-
-        $totalMembers = Member::where('status','1')->count();
-        
+        $totalMembers = Member::where('status', '1')->count();
 
         if ($request->ajax()) {
-             $category = Category::find(1);
-            $category->update(['category' => $request->category ?? 'name']);
-            $category1 = $category->category;
-            return view('admin.partials.index-search', compact('heads', 'totalMembers','admin1','category1'));
+            return view('admin.partials.index-search', compact('heads', 'totalMembers', 'admin1', 'category1'));
         }
 
-
-        return view("admin.index", compact("heads", 'totalMembers','admin1','category1'));
+        return view("admin.index", compact("heads", 'totalMembers', 'admin1', 'category1'));
     }
 
     public function print_all_pdf()
     {
-        $heads = Head::where('status','1')->get();
+        $heads = Head::where('status', '1')->get();
 
         ///home/dev83/Desktop/Assignment-Family_Management_System/Family_Management_System/public/uploads/images/1757081895_WhatsApp Image 2025-04-02 at 11.24.38_5fb74118.jpg
-        
+
 
         $pdf = Pdf::loadView('pdf.all', compact('heads'));
         $pdf->showImageErrors = true;
@@ -118,7 +109,7 @@ class AdminController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
 
-        return view("admin.show", ["heads" => $heads, "members" => $members,'admin1'=>$admin1]);
+        return view("admin.show", ["heads" => $heads, "members" => $members, 'admin1' => $admin1]);
     }
 
     /**
@@ -126,12 +117,12 @@ class AdminController extends Controller
      */
     public function edit(string $id)
     {
-        $head = Head::where('status','1')->find($id);
+        $head = Head::where('status', '1')->find($id);
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
         $states = State::where('country_id', 101)->orderBy('name', 'asc')->get();
 
-        
+
         $city = collect();
         if ($head && $head->state) {
             $selectedState = State::where('name', $head->state)->first();
@@ -173,6 +164,7 @@ class AdminController extends Controller
         $pdf = Pdf::loadView('pdf.head', compact('heads', 'pdf_actual_path'));
         $pdf->showImageErrors = true;
         $pdf->curlAllowUnsafeSslRequests = true;
+        log::debug('Admin has downloaded pdf of head data at ' . Carbon::now());
         return $pdf->download($heads->name . '\'s_family.pdf');
     }
 
@@ -180,18 +172,29 @@ class AdminController extends Controller
      * Update the specified resource in storage.
      */
 
-    public function export() 
+    public function export()
     {
+        log::debug('Admin has downloaded excel of head data at :' . Carbon::now());
         return Excel::download(new HeadsImport, 'heads.xlsx');
     }
 
     public function update(Request $request, string $id)
     {
+        $user = Head::find($id);
+
         $request->validate([
             'name' => 'required',
             'surname' => 'required',
             'birthdate' => ['required', 'date', 'before:' . Carbon::now()->subYears(21)->format('Y-m-d')],
-            'mobile' => 'required|digits:10',
+
+
+
+            'mobile' => [
+                'required',
+                'digits:10',
+                Rule::unique('heads', 'mobile')->ignore($user->id),
+            ],
+
             'address' => 'required',
             'state' => 'required',
             'city' => 'required',
@@ -211,12 +214,20 @@ class AdminController extends Controller
             'path.image' => 'The uploaded file must be an image.',
             'path.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
             'path.max' => 'The image may not be greater than 2 MB.',
-           
+
         ]);
 
 
-        $user = Head::find($id);
+
+
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
+
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+        $log = new Logg();
+        $log->user_id = $admin1->id;
+        $log->logs = 'Admin has Updated Head  (' . $user->name . ' ' . $user->surname . ')  Successfully : ' . Carbon::now();
+        $log->save();
+        log::debug('Admin has Updated Head  (' . $user->name . ' ' . $user->surname . ')  Successfully : ' . Carbon::now());
 
         $user->name = $request->name;
         $user->surname = $request->surname;
@@ -228,20 +239,24 @@ class AdminController extends Controller
         $user->pincode = $request->pincode;
         $user->marital_status = $request->marital_status;
 
+
         if ($request->input('marital_status') == 1) {
             $user->mariage_date = $request->mariage_date;
         }
 
         $user->hobbies()->delete();
 
-        
+
         foreach ($request->hobbies as $hobby) {
             $user->hobbies()->create([
                 'head_id' => $user->id,
                 'hobby_name' => $hobby,
             ]);
         }
-        if($request->path != null){
+
+
+
+        if ($request->path != null) {
             $file = $request->file('path');
             $filename = time() . '_' . $file->getClientOriginalName();
             $file->move('uploads/images/', $filename);
@@ -251,7 +266,15 @@ class AdminController extends Controller
         }
         $user->save();
 
+
+
+
+
+
         return redirect()->route('admin.index', ['id' => $user->id])->with('success', "Head Updated successfully.")->with('name', $user->name)->with('surname', $user->surname);
+
+
+
 
     }
 
@@ -268,12 +291,24 @@ class AdminController extends Controller
     }
     public function delete(string $id)
     {
+
         $head = Head::find($id);
         if ($head) {
             $head->update(['status' => '9']);
             $head->members()->update(['status' => '9']);
+
+            $admin1 = User::where('id', '=', session::get('loginId'))->first();
+            $log = new Logg();
+            $log->user_id = $admin1->id;
+            $log->logs = 'Admin Has Deleted (' . $head->name . ' ' . $head->surname . ') Successfully : ' . Carbon::now();
+            $log->save();
+            log::debug('Admin Has Deleted (' . $head->name . ' ' . $head->surname . ') Successfully : ' . Carbon::now());
+
+
             return redirect()->route('admin.index')->with('success', "Head deleted successfully.")->with('name', $head->name)->with('surname', $head->surname);
         }
+
+
     }
 
     // public function search(Request $request)

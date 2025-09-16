@@ -11,9 +11,27 @@
 
 </head>
 <style>
-    #uploadPhoto{
-        display: none;
-    }
+#uploadPhoto {
+    display: none;
+}
+</style>
+<style>
+.validation-error {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 4px;
+    font-weight: 500;
+    padding-left: 2px;
+    min-height: 18px;
+    transition: all 0.2s;
+}
+
+input.error,
+select.error,
+textarea.error {
+    border-color: #dc3545;
+    background-color: #fff0f0;
+}
 </style>
 
 
@@ -51,7 +69,8 @@
                         </div>
                         @endif
 
-                        <form action="{{ route('admin.update',$id) }}" id="formSubmit"   method="post" enctype="multipart/form-data">
+                        <form action="{{ route('admin.update',$id) }}" id="formSubmit" method="post"
+                            enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
@@ -192,16 +211,17 @@
                             @error('hobbies')<div class="text-danger mt-2">{{ $message }}</div>@enderror
                         </div>
                     </div>
-                    <div class="mb-4 mx-4" id="photoSection" >
-                        <p>Do You Want To Update Head Photo? <span id="addphoto" class="  btn btn-danger mx-3 py-0 px-3 rounded-pill">Yes</span> </p>
+                    <div class="mb-4 mx-4" id="photoSection">
+                        <p>Do You Want To Update Head Photo? <span id="addphoto"
+                                class="  btn btn-danger mx-3 py-0 px-3 rounded-pill">Yes</span> </p>
                     </div>
-                    <div class="mb-4 mx-4 form-group"  id="uploadPhoto">
+                    <div class="mb-4 mx-4 form-group" id="uploadPhoto">
                         <label class="form-label fw-semibold">Profile Picture</label>
                         <input type="file" name="path" class="form-control rounded-pill" accept="image/*">
                         <small class="text-muted">Upload a clear photo (JPG, PNG, max 2MB)</small>
                         <div class="validation-error"></div>
                     </div>
-                        @error('path')<div class="text-danger">{{ $message }}</div>@enderror
+                    @error('path')<div class="text-danger">{{ $message }}</div>@enderror
 
 
 
@@ -222,7 +242,7 @@
                     <h5 class="mb-0 fw-bold">Danger Zone: Delete family head and all members</h5>
                 </div>
                 <div class="card-body text-center p-4">
-                    <a  href="{{ route('delete',$head->id) }}" class="btn btn-danger rounded-pill" id="deleteBtn">
+                    <a href="{{ route('delete',$head->id) }}" class="btn btn-danger rounded-pill" id="deleteBtn">
                         <i class="bi bi-trash me-2"></i>Delete Head
                     </a>
                     </form>
@@ -246,7 +266,7 @@
         const photoSection = document.getElementById('photoSection');
 
 
-        if(addphoto){
+        if (addphoto) {
             addphoto.addEventListener('click', function(event) {
                 const uploadPhoto = document.getElementById('uploadPhoto');
                 if (uploadPhoto) {
@@ -255,7 +275,7 @@
                 }
             });
         }
-    
+
 
         if (deleteButton) {
             deleteButton.addEventListener('click', function(event) {
@@ -292,12 +312,12 @@
         unmarriedRadio.addEventListener('change', toggleMarriageDate);
         addHobbyBtn.addEventListener('click', addHobbyInput);
         removeHobbyBtn.addEventListener('click', removeHobbyInput);
-    
+
     });
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
     <script>
     jQuery(document).ready(function() {
         jQuery('select[name="state"]').on('change', function() {
@@ -321,96 +341,141 @@
     </script>
 
 
-<script>
-jQuery(document).ready(function() {
-    // Custom file size validator
-    $.validator.addMethod("maxfilesize", function(value, element, param) {
-        if (element.files && element.files.length > 0) {
-            var fileSize = element.files[0].size;
-            var maxSizeBytes = param * 1024 * 1024;
-            return fileSize <= maxSizeBytes;
-        }
-        return true;
-    }, "File size exceeds the allowed limit.");
+    <script>
+    jQuery(document).ready(function() {
+        // Custom file size validator
+        $.validator.addMethod("maxfilesize", function(value, element, param) {
+            if (element.files && element.files.length > 0) {
+                var fileSize = element.files[0].size;
+                var maxSizeBytes = param * 1024 * 1024;
+                return fileSize <= maxSizeBytes;
+            }
+            return true;
+        }, "File size exceeds the allowed limit.");
 
-    // Custom age validator
-    $.validator.addMethod("ageAbove21", function(value, element) {
-        if (!value) return true;
-        var dob = new Date(value);
-        var today = new Date();
-        var age = today.getFullYear() - dob.getFullYear();
-        var m = today.getMonth() - dob.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
-        return age >= 21;
-    }, "You must be at least 21 years old.");
+        // Custom age validator
+        $.validator.addMethod("ageAbove21", function(value, element) {
+            if (!value) return true;
+            var dob = new Date(value);
+            var today = new Date();
+            var age = today.getFullYear() - dob.getFullYear();
+            var m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+            return age >= 21;
+        }, "You must be at least 21 years old.");
 
-    // Only require profile picture if not already present
-    
+        // Only require profile picture if not already present
 
-    $('#formSubmit').validate({
-        rules: {
-            path: {
-                required: true,
-                extension: "jpg|jpeg|png",
-                maxfilesize: 2
+
+        $('#formSubmit').validate({
+            rules: {
+                path: {
+                    required: true,
+                    extension: "jpg|jpeg|png",
+                    maxfilesize: 2
+                },
+                name: {
+                    required: true
+                },
+                surname: {
+                    required: true
+                },
+                birthdate: {
+                    required: true,
+                    ageAbove21: true
+                },
+                mobile: {
+                    required: true,
+                    rangelength: [10, 10]
+                },
+                address: {
+                    required: true
+                },
+                state: {
+                    required: true
+                },
+                city: {
+                    required: true
+                },
+                pincode: {
+                    required: true,
+                    rangelength: [6, 6]
+                },
+                marital_status: {
+                    required: true
+                },
+                mariage_date: {
+                    required: function() {
+                        return $("#married").is(":checked");
+                    }
+                },
+                'hobbies[]': {
+                    required: true
+                },
+
             },
-            name: { required: true },
-            surname: { required: true },
-            birthdate: { required: true, ageAbove21: true },
-            mobile: { required: true, rangelength: [10, 10] },
-            address: { required: true },
-            state: { required: true },
-            city: { required: true },
-            pincode: { required: true, rangelength: [6, 6] },
-            marital_status: { required: true },
-            mariage_date: {
-                required: function() {
-                    return $("#married").is(":checked");
+            messages: {
+                path: {
+                    required: "Please upload a profile picture",
+                    extension: "Only JPG, JPEG, and PNG files are allowed.",
+                    maxfilesize: "File size exceeds the allowed limit."
+                },
+                name: {
+                    required: "Please enter name"
+                },
+                surname: {
+                    required: "Please enter surname"
+                },
+                birthdate: {
+                    required: "Please enter birthdate",
+                    ageAbove21: "You must be at least 21 years old to proceed."
+                },
+                mobile: {
+                    required: "Please enter mobile",
+                    rangelength: "Mobile must be 10 digits"
+                },
+                address: {
+                    required: "Please enter address"
+                },
+                state: {
+                    required: "Please select state"
+                },
+                city: {
+                    required: "Please select city"
+                },
+                pincode: {
+                    required: "Please enter Pincode",
+                    rangelength: "Pincode must be 6 digits"
+                },
+                marital_status: {
+                    required: "Please select marital status"
+                },
+                mariage_date: {
+                    required: "Please enter marriage date"
+                },
+                'hobbies[]': {
+                    required: "Please enter at least one hobby"
+                },
+
+            },
+            errorPlacement: function(error, element) {
+                var $container = element.closest('.form-group').find('.validation-error');
+                if ($container.length) {
+                    $container.html(error);
+                } else {
+                    error.insertAfter(element);
                 }
             },
-            'hobbies[]': { required: true },
-            
-        },
-        messages: {
-            path: {
-                required: "Please upload a profile picture",
-                extension: "Only JPG, JPEG, and PNG files are allowed.",
-                maxfilesize: "File size exceeds the allowed limit."
+            highlight: function(element) {
+                $(element).addClass('error');
             },
-            name: { required: "Please enter name" },
-            surname: { required: "Please enter surname" },
-            birthdate: {
-                required: "Please enter birthdate",
-                ageAbove21: "You must be at least 21 years old to proceed."
-            },
-            mobile: { required: "Please enter mobile", rangelength: "Mobile must be 10 digits" },
-            address: { required: "Please enter address" },
-            state: { required: "Please select state" },
-            city: { required: "Please select city" },
-            pincode: { required: "Please enter Pincode", rangelength: "Pincode must be 6 digits" },
-            marital_status: { required: "Please select marital status" },
-            mariage_date: { required: "Please enter marriage date" },
-            'hobbies[]': { required: "Please enter at least one hobby" },
-            
-        },
-        errorPlacement: function(error, element) {
-            var $container = element.closest('.form-group').find('.validation-error');
-            if ($container.length) {
-                $container.html(error);
-            } else {
-                error.insertAfter(element);
+            unhighlight: function(element) {
+                $(element).removeClass('error');
+                $(element).closest('.form-group').find('.validation-error').empty();
             }
-        },
-        highlight: function(element) {
-            $(element).addClass('error');
-        },
-        unhighlight: function(element) {
-            $(element).removeClass('error');
-            $(element).closest('.form-group').find('.validation-error').empty();
-        }
+        });
     });
-});
-</script>
+    </script>
 </body>
 
 </html>

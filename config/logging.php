@@ -127,6 +127,12 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'adminlog' => [
+            'driver' => 'single', // Or 'daily' for daily log files
+            'path' => storage_path('logs/admin.log'),
+            'level' => 'debug', // Set the minimum logging level (e.g., debug, info, warning, error)
+        ],
+
     ],
 
 ];

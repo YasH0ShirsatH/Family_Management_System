@@ -95,7 +95,7 @@ class HeadController extends Controller
             }
             $submission_key = 'head_submitted_' . $user->id ;
             session([ $submission_key=> true]);
-            Log::debug('User Added Head To the Database Successfully');
+            Log::debug('User Added Head ('.$request->name.' '.$request->surname.') To the Database Successfully');
             return redirect()->route('familySection', ['id' => $user->id])->with('success', 'Head added successfully.');
         }
         catch (\Exception $e) {
@@ -177,7 +177,7 @@ class HeadController extends Controller
             'education' => $request->education,
             'photo_path' => $filename,
         ]);
-
+        log::debug('User ('.$user->name.' '.$user->surname.') Added Member ('.$request->name.') To the Database Successfully');
         return back()->with('success', 'Member added successfully.');
     }
 
@@ -202,7 +202,9 @@ class HeadController extends Controller
         if ($head) {
             session()->forget($submission_key);
         }
+        $user2 = Head::find($id);
         // Redirect to the homepage or login page
+        log::debug('User ('.$user2->name.' '.$user2->surname.') Logged Out Successfully');
         return redirect('/')->with('success', 'You have been logged out successfully.');
     }
 }

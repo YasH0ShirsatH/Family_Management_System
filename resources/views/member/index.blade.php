@@ -22,7 +22,12 @@
                     <div class="card-header bg-primary text-white py-3 rounded-top-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h2 class="text-white mb-1 fw-bold"><i class="bi bi-people-fill me-2"></i>Family Members
+                                <h2 class="text-white mb-1 fw-bold">
+                                <span class="text-white-50">
+                                    <i class="bi bi-people-fill me-2"></i>
+                                    {{ $head->name.' '.$head->surname.'\'s ' }}
+                                </span>
+                                Family Members
                                 </h2>
                                 <p class="text-white-50 mb-0">{{ $members->count() }}
                                     member{{ $members->count() !== 1 ? 's' : '' }} found</p>
@@ -44,6 +49,12 @@
         @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show rounded-pill">
             <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        @endif
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show rounded-pill">
+            <i class="bi bi-cross-circle me-2"></i>{{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
         @endif

@@ -122,7 +122,7 @@
                         <div class="mt-4">
                             <span class="badge bg-success fs-6 px-4 py-3 rounded-pill">
                                 <i class="bi bi-people me-2"></i>
-                                {{ $heads->members->count() }} Family Members
+                                {{ $heads->members->where('status','1')->count() }} Family Members
                             </span>
                         </div>
                         <div class="mt-4">
@@ -136,7 +136,7 @@
             </div>
         </div>
 
-        @if($heads->members->count() > 0)
+        @if($heads->members->where('status','1')->count() > 0)
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="card shadow-sm border-0">
@@ -147,7 +147,7 @@
                         </div>
                         <div class="card-body p-4">
                             <div class="row">
-                                @foreach($heads->members as $member)
+                                @foreach($heads->members->where('status','1') as $member)
                                     <div class="col-md-6 col-lg-4 mb-4">
                                         <div class="card border-0 shadow-sm h-100 rounded-4">
                                             @if(empty($member->photo_path))

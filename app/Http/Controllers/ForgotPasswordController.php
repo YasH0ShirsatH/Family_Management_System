@@ -8,7 +8,9 @@ use Illuminate\Support\Str;
 use App\Models\Password_reset;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ForgotPassword;
-
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use App\Models\Logg;
 class ForgotPasswordController extends Controller
 {
     public function forgotPassword() {
@@ -54,9 +56,20 @@ class ForgotPasswordController extends Controller
         if(!$updatePassword){
             return back()->withInput()->with('error', 'Invalid token!');
         }
+        
 
         User::where('email', $request->email)->update(['password' => bcrypt($request->password)]);
         Password_reset::where(['email'=> $request->email])->delete();
+
+
+        $admin1 = User::where('email', '=', $request->email)->first();
+        $log = new Logg();
+        $log->user_id = $admin1->id;
+        $log->logs = $request->email.' =>  password changed Successfully';
+        log::debug($request->email.' =>  password changed Successfully');
+
+
+
         return redirect('/login')->with('success', 'Your password has been changed!');
     }
 }

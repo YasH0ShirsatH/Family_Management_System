@@ -99,13 +99,13 @@
                     <div class="col-md-3 text-md-end">
                         <div class="d-flex flex-column flex-sm-row justify-content-md-end gap-2">
                             <a href="{{ route('admin.show', $user->id) }}" class="btn btn-primary btn-table">
-                                <i class="bi bi-eye"></i> View
+                                <i class="bi bi-eye"></i> View Data
                             </a>
                             <div class="btn-group" role="group">
-                                <a href="{{ route('admin.edit', $user->id) }}" class="btn btn-outline-secondary btn-table">
+                                <a href="{{ route('admin.edit', $user->id) }}" class="btn btn-outline-secondary btn-table"  data-toggle="tooltip" data-placement="left" title="Edit and Delete Head data">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <a href="{{ route('admin-member.show',$user->id) }}" class="btn btn-outline-secondary btn-table">
+                                <a href="{{ route('admin-member.show',$user->id) }}" class="btn btn-outline-secondary btn-table"  data-toggle="tooltip" data-placement="left" title="Edit and delete Members data">
                                     <i class="bi bi-people"></i>
                                 </a>
                             </div>

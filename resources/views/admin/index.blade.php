@@ -126,6 +126,12 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
         @endif
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            <strong>{{ session('name') }} {{ session('surname') }}</strong>: {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        @endif
 
         <div class="card shadow mb-4">
             <div class="card-header-main d-flex justify-content-between align-items-center">
@@ -163,9 +169,12 @@
                         <div class="row align-items-center">
                             <div class="col-lg-8 col-md-10 w-100">
                                 <div class="input-group search-input-group">
+                                    <span style=" padding: 10px 20px; display : flex; align-items: center;    border: 1px solid #ced4da;border-right : 0px;border-radius:5px 0px 0px 5px">
+                                        <i class="bi bi-search"></i>
+                                    </span>
                                     <input type="text" id="searchInput"
-                                        class="form-control w-100"
-                                        style="border-radius : 5px"
+                                        class="form-control"
+                                        style="border-radius : 0px 5px 5px 0px"
                                         placeholder="Search by name, surname, mobile, city, state..."
                                         value="{{ request('search') }}">
 
@@ -185,11 +194,11 @@
                 <div>
                     <select name="category" id="category"
                         class="form-select rounded-pill mb-3" role="button">
-                        <option value="name" {{ $category1 == 'name' ? 'selected' : '' }}>Select Category</option>
-                        <option value="updated_at" {{ $category1 == 'updated_at' ? 'selected' : '' }} >Updated At(Latest)</option>
-                        <option value="updated_at_asc" {{ $category1 == 'updated_at_asc' ? 'selected' : '' }} >Updated At(Oldest)</option>
-                        <option value="created_at" {{ $category1 == 'created_at' ? 'selected' : '' }} >Created At(Latest)</option>
-                        <option value="created_at_asc" {{ $category1 == 'created_at_asc' ? 'selected' : '' }} >Created At(Oldest)</option>
+                        <option value="name" {{$category1 = $request->category ?? 'name';}}>Select Category</option>
+                        <option value="updated_at" {{ $category1 = $request->category ?? 'name'; }} >Updated At(Latest)</option>
+                        <option value="updated_at_asc" {{ $category1 = $request->category ?? 'name'; }} >Updated At(Oldest)</option>
+                        <option value="created_at" {{ $category1 = $request->category ?? 'name'; }} >Created At(Latest)</option>
+                        <option value="created_at_asc" {{$category1 = $request->category ?? 'name';}} >Created At(Oldest)</option>
                     </select>
                 </div>
 
@@ -274,6 +283,7 @@
                         },
                         success: function(response) {
                             $('#tableResults').html(response);
+                            $('#category').val(selectedValue);
                             console.log(selectedValue)
                         },
                         error: function(xhr, status, error) {

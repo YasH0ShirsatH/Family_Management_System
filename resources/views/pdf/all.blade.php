@@ -154,9 +154,9 @@
                 </tr>
                 <tr>
                     <td class="data-label">Family Members</td>
-                    <td>{{ $head->members->count() }},
+                    <td>{{ $head->members->where('status','1')->count() }},
                         (
-                            @foreach ($head->members as $member)
+                            @foreach ($head->members->where('status','1') as $member)
                                 {{ ucfirst($member->name) }}@if(!$loop->last), @endif 
                             @endforeach
                         )

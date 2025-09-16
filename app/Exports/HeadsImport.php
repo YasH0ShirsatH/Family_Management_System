@@ -30,7 +30,7 @@ class HeadsImport implements FromCollection, WithMapping, WithHeadings, WithColu
             $head->city,
             $head->pincode,
             $head->marital_status,
-            $head->marriage_date ? Date::dateTimeToExcel($head->marriage_date) : '',
+            $head->mariage_date,
             $head->photo_path,
             $head->status,
             $head->created_at ? Date::dateTimeToExcel($head->created_at) : '',
