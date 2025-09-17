@@ -14,16 +14,18 @@
 
 
 <body class="bg-light">
-   @include('partials.navbar2',['shouldShowDiv' => true])
-   @if(session('success'))
-<div class="alert alert-success alert-dismissible fade show rounded-pill mt-4 mx-5">
-    <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>
-@endif
-    <div class="container py-4">
-        <!-- Header Card -->
-        <!-- <div class="card shadow mb-4 border-0" style="border-radius: 20px;">
+    <div id="mainContent">
+
+        @include('partials.navbar2', ['shouldShowDiv' => true])
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show rounded-pill mt-4 mx-5">
+                <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+        <div class="container py-4">
+            <!-- Header Card -->
+            <!-- <div class="card shadow mb-4 border-0" style="border-radius: 20px;">
             <div class="card-header bg-gradient bg-primary text-white py-4 border-0"
                 style="border-radius: 20px 20px 0 0;">
                 <div class="d-flex justify-content-between align-items-center flex-wrap">
@@ -48,89 +50,96 @@
                 </div>
             </div>
         </div> -->
-        <!-- Search Bar -->
-         <div class="card shadow-sm mb-4 border-0 rounded-4">
-            <div class="card-header bg-gradient bg-primary text-white py-3 border-0 rounded-top-4">
-                <h5 class="mb-0 fw-bold">
-                    <i class="bi bi-search me-2"></i>Search States
-                </h5>
-            </div>
-            <div class="card-body p-4">
-                <div class="row align-items-center">
-                    <div class="col-lg-8 col-md-10">
-                        <div class="input-group">
-                            <span class="input-group-text bg-primary text-white border-0 rounded-start-pill px-4">
-                                <i class="bi bi-search fs-5"></i>
-                            </span>
-                            <input type="text" id="searchInput" class="form-control border-0 rounded-end-pill py-3 px-4 shadow-sm"
-                                placeholder="Search by ID, Name, or type..." value="{{ request('search') }}">
-                            <span id="searchLoading" class="position-absolute top-50 end-0 translate-middle-y me-4 d-none" style="z-index: 10;">
-                                <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                    <span class="visually-hidden">Loading...</span>
-                                </div>
-                            </span>
+            <!-- Search Bar -->
+            <div class="card shadow-sm mb-4 border-0 rounded-4">
+                <div class="card-header bg-gradient bg-primary text-white py-3 border-0 rounded-top-4">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-search me-2"></i>Search States
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8 col-md-10">
+                            <div class="input-group">
+                                <span class="input-group-text bg-primary text-white border-0 rounded-start-pill px-4">
+                                    <i class="bi bi-search fs-5"></i>
+                                </span>
+                                <input type="text" id="searchInput"
+                                    class="form-control border-0 rounded-end-pill py-3 px-4 shadow-sm"
+                                    placeholder="Search by ID, Name, or type..." value="{{ request('search') }}">
+                                <span id="searchLoading"
+                                    class="position-absolute top-50 end-0 translate-middle-y me-4 d-none"
+                                    style="z-index: 10;">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </span>
+                            </div>
+
                         </div>
-                       
-                    </div>
-                    <div class="col-lg-4 col-md-2 mt-3 mt-md-0">
-                        <div class="d-flex gap-2 justify-content-md-end">
-                            <button type="button" class="btn btn-outline-secondary rounded-pill px-3" onclick="$('#searchInput').val('').trigger('keyup')">
-                                <i class="bi bi-x-circle me-1"></i>Clear
-                            </button>
+                        <div class="col-lg-4 col-md-2 mt-3 mt-md-0">
+                            <div class="d-flex gap-2 justify-content-md-end">
+                                <button type="button" class="btn btn-outline-secondary rounded-pill px-3"
+                                    onclick="$('#searchInput').val('').trigger('keyup')">
+                                    <i class="bi bi-x-circle me-1"></i>Clear
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Stats Cards -->
-        <div class="row justify-content-center mb-4">
-            <div class="col-md-4 mb-3">
-                <div class="card bg-primary text-white border-0 h-100" style="border-radius: 20px;">
-                    <div class="card-body text-center py-4">
-                        <i class="bi bi-geo-alt display-4 mb-3"></i>
-                        <h3 class="fw-bold mb-1">{{ $state_count }}</h3>
-                        <p class="mb-0 opacity-75">Total States</p>
+            <!-- Stats Cards -->
+            <div class="row justify-content-center mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-primary text-white border-0 h-100" style="border-radius: 20px;">
+                        <div class="card-body text-center py-4">
+                            <i class="bi bi-geo-alt display-4 mb-3"></i>
+                            <h3 class="fw-bold mb-1">{{ $state_count }}</h3>
+                            <p class="mb-0 opacity-75">Total States</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card bg-danger  text-white border-0 h-100" style="border-radius: 20px;">
-                   <a href="{{ route('create.state') }}" class="text-decoration-none text-light">
-                     <div class="card-body text-center py-4 " role="button">
-                        <i class="bi bi-plus display-4 mb-3"></i>
-                        <h3 class="fw-bold mb-1">Add States</h3>
-                
-                    </div>
-                   </a>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card bg-success text-white border-0 h-100" style="border-radius: 20px;">
-                    <div class="card-body text-center py-4">
-                        <i class="bi bi-buildings display-4 mb-3"></i>
-                        <h3 class="fw-bold mb-1">
-                            {{ $city_count}}</h3>
-                        <p class="mb-0 opacity-75">Total Cities</p>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-danger  text-white border-0 h-100" style="border-radius: 20px;">
+                        <a href="{{ route('create.state') }}" class="text-decoration-none text-light">
+                            <div class="card-body text-center py-4 " role="button">
+                                <i class="bi bi-plus display-4 mb-3"></i>
+                                <h3 class="fw-bold mb-1">Add States</h3>
+
+                            </div>
+                        </a>
                     </div>
                 </div>
+                <div class="col-md-4 mb-3">
+                    <a href="{{ route('city.index') }}" style="text-decoration : none">
+                        <div class="card bg-success text-white border-0 h-100" style="border-radius: 20px;">
+                            <div class="card-body text-center py-4">
+                                <i class="bi bi-buildings display-4 mb-3"></i>
+                                <h3 class="fw-bold mb-1">
+                                    {{ $city_count}}
+                                </h3>
+                                <p class="mb-0 opacity-75">Total Cities</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
             </div>
 
+
+            <!-- States List -->
+
+
+            <div id="tableResults">
+                @include('state-city.partials.state-list', ['states' => $states])
+            </div>
         </div>
-
-
-        <!-- States List -->
-        
-
-    <div id="tableResults">
-            @include('state-city.partials.state-list', ['states' => $states])
-        </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
     $(function () {
         const listUrl = "{{ url('admin/state-city/states') }}";
         let debounceTimeout = null;
@@ -165,7 +174,7 @@
             const query = $(this).val();
             clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(function () {
-                fetchList({search: query});
+                fetchList({ search: query });
             }, 800);
         });
 
@@ -185,6 +194,6 @@
             fetchList(params);
         });
     });
-    </script>
+</script>
 
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,208 +8,311 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-    .offcanvas-body {
-        padding: 2rem;
-        background-color: #f8f9fa;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+        body {
+            background: #f4f6fb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    .offcanvas-body > div:first-child {
-        font-size: 1.1rem;
-        font-weight: 500;
-        color: #343a40;
-        margin-bottom: 1.5rem;
-    }
+        .dashboard-header {
+            background: #0d6efd;
+            color: #fff;
+            padding: 32px 0 24px 0;
+            border-radius: 18px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+        }
 
-    .dropdown {
-        background-color: #ffffff;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-top: 20px;
-    }
+        .dashboard-header h2 {
+            font-weight: 700;
+            font-size: 2.2rem;
+            margin-bottom: 0;
+        }
 
-    .dropdown::before {
-        
-        display: block;
-        font-weight: 600;
-        font-size: 1.05rem;
-        margin-bottom: 0.75rem;
-        color: #0d6efd;
-    }
+        .quick-access .btn {
+            font-size: 1.1rem;
+            padding: 1.5rem 1rem;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.15s;
+        }
 
-    .dropdown-item {
-        padding: 0.5rem 1rem;
-        margin-bottom: 0.3rem;
-        border-radius: 0.375rem;
-        transition: background-color 0.2s ease, color 0.2s ease;
-    }
+        .quick-access .btn:hover {
+            transform: translateY(-4px) scale(1.03);
+        }
 
-    .dropdown-item:hover {
-        background-color: #ffda07ff;
-        color: black !important;
-    }
+        .stats-row {
+            margin-bottom: 32px;
+        }
 
-    li {
-        list-style-type: none;
-    }
-    li{
-        transition: all 400ms;
-    }
-    li:has(a:hover){
-        margin-left : 10px
-    }
-    
-</style>
+        .stat-card {
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            background: #fff;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 0;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 1.05rem;
+            color: #6c757d;
+        }
+
+        .charts-section {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            margin-bottom: 32px;
+        }
+
+        .charts-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #0d6efd;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 991px) {
+            .charts-section {
+                padding: 1rem;
+            }
+
+            .dashboard-header {
+                padding: 24px 0 16px 0;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .quick-access .btn {
+                font-size: 1rem;
+                padding: 1rem 0.5rem;
+            }
+
+            .stat-card {
+                padding: 1.2rem 0.5rem;
+            }
+
+            .charts-section {
+                padding: 0.5rem;
+            }
+        }
+    </style>
 </head>
-<body class="bg-light">
-    <!-- Navigation -->
-    @include('partials.navbar2',['shouldShowDiv' => true])
 
+<body>
+    <div id="mainContent">
 
+        @include('partials.navbar2', ['shouldShowDiv' => true])
 
-
-    <div class="container py-4">
-        @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show rounded-pill">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        @endif
-
-        <!-- Quick Access Buttons -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-4">
-                <a href="{{ route('admin.index') }}" class="btn btn-primary btn-lg w-100 py-3 shadow rounded-pill">
-                    <i class="bi bi-people fs-3 d-block mb-2"></i>
-                    <div class="fw-bold">Manage Families</div>
-                    <small>View and manage all family records</small>
-                </a>
+        <div class="container py-4">
+            <div class="dashboard-header text-center">
+                <h2><i class="bi bi-speedometer2 me-2"></i>Family Management Dashboard</h2>
+                <p class="lead mb-0">Welcome! Here’s a quick overview and access to key features.</p>
             </div>
 
-            <div class="col-md-4">
-                <a href="/headview" class="btn btn-success btn-lg w-100 py-3 shadow rounded-pill">
-                    <i class="bi bi-plus-circle fs-3 d-block mb-2"></i>
-                    <div class="fw-bold">Create Head</div>
-                    <small>Create a new Family Tree</small>
-                </a>
-            </div>
-
-            <div class="col-md-4">
-                <a href="/state-city" class="btn btn-warning btn-lg w-100 py-3 shadow rounded-pill">
-                    <i class="bi bi-buildings fs-3 d-block mb-2"></i>
-                    <div class="fw-bold">Manage States</div>
-                    <small>View and Manage States and Cities</small>
-                </a>
-            </div>
-            <!-- <div class="col-md-3">
-                <a href="logout" class="btn btn-danger btn-lg w-100 py-3 shadow rounded-pill">
-                    <i class="bi bi-box-arrow-right fs-3 d-block mb-2"></i>
-                    <div class="fw-bold">Logout</div>
-                    <small>Sign out <br>of your account</small>
-                </a>
-            </div> -->
-            
-        </div>
-
-        <!-- Dashboard Overview -->
-        <div class="card shadow mb-4 rounded-4">
-            <div class="card-header bg-primary text-white py-3 rounded-top-4">
-                <h4 class="mb-0 fw-bold">
-                    <i class="bi bi-speedometer2 me-2"></i>Dashboard Overview
-                </h4>
-            </div>
-            <div class="card-body p-4">
-                <div class="row g-4 mb-4">
-                    <div class="col-md-3">
-                        <div class="card border-0 bg-light text-center rounded-4">
-                            <div class="card-body p-4">
-                                <i class="bi bi-people text-primary fs-1 mb-2"></i>
-                                <h3 class="fw-bold text-primary mb-1">{{ $headcount }}</h3>
-                                <p class="text-muted mb-0">Total Families</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card border-0 bg-light text-center rounded-4">
-                            <div class="card-body p-4">
-                                <i class="bi bi-person-check text-success fs-1 mb-2"></i>
-                                <h3 class="fw-bold text-success mb-1">{{ $membercount }}</h3>
-                                <p class="text-muted mb-0">Active Members</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card border-0 bg-light text-center rounded-4">
-                            <div class="card-body p-4">
-                                <i class="bi bi-geo-alt text-warning fs-1 mb-2"></i>
-                                <h3 class="fw-bold text-warning mb-1">{{ $statecount }}</h3>
-                                <p class="text-muted mb-0">Total States</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card border-0 bg-light text-center rounded-4">
-                            <div class="card-body p-4">
-                                <i class="bi bi-geo-fill text-danger fs-1 mb-2"></i>
-                                <h3 class="fw-bold text-danger mb-1">{{ $citycount }}</h3>
-                                <p class="text-muted mb-0">Total Cities</p>
-                            </div>
-                        </div>
-                    </div>
-                   
+            @if (session('error'))
+                <div class="alert alert-success alert-dismissible fade show rounded-pill">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
+            @endif
 
-                <!-- Account Info -->
-                <div class="card bg-light rounded-4">
-                    <div class="card-body p-4">
-                        <h5 class="card-title text-center mb-4">
-                            <i class="bi bi-person-badge text-info me-2"></i>Account Information
+            <!-- Quick Access Buttons -->
+            <div class="row quick-access g-4 mb-4">
+                <div class="col-md-4">
+                    <a href="{{ route('admin.index') }}" class="btn btn-primary w-100 shadow">
+                        <i class="bi bi-people fs-2 d-block mb-2"></i>
+                        <span class="fw-bold">Manage Families</span>
+                        <div class="small">View and manage all family records</div>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="/headview" class="btn btn-success w-100 shadow">
+                        <i class="bi bi-plus-circle fs-2 d-block mb-2"></i>
+                        <span class="fw-bold">Create Head</span>
+                        <div class="small">Create a new Family Tree</div>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="/state-city" class="btn btn-warning w-100 shadow">
+                        <i class="bi bi-buildings fs-2 d-block mb-2"></i>
+                        <span class="fw-bold">Manage States</span>
+                        <div class="small">View and Manage States and Cities</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="row stats-row g-4 mb-4">
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <div class="stat-icon text-primary"><i class="bi bi-people"></i></div>
+                        <div class="stat-value text-primary">{{ $headcount }}</div>
+                        <div class="stat-label">Total Families</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <div class="stat-icon text-success"><i class="bi bi-person-check"></i></div>
+                        <div class="stat-value text-success">{{ $membercount }}</div>
+                        <div class="stat-label">Active Members</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <div class="stat-icon text-warning"><i class="bi bi-geo-alt"></i></div>
+                        <div class="stat-value text-warning">{{ $statecount }}</div>
+                        <div class="stat-label">Total States</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <div class="stat-icon text-danger"><i class="bi bi-geo-fill"></i></div>
+                        <div class="stat-value text-danger">{{ $citycount }}</div>
+                        <div class="stat-label">Total Cities</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section mb-4">
+                <div class="charts-title"><i class="bi bi-bar-chart-line me-2"></i>Statistics Overview</div>
+                <div class="row g-4">
+                    <div class="col-lg-6 col-12 mb-3 mb-lg-0">
+                        <h5 class="text-primary mb-3 text-center">
+                            Age Distribution of Family Heads
                         </h5>
-                        <div class="row g-3">
-                            <div class="col-sm-6">
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-person text-muted me-3"></i>
-                                    <div>
-                                        <small class="text-muted">Name</small>
-                                        <div class="fw-semibold">{{ $user->first_name }} {{ $user->last_name }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-envelope text-muted me-3"></i>
-                                    <div>
-                                        <small class="text-muted">Email</small>
-                                        <div class="fw-semibold">{{ $user->email }}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-shield-check text-muted me-3"></i>
-                                    <div>
-                                        <small class="text-muted">Role</small>
-                                        <div class="fw-semibold">Administrator</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-check-circle text-muted me-3"></i>
-                                    <div>
-                                        <small class="text-muted">Status</small>
-                                        <div class="fw-semibold text-success">Active</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <canvas style="width:100%;max-height:350px;" id="myChart"></canvas>
+                    </div>
+                    <div class="col-lg-6 col-12 mb-3 mb-lg-0">
+                        <h5 class="text-success mb-3 text-center">
+                            Members per Family 
+                        </h5>
+                        <canvas style="width:100%;max-height:350px;" id="myChart3"></canvas>
+                    </div>
+
+                </div>
+                <div class="row g-4 mt-4">
+                    <div class="col-lg-6 col-12">
+                        <h5 class="text-warning mb-3 text-center">
+                            Top States by Family Count
+                        </h5>
+                        <canvas style="width:100%;max-height:350px;" id="myChart2"></canvas>
+                    </div>
+                    <div class="col-lg-6 col-12">
+                        <h5 class="text-danger mb-3 text-center">
+                            Cities per State
+                        </h5>
+                        <canvas style="width:100%;max-height:350px;" id="myChart4"></canvas>
                     </div>
                 </div>
             </div>
+            <!-- ...existing code... -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            @php
+                $topStateCounts = collect($topStates)->pluck('count')
+            @endphp
         </div>
-    </div>
+        <script>
+            const ctx = document.getElementById('myChart');
+            const ctx2 = document.getElementById('myChart2');
+            const ctx3 = document.getElementById('myChart3');
+            const ctx4 = document.getElementById('myChart4');
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: @json($nameData),
+                    datasets: [{
+                        label: 'Age',
+                        data: @json($ageData),
+                        borderWidth: 1,
+                        backgroundColor: '#0d6efd'
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 20
+                        }
+                    }
+                }
+            });
+
+            new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: @json($topStateNames),
+                    datasets: [{
+                        label: 'Family Count',
+                        data: @json($topStateCounts),
+                        borderWidth: 1,
+                        backgroundColor: '#ffc107'
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            new Chart(ctx3, {
+                type: 'bar',
+                data: {
+                    labels: @json($membersPerFamilyLabels),
+                    datasets: [{
+                        label: 'Members',
+                        data: @json($membersPerFamilyData),
+                        borderWidth: 1,
+                        backgroundColor: '#198754'
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0,
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+
+            new Chart(ctx4, {
+                type: 'bar',
+                data: {
+                    labels: @json($nameStates),
+                    datasets: [{
+                        label: 'Cities',
+                        data: @json($totalCitiesOfStates),
+                        borderWidth: 1,
+                        backgroundColor: '#dc3545'
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        </script>
 </body>
+
 </html>

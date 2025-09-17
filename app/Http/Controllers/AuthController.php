@@ -15,6 +15,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use DB;
 use Session;
 class AuthController extends Controller
 {
@@ -104,10 +105,67 @@ class AuthController extends Controller
                 $statecount = $state->count();
                 $citycount = $city->count();
 
-                
-                Log::debug('Admin returned to dashboard');
 
-                return view('dashboard', compact('user', 'headcount', 'membercount', 'statecount', 'citycount', 'admin1'));
+                
+               
+                $topStates = DB::table('heads')
+                            ->select('state', DB::raw('COUNT(*) as count'))
+                            ->groupBy('state')
+                            ->orderByDesc('count')
+                            ->limit(5)
+                            ->get()
+                            ->toArray();;
+                $topStateNames = DB::table('heads')
+                        ->select('state', DB::raw('count(*) as total'))
+                        ->groupBy('state')
+                        ->orderByDesc('total')
+                        ->limit(5)
+                        ->pluck('state');
+
+              
+                    $headsWithAge = $head->map(function ($bday)  {
+                        return [
+                            'age' => Carbon::parse($bday->birthdate)->age,
+                            'name' => $bday->name." ".$bday->surname,
+                            'id' => $bday->id,
+                            'members' => Member::where('status','1')->where('head_id', $bday->id)->count()
+                        ];
+                    });
+
+                   
+                    $headsWithAgeSortedByAge = $headsWithAge->sortByDesc('age')->values();
+
+                    
+                    $headsWithAgeSortedByMembers = $headsWithAge->sortByDesc('members')->values();
+
+                    
+                    $ageData = $headsWithAgeSortedByAge->pluck('age')->toArray();
+                    $nameData = $headsWithAgeSortedByAge->pluck('name')->toArray();
+
+                    $membersPerFamilyData = $headsWithAgeSortedByMembers->pluck('members')->toArray();
+                    $membersPerFamilyLabels = $headsWithAgeSortedByMembers->pluck('name')->toArray();
+
+                    
+                    $states = $state->map(function ($bday)  {
+                        return [
+                            'cities' => City::where('status', '1')->where('state_id', $bday->id)->count(),
+                            'name' => $bday->name,
+                            'id' => $bday->id
+                        ];
+                    });
+                
+                
+                
+                $topStates2 = $states->sortByDesc('cities')->take(5)->values();
+                $totalCitiesOfStates = $topStates2->pluck('cities')->toArray();
+                $nameStates = $topStates2->pluck('name')->toArray();
+                
+
+
+
+                Log::debug('Admin returned to dashboard at :'.Carbon::now()->setTimezone('Asia/Kolkata'));
+
+                return view('dashboard', compact('user','head', 'headcount', 'membercount', 'statecount', 'citycount', 'admin1','ageData','nameData','topStates','topStateNames','membersPerFamilyData','totalCitiesOfStates','nameStates','membersPerFamilyLabels'));
             }
         }
 

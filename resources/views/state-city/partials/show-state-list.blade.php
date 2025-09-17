@@ -13,7 +13,7 @@
             <table class="table table-hover mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th scope="col" class="text-muted fw-bold">#</th>
+                        <th scope="col" class="text-muted fw-bold"># City Id</th>
                         <th scope="col" class="text-muted fw-bold"><i class="bi bi-buildings me-1"></i>City Name</th>
                         <th scope="col" class="text-muted fw-bold"><i class="bi bi-map me-1"></i>State</th>
                         <th scope="col" class="text-muted fw-bold"><i class="bi bi-calendar me-1"></i>Added On</th>
@@ -23,7 +23,7 @@
                 <tbody>
                     @forelse ($city as $index => $item)
                     <tr>
-                        <th scope="row" class="align-middle">{{ $index + 1 }}</th>
+                        <th scope="row" class="align-middle">{{ $item->id}}</th>
                         <td class="align-middle fw-bold text-dark">{{ $item->name }}</td>
                         <td class="align-middle">{{ $item->state->name ?? 'N/A' }}</td>
                         <td class="align-middle">{{ $item->created_at->format('M d, Y') }}</td>

@@ -91,7 +91,7 @@
                             </div>
                             <div class="col-sm-6 d-flex align-items-center">
                                 <i class="bi bi-people info-icon text-success"></i>
-                                <span class="text-success fw-bold">{{ $user->members->where('status','1')->count() + 1 }} Members</span>
+                                <span class="text-success fw-bold">{{ $user->members->where('status','1')->count()  }} Members</span>
                             </div>
                         </div>
                     </div>

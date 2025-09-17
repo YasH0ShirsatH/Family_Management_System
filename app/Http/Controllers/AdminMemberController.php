@@ -50,7 +50,7 @@ class AdminMemberController extends Controller
         $pdf = Pdf::loadView('pdf.member_all', compact('members'));
         $pdf->showImageErrors = true;
         $pdf->curlAllowUnsafeSslRequests = true;
-        log::channel('adminlog')->debug('All Members PDF Printed at : ' . Carbon::now());
+        log::channel('adminlog')->debug('All Members PDF Printed at : ' . Carbon::now()->setTimezone('Asia/Kolkata'));
         return $pdf->download('All_Family\'s_members.pdf');
     }
 
@@ -97,7 +97,7 @@ class AdminMemberController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
-        $log->logs = 'Admin Added User (' . $user->name . ' ' . $user->surname . '\'s)  Member (' . $request->name . ') To the Database Successfully';
+        $log->logs = 'Admin Added User (' . $user->name . ' ' . $user->surname . '\'s)  Member (' . $request->name . ') To the Database Successfully at : '.Carbon::now()->setTimezone('Asia/Kolkata');
         $log->save();
 
 
@@ -156,9 +156,9 @@ class AdminMemberController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
-        $log->logs = 'Admin Updated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now();
+        $log->logs = 'Admin Updated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now()->setTimezone('Asia/Kolkata');
         $log->save();
-        log::channel('adminlog')->debug('Admin Updated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now());
+        log::channel('adminlog')->debug('Admin Updated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now()->setTimezone('Asia/Kolkata'));
 
         if (!$member) {
             return back()->with('error', 'member not found.');
@@ -208,11 +208,11 @@ class AdminMemberController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
-        $log->logs = 'Admin Deleted Member (' . $member->name . ')  Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now();
+        $log->logs = 'Admin Deleted Member (' . $member->name . ')  Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now()->setTimezone('Asia/Kolkata');
         $log->save();
 
 
-        log::channel('adminlog')->debug('Admin Deleted Member (' . $member->name . ')  Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now());
+        log::channel('adminlog')->debug('Admin Deleted Member (' . $member->name . ')  Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now()->setTimezone('Asia/Kolkata'));
 
 
 
@@ -222,7 +222,7 @@ class AdminMemberController extends Controller
 
     public function export()
     {
-        log::debug('Members data(in excel) Exported Successfully at : ' . Carbon::now());
+        log::debug('Members data(in excel) Exported Successfully at : ' . Carbon::now()->setTimezone('Asia/Kolkata'));
         return Excel::download(new MembersExport, 'members.xlsx');
     }
 

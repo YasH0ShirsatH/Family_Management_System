@@ -225,9 +225,9 @@ class AdminController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
-        $log->logs = 'Admin has Updated Head  (' . $user->name . ' ' . $user->surname . ')  Successfully : ' . Carbon::now();
+        $log->logs = 'Admin has Updated Head  (' . $user->name . ' ' . $user->surname . ')  Successfully : ' . Carbon::now()->setTimezone('Asia/Kolkata');
         $log->save();
-        log::debug('Admin has Updated Head  (' . $user->name . ' ' . $user->surname . ')  Successfully : ' . Carbon::now());
+        log::debug('Admin has Updated Head  (' . $user->name . ' ' . $user->surname . ')  Successfully : ' . Carbon::now()->setTimezone('Asia/Kolkata'));
 
         $user->name = $request->name;
         $user->surname = $request->surname;
@@ -300,9 +300,9 @@ class AdminController extends Controller
             $admin1 = User::where('id', '=', session::get('loginId'))->first();
             $log = new Logg();
             $log->user_id = $admin1->id;
-            $log->logs = 'Admin Has Deleted (' . $head->name . ' ' . $head->surname . ') Successfully : ' . Carbon::now();
+            $log->logs = 'Admin Has Deleted (' . $head->name . ' ' . $head->surname . ') Successfully : ' . Carbon::now()->setTimezone('Asia/Kolkata');
             $log->save();
-            log::debug('Admin Has Deleted (' . $head->name . ' ' . $head->surname . ') Successfully : ' . Carbon::now());
+            log::debug('Admin Has Deleted (' . $head->name . ' ' . $head->surname . ') Successfully : ' . Carbon::now()->setTimezone('Asia/Kolkata'));
 
 
             return redirect()->route('admin.index')->with('success', "Head deleted successfully.")->with('name', $head->name)->with('surname', $head->surname);

@@ -45,7 +45,7 @@ class HeadController extends Controller
             $request->validate([
                 'name' => 'required',
                 'surname' => 'required',
-                'birthdate' => ['required', 'date', 'before:' . Carbon::now()->subYears(21)->format('Y-m-d')],
+                'birthdate' => ['required', 'date', 'before:' . Carbon::now()->setTimezone('Asia/Kolkata')->subYears(21)->format('Y-m-d')],
                 'mobile' => 'required|digits:10|unique:heads,mobile',
                 'address' => 'required',
                 'state' => 'required',
@@ -103,7 +103,7 @@ class HeadController extends Controller
             $request->validate([
                 'name' => 'required',
                 'surname' => 'required',
-                'birthdate' => ['required', 'date', 'before:' . Carbon::now()->subYears(21)->format('Y-m-d')],
+                'birthdate' => ['required', 'date', 'before:' . Carbon::now()->setTimezone('Asia/Kolkata')->subYears(21)->format('Y-m-d')],
                 'mobile' => 'required|digits:10|unique:heads,mobile',
                 'address' => 'required',
                 'state' => 'required',
@@ -177,7 +177,7 @@ class HeadController extends Controller
             'education' => $request->education,
             'photo_path' => $filename,
         ]);
-        log::debug('User ('.$user->name.' '.$user->surname.') Added Member ('.$request->name.') To the Database Successfully');
+        log::debug('User ('.$user->name.' '.$user->surname.') Added Member ('.$request->name.') To the Database Successfully at :'.Carbon::now()->setTimezone('Asia/Kolkata'));
         return back()->with('success', 'Member added successfully.');
     }
 
@@ -204,7 +204,7 @@ class HeadController extends Controller
         }
         $user2 = Head::find($id);
         // Redirect to the homepage or login page
-        log::debug('User ('.$user2->name.' '.$user2->surname.') Logged Out Successfully');
-        return redirect('/')->with('success', 'You have been logged out successfully.');
+        log::debug('User ('.$user2->name.' '.$user2->surname.') Logged Out Successfully at : '.Carbon::now()->setTimezone('Asia/Kolkata'));
+        return redirect('/')->with('success', 'You\'ve successfully added the head and members of the heads family..');
     }
 }
