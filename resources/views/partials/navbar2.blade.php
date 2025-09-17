@@ -262,23 +262,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
     $(function () {
-       
-        $('#sidebarPush').addClass('active');
-        $('#mainContent').addClass('pushed');
-        $('#mainNavbar').addClass('navbar-pushed');
-        
-        function toggleSidebar() {
-            $('#sidebarPush').toggleClass('active');
-            $('#mainContent').toggleClass('pushed');
-            $('#mainNavbar').toggleClass('navbar-pushed');
-        }
+        @if ($shouldShowDiv ?? true)
+            $('#sidebarPush').addClass('active');
+            $('#mainContent').addClass('pushed');
+            $('#mainNavbar').addClass('navbar-pushed');
+            
+            function toggleSidebar() {
+                $('#sidebarPush').toggleClass('active');
+                $('#mainContent').toggleClass('pushed');
+                $('#mainNavbar').toggleClass('navbar-pushed');
+            }
 
-        $('#openSidebarPush').on('click', function () {
-            toggleSidebar();
-        });
+            $('#openSidebarPush').on('click', function () {
+                toggleSidebar();
+            });
 
-        $('#closeSidebarPush').on('click', function () {
-            toggleSidebar();
-        });
+            $('#closeSidebarPush').on('click', function () {
+                toggleSidebar();
+            });
+        @endif
     });
 </script>

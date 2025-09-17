@@ -1,0 +1,152 @@
+/* Table Styling */
+.table {
+    font-size: 0.95rem;
+}
+
+.table th {
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    padding: 1rem 1.5rem;
+    background: #f8fafc !important;
+}
+
+.table td {
+    padding: 1rem 1.5rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.family-row {
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.family-row:hover {
+    background-color: #f8fafc;
+    border-left-color: #3b82f6;
+}
+
+/* Profile Avatar */
+.profile-avatar {
+    position: relative;
+}
+
+.profile-avatar::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    background: #22c55e;
+    border: 2px solid white;
+    border-radius: 50%;
+}
+
+/* Metrics Container */
+.metrics-container {
+    display: flex;
+    gap: 1rem;
+}
+
+.metric-item {
+    text-align: center;
+}
+
+.metric-value {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #3b82f6;
+    line-height: 1;
+}
+
+.metric-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Location Info */
+.location-info {
+    text-align: left;
+}
+
+/* Status Container */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.status-badge.active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-date {
+    margin-top: 4px;
+}
+
+/* Action Buttons */
+.action-buttons .btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.action-buttons .btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Pagination Footer */
+.pagination-footer {
+    padding: 1.5rem 2rem;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+}
+
+.pagination-info {
+    font-size: 0.9rem;
+}
+
+/* Empty State */
+.empty-state {
+    padding: 3rem 2rem;
+}
+
+/* Font Weights */
+.fw-500 { font-weight: 500; }
+.fw-600 { font-weight: 600; }
+
+/* Contact Info */
+.contact-info {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    .table th,
+    .table td {
+        padding: 0.75rem 1rem;
+    }
+    
+    .metrics-container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .action-buttons .btn {
+        width: 32px;
+        height: 32px;
+    }
+}
