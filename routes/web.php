@@ -18,6 +18,7 @@ Route::post('/login-user', [AuthController::class, 'loginUser'])->name('login-us
 
 Route::get('/dashboard', [AuthController::class, 'dashboard'])->middleware('auth.check');
 Route::get('/logout', [AuthController::class, 'logout']);
+Route::get('/dashboard/admin-profile',[AuthController::class, 'adminProfile'])->middleware('auth.check');
 
 
 

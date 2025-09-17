@@ -58,7 +58,7 @@ class AdminController extends Controller
             $query->orderBy('name', 'asc');
         }
 
-        $heads = $query->paginate(3)->withQueryString();
+        $heads = $query->paginate(5)->withQueryString();
 
         $totalMembers = Member::where('status','1')->count();
 
@@ -114,7 +114,7 @@ class AdminController extends Controller
 
         $states = State::where('country_id', 101)->orderBy('name', 'asc')->get();
 
-        // determine cities for the head's current state (head->state stores state name)
+        
         $city = collect();
         if ($head && $head->state) {
             $selectedState = State::where('name', $head->state)->first();
@@ -150,7 +150,7 @@ class AdminController extends Controller
         $pdf = Pdf::loadView('pdf.head', compact('heads', 'pdf_actual_path'));
         $pdf->showImageErrors = true;
         $pdf->curlAllowUnsafeSslRequests = true;
-        return $pdf->download($heads->name . '_head.pdf');
+        return $pdf->download($heads->name . '\'s_family.pdf');
     }
 
     /**
@@ -171,7 +171,7 @@ class AdminController extends Controller
             'mariage_date' => 'required_if:marital_status,1',
             'hobbies' => 'required|array|min:1',
             'hobbies.*' => ['required', 'distinct', 'min:1', 'string'],
-            'path' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'birthdate.before' => 'You must be at least 21 years old to register.',
             'hobbies.required' => 'Please add at least one hobby.',
@@ -179,6 +179,10 @@ class AdminController extends Controller
             'hobbies.*.distinct' => 'Duplicate hobbies are not allowed.',
             'hobbies.*.min' => 'Each hobby must be at least 1 character long.',
             'hobbies.*.string' => 'Each hobby must be a valid string.',
+            'path.image' => 'The uploaded file must be an image.',
+            'path.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
+            'path.max' => 'The image may not be greater than 2 MB.',
+           
         ]);
 
 
@@ -198,24 +202,25 @@ class AdminController extends Controller
         if ($request->input('marital_status') == 1) {
             $user->mariage_date = $request->mariage_date;
         }
-        $file = $request->file('path');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        $file->move('uploads/images/', $filename);
-        $user->photo_path = $filename;
 
-        $user->save();
-
-        // Delete existing hobbies
         $user->hobbies()->delete();
 
-        // Add new hobbies
+        
         foreach ($request->hobbies as $hobby) {
             $user->hobbies()->create([
                 'head_id' => $user->id,
                 'hobby_name' => $hobby,
             ]);
         }
-
+        if($request->path != null){
+            $file = $request->file('path');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move('uploads/images/', $filename);
+            $user->photo_path = $filename;
+            $user->save();
+            return redirect()->route('admin.index', ['id' => $user->id])->with('success', "Head Updated With Image successfully.")->with('name', $user->name)->with('surname', $user->surname);
+        }
+        $user->save();
 
         return redirect()->route('admin.index', ['id' => $user->id])->with('success', "Head Updated successfully.")->with('name', $user->name)->with('surname', $user->surname);
 

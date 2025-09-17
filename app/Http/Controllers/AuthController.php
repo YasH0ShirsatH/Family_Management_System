@@ -123,4 +123,40 @@ class AuthController extends Controller
             return redirect('/login')->with('error','You have been logged out');
         }
     }
+
+    public function adminProfile(){
+        if($user = User::where('id','=',session::get('loginId'))
+                        ->where('status','1')
+                        ->first())
+                        {
+                            ///head
+                            $headcount = Head::where('status', '1')->count();
+                            $inactiveheadcount = Head::where('status', '0')->count();
+                            $deletedheadcount = Head::where('status', '9')->count();
+                            $totalhead = Head::count();
+
+                            /// Member
+                            $membercount = Member::where('status', '1')->count(); 
+                            $inactivemembercount = Member::where('status', '0')->count(); 
+                            $deletedmembercount = Member::where('status', '9')->count(); 
+                            $totalmembercount = Member::count(); 
+
+                            ///State
+                            $statecount = State::where('status', '1')->count();
+                            $inactivestatecount = State::where('status', '0')->count();
+                            $deletedstatecount = State::where('status', '9')->count();
+                            $totalstatecount = State::count();  
+
+                            /// City Controller
+                            $citycount = City::where('status', '1')->count();
+                            $inactivecitycount = City::where('status', '0')->count();
+                            $deletedcitycount = City::where('status', '9')->count();
+                            $totalcitycount = City::count();
+
+                            $admin1 = User::where('id', '=', session::get('loginId'))->first();
+
+
+                            return view('admin.adminProfile', compact('user','headcount','totalhead','deletedheadcount','inactiveheadcount','membercount','inactivemembercount','deletedmembercount','totalmembercount','statecount','inactivestatecount','deletedstatecount','totalstatecount','citycount','inactivecitycount','deletedcitycount','totalcitycount','admin1'));
+                        }
+    }
 }

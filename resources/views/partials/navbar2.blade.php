@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-gradient bg-primary shadow-lg">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary bg-gradient shadow-lg">
     <div class="container">
         <a href="/" class="navbar-brand d-flex align-items-center">
             <div class="bg-white rounded-circle p-2 px-3 me-3">
@@ -9,49 +9,28 @@
                 <div class="small opacity-75">System Dashboard</div>
             </div>
         </a>
-
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Borel&family=Miniver&family=Pacifico&family=Playwrite+DE+Grund:wght@100..400&display=swap');
-        </style>
-
-
-
         <div class="d-flex align-items-center">
             @if ($shouldShowDiv ?? true)
-                            <span style="
-                                display: inline-flex;
-                                align-items: center;
-                                padding: 0.45rem 1.25rem 0.45rem 0.9rem;
-                                border-radius: 9999px;
-                                background-color: #2471e6ff; /* Dark charcoal background */
-                                box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.3);
-                                font-family: 'Playwrite DE Grund', cursive;
-                                color: #e6e6e6; /* Light gray text for high contrast */
-                                cursor: pointer;
-                                transition: all 0.3s ease;
-                                margin-right: 10px;
-                            ">
-                                <i class="p-1 px-2 rounded-pill bi bi-person-circle me-1" style="border: 2px solid #e6e6e6;"></i>
-                                <span class="fw-semibold text-start">
-                                    {{ $admin1->first_name . ' ' . $admin1->last_name ?? 'Admin' }}
-                                </span>
-                            </span>
-
+                <a href="/dashboard/admin-profile" class="btn btn-admin-profile me-2">
+                    <i class="p-1 px-2 rounded-pill bi bi-person-circle me-1 border border-white"></i>
+                    <span class="fw-semibold text-start">
+                        {{ $admin1->first_name . ' ' . $admin1->last_name ?? 'Admin' }}
+                    </span>
+                </a>
             @endif
             @if ($shouldShowDiv ?? true)
-                <button style="box-shadow: 3px 4px 8px rgba(214, 212, 212, 0.3);" class="btn btn-outline-light d-flex justify-content-center align-items-center  rounded-pill px-3" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#sidebarMenu">
+                <button class="btn btn-menu-style btn-outline-light rounded-pill px-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
                     <i class="bi bi-list fs-5 me-1"></i>
-                    <span  class="d-none d-sm-inline">Menu</span>
+                    <span class="d-none d-sm-inline">Menu</span>
                 </button>
             @endif
         </div>
     </div>
 </nav>
-@if ($shouldShowDiv ?? true)
 
+@if ($shouldShowDiv ?? true)
     <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu" style="width: 350px;">
-        <div class="offcanvas-header bg-gradient bg-primary text-white border-0">
+        <div class="offcanvas-header bg-primary bg-gradient text-white border-0">
             <div>
                 <h5 class="offcanvas-title fw-bold mb-1">
                     <i class="bi bi-grid-3x3-gap me-2"></i>Navigation Menu
@@ -60,12 +39,25 @@
             </div>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
         </div>
-
-
-
-
         <div class="offcanvas-body p-0 bg-light">
-            <!-- Dashboard Section -->
+            <div class="p-4">
+                <div class="card border-0 shadow-sm rounded-4 mb-3">
+                    <div class="card-body p-3">
+                        <h6 class="text-warning fw-bold mb-3 d-flex align-items-center">
+                            <div class="bg-warning bg-gradient rounded-circle p-2 me-2">
+                                <i class="bi bi-speedometer2 text-white"></i>
+                            </div>
+                            Admin Profile
+                        </h6>
+                        <div class="d-grid gap-2">
+                            <a href="/dashboard/admin-profile" class="btn btn-outline-warning rounded-pill text-start">
+                                <i class="bi bi-person-circle me-2"></i>Admin Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="p-4">
                 <div class="card border-0 shadow-sm rounded-4 mb-3">
                     <div class="card-body p-3">
@@ -90,7 +82,6 @@
                 </div>
             </div>
 
-            <!-- Management Section -->
             <div class="px-4 pb-4">
                 <div class="card border-0 shadow-sm rounded-4 mb-3">
                     <div class="card-body p-3">
@@ -115,7 +106,6 @@
                 </div>
             </div>
 
-            <!-- Create Section -->
             <div class="px-4 pb-4">
                 <div class="card border-0 shadow-sm rounded-4 mb-3">
                     <div class="card-body p-3">
@@ -140,7 +130,6 @@
                 </div>
             </div>
 
-            <!-- Account Section -->
             @if ($shouldShowDiv ?? true)
                 <div class="px-4 pb-4">
                     <div class="card border-0 shadow-sm rounded-4">
@@ -161,3 +150,27 @@
         </div>
     </div>
 @endif
+
+<style>
+    /* Admin Profile Button */
+    .btn-admin-profile {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.45rem 1.25rem 0.45rem 0.9rem;
+        border-radius: 9999px;
+        background-color: #2471e6ff;
+        box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.3);
+        font-family: 'Playwrite DE Grund', cursive;
+        color: #e6e6e6;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    /* Menu Button */
+    .btn-menu-style {
+        box-shadow: 3px 4px 8px rgba(214, 212, 212, 0.3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
