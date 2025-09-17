@@ -101,15 +101,15 @@
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
-                    <div class="card bg-danger  text-white border-0 h-100" style="border-radius: 20px;">
-                        <a href="{{ route('create.state') }}" class="text-decoration-none text-light">
-                            <div class="card-body text-center py-4 " role="button">
+                    <a href="{{ route('create.state') }}" class="text-decoration-none">
+                        <div class="card bg-warning text-dark border-0 h-100 shadow-sm" style="border-radius: 20px; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 10px rgba(0,0,0,0.1)'">
+                            <div class="card-body text-center py-4">
                                 <i class="bi bi-plus display-4 mb-3"></i>
-                                <h3 class="fw-bold mb-1">Add States</h3>
-
+                                <h5 class="fw-bold mb-1">Add New State</h5>
+                                <p class="mb-0 small opacity-75">Create a new state entry</p>
                             </div>
-                        </a>
-                    </div>
+                        </div>
+                    </a>
                 </div>
                 <div class="col-md-4 mb-3">
                     <a href="{{ route('city.index') }}" style="text-decoration : none">

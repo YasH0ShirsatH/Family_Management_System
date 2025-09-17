@@ -12,7 +12,7 @@
     <div id="mainContent">
         @include('partials.navbar2', ['shouldShowDiv' => true])
 
-        <div class="container py-5">
+        <div class="container py-5" style="margin-top: 20px;">
             <div class="row g-5">
                 <div class="col-lg-4">
                     <div class="card border-0 shadow-sm mb-4">

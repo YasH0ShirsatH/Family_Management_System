@@ -7,8 +7,7 @@
     }
 
     #mainNavbar {
-   
-        /* transition: margin-left 0.3s cubic-bezier(.4, 0, .2, 1), width 0.3s cubic-bezier(.4, 0, .2, 1); */
+        transition: all 0.3s ease;
     }
 
     #mainNavbar.navbar-pushed {
@@ -36,7 +35,7 @@
         z-index: 1040;
         box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
         overflow-y: auto;
-       
+        transition: left 0.3s ease;
         scrollbar-width: none; 
         -ms-overflow-style: none; 
     }
@@ -50,7 +49,7 @@
     }
 
     #mainContent {
-        /* transition: margin-left 0.3s cubic-bezier(.4, 0, .2, 1); */
+        transition: margin-left 0.3s ease;
     }
 
     #mainContent.pushed {
@@ -102,6 +101,13 @@
         font-family: 'Playwrite DE Grund', cursive;
         color: #e6e6e6;
         cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-admin-profile:hover {
+        transform: translateY(-2px);
+        box-shadow: 3px 6px 12px rgba(0, 0, 0, 0.4);
+        color: #ffffff;
     }
 
     .btn-menu-style {
@@ -109,16 +115,31 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        transition: all 0.2s ease;
+    }
+
+    .btn-menu-style:hover {
+        transform: translateY(-2px);
+        box-shadow: 3px 6px 12px rgba(214, 212, 212, 0.5);
     }
 
     .name {
         color: aliceblue;
         opacity: 70%;
+        transition: all 0.2s ease;
     }
 
     .name:hover {
         color: whitesmoke;
         opacity: 95%;
+    }
+
+    .sidebar-body .btn {
+        transition: all 0.2s ease;
+    }
+
+    .sidebar-body .btn:hover {
+        transform: translateX(5px);
     }
 </style>
 <div class="fixed-top" style="padding-bottom: 10px;z-index:100">
@@ -262,24 +283,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
     $(function () {
-        @if ($shouldShowDiv ?? true)
-            $('#sidebarPush').addClass('active');
-            $('#mainContent').addClass('pushed');
-            $('#mainNavbar').addClass('navbar-pushed');
-            
-            function toggleSidebar() {
-                $('#sidebarPush').toggleClass('active');
-                $('#mainContent').toggleClass('pushed');
-                $('#mainNavbar').toggleClass('navbar-pushed');
-            }
+       
+        $('#sidebarPush').addClass('active');
+        $('#mainContent').addClass('pushed');
+        $('#mainNavbar').addClass('navbar-pushed');
+        
+        function toggleSidebar() {
+            $('#sidebarPush').toggleClass('active');
+            $('#mainContent').toggleClass('pushed');
+            $('#mainNavbar').toggleClass('navbar-pushed');
+        }
 
-            $('#openSidebarPush').on('click', function () {
-                toggleSidebar();
-            });
+        $('#openSidebarPush').on('click', function () {
+            toggleSidebar();
+        });
 
-            $('#closeSidebarPush').on('click', function () {
-                toggleSidebar();
-            });
-        @endif
+        $('#closeSidebarPush').on('click', function () {
+            toggleSidebar();
+        });
     });
 </script>
