@@ -52,12 +52,16 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'resetPasswordP
 /// ADMIN SECTION
 Route::resource('/admin', AdminController::class)->middleware('auth.check');
 Route::get('/download/{id}', [AdminController::class, 'print_pdf'])->name('download');
+Route::get('pdf/heads/download/all', [AdminController::class, 'print_all_pdf'])->name('download_all');
+Route::get('excel/heads/download/all', [AdminController::class, 'export'])->name('download_excel_all');
 Route::get('/search', [AdminController::class, 'search'])->name('search');
 Route::get('/delete/{id}', [AdminController::class, 'delete'])->name('delete');
 
 /// Admin member section
 Route::resource('/admin-member', AdminMemberController::class)->middleware('auth.check');
 Route::get('/adminfamilySection/{id}', [AdminMemberController::class, 'familySection'])->name('adminFamilySection');
+Route::get('/pdf/members/download/all', [AdminMemberController::class, 'print_member_all_pdf'])->name('download_all_members');
+Route::get('/excel/members/download/all', [AdminMemberController::class, 'export'])->name('download_excel_all_members');
 Route::get('/member/delete/{id}', [AdminMemberController::class, 'delete'])->name('member.delete');
 Route::post('/admin.add-member/{id}', [AdminMemberController::class, 'addMember'])->name('adminAddMember');
 

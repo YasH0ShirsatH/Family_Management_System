@@ -8,24 +8,30 @@ use App\Models\Head;
 use App\Models\Member;
 use App\Models\State;
 use App\Models\City;
+use App\Models\Logg;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Factory;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use DB;
 use Session;
 class AuthController extends Controller
 {
-    public function login(Request $request){
-       
+    public function login(Request $request)
+    {
+
         return view("auth.login");
     }
 
-    public function register(){
+    public function register()
+    {
         return view("auth.register");
     }
 
-    public function registerUser(Request $request){
+    public function registerUser(Request $request)
+    {
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -38,125 +44,186 @@ class AuthController extends Controller
         $user->last_name = $request->last_name;
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
-        if($user->save()){
+        if ($user->save()) {
             return back()->with('success', 'Registration successful! You can now log in.');
-        }
-        else{
-            return back()->with('error','User was not registered');
+        } else {
+            return back()->with('error', 'User was not registered');
         }
 
-        
+
     }
 
-    public function loginUser(Request $request){
-            $request->validate([
-                'email' => 'required|email',
-                'password' => 'required',
-            ]);
+    public function loginUser(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-          
 
-            $user = User::where('email','=',$request->email)->first();
-            if($user){
-                
-                if($user->status == '0'){
-                    Session::pull('loginId');
-                    return back()->with('error', 'Your account is inactive');
-                }
-                else if($user->status == '9'){
-                    Session::pull('loginId');
-                    return back()->with('error', 'Your account has been blocked/deleted');
-                }
-                else{
-                    if(hash::check($request->password,$user->password) )
-                    {
-                        $request->session()->put('loginId',$user->id);
-                        return redirect('dashboard');
-                    }
-                    else{
-                        return back()->with('error','password incorrect');
-                    }
+
+        $user = User::where('email', '=', $request->email)->first();
+        if ($user) {
+
+            if ($user->status == '0') {
+                Session::pull('loginId');
+                return back()->with('error', 'Your account is inactive');
+            } else if ($user->status == '9') {
+                Session::pull('loginId');
+                return back()->with('error', 'Your account has been blocked/deleted');
+            } else {
+                if (hash::check($request->password, $user->password)) {
+                    $request->session()->put('loginId', $user->id);
+                    return redirect('dashboard');
+                } else {
+                    return back()->with('error', 'password incorrect');
                 }
             }
-            else{
-                return back()->with('error','No such user found');
-            }
+        } else {
+            return back()->with('error', 'No such user found');
+        }
     }
 
-    public function dashboard(){
+    public function dashboard()
+    {
         $data = array();
         Log::info('A request was received for processing.');
-        try{
-        if(Session::has('loginId')){
-            if($user = User::where('id','=',session::get('loginId'))
-                        ->where('status','1')
-                        ->first())
-                        {
-            $head = Head::where('status','1')->get();
-            $member = Member::where('status','1')->get();
-            $state = State::where('status','1')->get();
-            $city = City::where('status','1')->get();
-            $admin1 = User::where('id', '=', session::get('loginId'))->first();
-            $headcount = $head->count();
-            $membercount = $member->count();
-            $statecount = $state->count(); 
-            $citycount = $city->count();
-            Log::debug('Admin returned to dashboard');
-            return view('dashboard',compact('user','headcount','membercount','statecount','citycount','admin1'));
-                }
+
+        if (Session::has('loginId')) {
+            if (
+                $user = User::where('id', '=', session::get('loginId'))
+                    ->where('status', '1')
+                    ->first()
+            ) {
+                $head = Head::where('status', '1')->get();
+                $member = Member::where('status', '1')->get();
+                $state = State::where('status', '1')->get();
+                $city = City::where('status', '1')->get();
+                $admin1 = User::where('id', '=', session::get('loginId'))->first();
+                $headcount = $head->count();
+                $membercount = $member->count();
+                $statecount = $state->count();
+                $citycount = $city->count();
+
+
+                
+               
+                $topStates = DB::table('heads')
+                            ->select('state', DB::raw('COUNT(*) as count'))
+                            ->groupBy('state')
+                            ->orderByDesc('count')
+                            ->limit(5)
+                            ->get()
+                            ->toArray();;
+                $topStateNames = DB::table('heads')
+                        ->select('state', DB::raw('count(*) as total'))
+                        ->groupBy('state')
+                        ->orderByDesc('total')
+                        ->limit(5)
+                        ->pluck('state');
+
+              
+                    $headsWithAge = $head->map(function ($bday)  {
+                        return [
+                            'age' => Carbon::parse($bday->birthdate)->age,
+                            'name' => $bday->name." ".$bday->surname,
+                            'id' => $bday->id,
+                            'members' => Member::where('status','1')->where('head_id', $bday->id)->count()
+                        ];
+                    });
+
+                   
+                    $headsWithAgeSortedByAge = $headsWithAge->sortByDesc('age')->values();
+
+                    
+                    $headsWithAgeSortedByMembers = $headsWithAge->sortByDesc('members')->values();
+
+                    
+                    $ageData = $headsWithAgeSortedByAge->pluck('age')->toArray();
+                    $nameData = $headsWithAgeSortedByAge->pluck('name')->toArray();
+
+                    $membersPerFamilyData = $headsWithAgeSortedByMembers->pluck('members')->toArray();
+                    $membersPerFamilyLabels = $headsWithAgeSortedByMembers->pluck('name')->toArray();
+
+                    
+                    $states = $state->map(function ($bday)  {
+                        return [
+                            'cities' => City::where('status', '1')->where('state_id', $bday->id)->count(),
+                            'name' => $bday->name,
+                            'id' => $bday->id
+                        ];
+                    });
+                
+                
+                
+                $topStates2 = $states->sortByDesc('cities')->take(5)->values();
+                $totalCitiesOfStates = $topStates2->pluck('cities')->toArray();
+                $nameStates = $topStates2->pluck('name')->toArray();
+                
+
+
+
+                Log::debug('Admin returned to dashboard at :'.Carbon::now()->setTimezone('Asia/Kolkata'));
+
+                return view('dashboard', compact('user','head', 'headcount', 'membercount', 'statecount', 'citycount', 'admin1','ageData','nameData','topStates','topStateNames','membersPerFamilyData','totalCitiesOfStates','nameStates','membersPerFamilyLabels'));
             }
         }
-        catch (\Exception $e){
-            Log::debug('returned to login cause of status issue or  '.$e->getMessage());
-            return redirect('/login')->with('error', 'You are not allowed to log in');
-        }
-        
-        
 
-        
+
+
+
+
     }
-    
 
-    public function logout(){
-        if(Session::has('loginId')){
+
+    public function logout()
+    {
+        if (Session::has('loginId')) {
             Session::pull('loginId');
-            return redirect('/login')->with('error','You have been logged out');
+            return redirect('/login')->with('error', 'You have been logged out');
         }
     }
 
-    public function adminProfile(){
-        if($user = User::where('id','=',session::get('loginId'))
-                        ->where('status','1')
-                        ->first())
-                        {
-                            ///head
-                            $headcount = Head::where('status', '1')->count();
-                            $inactiveheadcount = Head::where('status', '0')->count();
-                            $deletedheadcount = Head::where('status', '9')->count();
-                            $totalhead = Head::count();
+    public function adminProfile()
+    {
+        if (
+            $user = User::where('id', '=', session::get('loginId'))
+                ->where('status', '1')
+                ->first()
+        ) {
+            ///head
+            $headcount = Head::where('status', '1')->count();
+            $inactiveheadcount = Head::where('status', '0')->count();
+            $deletedheadcount = Head::where('status', '9')->count();
+            $totalhead = Head::count();
 
-                            /// Member
-                            $membercount = Member::where('status', '1')->count(); 
-                            $inactivemembercount = Member::where('status', '0')->count(); 
-                            $deletedmembercount = Member::where('status', '9')->count(); 
-                            $totalmembercount = Member::count(); 
+            /// Member
+            $membercount = Member::where('status', '1')->count();
+            $inactivemembercount = Member::where('status', '0')->count();
+            $deletedmembercount = Member::where('status', '9')->count();
+            $totalmembercount = Member::count();
 
-                            ///State
-                            $statecount = State::where('status', '1')->count();
-                            $inactivestatecount = State::where('status', '0')->count();
-                            $deletedstatecount = State::where('status', '9')->count();
-                            $totalstatecount = State::count();  
+            ///State
+            $statecount = State::where('status', '1')->count();
+            $inactivestatecount = State::where('status', '0')->count();
+            $deletedstatecount = State::where('status', '9')->count();
+            $totalstatecount = State::count();
 
-                            /// City Controller
-                            $citycount = City::where('status', '1')->count();
-                            $inactivecitycount = City::where('status', '0')->count();
-                            $deletedcitycount = City::where('status', '9')->count();
-                            $totalcitycount = City::count();
+            /// City Controller
+            $citycount = City::where('status', '1')->count();
+            $inactivecitycount = City::where('status', '0')->count();
+            $deletedcitycount = City::where('status', '9')->count();
+            $totalcitycount = City::count();
 
-                            $admin1 = User::where('id', '=', session::get('loginId'))->first();
+            $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
+            $logs = Logg::latest()->where('user_id',$admin1->id)->take(6)->get();
 
-                            return view('admin.adminProfile', compact('user','headcount','totalhead','deletedheadcount','inactiveheadcount','membercount','inactivemembercount','deletedmembercount','totalmembercount','statecount','inactivestatecount','deletedstatecount','totalstatecount','citycount','inactivecitycount','deletedcitycount','totalcitycount','admin1'));
-                        }
+            
+
+            
+
+            return view('admin.adminProfile', compact('user', 'headcount', 'totalhead', 'deletedheadcount', 'inactiveheadcount', 'membercount', 'inactivemembercount', 'deletedmembercount', 'totalmembercount', 'statecount', 'inactivestatecount', 'deletedstatecount', 'totalstatecount', 'citycount', 'inactivecitycount', 'deletedcitycount', 'totalcitycount', 'admin1','logs'));
+        }
     }
 }

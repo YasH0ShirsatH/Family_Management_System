@@ -18,4 +18,6 @@ class Member extends Model
     public function head(){
         return $this->belongsTo(Head::class);
     }
+
+    
 }

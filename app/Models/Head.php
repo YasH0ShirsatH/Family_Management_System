@@ -14,4 +14,7 @@ class Head extends Model
     public function hobbies(){
         return $this->hasMany(Hobby::class);
     }
+    
+
+     
 }

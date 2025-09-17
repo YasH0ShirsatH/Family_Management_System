@@ -11,225 +11,248 @@
 
 </head>
 <style>
-    #uploadPhoto{
-        display: none;
-    }
+#uploadPhoto {
+    display: none;
+}
+</style>
+<style>
+.validation-error {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 4px;
+    font-weight: 500;
+    padding-left: 2px;
+    min-height: 18px;
+    transition: all 0.2s;
+}
+
+input.error,
+select.error,
+textarea.error {
+    border-color: #dc3545;
+    background-color: #fff0f0;
+}
 </style>
 
 
 
 <body class="bg-light">
 
+    <div id="mainContent">
 
-    @include('partials.navbar2',['shouldShowDiv' => true])
-
-    <div class="text-center mb-4 mt-4">
-        <a href="{{ route('admin.index') }}" class="btn btn-outline-primary rounded-pill">
-            <i class="bi bi-arrow-left me-2"></i>Back to Head Dashboard
-        </a>
-    </div>
-    <div class="container py-4">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="card shadow rounded-4">
-                    <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
-                        <h2 class="mb-0 fw-bold"><i class="bi bi-person-badge me-2"></i>Edit Family Head</h2>
-                        <p class="mb-0 mt-2">Update family head information</p>
-                    </div>
-
-                    <div class="card-body p-4">
-                        @if (session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show rounded-pill">
-                            {{ session('error') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div style="padding-bottom : 10px;z-index:100">
+              @include('partials.navbar2',['shouldShowDiv' => true])
+        </div>
+        <div class="text-center mb-4 mt-4">
+            <a href="{{ route('admin.index') }}" class="btn btn-outline-primary rounded-pill">
+                <i class="bi bi-arrow-left me-2"></i>Back to Manage Families
+            </a>
+        </div>
+        <div class="container py-4">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow rounded-4">
+                        <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
+                            <h2 class="mb-0 fw-bold"><i class="bi bi-person-badge me-2"></i>Edit Family Head</h2>
+                            <p class="mb-0 mt-2">Update family head information</p>
                         </div>
-                        @endif
-                        @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show rounded-pill">
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                        @endif
 
-                        <form action="{{ route('admin.update',$id) }}" id="formSubmit"   method="post" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-
-                            <div class="row">
-                                <div class="col-md-6 mb-3 form-group">
-                                    <label class="form-label fw-semibold">First Name</label>
-                                    <input type="text" name="name" class="form-control rounded-pill"
-                                        value="{{ $head->name }}" required>
-                                    <div class="validation-error"></div>
-                                    @error('name')<div class="text-danger">{{ $message }}</div>@enderror
-                                </div>
-                                <div class="col-md-6 mb-3 form-group">
-                                    <label class="form-label fw-semibold">Last Name</label>
-                                    <input type="text" name="surname" class="form-control rounded-pill"
-                                        value="{{ $head->surname }}" required>
-                                    <div class="validation-error"></div>
-                                    @error('surname')<div class="text-danger">{{ $message }}</div>@enderror
-                                </div>
+                        <div class="card-body p-4">
+                            @if (session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show rounded-pill">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
-
-                            <div class="row">
-                                <div class="col-md-6 mb-3 form-group">
-                                    <label class="form-label fw-semibold">Date of Birth</label>
-                                    <input type="date" name="birthdate" class="form-control rounded-pill"
-                                        value="{{ $head->birthdate }}" required>
-                                    <div class="validation-error"></div>
-                                    @error('birthdate')<div class="text-danger">{{ $message }}</div>@enderror
-                                </div>
-                                <div class="col-md-6 mb-3 form-group">
-                                    <label class="form-label fw-semibold">Mobile Number</label>
-                                    <input type="tel" name="mobile" class="form-control rounded-pill"
-                                        value="{{ $head->mobile }}" required>
-                                    <div class="validation-error"></div>
-                                    @error('mobile')<div class="text-danger">{{ $message }}</div>@enderror
-                                </div>
+                            @endif
+                            @if (session('success'))
+                            <div class="alert alert-success alert-dismissible fade show rounded-pill">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
+                            @endif
 
-                            <div class="mb-3 form-group">
-                                <label class="form-label fw-semibold">Address</label>
-                                <textarea name="address" class="form-control rounded-4" rows="3"
-                                    required>{{ $head->address }}</textarea>
-                                <div class="validation-error"></div>
-                                @error('address')<div class="text-danger">{{ $message }}</div>@enderror
-                            </div>
+                            <form action="{{ route('admin.update',$id) }}" id="formSubmit" method="post"
+                                enctype="multipart/form-data">
+                                @csrf
+                                @method('PUT')
 
-                            <div class="row">
-                                <div class="col-md-4 mb-3 form-group">
-                                    <label class="form-label fw-semibold">State</label>
-                                    <div class="validation-error"></div>
-                                    <select name="state" id="stateSelect" class="form-select rounded-pill">
-                                        <option value="">Select State</option>
-                                        @foreach ($states as $state)
-                                        <option value="{{ $state->name }}"
-                                            {{ $head->state == $state->name ? 'selected' : '' }}>{{ $state->name }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                    @error('state')<div class="text-danger">{{ $message }}</div>@enderror
-                                </div>
-                                <div class="col-md-4 mb-3 form-group">
-                                    <label class="form-label fw-semibold">City</label>
-                                    <div class="validation-error"></div>
-                                    <select name="city" id="citySelect" class="form-select rounded-pill">
-                                        <option value="">Select City</option>
-                                        @foreach ($city as $cities)
-                                        <option value="{{ $cities->name }}"
-                                            {{ $head->city == $cities->name ? 'selected' : '' }}>{{ $cities->name }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                    @error('city')<div class="text-danger">{{ $message }}</div>@enderror
-                                </div>
-                                <div class="col-md-4 mb-3 form-group">
-                                    <label class="form-label fw-semibold">Pincode</label>
-                                    <div class="validation-error"></div>
-                                    <input type="number" name="pincode" class="form-control rounded-pill"
-                                        value="{{ $head->pincode }}" required>
-                                    @error('pincode')<div class="text-danger">{{ $message }}</div>@enderror
-                                </div>
-                            </div>
-
-                            <hr class="my-4">
-
-                            <div class="mb-3 form-group">
-                                <label class="form-label fw-semibold">Marital Status</label>
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="marital_status"
-                                                id="married" value="1"
-                                                {{ $head->marital_status == '1' ? 'checked' : ''}}>
-                                            <label class="form-check-label" for="married">Married</label>
-                                        </div>
+                                    <div class="col-md-6 mb-3 form-group">
+                                        <label class="form-label fw-semibold">First Name</label>
+                                        <input type="text" name="name" class="form-control rounded-pill"
+                                            value="{{ $head->name }}" required>
+                                        <div class="validation-error"></div>
+                                        @error('name')<div class="text-danger">{{ $message }}</div>@enderror
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="marital_status"
-                                                id="unmarried" value="0"
-                                                {{ $head->marital_status == '0' ? 'checked' : ''}}>
-                                            <label class="form-check-label" for="unmarried">Unmarried</label>
-                                        </div>
+                                    <div class="col-md-6 mb-3 form-group">
+                                        <label class="form-label fw-semibold">Last Name</label>
+                                        <input type="text" name="surname" class="form-control rounded-pill"
+                                            value="{{ $head->surname }}" required>
+                                        <div class="validation-error"></div>
+                                        @error('surname')<div class="text-danger">{{ $message }}</div>@enderror
                                     </div>
                                 </div>
-                                <div class="validation-error"></div>
-                                @error('marital_status')<div class="text-danger">{{ $message }}</div>@enderror
 
-                                <div class="mt-3 form-group" id="mrg_date_div"
-                                    style="display: {{ $head->marital_status == '1' ? 'block' : 'none' }}">
-                                    <label class="form-label fw-semibold">Marriage Date</label>
-                                    <input type="date" name="mariage_date" class="form-control rounded-pill"
-                                        value="{{ $head->mariage_date }}" @error('mariage_date')<div
-                                        class="text-danger">{{ $message }}
-                                </div>@enderror
-                                <div class="validation-error"></div>
-                            </div>
-                    </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3 form-group">
+                                        <label class="form-label fw-semibold">Date of Birth</label>
+                                        <input type="date" name="birthdate" class="form-control rounded-pill"
+                                            value="{{ $head->birthdate}}" required>
+                                        <div class="validation-error"></div>
+                                        @error('birthdate')<div class="text-danger">{{ $message }}</div>@enderror
+                                    </div>
+                                    <div class="col-md-6 mb-3 form-group">
+                                        <label class="form-label fw-semibold">Mobile Number</label>
+                                        <input type="tel" name="mobile" class="form-control rounded-pill"
+                                            value="{{ $head->mobile }}" required>
+                                        <div class="validation-error"></div>
+                                        @error('mobile')<div class="text-danger">{{ $message }}</div>@enderror
+                                    </div>
+                                </div>
 
-                    <!-- Hobby Section -->
-                    <div class="card bg-light mb-4 mx-3 mt-4 rounded-4">
-                        <div class="card-body  form-group">
-                            <h6 class="card-title text-primary fw-semibold"><i class="bi bi-star me-2"></i>Hobbies &
-                                Interests</h6>
-                            <div id="hobbyContainer">
-                                @foreach ($head->hobbies as $hobby)
-                                <input type="text" name="hobbies[]" value="{{ $hobby->hobby_name }}"
-                                    class="form-control rounded-pill mb-2" placeholder="Enter hobby">
-                                @endforeach
-                            </div>
-                            <div class="d-flex gap-2">
-                                <button type="button" id="addHobby" class="btn btn-success btn-sm rounded-pill">
-                                    <i class="bi bi-plus-circle me-1"></i>Add
-                                </button>
-                                <button type="button" id="removeHobby" class="btn btn-danger btn-sm rounded-pill">
-                                    <i class="bi bi-dash-circle me-1"></i>Remove
-                                </button>
-                            </div>
-                            <div class="validation-error"></div>
-                            @error('hobbies')<div class="text-danger mt-2">{{ $message }}</div>@enderror
+                                <div class="mb-3 form-group">
+                                    <label class="form-label fw-semibold">Address</label>
+                                    <textarea name="address" class="form-control rounded-4" rows="3"
+                                        required>{{ $head->address }}</textarea>
+                                    <div class="validation-error"></div>
+                                    @error('address')<div class="text-danger">{{ $message }}</div>@enderror
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4 mb-3 form-group">
+                                        <label class="form-label fw-semibold">State</label>
+                                        <div class="validation-error"></div>
+                                        <select name="state" id="stateSelect" class="form-select rounded-pill">
+                                            <option value="">Select State</option>
+                                            @foreach ($states as $state)
+                                            <option value="{{ $state->name }}"
+                                                {{ $head->state == $state->name ? 'selected' : '' }}>{{ $state->name }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                        @error('state')<div class="text-danger">{{ $message }}</div>@enderror
+                                    </div>
+                                    <div class="col-md-4 mb-3 form-group">
+                                        <label class="form-label fw-semibold">City</label>
+                                        <div class="validation-error"></div>
+                                        <select name="city" id="citySelect" class="form-select rounded-pill">
+                                            <option value="">Select City</option>
+                                            @foreach ($city as $cities)
+                                            <option value="{{ $cities->name }}"
+                                                {{ $head->city == $cities->name ? 'selected' : '' }}>{{ $cities->name }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                        @error('city')<div class="text-danger">{{ $message }}</div>@enderror
+                                    </div>
+                                    <div class="col-md-4 mb-3 form-group">
+                                        <label class="form-label fw-semibold">Pincode</label>
+                                        <div class="validation-error"></div>
+                                        <input type="number" name="pincode" class="form-control rounded-pill"
+                                            value="{{ $head->pincode }}" required>
+                                        @error('pincode')<div class="text-danger">{{ $message }}</div>@enderror
+                                    </div>
+                                </div>
+
+                                <hr class="my-4">
+
+                                <div class="mb-3 form-group">
+                                    <label class="form-label fw-semibold">Marital Status</label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="marital_status"
+                                                    id="married" value="1"
+                                                    {{ $head->marital_status == '1' ? 'checked' : ''}}>
+                                                <label class="form-check-label" for="married">Married</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="marital_status"
+                                                    id="unmarried" value="0"
+                                                    {{ $head->marital_status == '0' ? 'checked' : ''}}>
+                                                <label class="form-check-label" for="unmarried">Unmarried</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="validation-error"></div>
+                                    @error('marital_status')<div class="text-danger">{{ $message }}</div>@enderror
+
+                                    <div class="mt-3 form-group" id="mrg_date_div"
+                                        style="display: {{ $head->marital_status == '1' ? 'block' : 'none' }}">
+                                        <label class="form-label fw-semibold">Marriage Date</label>
+                                        <input type="date" name="mariage_date" class="form-control rounded-pill"
+                                            value="{{ $head->mariage_date }}" @error('mariage_date')<div
+                                            class="text-danger">{{ $message }}
+                                    </div>@enderror
+                                    <div class="validation-error"></div>
+                                </div>
                         </div>
-                    </div>
-                    <div class="mb-4 mx-4" id="photoSection" >
-                        <p>Do You Want To Update Head Photo? <span id="addphoto" class="  btn btn-danger mx-3 py-0 px-3 rounded-pill">Yes</span> </p>
-                    </div>
-                    <div class="mb-4 mx-4 form-group"  id="uploadPhoto">
-                        <label class="form-label fw-semibold">Profile Picture</label>
-                        <input type="file" name="path" class="form-control rounded-pill" accept="image/*">
-                        <small class="text-muted">Upload a clear photo (JPG, PNG, max 2MB)</small>
-                        <div class="validation-error"></div>
-                    </div>
+
+                        <!-- Hobby Section -->
+                        <div class="card bg-light mb-4 mx-3 mt-4 rounded-4">
+                            <div class="card-body  form-group">
+                                <h6 class="card-title text-primary fw-semibold"><i class="bi bi-star me-2"></i>Hobbies &
+                                    Interests</h6>
+                                <div id="hobbyContainer">
+                                    @foreach ($head->hobbies as $hobby)
+                                    <input type="text" name="hobbies[]" value="{{ $hobby->hobby_name }}"
+                                        class="form-control rounded-pill mb-2" placeholder="Enter hobby">
+                                    @endforeach
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button type="button" id="addHobby" class="btn btn-success btn-sm rounded-pill">
+                                        <i class="bi bi-plus-circle me-1"></i>Add
+                                    </button>
+                                    <button type="button" id="removeHobby" class="btn btn-danger btn-sm rounded-pill">
+                                        <i class="bi bi-dash-circle me-1"></i>Remove
+                                    </button>
+                                </div>
+                                <div class="validation-error"></div>
+                                @error('hobbies')<div class="text-danger mt-2">{{ $message }}</div>@enderror
+                            </div>
+                        </div>
+                        <div class="mb-4 mx-4" id="photoSection">
+                            <p>Do You Want To Update Head Photo? <span id="addphoto"
+                                    class="  btn btn-danger mx-3 py-0 px-3 rounded-pill">Yes</span> </p>
+                        </div>
+                        <div class="mb-4 mx-4 form-group" id="uploadPhoto">
+                            <label class="form-label fw-semibold">Profile Picture</label>
+                            <input type="file" name="path" class="form-control rounded-pill" accept="image/*">
+                            <small class="text-muted">Upload a clear photo (JPG, PNG, max 2MB)</small>
+                            <div class="validation-error"></div>
+                        </div>
                         @error('path')<div class="text-danger">{{ $message }}</div>@enderror
 
 
 
-                    <button type="submit" class="btn btn-primary rounded-pill">
-                        <i class="bi bi-check-circle me-2"></i>Update Family Head
-                    </button>
-                    </form>
+                        <button type="submit" class="btn btn-primary rounded-pill">
+                            <i class="bi bi-check-circle me-2"></i>Update Family Head
+                        </button>
+                        </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Delete Section -->
-    <div class="row justify-content-center mt-4 mb-4">
-        <div class="col-lg-6">
-            <div class="card border-danger shadow rounded-4">
-                <div class="card-header bg-danger text-white py-3 rounded-top-4">
-                    <h5 class="mb-0 fw-bold">Danger Zone: Delete family head and all members</h5>
-                </div>
-                <div class="card-body text-center p-4">
-                    <a  href="{{ route('delete',$head->id) }}" class="btn btn-danger rounded-pill" id="deleteBtn">
-                        <i class="bi bi-trash me-2"></i>Delete Head
-                    </a>
-                    </form>
+        <!-- Delete Section -->
+            <div class="row justify-content-center mt-4 mb-4">
+                <div class="col-lg-6">
+                    <div class="card border-danger shadow rounded-4">
+                        <div class="card-header bg-danger text-white py-3 rounded-top-4">
+                            <h5 class="mb-0 fw-bold">Danger Zone: Delete family head and all members</h5>
+                        </div>
+                        <div class="card-body text-center p-4">
+                            <a href="{{ route('delete',$head->id) }}" class="btn btn-danger rounded-pill" id="deleteBtn">
+                                <i class="bi bi-trash me-2"></i>Delete Head
+                            </a>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -246,7 +269,7 @@
         const photoSection = document.getElementById('photoSection');
 
 
-        if(addphoto){
+        if (addphoto) {
             addphoto.addEventListener('click', function(event) {
                 const uploadPhoto = document.getElementById('uploadPhoto');
                 if (uploadPhoto) {
@@ -255,7 +278,7 @@
                 }
             });
         }
-    
+
 
         if (deleteButton) {
             deleteButton.addEventListener('click', function(event) {
@@ -292,12 +315,12 @@
         unmarriedRadio.addEventListener('change', toggleMarriageDate);
         addHobbyBtn.addEventListener('click', addHobbyInput);
         removeHobbyBtn.addEventListener('click', removeHobbyInput);
-    
+
     });
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
     <script>
     jQuery(document).ready(function() {
         jQuery('select[name="state"]').on('change', function() {
@@ -321,96 +344,141 @@
     </script>
 
 
-<script>
-jQuery(document).ready(function() {
-    // Custom file size validator
-    $.validator.addMethod("maxfilesize", function(value, element, param) {
-        if (element.files && element.files.length > 0) {
-            var fileSize = element.files[0].size;
-            var maxSizeBytes = param * 1024 * 1024;
-            return fileSize <= maxSizeBytes;
-        }
-        return true;
-    }, "File size exceeds the allowed limit.");
+    <script>
+    jQuery(document).ready(function() {
+        // Custom file size validator
+        $.validator.addMethod("maxfilesize", function(value, element, param) {
+            if (element.files && element.files.length > 0) {
+                var fileSize = element.files[0].size;
+                var maxSizeBytes = param * 1024 * 1024;
+                return fileSize <= maxSizeBytes;
+            }
+            return true;
+        }, "File size exceeds the allowed limit.");
 
-    // Custom age validator
-    $.validator.addMethod("ageAbove21", function(value, element) {
-        if (!value) return true;
-        var dob = new Date(value);
-        var today = new Date();
-        var age = today.getFullYear() - dob.getFullYear();
-        var m = today.getMonth() - dob.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
-        return age >= 21;
-    }, "You must be at least 21 years old.");
+        // Custom age validator
+        $.validator.addMethod("ageAbove21", function(value, element) {
+            if (!value) return true;
+            var dob = new Date(value);
+            var today = new Date();
+            var age = today.getFullYear() - dob.getFullYear();
+            var m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+            return age >= 21;
+        }, "You must be at least 21 years old.");
 
-    // Only require profile picture if not already present
-    
+        // Only require profile picture if not already present
 
-    $('#formSubmit').validate({
-        rules: {
-            path: {
-                required: true,
-                extension: "jpg|jpeg|png",
-                maxfilesize: 2
+
+        $('#formSubmit').validate({
+            rules: {
+                path: {
+                    required: true,
+                    extension: "jpg|jpeg|png",
+                    maxfilesize: 2
+                },
+                name: {
+                    required: true
+                },
+                surname: {
+                    required: true
+                },
+                birthdate: {
+                    required: true,
+                    ageAbove21: true
+                },
+                mobile: {
+                    required: true,
+                    rangelength: [10, 10]
+                },
+                address: {
+                    required: true
+                },
+                state: {
+                    required: true
+                },
+                city: {
+                    required: true
+                },
+                pincode: {
+                    required: true,
+                    rangelength: [6, 6]
+                },
+                marital_status: {
+                    required: true
+                },
+                mariage_date: {
+                    required: function() {
+                        return $("#married").is(":checked");
+                    }
+                },
+                'hobbies[]': {
+                    required: true
+                },
+
             },
-            name: { required: true },
-            surname: { required: true },
-            birthdate: { required: true, ageAbove21: true },
-            mobile: { required: true, rangelength: [10, 10] },
-            address: { required: true },
-            state: { required: true },
-            city: { required: true },
-            pincode: { required: true, rangelength: [6, 6] },
-            marital_status: { required: true },
-            mariage_date: {
-                required: function() {
-                    return $("#married").is(":checked");
+            messages: {
+                path: {
+                    required: "Please upload a profile picture",
+                    extension: "Only JPG, JPEG, and PNG files are allowed.",
+                    maxfilesize: "File size exceeds the allowed limit."
+                },
+                name: {
+                    required: "Please enter name"
+                },
+                surname: {
+                    required: "Please enter surname"
+                },
+                birthdate: {
+                    required: "Please enter birthdate",
+                    ageAbove21: "You must be at least 21 years old to proceed."
+                },
+                mobile: {
+                    required: "Please enter mobile",
+                    rangelength: "Mobile must be 10 digits"
+                },
+                address: {
+                    required: "Please enter address"
+                },
+                state: {
+                    required: "Please select state"
+                },
+                city: {
+                    required: "Please select city"
+                },
+                pincode: {
+                    required: "Please enter Pincode",
+                    rangelength: "Pincode must be 6 digits"
+                },
+                marital_status: {
+                    required: "Please select marital status"
+                },
+                mariage_date: {
+                    required: "Please enter marriage date"
+                },
+                'hobbies[]': {
+                    required: "Please enter at least one hobby"
+                },
+
+            },
+            errorPlacement: function(error, element) {
+                var $container = element.closest('.form-group').find('.validation-error');
+                if ($container.length) {
+                    $container.html(error);
+                } else {
+                    error.insertAfter(element);
                 }
             },
-            'hobbies[]': { required: true },
-            
-        },
-        messages: {
-            path: {
-                required: "Please upload a profile picture",
-                extension: "Only JPG, JPEG, and PNG files are allowed.",
-                maxfilesize: "File size exceeds the allowed limit."
+            highlight: function(element) {
+                $(element).addClass('error');
             },
-            name: { required: "Please enter name" },
-            surname: { required: "Please enter surname" },
-            birthdate: {
-                required: "Please enter birthdate",
-                ageAbove21: "You must be at least 21 years old to proceed."
-            },
-            mobile: { required: "Please enter mobile", rangelength: "Mobile must be 10 digits" },
-            address: { required: "Please enter address" },
-            state: { required: "Please select state" },
-            city: { required: "Please select city" },
-            pincode: { required: "Please enter Pincode", rangelength: "Pincode must be 6 digits" },
-            marital_status: { required: "Please select marital status" },
-            mariage_date: { required: "Please enter marriage date" },
-            'hobbies[]': { required: "Please enter at least one hobby" },
-            
-        },
-        errorPlacement: function(error, element) {
-            var $container = element.closest('.form-group').find('.validation-error');
-            if ($container.length) {
-                $container.html(error);
-            } else {
-                error.insertAfter(element);
+            unhighlight: function(element) {
+                $(element).removeClass('error');
+                $(element).closest('.form-group').find('.validation-error').empty();
             }
-        },
-        highlight: function(element) {
-            $(element).addClass('error');
-        },
-        unhighlight: function(element) {
-            $(element).removeClass('error');
-            $(element).closest('.form-group').find('.validation-error').empty();
-        }
+        });
     });
-});
-</script>
+    </script>
 </body>
 
 </html>

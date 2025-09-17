@@ -23,7 +23,7 @@ class BlockDirectAccess
             $sessionKey = $submission_key;
             $sessionRoute = 'admin-member.show';            
             if (!session()->has($sessionKey)) {
-                return redirect('/')->with('error', 'Direct access not allowed. Please submit head information first.');
+                return redirect('/')->with('error', 'Direct access to add family information is not permitted. Please create a new head to input the information.');
             }
         }
         
