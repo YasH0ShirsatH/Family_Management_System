@@ -74,23 +74,23 @@
 
         .search-input-group .form-control {
             border: 1px solid #ced4da;
-            
-           
             box-shadow: none;
-            padding: 1rem 1.5rem;
+            padding: 0.75rem 1rem;
         }
 
         .search-input-group .input-group-text {
             background-color: white;
             border: 1px solid #ced4da;
-
-          
             color: #007bff;
         }
         
-        .search-input-group .form-control:focus, .search-input-group .input-group-text:focus-within {
-             border-color: #007bff;
-             box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        .search-input-group .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+        
+        .search-input-group:focus-within .input-group-text {
+            border-color: #007bff;
         }
 
         .search-loading-spinner {
@@ -98,19 +98,31 @@
         }
 
         /* Select dropdown */
-        .form-select.rounded-pill {
-            border-radius: 20px;
-            padding-left: 1rem;
-            width: fit-content !important;
+        .form-select {
+            border-radius: 8px;
+            border: 1px solid #ced4da;
         }
         
-        /* Alert message */
-        .alert-success {
-            border-radius: 20px;
+        .form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+        
+        /* Alert messages */
+        .alert {
+            border-radius: 12px;
             font-weight: 500;
+            border: none;
+        }
+        
+        .alert-success {
             background-color: #d4edda;
             color: #155724;
-            border: none;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
         }
 
     </style>
@@ -170,20 +182,19 @@
                     <div class="card shadow-sm mb-4 search-card">
                         <div class="card-body p-4">
                             <div class="row align-items-center">
-                                <div class="col-lg-8 col-md-10 w-100">
-                                    <div class="input-group search-input-group">
-                                        <span style=" padding: 10px 20px; display : flex; align-items: center;    border: 1px solid #ced4da;border-right : 0px;border-radius:5px 0px 0px 5px">
+                                <div class="col-12">
+                                    <div class="input-group search-input-group position-relative">
+                                        <span class="input-group-text">
                                             <i class="bi bi-search"></i>
                                         </span>
                                         <input type="text" id="searchInput"
                                             class="form-control"
-                                            style="border-radius : 0px 5px 5px 0px"
                                             placeholder="Search by name, surname, mobile, city, state..."
                                             value="{{ request('search') }}">
 
                                         <span id="searchLoading"
-                                            class="position-absolute top-50 end-0 translate-middle-y me-4 d-none"
-                                            style="z-index: 234234;">
+                                            class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
+                                            style="z-index: 10;">
                                             <div class="spinner-border spinner-border-sm search-loading-spinner" role="status">
                                                 <span class="visually-hidden">Loading...</span>
                                             </div>
@@ -194,14 +205,16 @@
                         </div>
                     </div>
                 
-                    <div>
-                        <select name="category" id="category"
-                            class="form-select rounded-pill mb-3" role="button">
-                            <option value="name" {{$category1 = $request->category ?? 'name';}}>Select Category</option>
-                            <option value="updated_at" {{ $category1 = $request->category ?? 'name'; }} >Updated At(Latest)</option>
-                            <option value="updated_at_asc" {{ $category1 = $request->category ?? 'name'; }} >Updated At(Oldest)</option>
-                            <option value="created_at" {{ $category1 = $request->category ?? 'name'; }} >Created At(Latest)</option>
-                            <option value="created_at_asc" {{$category1 = $request->category ?? 'name';}} >Created At(Oldest)</option>
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <label for="category" class="form-label mb-0 fw-semibold">Sort By:</label>
+                        </div>
+                        <select name="category" id="category" class="form-select" style="max-width: 300px;">
+                            <option value="name">Select Category</option>
+                            <option value="updated_at">Updated At (Latest)</option>
+                            <option value="updated_at_asc">Updated At (Oldest)</option>
+                            <option value="created_at">Created At (Latest)</option>
+                            <option value="created_at_asc">Created At (Oldest)</option>
                         </select>
                     </div>
 

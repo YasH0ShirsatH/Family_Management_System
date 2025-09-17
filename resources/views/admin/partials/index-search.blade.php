@@ -59,56 +59,60 @@
         </style>
 
         @forelse ($heads as $user)
-        <div class="card table-row-card mb-3">
+        <div class="card table-row-card mb-2">
             <div class="card-body p-3">
-                <div class="row align-items-center g-3">
-                    <div class="col-md-4">
+                <div class="row align-items-center">
+                    <div class="col-md-3">
                         <div class="d-flex align-items-center">
                             <img src="{{ asset('uploads/images/' . $user->photo_path) }}"
                                  class="profile-img-small me-3" alt="Family Head Photo">
                             <div>
                                 <h6 class="mb-1 fw-bold">{{ ucfirst($user->name) }} {{ ucfirst($user->surname) }}</h6>
-                                <span class="family-name-badge">
-                                    <i class="bi bi-house-heart me-1"></i>{{ $user->name }}'s Family
-                                </span>
+                                <small class="text-muted">ID: #{{ str_pad($user->id, 4, '0', STR_PAD_LEFT) }}</small>
                             </div>
                         </div>
                     </div>
                     
                     <div class="col-md-5">
-                        <div class="row g-2">
-                            <div class="col-sm-6 d-flex align-items-center">
-                                <i class="bi bi-telephone info-icon"></i>
-                                <span class="info-text">{{ $user->mobile }}</span>
+                        <div class="row g-1">
+                            <div class="col-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-telephone info-icon"></i>
+                                    <span class="info-text small">{{ $user->mobile }}</span>
+                                </div>
                             </div>
-                            <div class="col-sm-6 d-flex align-items-center">
-                                <i class="bi bi-geo-alt info-icon"></i>
-                                <span class="info-text">{{ ucfirst($user->city) }}, {{ ucfirst($user->state) }}</span>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-geo-alt info-icon"></i>
+                                    <span class="info-text small">{{ ucfirst($user->city) }}</span>
+                                </div>
                             </div>
-                            <div class="col-sm-6 d-flex align-items-center">
-                                <i class="bi bi-calendar3 info-icon"></i>
-                                <span class="info-text">{{ date('M d, Y', strtotime($user->birthdate)) }}</span>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-calendar3 info-icon"></i>
+                                    <span class="info-text small">{{ date('M d, Y', strtotime($user->birthdate)) }}</span>
+                                </div>
                             </div>
-                            <div class="col-sm-6 d-flex align-items-center">
-                                <i class="bi bi-people info-icon text-success"></i>
-                                <span class="text-success fw-bold">{{ $user->members->where('status','1')->count()  }} Members</span>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-people info-icon text-success"></i>
+                                    <span class="text-success fw-bold small">{{ $user->members->where('status','1')->count() + 1 }} Total</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="col-md-3 text-md-end">
-                        <div class="d-flex flex-column flex-sm-row justify-content-md-end gap-2">
-                            <a href="{{ route('admin.show', $user->id) }}" class="btn btn-primary btn-table">
-                                <i class="bi bi-eye"></i> View Data
+                    <div class="col-md-4">
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{{ route('admin.show', $user->id) }}" class="btn btn-primary btn-sm">
+                                <i class="bi bi-eye me-1"></i>View Details
                             </a>
-                            <div class="btn-group" role="group">
-                                <a href="{{ route('admin.edit', $user->id) }}" class="btn btn-outline-secondary btn-table"  data-toggle="tooltip" data-placement="left" title="Edit and Delete Head data">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a href="{{ route('admin-member.show',$user->id) }}" class="btn btn-outline-secondary btn-table"  data-toggle="tooltip" data-placement="left" title="Edit and delete Members data">
-                                    <i class="bi bi-people"></i>
-                                </a>
-                            </div>
+                            <a href="{{ route('admin.edit', $user->id) }}" class="btn btn-outline-warning btn-sm">
+                                <i class="bi bi-pencil me-1"></i>Edit Head
+                            </a>
+                            <a href="{{ route('admin-member.show',$user->id) }}" class="btn btn-outline-info btn-sm">
+                                <i class="bi bi-people me-1"></i>Edit Members
+                            </a>
                         </div>
                     </div>
                 </div>
