@@ -165,7 +165,7 @@ class AuthController extends Controller
 
                 Log::debug('Admin returned to dashboard at :'.Carbon::now()->setTimezone('Asia/Kolkata'));
 
-                return view('dashboard', compact('user','head', 'headcount', 'membercount', 'statecount', 'citycount', 'admin1','ageData','nameData','topStates','topStateNames','membersPerFamilyData','totalCitiesOfStates','nameStates','membersPerFamilyLabels'));
+                return view('dashboard', compact('head', 'headcount', 'membercount', 'statecount', 'citycount', 'admin1','ageData','nameData','topStates','topStateNames','membersPerFamilyData','totalCitiesOfStates','nameStates','membersPerFamilyLabels'));
             }
         }
 
