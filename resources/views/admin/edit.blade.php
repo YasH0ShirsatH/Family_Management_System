@@ -215,19 +215,26 @@ textarea.error {
                         </div>
                         <div class="mb-4 mx-4" id="photoSection">
                             <p>Do You Want To Update Head Photo? <span id="addphoto"
-                                    class="  btn btn-danger mx-3 py-0 px-3 rounded-pill">Yes</span> </p>
+                                    class="  btn btn-danger mx-3 py-0 px-3 rounded-pill">Click here</span> </p>
                         </div>
                         <div class="mb-4 mx-4 form-group" id="uploadPhoto">
-                            <label class="form-label fw-semibold">Profile Picture</label>
+                             <p>Don't Want to Update ?  <span id="removephoto"
+                                    class="  btn btn-danger mx-3 py-0 px-3 rounded-pill">Click Here</span> </p>
+                                   
+                            <label class="form-label fw-semibold ">Profile Picture</label><br>
+                            <p style="margin-bottom : 3px" class="ms-2 fw-semibold" > Current Photo : </p>
+                             <img style="width : 80px; border-radius : 5px " class="mb-2 mt-1 ms-2" src="{{ asset('/uploads/images/').'/'.$head->photo_path }}" alt="">
                             <input type="file" name="path" class="form-control rounded-pill" accept="image/*">
+                            
                             <small class="text-muted">Upload a clear photo (JPG, PNG, max 2MB)</small>
                             <div class="validation-error"></div>
+                             
                         </div>
                         @error('path')<div class="text-danger">{{ $message }}</div>@enderror
 
 
 
-                        <button type="submit" class="btn btn-primary rounded-pill">
+                        <button type="submit" class="btn mb-5 py-3  mx-auto btn-primary rounded-pill" style="width : 80%" >
                             <i class="bi bi-check-circle me-2"></i>Update Family Head
                         </button>
                         </form>
@@ -266,6 +273,7 @@ textarea.error {
         const removeHobbyBtn = document.getElementById('removeHobby');
         const deleteButton = document.getElementById('deleteBtn');
         const addphoto = document.getElementById('addphoto');
+        const removephoto = document.getElementById('removephoto');
         const photoSection = document.getElementById('photoSection');
 
 
@@ -275,6 +283,15 @@ textarea.error {
                 if (uploadPhoto) {
                     uploadPhoto.style.display = 'block';
                     photoSection.style.display = 'none';
+                }
+            });
+        }
+        if (removephoto) {
+            removephoto.addEventListener('click', function(event) {
+                const uploadPhoto = document.getElementById('uploadPhoto');
+                if (uploadPhoto) {
+                    uploadPhoto.style.display = 'none';
+                    photoSection.style.display = 'block';
                 }
             });
         }

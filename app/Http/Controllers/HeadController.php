@@ -16,7 +16,7 @@ class HeadController extends Controller
     public function headview()
     {
         
-            $states = State::where('country_id', 101)->orderBy('name', 'asc')->get();
+            $states = State::where('status','1')->where('country_id', 101)->orderBy('name', 'asc')->get();
             foreach ($states as $state) {
                 $city = City::where('state_id', $state->id)->orderBy('name', 'asc')->get();
             }
@@ -186,7 +186,7 @@ class HeadController extends Controller
     {
         $state = State::where('name', $stateId)->first();
         if ($state) {
-            $cities = City::where('state_id', $state->id)->get();
+            $cities = City::where('state_id', $state->id)->where('status','1')->get();
             return response()->json($cities);
 
         }

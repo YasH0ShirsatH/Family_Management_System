@@ -84,7 +84,7 @@
                             <div class="col-6">
                                 <div class="d-flex align-items-center">
                                     <i class="bi bi-geo-alt info-icon"></i>
-                                    <span class="info-text small">{{ ucfirst($user->city) }}</span>
+                                    <span class="info-text small">{{ ucfirst($user->city) }}, {{ $user->state }}</span>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -96,7 +96,7 @@
                             <div class="col-6">
                                 <div class="d-flex align-items-center">
                                     <i class="bi bi-people info-icon text-success"></i>
-                                    <span class="text-success fw-bold small">{{ $user->members->where('status','1')->count() + 1 }} Total</span>
+                                    <span class="text-success fw-bold small">{{ $user->members->where('status','1')->count() + 1 }} Total Members</span>
                                 </div>
                             </div>
                         </div>

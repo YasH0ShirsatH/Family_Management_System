@@ -37,7 +37,7 @@
 
                         <div class="card-body p-5">
                             <div class="row text-center mb-4">
-                                <div class="col-md-6">
+                                <div class="col-md-6 mb-2">
                                     <div class="card bg-primary text-white border-0 h-100 rounded-4">
                                         <div class="card-body py-4">
                                             <i class="bi bi-map display-4 mb-3"></i>
@@ -46,7 +46,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 mb-2">
                                     <div class="card bg-success text-white border-0 h-100 rounded-4">
                                         <div class="card-body py-4">
                                             <i class="bi bi-buildings display-4 mb-3"></i>

@@ -217,7 +217,7 @@ class AuthController extends Controller
 
             $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
-            $logs = Logg::latest()->where('user_id',$admin1->id)->take(6)->get();
+            $logs = Logg::latest()->where('user_id',$admin1->id)->take(15)->get();
 
             
 

@@ -42,7 +42,7 @@ class CityStateController extends Controller
 
 
         //  preserve query-string 
-        $cities = $query->latest()->orderBy('name', 'asc')->paginate(10)->withQueryString();
+        $cities = $query->latest()->paginate(10)->withQueryString();
 
         // for AJAX return a partial
         if ($request->ajax()) {

@@ -1,28 +1,33 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Borel&family=Miniver&family=Pacifico&family=Playwrite+DE+Grund:wght@100..400&display=swap');
 
-   
     body {
-        padding-top: 115px; 
+        padding-top: 105px;
+    }
+
+    .text1{
+        font-size: 20px;
+    }
+    .text2{
+        font-size: 15px;
     }
 
     #mainNavbar {
-        transition: all 0.3s ease;
+        transition: all 0.25s cubic-bezier(0.42, 0, 0.58, 1);
     }
 
     #mainNavbar.navbar-pushed {
         margin-left: 290px;
-        width: calc(100% - 290px);
     }
-    
+
     nav::-webkit-scrollbar {
         display: none;
     }
-    nav {
-        scrollbar-width: none;  
-        -ms-overflow-style: none;  
-    }
 
+    nav {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
 
     .sidebar-push {
         position: fixed;
@@ -35,11 +40,11 @@
         z-index: 1040;
         box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
         overflow-y: auto;
-        transition: left 0.3s ease;
-        scrollbar-width: none; 
-        -ms-overflow-style: none; 
+        transition: all 0.25s cubic-bezier(0.42, 0, 0.58, 1);
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
-  
+
     .sidebar-push::-webkit-scrollbar {
         display: none;
     }
@@ -49,16 +54,58 @@
     }
 
     #mainContent {
-        transition: margin-left 0.3s ease;
+        transition: all 0.25s cubic-bezier(0.42, 0, 0.58, 1);
     }
 
     #mainContent.pushed {
         margin-left: 290px;
     }
 
+    #sidebarOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1039; 
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    #sidebarOverlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+   
+    @media (max-width: 990px) {
+        #mainNavbar.navbar-pushed {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        #mainContent.pushed {
+            margin-left: 0;
+        }
+        .text1{
+        font-size: 13px;
+        }
+        .text2{
+        font-size: 13px;
+        }
+    }
+
+    .mediaclass{
+        display: flex;
+    }
+
+    
+
     .sidebar-header {
         background: #007bff;
-        padding: 28px 10px 28px 20px;
+        padding: 23px 10px 22px 23px;
         border-bottom: 1px solid #fff2;
         display: flex;
         align-items: center;
@@ -68,11 +115,10 @@
     .sidebar-body {
         padding: 1.5rem 1rem;
         background-color: #fff;
-        
-        scrollbar-width: none; 
-        -ms-overflow-style: none; 
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
-    
+
     .sidebar-body::-webkit-scrollbar {
         display: none;
     }
@@ -90,7 +136,6 @@
         filter: invert(1);
     }
 
-   
     .btn-admin-profile {
         display: inline-flex;
         align-items: center;
@@ -142,47 +187,45 @@
         transform: translateX(5px);
     }
 </style>
+
 <div class="fixed-top" style="padding-bottom: 10px;z-index:100">
-<nav id="mainNavbar" class="navbar navbar-expand-lg mb-3 navbar-dark bg-primary bg-gradient shadow-lg ">
-    <div class="container ">
-        <a href="/" class="navbar-brand d-flex align-items-center">
-            <div class="bg-white rounded-circle p-2 px-3 me-3">
-                <i class="bi bi-house-heart text-primary fs-5"></i>
-            </div>
-            <div>
-                <span class="fs-4 fw-bold">Family Management System</span>
-                <div class="small opacity-75">Database for your family</div>
-            </div>
-        </a>
-        <div class="d-flex align-items-center">
-            @if ($shouldShowDiv ?? true)
+    <nav id="mainNavbar" class="navbar navbar-expand-lg mb-3 navbar-dark bg-primary bg-gradient shadow-lg">
+        <div class="container mediaclass">
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <div class="bg-white rounded-circle p-2 px-3 me-3">
+                    <i class="bi bi-house-heart text-primary fs-5"></i>
+                </div>
+                <div>
+                    <span class=" fw-bold text1">Family Management System</span>
+                    <div class="small opacity-75 text2">Database for your family</div>
+                </div>
+            </a>
+            <div class="d-flex align-items-center">
+                @if ($shouldShowDiv ?? true)
                 <a href="/dashboard/admin-profile" class="btn btn-admin-profile me-2 name">
                     <i class="p-1 px-2 rounded-pill bi bi-person-circle me-1 border border-white"></i>
                     <span class="fw-semibold text-start" style="font-family: Playwrite DE Grund, cursive;">
                         {{ $admin1->first_name . ' ' . $admin1->last_name ?? 'Admin' }}
                     </span>
                 </a>
-            @endif
-            @if ($shouldShowDiv ?? true)
+                @endif
+                @if ($shouldShowDiv ?? true)
                 <button class="btn btn-menu-style btn-outline-light rounded-pill px-3" type="button" id="openSidebarPush">
                     <i class="bi bi-list fs-5 me-1"></i>
                     <span class="d-none d-sm-inline">Menu</span>
                 </button>
-                
-            @endif
+                @endif
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-@if ($shouldShowDiv ?? true)
-
+    @if ($shouldShowDiv ?? true)
     <div id="sidebarPush" class="sidebar-push bg-primary text-white">
-        <div class="sidebar-header ">
+        <div class="sidebar-header">
             <h5 class="fw-bold mb-1"><i class="bi bi-grid-3x3-gap me-2"></i>Navigation Menu</h5>
-             <button type="button" class=" border-0" style="background-color : #007bff"  id="closeSidebarPush">
-                    <i class="bi bi-list text-white fs-5 me-1"></i>
-                </button>
-            
+            <button type="button" class="border-0" style="background-color: #007bff" id="closeSidebarPush">
+                <i class="bi bi-list text-white fs-5 me-1"></i>
+            </button>
         </div>
         <div class="sidebar-body">
             <div class="card border-0 shadow-sm rounded-4 mb-4">
@@ -278,29 +321,69 @@
             </div>
         </div>
     </div>
-@endif
+    <div id="sidebarOverlay"></div>
+    @endif
 </div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
     $(function () {
         @if ($shouldShowDiv ?? true)
-            $('#sidebarPush').addClass('active');
-            $('#mainContent').addClass('pushed');
-            $('#mainNavbar').addClass('navbar-pushed');
+            const sidebar = $('#sidebarPush');
+            const mainContent = $('#mainContent');
+            const mainNavbar = $('#mainNavbar');
+            const overlay = $('#sidebarOverlay');
+            const breakpoint = 992; 
+
             
-            function toggleSidebar() {
-                $('#sidebarPush').toggleClass('active');
-                $('#mainContent').toggleClass('pushed');
-                $('#mainNavbar').toggleClass('navbar-pushed');
+            function applySidebarState() {
+                if (sidebar.hasClass('active')) {
+                    if ($(window).width() < breakpoint) {
+                        overlay.addClass('active');
+                        mainContent.removeClass('pushed');
+                        mainNavbar.removeClass('navbar-pushed');
+                    } else {
+                        overlay.removeClass('active');
+                        mainContent.addClass('pushed');
+                        mainNavbar.addClass('navbar-pushed');
+                    }
+                } else {
+                    overlay.removeClass('active');
+                    mainContent.removeClass('pushed');
+                    mainNavbar.removeClass('navbar-pushed');
+                }
             }
 
-            $('#openSidebarPush').on('click', function () {
+            function toggleSidebar() {
+                sidebar.toggleClass('active');
+
+                // **NEW**: Save the state to localStorage
+                if (sidebar.hasClass('active')) {
+                    localStorage.setItem('sidebarState', 'active');
+                } else {
+                    localStorage.removeItem('sidebarState');
+                }
+
+                applySidebarState();
+            }
+
+            // **NEW**: This function runs on page load to check the saved state.
+            function initializeSidebar() {
+                if (localStorage.getItem('sidebarState') === 'active') {
+                    sidebar.addClass('active');
+                }
+                applySidebarState();
+            }
+
+            $('#openSidebarPush, #closeSidebarPush, #sidebarOverlay').on('click', function () {
                 toggleSidebar();
             });
 
-            $('#closeSidebarPush').on('click', function () {
-                toggleSidebar();
+            $(window).on('resize', function() {
+                applySidebarState();
             });
+
+            initializeSidebar();
         @endif
     });
 </script>

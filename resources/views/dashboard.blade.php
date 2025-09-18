@@ -21,10 +21,13 @@
             margin-bottom: 32px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
         }
+        .sidebar-body .btn {
+            font-size: 1rem !important;
+        }
 
         .dashboard-header h2 {
             font-weight: 700;
-            font-size: 2.2rem;
+            
             margin-bottom: 0;
         }
 
@@ -107,6 +110,11 @@
             .charts-section {
                 padding: 0.5rem;
             }
+
+            .abc {
+                margin-top: 20px;
+                padding: 20px 15px 20px 15px;
+            }
         }
     </style>
 </head>
@@ -117,7 +125,7 @@
         @include('partials.navbar2', ['shouldShowDiv' => true])
 
         <div class="container py-4">
-            <div class="dashboard-header text-center">
+            <div class="dashboard-header text-center abc">
                 <h2><i class="bi bi-speedometer2 me-2"></i>Family Management Dashboard</h2>
                 <p class="lead mb-0">Welcome! Here’s a quick overview and access to key features.</p>
             </div>
@@ -191,7 +199,7 @@
                 <div class="charts-title"><i class="bi bi-bar-chart-line me-2"></i>Statistics Overview</div>
                 <div class="row g-4">
                     <div class="col-lg-6 col-12 mb-3 mb-lg-0">
-                        <h5 class="text-primary mb-3 text-center">
+                        <h5 class="text-danger mb-3 text-center">
                             Age Distribution of Family Heads
                         </h5>
                         <canvas style="width:100%;max-height:350px;" id="myChart"></canvas>
@@ -204,20 +212,7 @@
                     </div>
 
                 </div>
-                <div class="row g-4 mt-4">
-                    <div class="col-lg-6 col-12">
-                        <h5 class="text-warning mb-3 text-center">
-                            Top States by Family Count
-                        </h5>
-                        <canvas style="width:100%;max-height:350px;" id="myChart2"></canvas>
-                    </div>
-                    <div class="col-lg-6 col-12">
-                        <h5 class="text-danger mb-3 text-center">
-                            Cities per State
-                        </h5>
-                        <canvas style="width:100%;max-height:350px;" id="myChart4"></canvas>
-                    </div>
-                </div>
+                
             </div>
             <!-- ...existing code... -->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -228,9 +223,9 @@
         </div>
         <script>
             const ctx = document.getElementById('myChart');
-            const ctx2 = document.getElementById('myChart2');
+           
             const ctx3 = document.getElementById('myChart3');
-            const ctx4 = document.getElementById('myChart4');
+            
 
             new Chart(ctx, {
                 type: 'bar',
@@ -240,7 +235,7 @@
                         label: 'Age',
                         data: @json($ageData),
                         borderWidth: 1,
-                        backgroundColor: '#0d6efd'
+                        backgroundColor: '#dc3545'
                     }]
                 },
                 options: {
@@ -253,23 +248,7 @@
                 }
             });
 
-            new Chart(ctx2, {
-                type: 'bar',
-                data: {
-                    labels: @json($topStateNames),
-                    datasets: [{
-                        label: 'Family Count',
-                        data: @json($topStateCounts),
-                        borderWidth: 1,
-                        backgroundColor: '#ffc107'
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
+           
 
             new Chart(ctx3, {
                 type: 'bar',
@@ -295,23 +274,7 @@
                 }
             });
 
-            new Chart(ctx4, {
-                type: 'bar',
-                data: {
-                    labels: @json($nameStates),
-                    datasets: [{
-                        label: 'Cities',
-                        data: @json($totalCitiesOfStates),
-                        borderWidth: 1,
-                        backgroundColor: '#dc3545'
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
+          
         </script>
 </body>
 
