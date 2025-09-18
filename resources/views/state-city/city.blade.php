@@ -32,7 +32,7 @@
 
 
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show rounded-pill mt-4 mx-5">
+            <div class="alert alert-success alert-dismissible fade show rounded-pill mt-4 mx-3 mx-md-5">
                 <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -47,28 +47,27 @@
                     </h5>
                 </div>
                 <div class="card-body p-4">
-                    <div class="row align-items-center">
-                        <div class="col-lg-8 col-md-10">
+                    <div class="row align-items-center g-3">
+                        <div class="col-12 col-md-8 col-lg-9">
                             <div class="input-group">
-                                <span class="input-group-text bg-primary text-white border-0 rounded-start-pill px-4">
+                                <span class="input-group-text bg-primary text-white border-0 rounded-start-pill px-3 px-md-4">
                                     <i class="bi bi-search fs-5"></i>
                                 </span>
                                 <input type="text" id="searchInput"
-                                    class="form-control border-0 rounded-end-pill py-3 px-4 shadow-sm"
-                                    placeholder="Search by ID, Name, or State New ID ('SID' + state_id)..."
+                                    class="form-control border-0 rounded-end-pill py-2 py-md-3 px-3 px-md-4 shadow-sm"
+                                    placeholder="Search by ID, Name, or State..."
                                     value="{{ request('search') }}">
                                 <span id="searchLoading"
-                                    class="position-absolute top-50 end-0 translate-middle-y me-4 d-none"
+                                    class="position-absolute top-50 end-0 translate-middle-y me-3 me-md-4 d-none"
                                     style="z-index: 10;">
                                     <div class="spinner-border spinner-border-sm text-primary" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
                                 </span>
                             </div>
-
                         </div>
-                        <div class="col-lg-4 col-md-2 mt-3 mt-md-0">
-                            <div class="d-flex gap-2 justify-content-md-end">
+                        <div class="col-12 col-md-4 col-lg-3">
+                            <div class="d-grid d-md-flex justify-content-md-end">
                                 <button type="button" class="btn btn-outline-secondary rounded-pill px-3"
                                     onclick="$('#searchInput').val('').trigger('keyup')">
                                     <i class="bi bi-x-circle me-1"></i>Clear

@@ -77,7 +77,7 @@
                             <div class="list-group list-group-flush">
                                 @forelse($logs as $log)
                                     <div class="list-group-item border-0 py-2">
-                                        <div class="small text-muted">{{ Str::before($admin1->email, '@') }}</div>
+                                        <div class="small text-muted"><span class="text-success">( #LogId-{{ $log->id }} )</span> &nbsp;{{ Str::before($admin1->email, '@') }}</div>
                                         <div class="fw-medium">{{ $log->logs }}</div>
                                     </div>
                                 @empty
@@ -169,7 +169,7 @@
                                     <div class="card-body text-center">
                                         <div class="mb-3">
                                             <h2 class="text-primary fw-bold mb-1">{{ $item['total'] }}</h2>
-                                            <small class="text-muted">Total {{ $item['title'] }}</small>
+                                            <small class="text-muted">Total {{ $item['title'] }} Registered In Database</small>
                                         </div>
                                         
                                         <div style="height: 200px; margin-bottom: 20px;">

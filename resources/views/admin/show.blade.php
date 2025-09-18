@@ -181,9 +181,28 @@
                                                             <span>{{ date('M d, Y', strtotime($member->birthdate)) }}</span>
                                                         </p>
                                                         <p class="mb-2 d-flex align-items-center">
-                                                            <i class="bi bi-heart text-muted me-2"></i>
-                                                            <span>{{ $member->marital_status ? 'Married' : 'Single' }}</span>
+                                                             @if($member->marital_status == 1)
+                                                                <span >
+                                                                    <i class="bi bi-heart-fill   text-danger me-2"></i>
+                                                                </span>
+                                                            @else
+                                                                <i class="bi bi-heart text-muted me-2"></i>
+                                                            @endif
+                                                            <span>{{ $member->marital_status ? 'Married' : 'Single' }}
+                                                               
                                                         </p>
+                                                        @if($member->marital_status == 1)
+                                                        <p class="mb-2 d-flex align-items-center">
+                                                             
+                                                                    <span>
+                                                                        <span >
+                                                                            <i class="bi bi-heart-fill text-danger   me-2"></i>( <i class="bi bi-calendar3"></i> )
+                                                                        </span> &nbsp;
+                                                                        {{  date('M d, Y', strtotime($member->mariage_date)) }}
+                                                                    </span>
+                                                                
+                                                        </p>
+                                                        @endif
                                                         <p class="mb-0 d-flex align-items-center">
                                                             <i class="bi bi-mortarboard text-muted me-2"></i>
                                                             @if($member->education)

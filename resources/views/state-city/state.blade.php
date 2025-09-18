@@ -18,7 +18,7 @@
 
         @include('partials.navbar2', ['shouldShowDiv' => true])
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show rounded-pill mt-4 mx-5">
+            <div class="alert alert-success alert-dismissible fade show rounded-pill mt-4 mx-3 mx-md-5">
                 <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -58,27 +58,26 @@
                     </h5>
                 </div>
                 <div class="card-body p-4">
-                    <div class="row align-items-center">
-                        <div class="col-lg-8 col-md-10">
+                    <div class="row align-items-center g-3">
+                        <div class="col-12 col-md-8 col-lg-9">
                             <div class="input-group">
-                                <span class="input-group-text bg-primary text-white border-0 rounded-start-pill px-4">
+                                <span class="input-group-text bg-primary text-white border-0 rounded-start-pill px-3 px-md-4">
                                     <i class="bi bi-search fs-5"></i>
                                 </span>
                                 <input type="text" id="searchInput"
-                                    class="form-control border-0 rounded-end-pill py-3 px-4 shadow-sm"
+                                    class="form-control border-0 rounded-end-pill py-2 py-md-3 px-3 px-md-4 shadow-sm"
                                     placeholder="Search by ID, Name, or type..." value="{{ request('search') }}">
                                 <span id="searchLoading"
-                                    class="position-absolute top-50 end-0 translate-middle-y me-4 d-none"
+                                    class="position-absolute top-50 end-0 translate-middle-y me-3 me-md-4 d-none"
                                     style="z-index: 10;">
                                     <div class="spinner-border spinner-border-sm text-primary" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
                                 </span>
                             </div>
-
                         </div>
-                        <div class="col-lg-4 col-md-2 mt-3 mt-md-0">
-                            <div class="d-flex gap-2 justify-content-md-end">
+                        <div class="col-12 col-md-4 col-lg-3">
+                            <div class="d-grid d-md-flex justify-content-md-end">
                                 <button type="button" class="btn btn-outline-secondary rounded-pill px-3"
                                     onclick="$('#searchInput').val('').trigger('keyup')">
                                     <i class="bi bi-x-circle me-1"></i>Clear
@@ -90,41 +89,40 @@
             </div>
 
             <!-- Stats Cards -->
-            <div class="row justify-content-center mb-4">
-                <div class="col-md-4 mb-3">
+            <div class="row g-3 mb-4">
+                <div class="col-12 col-sm-6 col-lg-4">
                     <div class="card bg-primary text-white border-0 h-100" style="border-radius: 20px;">
-                        <div class="card-body text-center py-4">
-                            <i class="bi bi-geo-alt display-4 mb-3"></i>
+                        <div class="card-body text-center py-3 py-md-4">
+                            <i class="bi bi-geo-alt display-5 display-md-4 mb-2 mb-md-3"></i>
                             <h3 class="fw-bold mb-1">{{ $state_count }}</h3>
-                            <p class="mb-0 opacity-75">Total States</p>
+                            <p class="mb-0 opacity-75 small">Total States</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-12 col-sm-6 col-lg-4">
                     <a href="{{ route('create.state') }}" class="text-decoration-none">
                         <div class="card bg-warning text-dark border-0 h-100 shadow-sm" style="border-radius: 20px; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 10px rgba(0,0,0,0.1)'">
-                            <div class="card-body text-center py-4">
-                                <i class="bi bi-plus display-4 mb-3"></i>
+                            <div class="card-body text-center py-3 py-md-4">
+                                <i class="bi bi-plus display-5 display-md-4 mb-2 mb-md-3"></i>
                                 <h5 class="fw-bold mb-1">Add New State</h5>
                                 <p class="mb-0 small opacity-75">Create a new state entry</p>
                             </div>
                         </div>
                     </a>
                 </div>
-                <div class="col-md-4 mb-3">
+                <div class="col-12 col-sm-12 col-lg-4">
                     <a href="{{ route('city.index') }}" style="text-decoration : none">
                         <div class="card bg-success text-white border-0 h-100" style="border-radius: 20px;">
-                            <div class="card-body text-center py-4">
-                                <i class="bi bi-buildings display-4 mb-3"></i>
+                            <div class="card-body text-center py-3 py-md-4">
+                                <i class="bi bi-buildings display-5 display-md-4 mb-2 mb-md-3"></i>
                                 <h3 class="fw-bold mb-1">
                                     {{ $city_count}}
                                 </h3>
-                                <p class="mb-0 opacity-75">Total Cities</p>
+                                <p class="mb-0 opacity-75 small">Total Cities</p>
                             </div>
                         </div>
                     </a>
                 </div>
-
             </div>
 
 

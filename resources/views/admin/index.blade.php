@@ -9,24 +9,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
     <style>
-        /* General body and font styles for a clean, professional look */
         body {
             font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f4f5f7; /* A modern, light gray background */
+            background-color: #f4f5f7;
         }
-
-        /* Container and Card styling */
-        
 
         .card {
             border: none;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* More subtle shadow */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
-        /* Header and its components */
         .card-header-main {
-            background-color: #007bff; /* Primary brand color */
+            background-color: #007bff;
             color: white;
             padding: 1.5rem;
             border-top-left-radius: 12px;
@@ -39,7 +34,6 @@
             padding: 8px 20px;
         }
 
-        /* Stats Section */
         .stats-card {
             background-color: #fff;
             padding: 1.5rem;
@@ -65,11 +59,9 @@
             color: #6c757d;
         }
 
-        /* Search Form */
         .search-card {
             background-color: #fff;
             border: 1px solid #e9ecef;
-            
         }
 
         .search-input-group .form-control {
@@ -97,7 +89,6 @@
             color: #007bff;
         }
 
-        /* Select dropdown */
         .form-select {
             border-radius: 8px;
             border: 1px solid #ced4da;
@@ -108,7 +99,6 @@
             box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
         }
         
-        /* Alert messages */
         .alert {
             border-radius: 12px;
             font-weight: 500;
@@ -124,7 +114,6 @@
             background-color: #f8d7da;
             color: #721c24;
         }
-
     </style>
 </head>
 
@@ -149,27 +138,29 @@
             @endif
 
             <div class="card shadow mb-4">
-                <div class="card-header-main d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0 fw-bold">
-                        <i class="bi bi-speedometer2 me-2"></i>Manage Families
-                    </h4>
-                <div class="header-buttons d-flex gap-2">
-                    <a href="{{ route('download_all') }}" class="btn btn-outline-light" data-toggle="tooltip" data-placement="bottom" title="Export Data in PDF">PDF</a>
-                    <a href="{{ route('download_excel_all') }}" class="btn btn-outline-light" data-toggle="tooltip" data-placement="bottom" title="Export Data in excel">Excel</a>
-                </div>
+                <div class="card-header-main d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+                    <div class="flex-grow-1">
+                        <h4 class="mb-0 fw-bold">
+                            <i class="bi bi-speedometer2 me-2"></i>Manage Families
+                        </h4>
+                    </div>
+                    <div class="header-buttons d-flex flex-column flex-sm-row gap-2">
+                        <a href="{{ route('download_all') }}" class="btn btn-outline-light" data-toggle="tooltip" data-placement="bottom" title="Export Data in PDF">PDF</a>
+                        <a href="{{ route('download_excel_all') }}" class="btn btn-outline-light" data-toggle="tooltip" data-placement="bottom" title="Export Data in excel">Excel</a>
+                    </div>
                 </div>
 
                 <div class="card-body p-4">
                     <div class="card stats-card mb-4">
-                        <div class="row g-2 text-center">
-                            <div class="col-md-6">
+                        <div class="row g-3 text-center">
+                            <div class="col-12 col-sm-6">
                                 <div class="stat-item">
                                     <i class="me-2 bi bi-house-door"></i>
                                     <span class="stat-value">{{ $heads->total() }}</span>
                                     <span class="stat-label">Total Family Heads</span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-12 col-sm-6">
                                 <div class="stat-item">
                                     <i class="me-2 bi bi-people-fill"></i>
                                     <span class="stat-value">{{ $totalMembers }}</span>
@@ -206,16 +197,20 @@
                     </div>
                 
                     <div class="mb-4">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <label for="category" class="form-label mb-0 fw-semibold">Sort By:</label>
+                        <div class="row align-items-center">
+                            <div class="col-12 col-md-auto mb-2 mb-md-0">
+                                <label for="category" class="form-label mb-0 fw-semibold">Sort By:</label>
+                            </div>
+                            <div class="col-12 col-md-auto">
+                                <select name="category" id="category" class="form-select" style="max-width: 300px;">
+                                    <option value="name">Select Category</option>
+                                    <option value="updated_at">Updated At (Latest)</option>
+                                    <option value="updated_at_asc">Updated At (Oldest)</option>
+                                    <option value="created_at">Created At (Latest)</option>
+                                    <option value="created_at_asc">Created At (Oldest)</option>
+                                </select>
+                            </div>
                         </div>
-                        <select name="category" id="category" class="form-select" style="max-width: 300px;">
-                            <option value="name">Select Category</option>
-                            <option value="updated_at">Updated At (Latest)</option>
-                            <option value="updated_at_asc">Updated At (Oldest)</option>
-                            <option value="created_at">Created At (Latest)</option>
-                            <option value="created_at_asc">Created At (Oldest)</option>
-                        </select>
                     </div>
 
                     <div id="tableResults">

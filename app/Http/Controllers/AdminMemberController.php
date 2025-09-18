@@ -164,21 +164,34 @@ class AdminMemberController extends Controller
             return back()->with('error', 'member not found.');
         }
 
-        $filename = null;
-        if ($request->hasFile('photo_path')) {
-            $file = $request->file('photo_path');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('/uploads/images/'), $filename);
-        }
+        
 
-        $member->update([
-            'name' => $request->name,
-            'birthdate' => $request->birthdate,
-            'marital_status' => $request->marital_status,
-            'mariage_date' => $request->marital_status == 1 ? $request->mariage_date : null,
-            'education' => $request->education,
-            'photo_path' => $filename,
-        ]);
+        
+            $member->name = $request->name;
+            $member->birthdate = $request->birthdate;
+            $member->marital_status = $request->marital_status;
+            $member->mariage_date = $request->marital_status == 1 ? $request->mariage_date : null;
+            $member->education = $request->education;
+
+            if ($request->photo_path != null) {
+                $file = $request->file('photo_path');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('/uploads/images/'), $filename);
+                $member->photo_path = $filename;
+                $member->save();
+                return redirect()->route('admin-member.show', $parentId)->with('success', 'The member successfully modified data and their image..')->with('name', $member->name)->with('surname', $member->surname);
+            }
+
+            if($request->boolean('remove_image') == 1)
+            {
+                $member->photo_path = null;
+                $member->save();
+                return redirect()->route('admin-member.show', $parentId)->with('success', 'The member successfully modified data and removed image..')->with('name', $member->name)->with('surname', $member->surname);
+            }
+
+            $member->save();
+            
+    
 
         
 

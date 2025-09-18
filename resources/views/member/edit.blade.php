@@ -9,6 +9,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
     <style>
+        #uploadPhoto {
+            display: none;
+        }
+    </style>
+    <style>
         .validation-error {
             color: #dc3545;
             font-size: 14px;
@@ -129,18 +134,58 @@
                                     @enderror
                                 </div>
 
-                                <div class="mb-4 form-group">
-                                    <label class="form-label fw-semibold"><i class="bi bi-camera me-2"></i>Photo
-                                        (Optional)</label>
-                                    <input type="file" name="photo_path"
-                                        class="form-control rounded-pill @error('photo_path') is-invalid @enderror"
-                                        accept="image/*">
-                                    <small class="form-text text-muted">Upload a clear photo (JPG, PNG, max 2MB)</small>
-                                    <div class="validation-error"></div>
-                                    @error('photo_path')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                <div class="mb-3 mx-3" id="photoSection">
+                                    <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded-3 border">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-camera text-primary me-2"></i>
+                                            <span class="fw-semibold">Update Photo?</span>
+                                        </div>
+                                        <button type="button" id="addphoto" class="btn btn-primary btn-sm rounded-pill">
+                                            <i class="bi bi-upload me-1"></i>Yes
+                                        </button>
+                                    </div>
                                 </div>
+                                <div class="mb-3 mx-3 form-group" id="uploadPhoto" style="display: none;">
+                                    <div class="p-2 bg-light rounded-3 border">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <label class="form-label fw-semibold mb-0">Member Photo</label>
+                                            <button type="button" id="removephoto" class="btn btn-outline-secondary btn-sm rounded-pill">
+                                                <i class="bi bi-x"></i>
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="flex-shrink-0">
+                                                @if ($member->photo_path != null)
+                                                    <img src="{{ asset('/uploads/images/').'/'.$member->photo_path }}" 
+                                                         alt="Current" 
+                                                         class="rounded-circle" 
+                                                         style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #007bff;">
+                                                @else
+                                                    <img src="{{ asset('/uploads/images/noimage.png') }}" 
+                                                         alt="No Image" 
+                                                         class="rounded-circle" 
+                                                         style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #007bff;">
+                                                @endif
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                @if ($member->photo_path != null)
+                                                    <div class="form-check mb-2">
+                                                        <input class="form-check-input" type="checkbox" name="remove_image" id="removeImageCheck">
+                                                        <label class="form-check-label fw-semibold" for="removeImageCheck">
+                                                            <i class="bi bi-trash"></i> Remove current image
+                                                        </label>
+                                                    </div>
+                                                @endif
+                                                <input type="file" name="photo_path" class="form-control form-control-sm rounded-pill" accept="image/*">
+                                                <small class="text-muted">JPG, PNG, max 2MB</small>
+                                                <div class="validation-error"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
 
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-primary btn-lg rounded-pill">
@@ -155,6 +200,31 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const addphoto = document.getElementById('addphoto');
+        const removephoto = document.getElementById('removephoto');
+        const photoSection = document.getElementById('photoSection');
+
+        if (addphoto) {
+            addphoto.addEventListener('click', function (event) {
+                const uploadPhoto = document.getElementById('uploadPhoto');
+                if (uploadPhoto) {
+                    uploadPhoto.style.display = 'block';
+                    photoSection.style.display = 'none';
+                }
+            });
+        }
+        
+        if (removephoto) {
+            removephoto.addEventListener('click', function (event) {
+                const uploadPhoto = document.getElementById('uploadPhoto');
+                if (uploadPhoto) {
+                    uploadPhoto.style.display = 'none';
+                    photoSection.style.display = 'block';
+                }
+            });
+        }
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const marriedRadio = document.getElementById('married');

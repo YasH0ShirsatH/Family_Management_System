@@ -9,38 +9,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
     <style>
-        .validation-error  label {
-            color: #dc3545;
-            font-size: 14px;
-            margin-top: 4px;
-            font-weight: 500;
-            padding-left: 2px;
-            min-height: 18px;
-            transition: all 0.2s;
-        }
+    .validation-error label {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 4px;
+        font-weight: 500;
+        padding-left: 2px;
+        min-height: 18px;
+        transition: all 0.2s;
+    }
 
-        input.error,
-        select.error,
-        textarea.error {
-            border-color: #dc3545;
-            background-color: #fff0f0;
-        }
+    input.error,
+    select.error,
+    textarea.error {
+        border-color: #dc3545;
+        background-color: #fff0f0;
+    }
     </style>
 </head>
 
-
-@if(session('success'))
-<div class="alert alert-success alert-dismissible fade show">
-    <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>
-@endif
-@if(session('error'))
-<div class="alert alert-danger alert-dismissible fade show">
-    <i class="bi bi-exclamation-circle me-2"></i>{{ session('error') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>
-@endif
 
 
 
@@ -52,6 +39,20 @@
 
             <div class="row justify-content-center">
                 <div class="col-md-6">
+
+                    @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    @endif
+                    @if(session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <i class="bi bi-exclamation-circle me-2"></i>{{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    @endif
+
                     <div class="d-flex justify-content-between">
                         <div class="text-center mb-4 mt-4">
                             <a href="{{ route('state.index') }}" class="btn btn-outline-primary rounded-pill">
@@ -101,7 +102,7 @@
                                     </label>
                                     <input type="text" id="city" name="city" class="form-control"
                                         placeholder="Enter city name" value="{{ old('city') }}">
-                                        <div class="validation-error"></div>
+                                    <div class="validation-error"></div>
                                     @error('city')
                                     <div class="text-danger mt-1">{{ $message }}</div>
                                     @enderror
@@ -121,41 +122,49 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
     <script>
-        jQuery(document).ready(function () {
-      
+    jQuery(document).ready(function() {
 
-            $('#formSubmit').validate({
-                rules: {
-                    states: { required: true },
-                    city: { required: true },
-                   
+
+        $('#formSubmit').validate({
+            rules: {
+                states: {
+                    required: true
                 },
-                messages: {
-                    state: { required: "Please enter state name" },
-                    city: { required: "Please enter city name" },
+                city: {
+                    required: true
                 },
-                errorPlacement: function (error, element) {
-                    var $container = element.closest('.form-group').find('.validation-error');
-                    if ($container.length) {
-                        $container.html(error);
-                    } else {
-                        error.insertAfter(element);
-                    }
+
+            },
+            messages: {
+                state: {
+                    required: "Please enter state name"
                 },
-                highlight: function (element) {
-                    $(element).addClass('error');
+                city: {
+                    required: "Please enter city name"
                 },
-                unhighlight: function (element) {
-                    $(element).removeClass('error');
-                    $(element).closest('.form-group').find('.validation-error').empty();
+            },
+            errorPlacement: function(error, element) {
+                var $container = element.closest('.form-group').find('.validation-error');
+                if ($container.length) {
+                    $container.html(error);
+                } else {
+                    error.insertAfter(element);
                 }
-            });
+            },
+            highlight: function(element) {
+                $(element).addClass('error');
+            },
+            unhighlight: function(element) {
+                $(element).removeClass('error');
+                $(element).closest('.form-group').find('.validation-error').empty();
+            }
         });
+    });
     </script>
 </body>
 

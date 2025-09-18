@@ -213,21 +213,47 @@ textarea.error {
                                 @error('hobbies')<div class="text-danger mt-2">{{ $message }}</div>@enderror
                             </div>
                         </div>
-                        <div class="mb-4 mx-4" id="photoSection">
-                            <p>Do You Want To Update Head Photo? <span id="addphoto"
-                                    class="  btn btn-danger mx-3 py-0 px-3 rounded-pill">Yes</span> </p>
+                        <div class="mb-3 mx-3" id="photoSection">
+                            <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded-3 border">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-camera text-primary me-2"></i>
+                                    <span class="fw-semibold">Update Photo?</span>
+                                </div>
+                                <button type="button" id="addphoto" class="btn btn-primary btn-sm rounded-pill">
+                                    <i class="bi bi-upload me-1"></i>Yes
+                                </button>
+                            </div>
                         </div>
-                        <div class="mb-4 mx-4 form-group" id="uploadPhoto">
-                            <label class="form-label fw-semibold">Profile Picture</label>
-                            <input type="file" name="path" class="form-control rounded-pill" accept="image/*">
-                            <small class="text-muted">Upload a clear photo (JPG, PNG, max 2MB)</small>
-                            <div class="validation-error"></div>
+                        
+                        <div class="mb-3 mx-3 form-group" id="uploadPhoto" style="display: none;">
+                            <div class="p-2 bg-light rounded-3 border">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <label class="form-label fw-semibold mb-0">Profile Picture</label>
+                                    <button type="button" id="removephoto" class="btn btn-outline-secondary btn-sm rounded-pill">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="flex-shrink-0">
+                                        <img src="{{ asset('/uploads/images/').'/'.$head->photo_path }}" 
+                                             alt="Current" 
+                                             class="rounded-circle" 
+                                             style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #007bff;">
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <input type="file" name="path" class="form-control form-control-sm rounded-pill" accept="image/*">
+                                        <small class="text-muted">JPG, PNG, max 2MB</small>
+                                        <div class="validation-error"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         @error('path')<div class="text-danger">{{ $message }}</div>@enderror
 
 
 
-                        <button type="submit" class="btn btn-primary rounded-pill">
+                        <button type="submit" class="btn mb-5 py-3  mx-auto btn-primary rounded-pill" style="width : 80%" >
                             <i class="bi bi-check-circle me-2"></i>Update Family Head
                         </button>
                         </form>
@@ -266,6 +292,7 @@ textarea.error {
         const removeHobbyBtn = document.getElementById('removeHobby');
         const deleteButton = document.getElementById('deleteBtn');
         const addphoto = document.getElementById('addphoto');
+        const removephoto = document.getElementById('removephoto');
         const photoSection = document.getElementById('photoSection');
 
 
@@ -275,6 +302,15 @@ textarea.error {
                 if (uploadPhoto) {
                     uploadPhoto.style.display = 'block';
                     photoSection.style.display = 'none';
+                }
+            });
+        }
+        if (removephoto) {
+            removephoto.addEventListener('click', function(event) {
+                const uploadPhoto = document.getElementById('uploadPhoto');
+                if (uploadPhoto) {
+                    uploadPhoto.style.display = 'none';
+                    photoSection.style.display = 'block';
                 }
             });
         }
