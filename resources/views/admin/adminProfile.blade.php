@@ -14,6 +14,22 @@
             color: black;
             transform: translateX(5px);
         }
+    .validation-error  label {
+                 color: #dc3545;
+                 font-size: 14px;
+                 margin-top: 4px;
+                 font-weight: 500;
+                 padding-left: 2px;
+                 min-height: 18px;
+                 transition: all 0.2s;
+             }
+
+             input.error,
+             select.error,
+             textarea.error {
+                 border-color: #dc3545;
+                 background-color: #fff0f0;
+             }
     </style>
 </head>
 
@@ -117,9 +133,9 @@
                             </h6>
                         </div>
                         <div class="card-body p-4">
-                            <form action="{{ route('activate.head') }}" method="post">
+                            <form id="formSubmit" action="{{ route('activate.head') }}" method="post">
                                 @csrf
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="active-member" class="form-label fw-semibold">Select Head to
                                         Activate (All Members will be activated too)</label>
                                     <select role="button" name="active_member" id="active-member"
@@ -129,6 +145,7 @@
                                         <option value="{{ $head->id }}">{{ $head->name }} {{ $head->surname }}</option>
                                         @endforeach
                                     </select>
+                                <div class="validation-error"></div>
 
                                 </div>
                                 <div class="d-grid mt-4">
@@ -147,9 +164,9 @@
                             </h6>
                         </div>
                         <div class="card-body p-4">
-                            <form action="{{ route('deactivateHead.head') }}" method="post">
+                            <form id="formSubmit2" action="{{ route('deactivateHead.head') }}" method="post">
                                 @csrf
-                                <div class="mb-3">
+                                <div class="mb-3 form-group">
                                     <label for="deactive-member" class="form-label fw-semibold">Select Head to
                                         Dectivate (All Members will be deactivated too)</label>
                                     <select role="button" name="deactive_member" id="deactive-member"
@@ -160,6 +177,7 @@
                                         <option value="{{ $head->id }}">{{ $head->name }} {{ $head->surname }}</option>
                                         @endforeach
                                     </select>
+                                    <div class="validation-error"></div>
                                 </div>
                                 <div class="d-grid mt-4">
                                     <button type="submit"
@@ -415,6 +433,69 @@
             });
         }
     });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script>
+        jQuery(document).ready(function () {
+
+
+            $('#formSubmit').validate({
+                rules: {
+                    active_member: { required: true },
+                    deactive_member: { required: true },
+
+                },
+                messages: {
+                    active_member : { required: "Please select head" },
+                    deactive_member : { required: "Please select head" },
+                },
+                errorPlacement: function (error, element) {
+                    var $container = element.closest('.form-group').find('.validation-error');
+                    if ($container.length) {
+                        $container.html(error);
+                    } else {
+                        error.insertAfter(element);
+                    }
+                },
+                highlight: function (element) {
+                    $(element).addClass('error');
+                },
+                unhighlight: function (element) {
+                    $(element).removeClass('error');
+                    $(element).closest('.form-group').find('.validation-error').empty();
+                }
+            });
+             $('#formSubmit2').validate({
+                            rules: {
+
+                                deactive_member: { required: true },
+
+                            },
+                            messages: {
+
+                                deactive_member : { required: "Please select head" },
+                            },
+                            errorPlacement: function (error, element) {
+                                var $container = element.closest('.form-group').find('.validation-error');
+                                if ($container.length) {
+                                    $container.html(error);
+                                } else {
+                                    error.insertAfter(element);
+                                }
+                            },
+                            highlight: function (element) {
+                                $(element).addClass('error');
+                            },
+                            unhighlight: function (element) {
+                                $(element).removeClass('error');
+                                $(element).closest('.form-group').find('.validation-error').empty();
+                            }
+                        });
+        });
     </script>
 
 </body>
