@@ -16,6 +16,11 @@
     <title>Edit city</title>
 
     <style>
+        .active-class-4{
+            background-color: #198754;
+            color : white;
+            transform: translateX(5px);
+        }
     section {
         display: flex;
         justify-content: center;

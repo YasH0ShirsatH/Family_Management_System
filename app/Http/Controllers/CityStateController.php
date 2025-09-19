@@ -28,6 +28,8 @@ class CityStateController extends Controller
     {
         // build base query
         $query = City::query();
+        $city_count = City::where('status', '1')->count();
+        $state_count = State::where('status', '1')->count();
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
         if ($request->filled('search')) {
@@ -46,11 +48,11 @@ class CityStateController extends Controller
 
         // for AJAX return a partial
         if ($request->ajax()) {
-            return view('state-city.partials.city-list', compact('cities', 'admin1'));
+            return view('state-city.partials.city-list', compact('cities', 'admin1','city_count','state_count'));
         }
 
         // normal full page render
-        return view('state-city.city', compact('cities', 'admin1'));
+        return view('state-city.city', compact('cities', 'admin1','city_count','state_count'));
     }
 
     public function stateindex(Request $request)
@@ -90,6 +92,7 @@ class CityStateController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
         $state = State::findOrFail($id);
+        
         $city = City::where('state_id', $id)->where('status', '1')
             ->when($request->search, function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->search . '%');
@@ -98,7 +101,7 @@ class CityStateController extends Controller
             ->withQueryString();
 
         if ($request->ajax()) {
-            return view('state-city.partials.show-state-list', compact('city', 'state', 'admin1'))->render();
+            return view('state-city.partials.show-state-list', compact('city', 'state', 'admin1',''))->render();
         }
 
         return view('state-city.showcityfromstates', compact('city', 'state', 'admin1'));
@@ -140,7 +143,7 @@ class CityStateController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
-        $log->logs = 'Admin has Updated State  to (' . $state->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata');
+        $log->logs = 'Admin has Updated State  to (' . $state->name . ') Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
         log::debug('State Updated to (' . $state->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata'));
 
@@ -156,7 +159,7 @@ class CityStateController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
-        $log->logs = 'Admin Deleted State (' . $state->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata');
+        $log->logs = 'Admin Deleted State (' . $state->name . ') Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
         log::debug('Admin Deleted State (' . $state->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata'));
 
@@ -193,9 +196,9 @@ class CityStateController extends Controller
             $admin1 = User::where('id', '=', session::get('loginId'))->first();
             $log = new Logg();
             $log->user_id = $admin1->id;
-            $log->logs = 'City (' . $city->name . ') Added to (' . $state->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata');
+            $log->logs = 'City (' . $city->name . ') Added to (' . $state->name . ') Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
             $log->save();
-            log::debug('City (' . $city->name . ') Added to (' . $state->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata'));
+            log::debug('City (' . $city->name . ') Added to (' . $state->name . ') Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A'));
             return redirect()->route('create.city', ['state_id' => $state->id])
                 ->with('success', 'City added successfully.');
         }
@@ -222,9 +225,9 @@ class CityStateController extends Controller
             $admin1 = User::where('id', '=', session::get('loginId'))->first();
             $log = new Logg();
             $log->user_id = $admin1->id;
-            $log->logs = 'Admin Added State (' . $states1->name . ')  Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata');
+            $log->logs = 'Admin Added State (' . $states1->name . ')  Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
             $log->save();
-            log::debug('State (' . $states1->name . ') Added Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata'));
+            log::debug('State (' . $states1->name . ') Added Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A'));
             return redirect()->route('create.city', ['state_id' => $states1->id])
                 ->with('success', 'State added successfully.');
 
@@ -259,10 +262,14 @@ class CityStateController extends Controller
     public function updatecity(Request $request, $id)
     {
         $city = City::find($id);
+
         $request->validate([
             'name' => [
                 'required',
-                Rule::unique('cities', 'name')->ignore($city->id),
+                
+                Rule::unique('cities', 'name')->where(function ($query) use ($city) {
+                    return $query->where('state_id', $city->state->id);
+                })->ignore($city->id),
             ],
         ]);
 
@@ -276,7 +283,7 @@ class CityStateController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
-        $log->logs = 'Admin  Updated City to (' . $city->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata');
+        $log->logs = 'Admin  Updated City to (' . $city->name . ') Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
         log::debug('City Updated to (' . $city->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata'));
 
@@ -292,7 +299,7 @@ class CityStateController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
-        $log->logs = 'Admin Deleted City (' . $city->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata');
+        $log->logs = 'Admin Deleted City (' . $city->name . ') Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
         log::debug('City (' . $city->name . ') Deleted Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata'));
         return redirect()->back()->with('success', 'City deleted successfully.');

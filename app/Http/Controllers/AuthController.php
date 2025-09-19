@@ -191,6 +191,8 @@ class AuthController extends Controller
                 ->where('status', '1')
                 ->first()
         ) {
+            $heads = Head::where('status','9')->orWhere('status','0')->orderBy('name','asc')->get();
+            $heads2 = Head::where('status','1')->orderBy('name','asc')->get();
             ///head
             $headcount = Head::where('status', '1')->count();
             $inactiveheadcount = Head::where('status', '0')->count();
@@ -223,7 +225,39 @@ class AuthController extends Controller
 
             
 
-            return view('admin.adminProfile', compact('user', 'headcount', 'totalhead', 'deletedheadcount', 'inactiveheadcount', 'membercount', 'inactivemembercount', 'deletedmembercount', 'totalmembercount', 'statecount', 'inactivestatecount', 'deletedstatecount', 'totalstatecount', 'citycount', 'inactivecitycount', 'deletedcitycount', 'totalcitycount', 'admin1','logs'));
+            return view('admin.adminProfile', compact('user', 'headcount', 'totalhead', 'deletedheadcount', 'inactiveheadcount', 'membercount', 'inactivemembercount', 'deletedmembercount', 'totalmembercount', 'statecount', 'inactivestatecount', 'deletedstatecount', 'totalstatecount', 'citycount', 'inactivecitycount', 'deletedcitycount', 'totalcitycount', 'admin1','logs','heads','heads2'));
         }
     }
+
+    public function activateHead(Request $request){
+        $head = Head::find($request->active_member);
+        $head->update(['status' => '1']);
+        $head->members()->where('status', '0')->update(['status' => '1']); 
+
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+        $log = new Logg();
+        $log->user_id = $admin1->id;
+        $log->logs = 'Admin has Activated Head  (' . $head->name . ' ' . $head->surname . ')  Successfully with all members on ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
+        $log->save();
+        log::debug('Admin has Updated Head  (' . $head->name . ' ' . $head->surname . ')  Successfully : ' . Carbon::now()->setTimezone('Asia/Kolkata'));
+
+        return redirect('/dashboard/admin-profile')->with('success', 'Head activated successfully');
+    }
+    public function deactivateHead(Request $request){
+        $head = Head::find($request->deactive_member);
+        $head->update(['status' => '0']);
+        $head->members()->where('status', '1')->update(['status' => '0']); 
+
+
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+        $log = new Logg();
+        $log->user_id = $admin1->id;
+        $log->logs = 'Admin has Deactivated Head  (' . $head->name . ' ' . $head->surname . ')   with all members on ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
+        $log->save();
+        log::debug('Admin has Updated Head  (' . $head->name . ' ' . $head->surname . ')  Successfully : ' . Carbon::now()->setTimezone('Asia/Kolkata'));
+
+        return redirect('/dashboard/admin-profile')->with('success', 'Head deactivated successfully');
+    }
+
+    
 }

@@ -211,6 +211,7 @@
         .container.mediaclass {
             padding-left: 0.75rem;
             padding-right: 0.75rem;
+            padding-bottom: 0.45rem;
         }
     }
 </style>
@@ -264,8 +265,8 @@
                         Admin Profile
                     </h6>
                     <div class="d-grid gap-2">
-                        <a href="/dashboard/admin-profile" class="btn btn-outline-warning rounded-pill text-start">
-                            <i class="bi bi-person-circle me-2"></i>Admin Profile
+                        <a href="/dashboard/admin-profile" class="btn btn-outline-warning rounded-pill text-start active-class">
+                            <i class="bi bi-person-circle me-2 "></i>Admin Profile
                         </a>
                     </div>
                 </div>
@@ -279,13 +280,13 @@
                         Management
                     </h6>
                     <div class="d-grid gap-2">
-                        <a href="/admin" class="btn btn-outline-success rounded-pill text-start">
+                        <a href="/admin" class="btn btn-outline-success rounded-pill text-start active-class-2">
                             <i class="bi bi-people me-2"></i>Manage Families
                         </a>
-                        <a href="{{ route('state.index') }}" class="btn btn-outline-success rounded-pill text-start">
+                        <a href="{{ route('state.index') }}" class="btn btn-outline-success rounded-pill text-start active-class-3">
                             <i class="bi bi-geo-alt me-2"></i>Manage States
                         </a>
-                        <a href="{{ route('city.index') }}" class="btn btn-outline-success rounded-pill text-start">
+                        <a href="{{ route('city.index') }}" class="btn btn-outline-success rounded-pill text-start active-class-4">
                             <i class="bi bi-buildings me-2"></i>Manage Cities
                         </a>
                     </div>
@@ -303,11 +304,11 @@
                         <a href="/headview" class="btn btn-outline-info rounded-pill text-start">
                             <i class="bi bi-person-plus me-2"></i>Create Family Head
                         </a>
-                        <a href="{{ route('create.state') }}" class="btn btn-outline-info rounded-pill text-start">
-                            <i class="bi bi-geo-alt-fill me-2"></i>Create State
+                        <a href="{{ route('create.state') }}" class="btn btn-outline-info rounded-pill text-start active-class-5">
+                            <i class="bi bi-geo-alt-fill me-2 "></i>Create State
                         </a>
-                        <a href="{{ route('create.city') }}" class="btn btn-outline-info rounded-pill text-start">
-                            <i class="bi bi-building-add me-2"></i>Create City
+                        <a href="{{ route('create.city') }}" class="btn btn-outline-info rounded-pill text-start active-class-6">
+                            <i class="bi bi-building-add me-2  "></i>Create City
                         </a>
                     </div>
                 </div>
@@ -321,13 +322,13 @@
                         Dashboards
                     </h6>
                     <div class="d-grid gap-2">
-                        <a href="/dashboard" class="btn btn-outline-primary rounded-pill text-start">
+                        <a href="/dashboard" class="btn btn-outline-primary rounded-pill text-start active-class-7">
                             <i class="bi bi-house me-2"></i>Admin Dashboard
                         </a>
-                        <a href="/" class="btn btn-outline-primary rounded-pill text-start">
+                        <a href="/" class="btn btn-outline-primary rounded-pill text-start active-class-8">
                             <i class="bi bi-person me-2"></i>User Dashboard
                         </a>
-                        <a href="/state-city" class="btn btn-outline-primary rounded-pill text-start">
+                        <a href="/state-city" class="btn btn-outline-primary rounded-pill text-start active-class-9">
                             <i class="bi bi-geo me-2"></i>State-City Dashboard
                         </a>
                     </div>

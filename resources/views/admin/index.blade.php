@@ -114,7 +114,13 @@
             background-color: #f8d7da;
             color: #721c24;
         }
+        .active-class-2{
+            background-color: #198754;
+            color : white;
+            transform: translateX(5px);
+        }
     </style>
+    
 </head>
 
 <body class="bg-light">

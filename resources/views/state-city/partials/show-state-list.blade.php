@@ -7,6 +7,14 @@
             <i class="bi bi-plus-circle me-1"></i>
             Add City
         </a>
+        <style>
+            @media (max-width: 768px) {
+            .disable-div {
+                display: none;
+            }
+            
+        }
+        </style>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -16,7 +24,7 @@
                         <th scope="col" class="text-muted fw-bold"># City Id</th>
                         <th scope="col" class="text-muted fw-bold"><i class="bi bi-buildings me-1"></i>City Name</th>
                         <th scope="col" class="text-muted fw-bold"><i class="bi bi-map me-1"></i>State</th>
-                        <th scope="col" class="text-muted fw-bold"><i class="bi bi-calendar me-1"></i>Added On</th>
+                        <th scope="col" class="text-muted fw-bold disable-div"><i class="bi bi-calendar me-1"></i>Added On</th>
                         <th scope="col" class="text-muted fw-bold text-center">Actions</th>
                     </tr>
                 </thead>
@@ -26,7 +34,7 @@
                         <th scope="row" class="align-middle">{{ $item->id}}</th>
                         <td class="align-middle fw-bold text-dark">{{ $item->name }}</td>
                         <td class="align-middle">{{ $item->state->name ?? 'N/A' }}</td>
-                        <td class="align-middle">{{ $item->created_at->format('M d, Y') }}</td>
+                        <td class="align-middle disable-div">{{ $item->created_at->format('M d, Y') }}</td>
                         <td class="align-middle text-center">
                             <div class="d-flex justify-content-center flex-wrap gap-2">
                                 <a href="{{ route('city.edit', $item->id) }}" class="btn btn-outline-info rounded-pill py-2 fw-semibold btn-sm">

@@ -65,7 +65,7 @@ class ForgotPasswordController extends Controller
         $admin1 = User::where('email', '=', $request->email)->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
-        $log->logs = $request->email.' =>  password changed Successfully';
+        $log->logs = $request->email.' =>  password changed Successfully on : '. Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         log::debug($request->email.' =>  password changed Successfully');
 
 

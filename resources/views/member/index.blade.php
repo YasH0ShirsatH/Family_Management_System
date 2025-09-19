@@ -8,6 +8,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
+    <style>
+        .active-class-2{
+            background-color: #198754;
+            color : white;
+            transform: translateX(5px);
+        }
+    </style>
 
 </head>
 
@@ -30,7 +37,7 @@
                                         </span>
                                         Family Members
                                     </h2>
-                                    <p class="text-white-50 mb-0">{{ $members->count() }}
+                                    <p class="text-white-50 mb-0">{{ $head->members->count() }}
                                         member{{ $members->count() !== 1 ? 's' : '' }} found</p>
                                 </div>
                                 <div class="d-flex gap-2">

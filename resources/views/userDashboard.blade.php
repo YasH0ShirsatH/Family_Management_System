@@ -163,7 +163,7 @@
                                     <p class="card-text text-muted mb-4">Begin your family tree by registering the primary
                                         family head with complete personal information, contact details, and family
                                         background to establish the foundation of your family network.</p>
-                                    <a href="headview" class="btn btn-primary btn-lg rounded-pill">
+                                    <a href="headview" class="btn btn-outline-primary btn-lg rounded-pill">
                                         <i class="bi bi-plus-circle me-2"></i>Start Registration
                                     </a>
                                 </div>
@@ -181,7 +181,7 @@
                                     <p class="card-text text-muted mb-4">Access the administrative dashboard to manage all
                                         registered families, view comprehensive reports, edit family information, and
                                         maintain the overall system with advanced management tools.</p>
-                                    <a href="/login" class="btn btn-success btn-lg rounded-pill">
+                                    <a href="/login" class="btn btn-outline-success btn-lg rounded-pill">
                                         <i class="bi bi-shield-lock me-2"></i>Admin Login
                                     </a>
                                 </div>

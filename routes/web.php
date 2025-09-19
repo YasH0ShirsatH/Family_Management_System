@@ -7,9 +7,6 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminMemberController;
 use App\Http\Controllers\CityStateController;
-use App\Http\Middleware\AuthCheck;
-use App\Http\Middleware\AlreadyIn;
-use App\Http\Middleware\BlockDirectAccess;
 
 Route::get('/login', [AuthController::class, 'login'])->middleware('already.in');
 Route::get('/register', [AuthController::class, 'register'])->middleware('auth.check');
@@ -18,10 +15,11 @@ Route::post('/login-user', [AuthController::class, 'loginUser'])->name('login-us
 
 Route::get('/dashboard', [AuthController::class, 'dashboard'])->middleware('auth.check');
 Route::get('/logout', [AuthController::class, 'logout']);
-Route::get('/dashboard/admin-profile',[AuthController::class, 'adminProfile'])->middleware('auth.check');
+Route::get('/dashboard/admin-profile', [AuthController::class, 'adminProfile'])->middleware('auth.check');
 
-
-
+/// Activate Head
+Route::post('/dashboard/admin-profile/activate', [AuthController::class, 'activateHead'])->name('activate.head')->middleware('auth.check');
+Route::post('/dashboard/admin-profile/deactivateHead', [AuthController::class, 'deactivateHead'])->name('deactivateHead.head')->middleware('auth.check');
 
 /// Head section
 Route::post('/head', [HeadController::class, 'post_data']);
@@ -85,5 +83,5 @@ Route::get('admin/state-city/createcity', [CityStateController::class, 'createCi
 Route::get('admin/state-city/createState', [CityStateController::class, 'createState'])->name('create.state')->middleware('auth.check');
 Route::post('admin/state-city/storecity', [CityStateController::class, 'storeCity'])->name('store.city');
 Route::post('admin/state-city/storestate', [CityStateController::class, 'storestate'])->name('store.state');
-Route::get( 'admin/state-city/showcity/{id}', [CityStateController::class, 'showcity'])->name('show.city');
+Route::get('admin/state-city/showcity/{id}', [CityStateController::class, 'showcity'])->name('show.city');
 Route::get('admin/state-city/createViaShowCity/{id}', [CityStateController::class, 'createViaShowCity'])->name('show.createViaShowCity');

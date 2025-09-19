@@ -9,6 +9,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
 
+     <style>
+        .active-class-2{
+            background-color: #198754;
+            color : white;
+            transform: translateX(5px);
+        }
+    </style>
+
 </head>
 <style>
 #uploadPhoto {
@@ -41,7 +49,7 @@ textarea.error {
     <div id="mainContent">
 
         <div style="padding-bottom : 10px;z-index:100">
-              @include('partials.navbar2',['shouldShowDiv' => true])
+            @include('partials.navbar2',['shouldShowDiv' => true])
         </div>
         <div class="text-center mb-4 mt-4">
             <a href="{{ route('admin.index') }}" class="btn btn-outline-primary rounded-pill">
@@ -198,7 +206,7 @@ textarea.error {
                                 <div id="hobbyContainer">
                                     @foreach ($head->hobbies as $hobby)
                                     <input type="text" name="hobbies[]" value="{{ $hobby->hobby_name }}"
-                                        class="form-control rounded-pill mb-2" placeholder="Enter hobby">
+                                        class="form-control rounded-pill mb-2 hobby-input" placeholder="Enter hobby">
                                     @endforeach
                                 </div>
                                 <div class="d-flex gap-2">
@@ -214,7 +222,8 @@ textarea.error {
                             </div>
                         </div>
                         <div class="mb-3 mx-3" id="photoSection">
-                            <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded-3 border">
+                            <div
+                                class="d-flex align-items-center justify-content-between p-2 bg-light rounded-3 border">
                                 <div class="d-flex align-items-center">
                                     <i class="bi bi-camera text-primary me-2"></i>
                                     <span class="fw-semibold">Update Photo?</span>
@@ -224,25 +233,26 @@ textarea.error {
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="mb-3 mx-3 form-group" id="uploadPhoto" style="display: none;">
                             <div class="p-2 bg-light rounded-3 border">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <label class="form-label fw-semibold mb-0">Profile Picture</label>
-                                    <button type="button" id="removephoto" class="btn btn-outline-secondary btn-sm rounded-pill">
+                                    <button type="button" id="removephoto"
+                                        class="btn btn-outline-secondary btn-sm rounded-pill">
                                         <i class="bi bi-x"></i>
                                     </button>
                                 </div>
-                                
+
                                 <div class="d-flex align-items-center gap-2">
                                     <div class="flex-shrink-0">
-                                        <img src="{{ asset('/uploads/images/').'/'.$head->photo_path }}" 
-                                             alt="Current" 
-                                             class="rounded-circle" 
-                                             style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #007bff;">
+                                        <img src="{{ asset('/uploads/images/').'/'.$head->photo_path }}" alt="Current"
+                                            class="rounded-circle"
+                                            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #007bff;">
                                     </div>
                                     <div class="flex-grow-1">
-                                        <input type="file" name="path" class="form-control form-control-sm rounded-pill" accept="image/*">
+                                        <input type="file" name="path" class="form-control form-control-sm rounded-pill"
+                                            accept="image/*">
                                         <small class="text-muted">JPG, PNG, max 2MB</small>
                                         <div class="validation-error"></div>
                                     </div>
@@ -253,32 +263,33 @@ textarea.error {
 
 
 
-                        <button type="submit" class="btn mb-5 py-3  mx-auto btn-primary rounded-pill" style="width : 80%" >
+                        <button type="submit" class="btn mb-5 py-3  mx-auto btn-primary rounded-pill"
+                            style="width : 80%">
                             <i class="bi bi-check-circle me-2"></i>Update Family Head
                         </button>
                         </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        <!-- Delete Section -->
-            <div class="row justify-content-center mt-4 mb-4">
-                <div class="col-lg-6">
-                    <div class="card border-danger shadow rounded-4">
-                        <div class="card-header bg-danger text-white py-3 rounded-top-4">
-                            <h5 class="mb-0 fw-bold">Danger Zone: Delete family head and all members</h5>
-                        </div>
-                        <div class="card-body text-center p-4">
-                            <a href="{{ route('delete',$head->id) }}" class="btn btn-danger rounded-pill" id="deleteBtn">
-                                <i class="bi bi-trash me-2"></i>Delete Head
-                            </a>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Delete Section -->
+        <div class="row justify-content-center mt-4 mb-4">
+            <div class="col-lg-6">
+                <div class="card border-danger shadow rounded-4">
+                    <div class="card-header bg-danger text-white py-3 rounded-top-4">
+                        <h5 class="mb-0 fw-bold">Danger Zone: Delete family head and all members</h5>
+                    </div>
+                    <div class="card-body text-center p-4">
+                        <a href="{{ route('delete',$head->id) }}" class="btn btn-danger rounded-pill" id="deleteBtn">
+                            <i class="bi bi-trash me-2"></i>Delete Head
+                        </a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -330,7 +341,8 @@ textarea.error {
             const input = document.createElement('input');
             input.type = 'text';
             input.name = 'hobbies[]';
-            input.className = 'form-control rounded-pill mb-2';
+            // This is the line to change
+            input.className = 'form-control rounded-pill mb-2 hobby-input'; // Add the 'hobby-input' class
             input.placeholder = 'Enter hobby';
             hobbyContainer.appendChild(input);
             input.focus();
@@ -382,7 +394,6 @@ textarea.error {
 
     <script>
     jQuery(document).ready(function() {
-        // Custom file size validator
         $.validator.addMethod("maxfilesize", function(value, element, param) {
             if (element.files && element.files.length > 0) {
                 var fileSize = element.files[0].size;
@@ -390,9 +401,8 @@ textarea.error {
                 return fileSize <= maxSizeBytes;
             }
             return true;
-        }, "File size exceeds the allowed limit.");
+        }, "File size must be less than 2 MB.");
 
-        // Custom age validator
         $.validator.addMethod("ageAbove21", function(value, element) {
             if (!value) return true;
             var dob = new Date(value);
@@ -403,13 +413,9 @@ textarea.error {
             return age >= 21;
         }, "You must be at least 21 years old.");
 
-        // Only require profile picture if not already present
-
-
         $('#formSubmit').validate({
             rules: {
                 path: {
-                    required: true,
                     extension: "jpg|jpeg|png",
                     maxfilesize: 2
                 },
@@ -448,57 +454,67 @@ textarea.error {
                         return $("#married").is(":checked");
                     }
                 },
+                // Corrected rule for hobbies
                 'hobbies[]': {
-                    required: true
-                },
-
+                    require_from_group: [1, ".hobby-input"]
+                }
             },
             messages: {
                 path: {
-                    required: "Please upload a profile picture",
                     extension: "Only JPG, JPEG, and PNG files are allowed.",
-                    maxfilesize: "File size exceeds the allowed limit."
+                    maxfilesize: "File size must be less than 2 MB."
                 },
                 name: {
-                    required: "Please enter name"
+                    required: "Please enter your first name"
                 },
                 surname: {
-                    required: "Please enter surname"
+                    required: "Please enter your last name"
                 },
                 birthdate: {
-                    required: "Please enter birthdate",
+                    required: "Please enter your date of birth",
                     ageAbove21: "You must be at least 21 years old to proceed."
                 },
                 mobile: {
-                    required: "Please enter mobile",
-                    rangelength: "Mobile must be 10 digits"
+                    required: "Please enter your mobile number",
+                    rangelength: "Mobile number must be 10 digits"
                 },
                 address: {
-                    required: "Please enter address"
+                    required: "Please enter your address"
                 },
                 state: {
-                    required: "Please select state"
+                    required: "Please select a state"
                 },
                 city: {
-                    required: "Please select city"
+                    required: "Please select a city"
                 },
                 pincode: {
-                    required: "Please enter Pincode",
+                    required: "Please enter your pincode",
                     rangelength: "Pincode must be 6 digits"
                 },
                 marital_status: {
-                    required: "Please select marital status"
+                    required: "Please select your marital status"
                 },
                 mariage_date: {
-                    required: "Please enter marriage date"
+                    required: "Please enter your marriage date"
                 },
+                // Corrected message for hobbies
                 'hobbies[]': {
-                    required: "Please enter at least one hobby"
-                },
-
+                    require_from_group: "Please enter at least one hobby"
+                }
+            },
+           
+            groups: {
+                hobbies: "hobbies[]"
             },
             errorPlacement: function(error, element) {
-                var $container = element.closest('.form-group').find('.validation-error');
+                var $container;
+               
+                if (element.attr("name") === "hobbies[]") {
+                    $container = element.closest('.form-group').find('.validation-error');
+                } else {
+                    $container = element.closest('.form-group').find('.validation-error');
+                }
+
                 if ($container.length) {
                     $container.html(error);
                 } else {
@@ -510,6 +526,10 @@ textarea.error {
             },
             unhighlight: function(element) {
                 $(element).removeClass('error');
+               
+                if ($(element).attr("name") === "hobbies[]") {
+                    $('.hobby-input').removeClass('error');
+                }
                 $(element).closest('.form-group').find('.validation-error').empty();
             }
         });

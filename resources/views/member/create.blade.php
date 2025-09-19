@@ -9,6 +9,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
     <style>
+        .active-class-2{
+            background-color: #198754;
+            color : white;
+            transform: translateX(5px);
+        }
         .validation-error {
             color: #dc3545;
             font-size: 14px;

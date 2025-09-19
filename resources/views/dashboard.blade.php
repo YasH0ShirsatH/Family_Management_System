@@ -97,6 +97,12 @@
             }
         }
 
+        .active-class-7{
+            background-color: #0d6efd;
+            color : white;
+            transform: translateX(5px);
+        }
+
         @media (max-width: 767px) {
             .quick-access .btn {
                 font-size: 1rem;

@@ -12,6 +12,11 @@
         #uploadPhoto {
             display: none;
         }
+        .active-class-2{
+            background-color: #198754;
+            color : white;
+            transform: translateX(5px);
+        }
     </style>
     <style>
         .validation-error {

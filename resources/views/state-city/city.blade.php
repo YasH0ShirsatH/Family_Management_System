@@ -19,6 +19,11 @@
             text-decoration: underline;
             color: #0d6efd;
         }
+        .active-class-4{
+            background-color: #198754;
+            color : white;
+            transform: translateX(5px);
+        }
     </style>
 
 </head>
@@ -31,20 +36,24 @@
         @include('partials.navbar2', ['shouldShowDiv' => true])
 
 
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show rounded-pill mt-4 mx-3 mx-md-5">
+        
+
+        <div class="container py-4">
+            @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show rounded-pill mt-4 ">
                 <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
-
-        <div class="container py-4">
             <!-- Search Card -->
             <div class="card shadow-sm mb-4 border-0 rounded-4">
-                <div class="card-header bg-gradient bg-primary text-white py-3 border-0 rounded-top-4">
+                <div class="card-header bg-gradient bg-primary text-white py-3 border-0 rounded-top-4 d-flex justify-content-between align-items-center">
                     <h5 class="mb-0 fw-bold">
                         <i class="bi bi-search me-2"></i>Search Cities
                     </h5>
+                    <a href="{{ route('state.index') }}" class="ms-2 btn ms-2 btn-outline-warning rounded-pill py-2 fw-semibold btn-sm">
+                     <i class="bi bi-arrow-left me-2"></i>Go To States
+                    </a>
                 </div>
                 <div class="card-body p-4">
                     <div class="row align-items-center g-3">
@@ -75,6 +84,45 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div class="card bg-primary text-white border-0 h-100" style="border-radius: 20px;">
+                        <div class="card-body text-center py-3 py-md-4">
+                            <i class="bi bi-geo-alt display-5 display-md-4 mb-2 mb-md-3"></i>
+                            <h3 class="fw-bold mb-1">{{ $state_count }}</h3>
+                            <p class="mb-0 opacity-75 small">Total States</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <a href="{{ route('create.city') }}" class="text-decoration-none">
+                        <div class="card bg-warning text-dark border-0 h-100 shadow-sm"
+                            style="border-radius: 20px; transition: all 0.3s ease;"
+                            onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.15)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 10px rgba(0,0,0,0.1)'">
+                            <div class="card-body text-center py-3 py-md-4">
+                                <i class="bi bi-plus display-5 display-md-4 mb-2 mb-md-3"></i>
+                                <h5 class="fw-bold mb-1">Add New City</h5>
+                                <p class="mb-0 small opacity-75">Create a new city entry</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-12 col-sm-12 col-lg-4">
+                    <a href="{{ route('city.index') }}" style="text-decoration : none">
+                        <div class="card bg-success text-white border-0 h-100" style="border-radius: 20px;">
+                            <div class="card-body text-center py-3 py-md-4">
+                                <i class="bi bi-buildings display-5 display-md-4 mb-2 mb-md-3"></i>
+                                <h3 class="fw-bold mb-1">
+                                    {{ $city_count}}
+                                </h3>
+                                <p class="mb-0 opacity-75 small">Total Cities</p>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </div>
 

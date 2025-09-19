@@ -7,6 +7,7 @@
             <a href="{{ route('create.city') }}" class="btn btn-primary rounded-pill py-2 fw-semibold btn-sm">
                 <i class="bi bi-plus-circle me-2"></i>Add City
             </a>
+            
         </div>
     </div>
     <div class="card-body p-0">

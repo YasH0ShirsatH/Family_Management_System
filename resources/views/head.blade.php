@@ -30,6 +30,13 @@ $session_number = $number;
     <title>Resume Session</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+    .prevent-select {
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    </style>
 </head>
 
 <body>
@@ -134,15 +141,15 @@ $session_number = $number;
                             <div class="row">
                                 <div class="col-md-6 mb-3 form-group">
                                     <label class="form-label fw-semibold">First Name</label>
-                                    <input type="text" name="name" class="form-control rounded-pill"
-                                        placeholder="Enter first name" value="{{ old('name') }}">
+                                    <input type="text" name="name" class="form-control rounded-pill optional-field"
+                                        placeholder="Enter first name" value="{{ old('name') }}" required>
                                     <div class="validation-error"></div>
                                     @error('name')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
                                 <div class="col-md-6 mb-3 form-group">
                                     <label class="form-label fw-semibold">Last Name</label>
                                     <input type="text" name="surname" class="form-control rounded-pill"
-                                        placeholder="Enter last name" value="{{ old('surname') }}">
+                                        placeholder="Enter last name" value="{{ old('surname') }}" required>
                                     <div class="validation-error"></div>
                                     @error('surname')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
@@ -215,10 +222,10 @@ $session_number = $number;
                                 <div class="row form-group">
                                     <div class="col-md-6">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="marital_status"
+                                            <input class="form-check-input " type="radio" name="marital_status"
                                                 id="married" value="1"
                                                 {{ old('marital_status') == '1' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="married">Married</label>
+                                            <label class="form-check-label prevent-select" for="married">Married</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -226,7 +233,7 @@ $session_number = $number;
                                             <input class="form-check-input" type="radio" name="marital_status"
                                                 id="unmarried" value="0"
                                                 {{ old('marital_status') == '0' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="unmarried">Unmarried</label>
+                                            <label class="form-check-label  prevent-select" for="unmarried">Unmarried</label>
                                         </div>
                                     </div>
                                     <div class="validation-error"></div>
@@ -294,6 +301,11 @@ $session_number = $number;
         const hobbyContainer = document.getElementById('hobbyContainer');
         const addHobbyBtn = document.getElementById('addHobby');
         const removeHobbyBtn = document.getElementById('removeHobby');
+        const optionalFields = document.getElementsByClassName('optional-field');
+
+        for (let i = 0; i < optionalFields.length; i++) {
+            optionalFields[i].removeAttribute('required');
+        }
 
         function addHobbyInput() {
             const input = document.createElement('input');

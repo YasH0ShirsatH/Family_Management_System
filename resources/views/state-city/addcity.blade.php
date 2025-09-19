@@ -25,6 +25,12 @@
         border-color: #dc3545;
         background-color: #fff0f0;
     }
+    
+        .active-class-6{
+            background-color: #0dcaf0;
+            color : white;
+            transform: translateX(5px);
+        }
     </style>
 </head>
 

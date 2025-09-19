@@ -33,6 +33,11 @@
 
 
         }
+        .active-class-3{
+            background-color: #198754;
+            color : white;
+            transform: translateX(5px);
+        }
         .validation-error label{
             color: #dc3545;
             font-size: 14px;

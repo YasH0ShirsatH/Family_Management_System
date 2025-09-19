@@ -164,7 +164,7 @@ class AdminController extends Controller
         $pdf = Pdf::loadView('pdf.head', compact('heads', 'pdf_actual_path'));
         $pdf->showImageErrors = true;
         $pdf->curlAllowUnsafeSslRequests = true;
-        log::debug('Admin has downloaded pdf of head data at ' . Carbon::now());
+        log::debug('Admin has downloaded pdf of head data at ' . Carbon::now()->format('l, F jS, Y \a\t h:i A'));
         return $pdf->download($heads->name . '\'s_family.pdf');
     }
 
@@ -225,7 +225,7 @@ class AdminController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
-        $log->logs = 'Admin has Updated Head  (' . $user->name . ' ' . $user->surname . ')  Successfully : ' . Carbon::now()->setTimezone('Asia/Kolkata');
+        $log->logs = 'Admin has Updated Head  (' . $user->name . ' ' . $user->surname . ')  Successfully on ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
         log::debug('Admin has Updated Head  (' . $user->name . ' ' . $user->surname . ')  Successfully : ' . Carbon::now()->setTimezone('Asia/Kolkata'));
 
@@ -295,14 +295,14 @@ class AdminController extends Controller
         $head = Head::find($id);
         if ($head) {
             $head->update(['status' => '9']);
-            $head->members()->update(['status' => '9']);
+            $head->members()->where('status','1')->update(['status' => '0']);
 
             $admin1 = User::where('id', '=', session::get('loginId'))->first();
             $log = new Logg();
             $log->user_id = $admin1->id;
-            $log->logs = 'Admin Has Deleted (' . $head->name . ' ' . $head->surname . ') Successfully : ' . Carbon::now()->setTimezone('Asia/Kolkata');
+            $log->logs = 'Admin Has Deleted Head  (' . ucfirst($head->name) . ' ' . ucfirst($head->surname) . ') Successfully ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
             $log->save();
-            log::debug('Admin Has Deleted (' . $head->name . ' ' . $head->surname . ') Successfully : ' . Carbon::now()->setTimezone('Asia/Kolkata'));
+            log::debug('Admin Has Deleted (' . $head->name . ' ' . $head->surname . ') Successfully on ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A'));
 
 
             return redirect()->route('admin.index')->with('success', "Head deleted successfully.")->with('name', $head->name)->with('surname', $head->surname);

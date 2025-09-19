@@ -15,21 +15,21 @@ class HeadController extends Controller
 {
     public function headview()
     {
-        
-            $states = State::where('status','1')->where('country_id', 101)->orderBy('name', 'asc')->get();
-            foreach ($states as $state) {
-                $city = City::where('state_id', $state->id)->orderBy('name', 'asc')->get();
-            }
-            return view('head', compact('states', 'city'));
-         
+
+        $states = State::where('status', '1')->where('country_id', 101)->orderBy('name', 'asc')->get();
+        foreach ($states as $state) {
+            $city = City::where('state_id', $state->id)->orderBy('name', 'asc')->get();
+        }
+        return view('head', compact('states', 'city'));
+
     }
 
     public function dashboard()
     {
-        $head = Head::where('status','1')->get();
-        $member = Member::where('status','1')->get();
+        $head = Head::where('status', '1')->get();
+        $member = Member::where('status', '1')->get();
 
-        $user = User::where('status','1')->get();
+        $user = User::where('status', '1')->get();
         $headcount = $head->count();
         $membercount = $member->count();
 
@@ -41,91 +41,63 @@ class HeadController extends Controller
     public function post_data(Request $request)
     {
 
-        try {
-            $request->validate([
-                'name' => 'required',
-                'surname' => 'required',
-                'birthdate' => ['required', 'date', 'before:' . Carbon::now()->setTimezone('Asia/Kolkata')->subYears(21)->format('Y-m-d')],
-                'mobile' => 'required|digits:10|unique:heads,mobile',
-                'address' => 'required',
-                'state' => 'required',
-                'city' => 'required',
-                'pincode' => 'required|digits:6',
-                'marital_status' => 'required',
-                'mariage_date' => 'required_if:marital_status,1',
-                'hobbies' => 'required|array|min:1',
-                'hobbies.*' => ['required', 'distinct', 'min:1', 'string'],
-                'path' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            ], [
-                'birthdate.before' => 'You must be at least 21 years old to register.',
-                'hobbies.required' => 'Please add at least one hobby.',
-                'hobbies.*.required' => 'Each hobby field is required.',
-                'hobbies.*.distinct' => 'Duplicate hobbies are not allowed.',
-                'hobbies.*.min' => 'Each hobby must be at least 1 character long.',
-                'hobbies.*.string' => 'Each hobby must be a valid string.',
-            ]);
+
+        $request->validate([
+            'name' => 'required',
+            'surname' => 'required',
+            'birthdate' => ['required', 'date', 'before:' . Carbon::now()->setTimezone('Asia/Kolkata')->subYears(21)->format('Y-m-d')],
+            'mobile' => 'required|digits:10|unique:heads,mobile',
+            'address' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+            'pincode' => 'required|digits:6',
+            'marital_status' => 'required',
+            'mariage_date' => 'required_if:marital_status,1',
+            'hobbies' => 'required|array|min:1',
+            'hobbies.*' => ['required', 'distinct', 'min:1', 'string'],
+            'path' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'birthdate.before' => 'You must be at least 21 years old to register.',
+            'hobbies.required' => 'Please add at least one hobby.',
+            'hobbies.*.required' => 'Each hobby field is required.',
+            'hobbies.*.distinct' => 'Duplicate hobbies are not allowed.',
+            'hobbies.*.min' => 'Each hobby must be at least 1 character long.',
+            'hobbies.*.string' => 'Each hobby must be a valid string.',
+        ]);
 
 
-            $user = new Head();
+        $user = new Head();
 
-            $user->name = $request->name;
-            $user->surname = $request->surname;
-            $user->birthdate = $request->birthdate;
-            $user->mobile = $request->mobile;
-            $user->address = $request->address;
-            $user->state = $request->state;
-            $user->city = $request->city;
-            $user->pincode = $request->pincode;
-            $user->marital_status = $request->marital_status;
+        $user->name = $request->name;
+        $user->surname = $request->surname;
+        $user->birthdate = $request->birthdate;
+        $user->mobile = $request->mobile;
+        $user->address = $request->address;
+        $user->state = $request->state;
+        $user->city = $request->city;
+        $user->pincode = $request->pincode;
+        $user->marital_status = $request->marital_status;
 
-            if ($request->input('marital_status') == 1) {
-                $user->mariage_date = $request->mariage_date;
-            }
-            $file = $request->file('path');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move('uploads/images/', $filename);
-            $user->photo_path = $filename;
-
-            $user->save();
-            foreach ($request->hobbies as $hobby) {
-                $user->hobbies()->create([
-                    'head_id' => $user->id,
-                    'hobby_name' => $hobby,
-                ]);
-            }
-            $submission_key = 'head_submitted_' . $user->id ;
-            session([ $submission_key=> true]);
-            Log::debug('User Added Head ('.$request->name.' '.$request->surname.') To the Database Successfully');
-            return redirect()->route('familySection', ['id' => $user->id])->with('success', 'Head added successfully.');
+        if ($request->input('marital_status') == 1) {
+            $user->mariage_date = $request->mariage_date;
         }
-        catch (\Exception $e) {
-            Log::debug('User Couldn\'t Add Head Section');
-            $request->validate([
-                'name' => 'required',
-                'surname' => 'required',
-                'birthdate' => ['required', 'date', 'before:' . Carbon::now()->setTimezone('Asia/Kolkata')->subYears(21)->format('Y-m-d')],
-                'mobile' => 'required|digits:10|unique:heads,mobile',
-                'address' => 'required',
-                'state' => 'required',
-                'city' => 'required',
-                'pincode' => 'required|digits:6',
-                'marital_status' => 'required',
-                'mariage_date' => 'required_if:marital_status,1',
-                'hobbies' => 'required|min:1',
-                'hobbies.*' => ['required', 'distinct', 'min:1', 'string'],
-                'path' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            ], [
-                'birthdate.before' => 'You must be at least 21 years old to register.',
-                'hobbies.required' => 'Please add at least one hobby.',
-                'hobbies.*.required' => 'Each hobby field is required.',
-                'hobbies.*.distinct' => 'Duplicate hobbies are not allowed.',
-                'hobbies.*.min' => 'Each hobby must be at least 1 character long.',
-                'hobbies.*.string' => 'Each hobby must be a valid string.',
-            ]);
-            
+        $file = $request->file('path');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move('uploads/images/', $filename);
+        $user->photo_path = $filename;
 
-            return redirect()->back();
+        $user->save();
+        foreach ($request->hobbies as $hobby) {
+            $user->hobbies()->create([
+                'head_id' => $user->id,
+                'hobby_name' => $hobby,
+            ]);
         }
+        $submission_key = 'head_submitted_' . $user->id;
+        session([$submission_key => true]);
+        Log::debug('User Added Head (' . $request->name . ' ' . $request->surname . ') To the Database Successfully on : ' . Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A'));
+        return redirect()->route('familySection', ['id' => $user->id])->with('success', 'Head added successfully.');
+
 
 
     }
@@ -177,7 +149,7 @@ class HeadController extends Controller
             'education' => $request->education,
             'photo_path' => $filename,
         ]);
-        log::debug('User ('.$user->name.' '.$user->surname.') Added Member ('.$request->name.') To the Database Successfully at :'.Carbon::now()->setTimezone('Asia/Kolkata'));
+        log::debug('User (' . $user->name . ' ' . $user->surname . ') Added Member (' . $request->name . ') To the Database Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A'));
         return back()->with('success', 'Member added successfully.');
     }
 
@@ -186,7 +158,7 @@ class HeadController extends Controller
     {
         $state = State::where('name', $stateId)->first();
         if ($state) {
-            $cities = City::where('state_id', $state->id)->where('status','1')->get();
+            $cities = City::where('state_id', $state->id)->where('status', '1')->get();
             return response()->json($cities);
 
         }
@@ -204,7 +176,7 @@ class HeadController extends Controller
         }
         $user2 = Head::find($id);
         // Redirect to the homepage or login page
-        log::debug('User ('.$user2->name.' '.$user2->surname.') Logged Out Successfully at : '.Carbon::now()->setTimezone('Asia/Kolkata'));
+        log::debug('User (' . $user2->name . ' ' . $user2->surname . ') Logged Out Successfully on : ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A'));
         return redirect('/')->with('success', 'You\'ve successfully added the head and members of the heads family..');
     }
 }

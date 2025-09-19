@@ -9,6 +9,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
 
+   <style>
+    .active-class-3{
+            background-color: #198754;
+            color : white;
+            transform: translateX(5px);
+        }
+   </style>
+
 </head>
 
 
@@ -16,14 +24,15 @@
 <body class="bg-light">
     <div id="mainContent">
 
-        @include('partials.navbar2', ['shouldShowDiv' => true])
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show rounded-pill mt-4 mx-3 mx-md-5">
-                <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
+
         <div class="container py-4">
+            @include('partials.navbar2', ['shouldShowDiv' => true])
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show rounded-pill mt-4 ">
+                    <i class="bi bi-check-circle-fill me-2"></i>{{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
             <!-- Header Card -->
             <!-- <div class="card shadow mb-4 border-0" style="border-radius: 20px;">
             <div class="card-header bg-gradient bg-primary text-white py-4 border-0"
@@ -52,16 +61,22 @@
         </div> -->
             <!-- Search Bar -->
             <div class="card shadow-sm mb-4 border-0 rounded-4">
-                <div class="card-header bg-gradient bg-primary text-white py-3 border-0 rounded-top-4">
+                <div
+                    class="card-header bg-gradient bg-primary text-white py-3 border-0 rounded-top-4 d-flex justify-content-between align-items-center">
                     <h5 class="mb-0 fw-bold">
                         <i class="bi bi-search me-2"></i>Search States
                     </h5>
+                    <a href="{{ route('city.index') }}"
+                        class="btn ms-2 btn-outline-warning rounded-pill py-2 fw-semibold btn-sm ms-2">
+                        Go To Cities<i class="bi bi-arrow-right ms-2"></i>
+                    </a>
                 </div>
                 <div class="card-body p-4">
                     <div class="row align-items-center g-3">
                         <div class="col-12 col-md-8 col-lg-9">
                             <div class="input-group">
-                                <span class="input-group-text bg-primary text-white border-0 rounded-start-pill px-3 px-md-4">
+                                <span
+                                    class="input-group-text bg-primary text-white border-0 rounded-start-pill px-3 px-md-4">
                                     <i class="bi bi-search fs-5"></i>
                                 </span>
                                 <input type="text" id="searchInput"
@@ -101,7 +116,10 @@
                 </div>
                 <div class="col-12 col-sm-6 col-lg-4">
                     <a href="{{ route('create.state') }}" class="text-decoration-none">
-                        <div class="card bg-warning text-dark border-0 h-100 shadow-sm" style="border-radius: 20px; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 10px rgba(0,0,0,0.1)'">
+                        <div class="card bg-warning text-dark border-0 h-100 shadow-sm"
+                            style="border-radius: 20px; transition: all 0.3s ease;"
+                            onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.15)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 10px rgba(0,0,0,0.1)'">
                             <div class="card-body text-center py-3 py-md-4">
                                 <i class="bi bi-plus display-5 display-md-4 mb-2 mb-md-3"></i>
                                 <h5 class="fw-bold mb-1">Add New State</h5>
@@ -146,6 +164,7 @@
             $('#searchLoading').removeClass('d-none');
             $('#searchInput').prop('disabled', true);
         }
+
         function hideLoading() {
             $('#searchLoading').addClass('d-none');
             $('#searchInput').prop('disabled', false);
@@ -172,7 +191,9 @@
             const query = $(this).val();
             clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(function () {
-                fetchList({ search: query });
+                fetchList({
+                    search: query
+                });
             }, 800);
         });
 

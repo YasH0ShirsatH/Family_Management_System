@@ -97,11 +97,11 @@ class AdminMemberController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
-        $log->logs = 'Admin Added User (' . $user->name . ' ' . $user->surname . '\'s)  Member (' . $request->name . ') To the Database Successfully at : '.Carbon::now()->setTimezone('Asia/Kolkata');
+        $log->logs = 'Admin Added User (' . $user->name . ' ' . $user->surname . '\'s)  Member (' . $request->name . ') To the Database Successfully on ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
 
 
-        log::channel('adminlog')->debug('Admin Added User (' . $user->name . ' ' . $user->surname . '\'s)  Member (' . $request->name . ') To the Database Successfully');
+        log::channel('adminlog')->debug('Admin Added  User (' . $user->name . ' ' . $user->surname . '\'s)  Member (' . $request->name . ') To the Database Successfully');
         return redirect()->route('admin-member.show', $familyid)->with('success', 'Member added successfully.');
 
 
@@ -156,7 +156,7 @@ class AdminMemberController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
-        $log->logs = 'Admin Updated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now()->setTimezone('Asia/Kolkata');
+        $log->logs = 'Admin Updated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " on " .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
         log::channel('adminlog')->debug('Admin Updated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now()->setTimezone('Asia/Kolkata'));
 
@@ -221,7 +221,7 @@ class AdminMemberController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
-        $log->logs = 'Admin Deleted Member (' . $member->name . ')  Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now()->setTimezone('Asia/Kolkata');
+        $log->logs = 'Admin Deleted Member (' . $member->name . ')  Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " on " .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
 
 

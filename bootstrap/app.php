@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\AuthCheck;
 use App\Http\Middleware\BlockDirectAccess;
 use App\Http\Middleware\AlreadyIn;
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
