@@ -21,6 +21,10 @@ Route::get('/dashboard/admin-profile', [AuthController::class, 'adminProfile'])-
 Route::post('/dashboard/admin-profile/activate', [AuthController::class, 'activateHead'])->name('activate.head')->middleware('auth.check');
 Route::post('/dashboard/admin-profile/deactivateHead', [AuthController::class, 'deactivateHead'])->name('deactivateHead.head')->middleware('auth.check');
 
+/// AJAX routes for member activation
+Route::get('/dashboard/admin-profile/get-inactive-members/{headId}', [AuthController::class, 'getInactiveMembers'])->name('get.inactive.members')->middleware('auth.check');
+Route::post('/dashboard/admin-profile/activate-selected', [AuthController::class, 'activateSelectedMembers'])->name('activate.selected.members')->middleware('auth.check');
+
 /// Head section
 Route::post('/head', [HeadController::class, 'post_data']);
 Route::get('/headview', [HeadController::class, 'headview'])->name('head');

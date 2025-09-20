@@ -184,13 +184,20 @@ class AuthController extends Controller
         }
     }
 
-    public function adminProfile()
+    public function adminProfile(Request $request)
     {
         if (
             $user = User::where('id', '=', session::get('loginId'))
                 ->where('status', '1')
                 ->first()
         ) {
+            if ($request->has('success')) {
+                session()->flash('success', $request->get('success'));
+            }
+            if ($request->has('error')) {
+                session()->flash('error', $request->get('error'));
+            }
+
             $heads = Head::where('status','9')->orWhere('status','0')->orderBy('name','asc')->get();
             $heads2 = Head::where('status','1')->orderBy('name','asc')->get();
             ///head
@@ -258,6 +265,60 @@ class AuthController extends Controller
 
         return redirect('/dashboard/admin-profile')->with('success', 'Head deactivated successfully');
     }
+
+    public function getInactiveMembers($headId)
+    {
+        $head = Head::find($headId);
+        if (!$head) {
+            return response()->json(['error' => 'Head not found'], 404);
+        }
+
+        $inactiveMembers = $head->members()->whereIn('status', ['0', '9'])->get();
+        
+        return response()->json([
+            'head' => $head,
+            'members' => $inactiveMembers
+        ]);
+    }
+
+    public function activateSelectedMembers(Request $request)
+    {
+        $request->validate([
+            'head_id' => 'required|exists:heads,id',
+            'activation_mode' => 'required|in:all,selected',
+            'member_ids' => 'required_if:activation_mode,selected|array|min:1',
+            'member_ids.*' => 'exists:members,id'
+        ]);
+
+        $head = Head::find($request->head_id);
+        $activationMode = $request->activation_mode;
+
+        $head->update(['status' => '1']);
+
+        if ($activationMode === 'all') {
+            $head->members()->whereIn('status', ['0', '9'])->update(['status' => '1']);
+            $logMessage = 'Admin has Activated Head (' . $head->name . ' ' . $head->surname . ') with all members on ' . Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
+            $successMessage = 'Head and all members activated successfully';
+        } else {
+            $selectedMemberIds = $request->member_ids;
+            Member::whereIn('id', $selectedMemberIds)->update(['status' => '1']);
+            $logMessage = 'Admin has Activated Head (' . $head->name . ' ' . $head->surname . ') with selected members on ' . Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
+            $successMessage = 'Head and selected members activated successfully';
+        }
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+        $log = new Logg();
+        $log->user_id = $admin1->id;
+        $log->logs = $logMessage;
+        $log->save();
+
+        Log::debug('Admin has Activated Head (' . $head->name . ' ' . $head->surname . ') with ' . $activationMode . ' members: ' . Carbon::now()->setTimezone('Asia/Kolkata'));
+
+        return response()->json([
+            'success' => true,
+            'message' => $successMessage
+        ]);
+    }
+
 
     
 }
