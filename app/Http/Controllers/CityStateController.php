@@ -43,7 +43,7 @@ class CityStateController extends Controller
         $query->where('status', '1');
 
 
-        //  preserve query-string 
+        //  preserve query-string
         $cities = $query->latest()->paginate(10)->withQueryString();
 
         // for AJAX return a partial
@@ -73,7 +73,7 @@ class CityStateController extends Controller
         }
         $query->where('status', '1');
 
-        //  preserve query-string 
+        //  preserve query-string
         $states = $query->latest()->orderBy('name', 'asc')->paginate(8)->withQueryString();
 
         // for AJAX return a partial
@@ -92,7 +92,7 @@ class CityStateController extends Controller
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
         $state = State::findOrFail($id);
-        
+
         $city = City::where('state_id', $id)->where('status', '1')
             ->when($request->search, function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->search . '%');
@@ -188,7 +188,7 @@ class CityStateController extends Controller
 
 
         $city = City::firstOrCreate(
-            ['name' => $request->city, 'state_id' => $state->id]
+            ['name' => $request->city, 'state_id' => $state->id, 'state_new_id' => 'SID'.$state->id]
         );
 
 
@@ -266,7 +266,7 @@ class CityStateController extends Controller
         $request->validate([
             'name' => [
                 'required',
-                
+
                 Rule::unique('cities', 'name')->where(function ($query) use ($city) {
                     return $query->where('state_id', $city->state->id);
                 })->ignore($city->id),

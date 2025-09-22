@@ -27,7 +27,8 @@ class AuthController extends Controller
 
     public function register()
     {
-        return view("auth.register");
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+        return view("auth.register", compact('admin1'));
     }
 
     public function registerUser(Request $request)
@@ -37,11 +38,14 @@ class AuthController extends Controller
             'last_name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
+            'mobile' => 'required|digits:10',
+            'address' => 'required',
         ]);
-
         $user = new User;
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
+        $user->mobile = $request->mobile;
+        $user->address = $request->address;
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
         if ($user->save()) {
@@ -106,8 +110,8 @@ class AuthController extends Controller
                 $citycount = $city->count();
 
 
-                
-               
+
+
                 $topStates = DB::table('heads')
                             ->select('state', DB::raw('COUNT(*) as count'))
                             ->groupBy('state')
@@ -122,7 +126,7 @@ class AuthController extends Controller
                         ->limit(5)
                         ->pluck('state');
 
-              
+
                     $headsWithAge = $head->map(function ($bday)  {
                         return [
                             'age' => Carbon::parse($bday->birthdate)->age,
@@ -132,20 +136,20 @@ class AuthController extends Controller
                         ];
                     });
 
-                   
+
                     $headsWithAgeSortedByAge = $headsWithAge->sortByDesc('age')->values();
 
-                    
+
                     $headsWithAgeSortedByMembers = $headsWithAge->sortByDesc('members')->values();
 
-                    
+
                     $ageData = $headsWithAgeSortedByAge->pluck('age')->toArray();
                     $nameData = $headsWithAgeSortedByAge->pluck('name')->toArray();
 
                     $membersPerFamilyData = $headsWithAgeSortedByMembers->pluck('members')->toArray();
                     $membersPerFamilyLabels = $headsWithAgeSortedByMembers->pluck('name')->toArray();
 
-                    
+
                     $states = $state->map(function ($bday)  {
                         return [
                             'cities' => City::where('status', '1')->where('state_id', $bday->id)->count(),
@@ -153,13 +157,13 @@ class AuthController extends Controller
                             'id' => $bday->id
                         ];
                     });
-                
-                
-                
+
+
+
                 $topStates2 = $states->sortByDesc('cities')->take(5)->values();
                 $totalCitiesOfStates = $topStates2->pluck('cities')->toArray();
                 $nameStates = $topStates2->pluck('name')->toArray();
-                
+
 
 
 
@@ -228,9 +232,9 @@ class AuthController extends Controller
 
             $logs = Logg::latest()->where('user_id',$admin1->id)->take(15)->get();
 
-            
 
-            
+
+
 
             return view('admin.adminProfile', compact('user', 'headcount', 'totalhead', 'deletedheadcount', 'inactiveheadcount', 'membercount', 'inactivemembercount', 'deletedmembercount', 'totalmembercount', 'statecount', 'inactivestatecount', 'deletedstatecount', 'totalstatecount', 'citycount', 'inactivecitycount', 'deletedcitycount', 'totalcitycount', 'admin1','logs','heads','heads2'));
         }
@@ -239,7 +243,7 @@ class AuthController extends Controller
     public function activateHead(Request $request){
         $head = Head::find($request->active_member);
         $head->update(['status' => '1']);
-        $head->members()->where('status', '0')->update(['status' => '1']); 
+        $head->members()->where('status', '0')->update(['status' => '1']);
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
@@ -253,7 +257,7 @@ class AuthController extends Controller
     public function deactivateHead(Request $request){
         $head = Head::find($request->deactive_member);
         $head->update(['status' => '0']);
-        $head->members()->where('status', '1')->update(['status' => '0']); 
+        $head->members()->where('status', '1')->update(['status' => '0']);
 
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
@@ -274,7 +278,7 @@ class AuthController extends Controller
         }
 
         $inactiveMembers = $head->members()->whereIn('status', ['0', '9'])->get();
-        
+
         return response()->json([
             'head' => $head,
             'members' => $inactiveMembers
@@ -320,5 +324,5 @@ class AuthController extends Controller
     }
 
 
-    
+
 }

@@ -36,7 +36,7 @@
         @include('partials.navbar2', ['shouldShowDiv' => true])
 
 
-        
+
 
         <div class="container py-4">
             @if(session('success'))
@@ -89,13 +89,15 @@
 
             <div class="row g-3 mb-4">
                 <div class="col-12 col-sm-6 col-lg-4">
-                    <div class="card bg-primary text-white border-0 h-100" style="border-radius: 20px;">
-                        <div class="card-body text-center py-3 py-md-4">
-                            <i class="bi bi-geo-alt display-5 display-md-4 mb-2 mb-md-3"></i>
-                            <h3 class="fw-bold mb-1">{{ $state_count }}</h3>
-                            <p class="mb-0 opacity-75 small">Total States</p>
+                    <a href="{{ route('state.index') }}" style="text-decoration : none">
+                        <div class="card bg-primary text-white border-0 h-100" style="border-radius: 20px;">
+                            <div class="card-body text-center py-3 py-md-4">
+                                <i class="bi bi-geo-alt display-5 display-md-4 mb-2 mb-md-3"></i>
+                                <h3 class="fw-bold mb-1">{{ $state_count }}</h3>
+                                <p class="mb-0 opacity-75 small">Total States</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-4">
                     <a href="{{ route('create.city') }}" class="text-decoration-none">
@@ -112,7 +114,7 @@
                     </a>
                 </div>
                 <div class="col-12 col-sm-12 col-lg-4">
-                    <a href="{{ route('city.index') }}" style="text-decoration : none">
+
                         <div class="card bg-success text-white border-0 h-100" style="border-radius: 20px;">
                             <div class="card-body text-center py-3 py-md-4">
                                 <i class="bi bi-buildings display-5 display-md-4 mb-2 mb-md-3"></i>
@@ -122,7 +124,7 @@
                                 <p class="mb-0 opacity-75 small">Total Cities</p>
                             </div>
                         </div>
-                    </a>
+
                 </div>
             </div>
 

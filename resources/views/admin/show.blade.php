@@ -36,7 +36,7 @@
                         <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
                             <h2 class="mb-0">
                                 <i class="bi bi-person-badge me-2"></i>
-                                {{ $heads->name }} Family Details
+                                {{ ucfirst($heads->name) }}'s Family Details
                             </h2>
                         </div>
 
@@ -45,7 +45,7 @@
                                 class="rounded-circle mb-4  border-4 border-light shadow"
                                 style="width: 150px; height: 150px; object-fit: cover;" alt="Family Head Photo">
 
-                            <h3 class="fw-bold mb-4 text-dark">{{ $heads->name }} {{ $heads->surname }}</h3>
+                            <h3 class="fw-bold mb-4 text-dark">{{ ucfirst($heads->name) }} {{ ucfirst($heads->surname) }}</h3>
 
                             <div class="row g-4">
                                 <div class="col-md-6">
@@ -196,18 +196,18 @@
                                                                 <i class="bi bi-heart text-muted me-2"></i>
                                                             @endif
                                                             <span>{{ $member->marital_status ? 'Married' : 'Single' }}
-                                                               
+
                                                         </p>
                                                         @if($member->marital_status == 1)
                                                         <p class="mb-2 d-flex align-items-center">
-                                                             
+
                                                                     <span>
                                                                         <span >
                                                                             <i class="bi bi-heart-fill text-danger   me-2"></i>( <i class="bi bi-calendar3"></i> )
                                                                         </span> &nbsp;
                                                                         {{  date('M d, Y', strtotime($member->mariage_date)) }}
                                                                     </span>
-                                                                
+
                                                         </p>
                                                         @endif
                                                         <p class="mb-0 d-flex align-items-center">

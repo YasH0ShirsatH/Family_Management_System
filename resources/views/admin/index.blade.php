@@ -48,12 +48,12 @@
             font-size: 1.25rem;
             color: #495057;
         }
-        
+
         .stat-item .stat-value {
             font-weight: 700;
             margin-right: 5px;
         }
-        
+
         .stat-item .stat-label {
             font-size: 1rem;
             color: #6c757d;
@@ -75,12 +75,12 @@
             border: 1px solid #ced4da;
             color: #007bff;
         }
-        
+
         .search-input-group .form-control:focus {
             border-color: #007bff;
             box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
         }
-        
+
         .search-input-group:focus-within .input-group-text {
             border-color: #007bff;
         }
@@ -93,23 +93,23 @@
             border-radius: 8px;
             border: 1px solid #ced4da;
         }
-        
+
         .form-select:focus {
             border-color: #007bff;
             box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
         }
-        
+
         .alert {
             border-radius: 12px;
             font-weight: 500;
             border: none;
         }
-        
+
         .alert-success {
             background-color: #d4edda;
             color: #155724;
         }
-        
+
         .alert-danger {
             background-color: #f8d7da;
             color: #721c24;
@@ -120,19 +120,19 @@
             transform: translateX(5px);
         }
     </style>
-    
+
 </head>
 
 <body class="bg-light">
-    <div id="mainContent"> 
-        
+    <div id="mainContent">
+
 
     @include('partials.navbar2',['shouldShowDiv' => true])
-    
+
         <div class="container py-4">
             @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show">
-                <strong>{{ session('name') }} {{ session('surname') }}</strong>: {{ session('success') }}
+                <strong>{{ ucfirst(session('name')) }} {{ ucfirst(session('surname')) }}</strong>: {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
             @endif
@@ -201,7 +201,7 @@
                             </div>
                         </div>
                     </div>
-                
+
                     <div class="mb-4">
                         <div class="row align-items-center">
                             <div class="col-12 col-md-auto mb-2 mb-md-0">
@@ -247,11 +247,11 @@
                 showLoading();
                 $.get(listUrl, params)
                     .done(function(response) {
-                       
+
                         $('#tableResults').html(response);
                     })
                     .fail(function() {
-                        
+
                         console.error('Failed to fetch list');
                     })
                     .always(function() {
@@ -259,7 +259,7 @@
                     });
             }
 
-            
+
             $(document).on('keyup', '#searchInput', function() {
                 const query = $(this).val();
                 clearTimeout(debounceTimeout);
@@ -270,7 +270,7 @@
                 }, 800);
             });
 
-            
+
             $(document).on('click', '#tableResults .pagination a', function(e) {
                 e.preventDefault();
                 const url = new URL($(this).attr('href'), window.location.origin);

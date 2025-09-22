@@ -1,3 +1,4 @@
+@if($admin1->superuser == '1')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +18,7 @@
             --dark-text: #1e293b;
             --border-color: #e2e8f0;
         }
-        
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: linear-gradient(135deg, var(--light-bg) 0%, #e2e8f0 100%);
@@ -27,7 +28,7 @@
             justify-content: center;
             padding: 1rem;
         }
-        
+
         .register-container {
             background: white;
             border-radius: 50px;
@@ -37,14 +38,14 @@
             max-width: 480px;
             border: 1px solid var(--border-color);
         }
-        
+
         .register-header {
             background: var(--success-color);
             color: white;
             padding: 2rem;
             text-align: center;
         }
-        
+
         .register-header h1 {
             font-size: 1.5rem;
             font-weight: 600;
@@ -54,15 +55,15 @@
             justify-content: center;
             gap: 0.5rem;
         }
-        
+
         .register-body {
             padding: 2rem;
         }
-        
+
         .form-floating {
             margin-bottom: 1rem;
         }
-        
+
         .form-control {
             border: 2px solid var(--border-color);
             border-radius: 50px;
@@ -70,12 +71,12 @@
             font-size: 0.95rem;
             transition: all 0.2s ease;
         }
-        
+
         .form-control:focus {
             border-color: var(--success-color);
             box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
         }
-        
+
         .btn-success {
             background: var(--success-color);
             border: none;
@@ -85,24 +86,24 @@
             font-size: 0.95rem;
             transition: all 0.2s ease;
         }
-        
+
         .btn-success:hover {
             background: #047857;
             transform: translateY(-1px);
         }
-        
+
         .alert {
             border: none;
             border-radius: 50px;
             font-size: 0.9rem;
         }
-        
+
         .text-danger {
             color: var(--danger-color) !important;
             font-size: 0.85rem;
             margin-top: 0.25rem;
         }
-        
+
         .row .col-md-6 {
             padding-left: 0.5rem;
             padding-right: 0.5rem;
@@ -111,12 +112,12 @@
 </head>
 
 <body>
-    
+
     <div class="register-container">
         <div class="register-header">
             <h1><i class="bi bi-person-plus"></i> Admin Registration</h1>
         </div>
-        
+
         <div class="register-body">
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -134,12 +135,12 @@
 
             <form action="{{ route('register-user') }}" method="post">
                 @csrf
-                
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <input type="text" name="first_name" value="{{ old('first_name') }}" id="first_name" 
-                                   class="form-control @error('first_name') is-invalid @enderror" 
+                            <input type="text" name="first_name" value="{{ old('first_name') }}" id="first_name"
+                                   class="form-control @error('first_name') is-invalid @enderror"
                                    placeholder="First Name" required>
                             <label for="first_name"><i class="bi bi-person me-2"></i>First Name</label>
                             @error('first_name')
@@ -149,8 +150,8 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <input type="text" name="last_name" value="{{ old('last_name') }}" id="last_name" 
-                                   class="form-control @error('last_name') is-invalid @enderror" 
+                            <input type="text" name="last_name" value="{{ old('last_name') }}" id="last_name"
+                                   class="form-control @error('last_name') is-invalid @enderror"
                                    placeholder="Last Name" required>
                             <label for="last_name"><i class="bi bi-person me-2"></i>Last Name</label>
                             @error('last_name')
@@ -161,8 +162,28 @@
                 </div>
 
                 <div class="form-floating mb-3">
-                    <input type="email" name="email" value="{{ old('email') }}" id="email" 
-                           class="form-control @error('email') is-invalid @enderror" 
+                    <input type="number" name="mobile" value="{{ old('mobile') }}" id="mobile"
+                           class="form-control @error('mobile') is-invalid @enderror"
+                           placeholder="name@example.com" required>
+                    <label for="mobile"><i class="bi bi-phone me-2"></i>Mobile Number</label>
+                    @error('mobile')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text" name="address" value="{{ old('address') }}" id="address"
+                           class="form-control @error('address') is-invalid @enderror"
+                           placeholder="name@example.com" required>
+                    <label for="address"><i class="bi bi-house me-2"></i>Address</label>
+                    @error('address')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="email" name="email" value="{{ old('email') }}" id="email"
+                           class="form-control @error('email') is-invalid @enderror"
                            placeholder="name@example.com" required>
                     <label for="email"><i class="bi bi-envelope me-2"></i>Email Address</label>
                     @error('email')
@@ -171,8 +192,8 @@
                 </div>
 
                 <div class="form-floating mb-3">
-                    <input type="password" name="password" id="password" 
-                           class="form-control @error('password') is-invalid @enderror" 
+                    <input type="password" name="password" id="password"
+                           class="form-control @error('password') is-invalid @enderror"
                            placeholder="Password" required>
                     <label for="password"><i class="bi bi-lock me-2"></i>Password</label>
                     @error('password')
@@ -188,7 +209,74 @@
             </form>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+@else
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Access Denied</title>
+
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+      <style>
+          body {
+              background-color: #f0f2f5; /* A softer background color */
+          }
+          .card {
+              border-radius: 1rem;
+              transition: all 0.3s ease;
+          }
+          .icon-circle {
+              width: 80px;
+              height: 80px;
+              font-size: 2.5rem;
+          }
+      </style>
+  </head>
+  <body>
+
+      <div class="container">
+          <div class="row justify-content-center align-items-center vh-100">
+              <div class="col-md-8 col-lg-6">
+                  <div class="card border-0 shadow-lg text-center p-4 p-md-5">
+
+                      <div class="mx-auto bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center icon-circle mb-4">
+                          <i class="bi bi-shield-lock-fill text-danger"></i>
+                      </div>
+
+                      <h1 class="card-title fw-bold text-danger mb-3">Access Denied</h1>
+
+                      <p class="text-muted mb-4">
+                          Sorry, your account does not have the necessary permissions to view this page. If you believe this is an error, please contact a system administrator.
+                      </p>
+
+                      <div class="alert alert-warning d-flex align-items-center text-start shadow-sm" role="alert">
+                          <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+                          <div>
+                              <h6 class="alert-heading fw-semibold">Super User Access Required</h6>
+                              This area is restricted. Repeated unauthorized attempts to access it may be logged.
+                          </div>
+                      </div>
+
+                      <div class="mt-4">
+                          <a href="/dashboard/admin-profile" class="btn btn-primary rounded-pill px-5 py-2 fw-semibold shadow-sm">
+                              <i class="bi bi-arrow-left-circle me-2"></i>Return to Profile
+                          </a>
+                      </div>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+  </html>
+@endif
