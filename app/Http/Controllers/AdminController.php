@@ -36,7 +36,8 @@ class AdminController extends Controller
         if ($request->filled('search')) {
             $q = $request->input('search');
             $query->where(function ($subQuery) use ($q) {
-                $subQuery->where('name', 'like', "%{$q}%")
+                $subQuery
+                    ->where('name', 'like', "%{$q}%")
                     ->orWhere('surname', 'like', "%{$q}%")
                     ->orWhere('mobile', 'like', "%{$q}%")
                     ->orWhere('city', 'like', "%{$q}%")
@@ -55,7 +56,8 @@ class AdminController extends Controller
             $query->orderBy('updated_at', 'asc');
         } elseif ($category1 == "created_at_asc") {
             $query->orderBy('created_at', 'asc');
-        } else {
+        }
+        else {
             $query->orderBy('name', 'asc');
         }
 
@@ -67,6 +69,66 @@ class AdminController extends Controller
         }
 
         return view("admin.index", compact("heads", 'totalMembers', 'admin1', 'category1'));
+    }
+
+    public function allMembers(Request $request)
+    {
+        $query = Member::with('head')->whereIn('status', ['0','1']);
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $q = $request->input('search');
+            $query->where(function ($subQuery) use ($q) {
+                $subQuery->where('members.name', 'like', "%{$q}%")
+                    ->orWhere('members.education', 'like', "%{$q}%")
+                    ->orWhere('members.marital_status', 'like', "%{$q}%")
+                    ->orWhereHas('head', function($headQuery) use ($q) {
+                        $headQuery->where('name', 'like', "%{$q}%")
+                            ->orWhere('surname', 'like', "%{$q}%")
+                            ->orWhere('city', 'like', "%{$q}%")
+                            ->orWhere('state', 'like', "%{$q}%");
+                    });
+            });
+        }
+
+        // Sorting functionality
+        $category1 = $request->category ?? 'name';
+        if ($category1 == "created_at") {
+            $query->orderBy('members.created_at', 'desc');
+        } elseif ($category1 == "updated_at") {
+            $query->orderBy('members.updated_at', 'desc');
+        } elseif ($category1 == "updated_at_asc") {
+            $query->orderBy('members.updated_at', 'asc');
+        } elseif ($category1 == "created_at_asc") {
+            $query->orderBy('members.created_at', 'asc');
+        } elseif ($category1 == "birthdate") {
+            $query->orderBy('members.birthdate', 'desc');
+        } elseif ($category1 == "birthdate_asc") {
+            $query->orderBy('members.birthdate', 'asc');
+        } elseif ($category1 == "inactive") {
+            $query->where('status','0')->orderBy('members.status', 'asc');
+        } else {
+            $query->orderBy('members.name', 'asc');
+        }
+
+        $members = $query->paginate(10)->withQueryString();
+        $totalMembers = Member::where('status', '1')->count();
+
+        // Return partial view for AJAX requests
+        if ($request->ajax()) {
+            return view('admin.partials.member-search', compact('members', 'totalMembers', 'admin1', 'category1'));
+        }
+
+        return view('admin.members', compact('members', 'admin1', 'totalMembers', 'category1'));
+    }
+
+public function viewMemberDetails($id)
+    {
+        $members = Member::with('head')->find($id);
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+
+        return view("admin.member_profile", ["members" => $members, 'admin1' => $admin1]);
     }
 
     public function print_all_pdf()

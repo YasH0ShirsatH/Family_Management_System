@@ -126,7 +126,7 @@ class AdminMemberController extends Controller
     public function edit(string $id)
     {
 
-        $member = Member::where('status', '1')->find($id);
+        $member = Member::whereIn('status', ['1','0'])->find($id);
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         return view('member.edit', compact('member', 'admin1'));
     }
@@ -164,9 +164,9 @@ class AdminMemberController extends Controller
             return back()->with('error', 'member not found.');
         }
 
-        
 
-        
+
+
             $member->name = $request->name;
             $member->birthdate = $request->birthdate;
             $member->marital_status = $request->marital_status;
@@ -190,10 +190,10 @@ class AdminMemberController extends Controller
             }
 
             $member->save();
-            
-    
 
-        
+
+
+
 
         return redirect()->route('admin-member.show', $parentId)->with('success', 'Member updated successfully.')->with('name', $member->name)->with('surname', $member->surname);
 
@@ -226,10 +226,7 @@ class AdminMemberController extends Controller
 
 
         log::channel('adminlog')->debug('Admin Deleted Member (' . $member->name . ')  Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now()->setTimezone('Asia/Kolkata'));
-
-
-
-        return redirect()->route('admin-member.show', $parentId)->with('success', 'Member deleted successfully.')->with('name', $member->name)->with('surname', $member->surname);
+         return redirect()->route('admin-member.show', $parentId)->with('success', 'Member updated successfully.')->with('name', $member->name)->with('surname', $member->surname);
 
     }
 

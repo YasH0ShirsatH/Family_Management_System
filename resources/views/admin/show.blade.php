@@ -1,3 +1,51 @@
+@if($heads->status == '0')
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Family Inactive - Family Management System</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('css/heading.css') }}">
+        <style>
+            .active-class-2 { background-color: #198754; color: white; transform: translateX(5px); }
+            .status-icon { font-size: 4rem; color: #ffc107; margin-bottom: 1rem; animation: pulse 2s infinite; }
+            @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        </style>
+    </head>
+    <body class="bg-light">
+        <div id="mainContent">
+            @include('partials.navbar2', ['shouldShowDiv' => true])
+            <div class="container py-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="card shadow rounded-4">
+                            <div class="card-header bg-warning text-dark text-center py-3 rounded-top-4">
+                                <h2 class="mb-1 fw-bold"><i class="bi bi-x-circle me-2"></i>Family Inactive</h2>
+                                <p class="mb-0 opacity-75">This family is currently inactive</p>
+                            </div>
+                            <div class="card-body p-5 text-center">
+                                <div class="status-icon"><i class="bi bi-x-circle"></i></div>
+                                <h4 class="fw-bold text-dark mb-3">Access Restricted</h4>
+                                <p class="text-muted mb-4 lead">This family's profile is currently inactive and cannot be viewed.</p>
+                                <div class="alert alert-warning border-0 mb-4">
+                                    <i class="bi bi-info-circle me-2"></i>Contact administrator to activate this family.
+                                </div>
+                                <a href="{{ route('admin.index') }}" class="btn btn-primary rounded-pill px-4">
+                                    <i class="bi bi-arrow-left me-2"></i>Back to Families
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+    </html>
+
+@elseif($heads->status == '1')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -257,3 +305,55 @@
 </body>
 
 </html>
+
+@else
+
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Family Deleted - Family Management System</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('css/heading.css') }}">
+        <style>
+            .active-class-2 { background-color: #198754; color: white; transform: translateX(5px); }
+            .status-icon { font-size: 4rem; color: #dc3545; margin-bottom: 1rem; animation: pulse 2s infinite; }
+            @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        </style>
+    </head>
+    <body class="bg-light">
+        <div id="mainContent">
+            @include('partials.navbar2', ['shouldShowDiv' => true])
+            <div class="container py-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <div class="card shadow rounded-4">
+                            <div class="card-header bg-danger text-white text-center py-3 rounded-top-4">
+                                <h2 class="mb-1 fw-bold"><i class="bi bi-trash me-2"></i>Family Deleted or Never Existed</h2>
+                                <p class="mb-0 opacity-75">This family has been deleted or Never Existed</p>
+                            </div>
+                            <div class="card-body p-5 text-center">
+                                <div class="status-icon"><i class="bi bi-x-circle"></i></div>
+                                <h4 class="fw-bold text-dark mb-3">No Record or No Longer Available</h4>
+                                <p class="text-muted mb-4 lead">This family's profile has been permanently deleted or doesn't exist or is no longer accessible.</p>
+                                <div class="alert alert-danger border-0 mb-4">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>This family data has been removed from the system or it never existed !!.
+                                </div>
+                                <a href="{{ route('admin.index') }}" class="btn btn-primary rounded-pill px-4">
+                                    <i class="bi bi-arrow-left me-2"></i>Back to Families
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+    </html>
+
+
+@endif

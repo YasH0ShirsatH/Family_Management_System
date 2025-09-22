@@ -131,18 +131,43 @@
                         <div class="card-header bg-success text-white">
                             <h6 class="mb-0"><i class="bi bi-journal-text me-2"></i>Admin Logs</h6>
                         </div>
+                     @if($admin1->superuser == '1')
+                        <div class="card-body p-3 border-bottom">
+                            <select id="emailFilter" class="form-select form-select-sm">
+                                <option value="">All Emails</option>
+                                    @foreach($logs->unique('user.email') as $log)
+                                        <option value="{{ $log->user->email }}">{{ $log->user->email }}</option>
+                                    @endforeach
+                            </select>
+                        </div>
+                    @endif
                         <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
                             <div class="list-group list-group-flush">
+                                @if($admin1->superuser == '1')
                                 @forelse($logs as $log)
-                                <div class="list-group-item border-0 py-2">
+                                <div class="list-group-item border-0 py-2 log-item" data-email="{{ $log->user->email }}">
                                     <div class="small text-muted"><span class="text-success">(
                                             #LogId-{{ $log->id }}
-                                            )</span> &nbsp;{{ Str::before($admin1->email, '@') }}</div>
+                                            )</span> &nbsp;{{ Str::before($log->user->email, '@') }}</div>
                                     <div class="fw-medium">{{ $log->logs }}</div>
                                 </div>
+
                                 @empty
                                 <div class="list-group-item text-center text-muted">No logs found</div>
                                 @endforelse
+                                @else
+                                @forelse($logs as $log)
+                                      <div class="list-group-item border-0 py-2 log-item" data-email="{{ $admin1->email }}">
+                                         <div class="small text-muted"><span class="text-success">(
+                                               #LogId-{{ $log->id }}
+                                                                            )</span> &nbsp;{{ Str::before($admin1->email, '@') }}</div>
+                                                                    <div class="fw-medium">{{ $log->logs }}</div>
+                                                                </div>
+
+                                                                @empty
+                                                                <div class="list-group-item text-center text-muted">No logs found</div>
+                                                      @endforelse
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -343,7 +368,7 @@
                     ['label' => 'Inactive', 'count' => $inactivemembercount, 'color' => '#ffc107'],
                     ['label' => 'Deleted', 'count' => $deletedmembercount, 'color' => '#dc3545'],
                     ],
-                    'link' => '/admin',
+                    'link' => '/allmembers',
                     ],
                     [
                     'title' => 'Cities',
@@ -654,8 +679,9 @@
                             membersHtml +=
                                 '<input class="form-check-input member-checkbox" type="checkbox" value="' +
                                 member.id + '" id="member_' + member.id + '">';
-                            membersHtml += '<label class="form-check-label" for="member_' +
+                                membersHtml += '<label class="form-check-label" for="member_' +
                                 member.id + '">';
+
                             membersHtml += '<strong>' + member.name + '</strong>';
                             if (member.birthdate) {
                                 var age = new Date().getFullYear() - new Date(member
@@ -667,6 +693,18 @@
                                 membersHtml += '<br><small class="text-muted">' + member
                                     .education + '</small>';
                             }
+                           let statusText = '';
+
+                           if (member.status == '0') {
+                                text = 'text-warning '
+                               statusText = 'Inactive';
+                           } else if (member.status == '9') {
+                                text = 'text-danger'
+                               statusText = 'Deleted';
+                           }
+
+                           membersHtml += '<br><small class=' + text + '>( ' + statusText + ' )</small>';
+
                             membersHtml += '</label>';
                             membersHtml += '</div>';
                             membersHtml += '</div>';
@@ -765,6 +803,20 @@
                     $submitBtn.prop('disabled', false).html(originalText);
                 }
             });
+        });
+    });
+
+    // Email filter functionality
+    document.getElementById('emailFilter').addEventListener('change', function() {
+        const selectedEmail = this.value;
+        const logItems = document.querySelectorAll('.log-item');
+
+        logItems.forEach(item => {
+            if (selectedEmail === '' || item.dataset.email === selectedEmail) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
         });
     });
     </script>

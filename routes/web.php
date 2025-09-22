@@ -53,6 +53,8 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'resetPasswordP
 
 /// ADMIN SECTION
 Route::resource('/admin', AdminController::class)->middleware('auth.check');
+Route::get('/allmembers', [AdminController::class, 'allMembers'])->name('admin.members')->middleware('auth.check');
+Route::get('/allmembers/{id}', [AdminController::class, 'viewMemberDetails'])->name('admin.viewMemberDetails')->middleware('auth.check');
 Route::get('/download/{id}', [AdminController::class, 'print_pdf'])->name('download');
 Route::get('pdf/heads/download/all', [AdminController::class, 'print_all_pdf'])->name('download_all');
 Route::get('excel/heads/download/all', [AdminController::class, 'export'])->name('download_excel_all');

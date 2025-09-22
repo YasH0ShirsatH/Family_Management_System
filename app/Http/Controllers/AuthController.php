@@ -229,8 +229,13 @@ class AuthController extends Controller
             $totalcitycount = City::count();
 
             $admin1 = User::where('id', '=', session::get('loginId'))->first();
+             if($admin1->superuser == '1'){
+                $logs = Logg::latest()->get();
+                }
+             else{
+                $logs = Logg::latest()->where('user_id',$admin1->id)->take(15)->get();
+                }
 
-            $logs = Logg::latest()->where('user_id',$admin1->id)->take(15)->get();
 
 
 

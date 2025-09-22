@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Family Management - Admin Dashboard</title>
+    <title>Family Management - Members Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
@@ -114,11 +114,11 @@
             background-color: #f8d7da;
             color: #721c24;
         }
-        .active-class-2{
-            background-color: #198754;
-            color : white;
-            transform: translateX(5px);
-        }
+         .active-class-31{
+                    background-color: #198754;
+                    color : white;
+                    transform: translateX(5px);
+                }
     </style>
 
 </head>
@@ -132,13 +132,13 @@
         <div class="container py-4">
             @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show">
-                <strong>{{ ucfirst(session('name')) }} {{ ucfirst(session('surname')) }}</strong>: {{ session('success') }}
+                <strong>{{ ucfirst(session('name')) }}</strong>: {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
             @endif
             @if(session('error'))
             <div class="alert alert-danger alert-dismissible fade show">
-                <strong>{{ session('name') }} {{ session('surname') }}</strong>: {{ session('error') }}
+                <strong>{{ session('name') }}</strong>: {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
             @endif
@@ -147,32 +147,26 @@
                 <div class="card-header-main d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
                     <div class="flex-grow-1">
                         <h4 class="mb-0 fw-bold">
-                            <i class="bi bi-speedometer2 me-2"></i>Manage Families
+                            <i class="bi bi-people-fill me-2"></i>Manage Members
                         </h4>
                     </div>
                     <div class="header-buttons d-flex flex-column flex-sm-row gap-2">
-                        <a href="{{ route('download_all') }}" class="btn btn-outline-light" data-toggle="tooltip" data-placement="bottom" title="Export Data in PDF">PDF</a>
-                        <a href="{{ route('download_excel_all') }}" class="btn btn-outline-light" data-toggle="tooltip" data-placement="bottom" title="Export Data in excel">Excel</a>
+                        <a href="{{ route('admin.index') }}" class="btn btn-outline-light">
+                            <i class="bi bi-house-door me-1"></i>Back to Families
+                        </a>
                     </div>
                 </div>
 
                 <div class="card-body p-4">
                     <div class="card stats-card mb-4">
                         <div class="row g-3 text-center">
-                            <div class="col-12 col-sm-6">
-                                <div class="stat-item">
-                                    <i class="me-2 bi bi-house-door"></i>
-                                    <span class="stat-value">{{ $heads->total() }}</span>
-                                    <span class="stat-label">Total Family Heads</span>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-6">
+
                                 <div class="stat-item">
                                     <i class="me-2 bi bi-people-fill"></i>
                                     <span class="stat-value">{{ $totalMembers }}</span>
                                     <span class="stat-label">Total Members</span>
                                 </div>
-                            </div>
+
                         </div>
                     </div>
 
@@ -186,7 +180,7 @@
                                         </span>
                                         <input type="text" id="searchInput"
                                             class="form-control"
-                                            placeholder="Search by name, surname, mobile, city, state..."
+                                            placeholder="Search by member name, education, marital status..."
                                             value="{{ request('search') }}">
 
                                         <span id="searchLoading"
@@ -214,14 +208,16 @@
                                     <option value="updated_at_asc">Updated At (Oldest)</option>
                                     <option value="created_at">Created At (Latest)</option>
                                     <option value="created_at_asc">Created At (Oldest)</option>
-
+                                    <option value="birthdate">Age (Youngest)</option>
+                                    <option value="birthdate_asc">Age (Oldest)</option>
+                                    <option value="inactive">Inactive</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
                     <div id="tableResults">
-                        @include('admin.partials.index-search', ['heads' => $heads])
+                        @include('admin.partials.member-search', ['members' => $members])
                     </div>
                 </div>
             </div>
@@ -231,7 +227,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <script>
         $(function() {
-            const listUrl = "{{ url('/admin') }}";
+            const listUrl = "{{ route('admin.members') }}";
             let debounceTimeout = null;
 
             function showLoading() {
@@ -248,18 +244,15 @@
                 showLoading();
                 $.get(listUrl, params)
                     .done(function(response) {
-
                         $('#tableResults').html(response);
                     })
                     .fail(function() {
-
                         console.error('Failed to fetch list');
                     })
                     .always(function() {
                         hideLoading();
                     });
             }
-
 
             $(document).on('keyup', '#searchInput', function() {
                 const query = $(this).val();
@@ -271,7 +264,6 @@
                 }, 800);
             });
 
-
             $(document).on('click', '#tableResults .pagination a', function(e) {
                 e.preventDefault();
                 const url = new URL($(this).attr('href'), window.location.origin);
@@ -281,7 +273,6 @@
                 window.history.pushState({}, '', $(this).attr('href'));
             });
 
-            // restore on back/forward
             window.addEventListener('popstate', function() {
                 const params = Object.fromEntries(new URLSearchParams(location.search));
                 fetchList(params);
@@ -295,7 +286,7 @@
                 var selectedValue = $(this).val();
                 if (selectedValue) {
                     $.ajax({
-                        url: "{{ url('/admin') }}",
+                        url: "{{ route('admin.members') }}",
                         type: 'GET',
                         data: {
                             category: selectedValue
@@ -303,7 +294,6 @@
                         success: function(response) {
                             $('#tableResults').html(response);
                             $('#category').val(selectedValue);
-                            console.log(selectedValue)
                         },
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
@@ -313,6 +303,8 @@
             });
         });
         </script>
+
+
 </body>
 
 </html>

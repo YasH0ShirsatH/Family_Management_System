@@ -283,6 +283,9 @@
                         <a href="/admin" class="btn btn-outline-success rounded-pill text-start active-class-2">
                             <i class="bi bi-people me-2"></i>Manage Families
                         </a>
+                        <a href="{{ route('admin.members') }}" class="btn btn-outline-success rounded-pill text-start active-class-31">
+                            <i class="bi bi-person-lines-fill me-2"></i>Manage Members
+                        </a>
                         <a href="{{ route('state.index') }}" class="btn btn-outline-success rounded-pill text-start active-class-3">
                             <i class="bi bi-geo-alt me-2"></i>Manage States
                         </a>
@@ -361,9 +364,9 @@
             const mainContent = $('#mainContent');
             const mainNavbar = $('#mainNavbar');
             const overlay = $('#sidebarOverlay');
-            const breakpoint = 992; 
+            const breakpoint = 992;
 
-            
+
             function applySidebarState() {
                 if (sidebar.hasClass('active')) {
                     if ($(window).width() < breakpoint) {

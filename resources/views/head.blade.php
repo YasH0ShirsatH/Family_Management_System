@@ -165,7 +165,7 @@ $session_number = $number;
                                 </div>
                                 <div class="col-md-6 mb-3 form-group">
                                     <label class="form-label fw-semibold">Mobile Number</label>
-                                    <input type="tel" name="mobile" class="form-control rounded-pill"
+                                    <input type="text"  maxlength="10"  name="mobile" class="form-control rounded-pill"
                                         placeholder="Enter mobile number" value="{{ old('mobile') }}">
                                     <div class="validation-error"></div>
                                     @error('mobile')<div class="text-danger">{{ $message }}</div>@enderror
@@ -208,7 +208,7 @@ $session_number = $number;
                                 <div class="col-md-4 mb-3 form-group">
                                     <label class="form-label fw-semibold">Pincode</label>
                                     <div class="validation-error"></div>
-                                    <input type="number" name="pincode" class="form-control rounded-pill"
+                                    <input type="text"  maxlength="6"  name="pincode" class="form-control rounded-pill"
                                         placeholder="Enter pincode" value="{{ old('pincode') }}">
 
                                     @error('pincode')<div class="text-danger">{{ $message }}</div>@enderror
@@ -407,7 +407,8 @@ $session_number = $number;
                 },
                 mobile: {
                     required: true,
-                    rangelength: [10, 10]
+                    rangelength: [10, 10],
+                    number : true
                 },
                 address: {
                     required: true
@@ -420,7 +421,8 @@ $session_number = $number;
                 },
                 pincode: {
                     required: true,
-                    rangelength: [6, 6]
+                    rangelength: [6, 6],
+                    number : true
                 },
                 marital_status: {
                     required: true
@@ -454,7 +456,8 @@ $session_number = $number;
                 },
                 mobile: {
                     required: "Please enter mobile",
-                    rangelength: "Mobile must be 10 digits"
+                    rangelength: "Mobile must be 10 digits",
+                    number : "Please enter valid 10 digit mobile (number)",
                 },
                 address: {
                     required: "Please enter address"
@@ -467,7 +470,9 @@ $session_number = $number;
                 },
                 pincode: {
                     required: "Please enter Pincode",
-                    rangelength: "Pincode must be 6 digits"
+                    rangelength: "Pincode must be 6 digits",
+                    number : "Please enter valid 6 number pincode",
+
                 },
                 marital_status: {
                     required: "Please select marital status"
