@@ -30,6 +30,10 @@ Route::post('/head', [HeadController::class, 'post_data']);
 Route::get('/headview', [HeadController::class, 'headview'])->name('head');
 Route::get('/get-cities/{stateId}', [HeadController::class, 'getCities']);
 Route::get('/', [HeadController::class, 'dashboard']);
+
+/// Combined Family Registration
+Route::get('/family-registration', [HeadController::class, 'familyRegistration'])->name('family.registration');
+Route::post('/family-registration', [HeadController::class, 'storeWithFamily'])->name('family.store');
 // Route::get('/admin/addhead', [HeadController::class, 'addHead'])->name('admin.addhead')->middleware('auth.check');
 // Route::post('/admin/posthead', [HeadController::class, 'posthead'])->name('admin.posthead')->middleware('auth.check');
 

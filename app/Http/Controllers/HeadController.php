@@ -180,12 +180,98 @@ class HeadController extends Controller
         return redirect('/')->with('success', 'You\'ve successfully added the head and members of the heads family..');
     }
 
-//     public function addHead(){
-//
-//     }
-//
-//     public function posthead(Request $request){
-//
-//     }
+    public function familyRegistration()
+    {
+        $states = State::where('status', '1')->where('country_id', 101)->orderBy('name', 'asc')->get();
+        return view('family-registration', compact('states'));
+    }
+
+    public function storeWithFamily(Request $request)
+    {
+        $request->validate([
+            'head_name' => 'required|min:3',
+            'head_surname' => 'required|min:3',
+            'head_birthdate' => ['required', 'date', 'before:' . Carbon::now()->subYears(21)->format('Y-m-d')],
+            'head_mobile' => 'required|digits:10|unique:heads,mobile',
+            'head_address' => 'required',
+            'head_state' => 'required',
+            'head_city' => 'required',
+            'head_pincode' => 'required|digits:6',
+            'head_marital_status' => 'required',
+            'head_mariage_date' => 'required_if:head_marital_status,1',
+            'head_hobbies' => 'required|array|min:1',
+            'head_hobbies.*' => ['required', 'distinct', 'min:1', 'string'],
+            'head_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'members.*.name' => 'required|string',
+            'members.*.birthdate' => 'required|date',
+            'members.*.marital_status' => 'required',
+            'members.*.mariage_date' => 'required_if:members.*.marital_status,1',
+            'members.*.photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'head_birthdate.before' => 'Head must be at least 21 years old.',
+            'head_hobbies.required' => 'Please add at least one hobby.',
+            'head_hobbies.*.required' => 'Each hobby field is required.',
+            'head_hobbies.*.distinct' => 'Duplicate hobbies are not allowed.',
+        ]);
+
+        // Create Head
+        $head = new Head();
+        $head->name = $request->head_name;
+        $head->surname = $request->head_surname;
+        $head->birthdate = $request->head_birthdate;
+        $head->mobile = $request->head_mobile;
+        $head->address = $request->head_address;
+        $head->state = $request->head_state;
+        $head->city = $request->head_city;
+        $head->pincode = $request->head_pincode;
+        $head->marital_status = $request->head_marital_status;
+        
+        if ($request->head_marital_status == 1) {
+            $head->mariage_date = $request->head_mariage_date;
+        }
+        
+        // Handle head photo
+        if ($request->hasFile('head_photo')) {
+            $file = $request->file('head_photo');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move('uploads/images/', $filename);
+            $head->photo_path = $filename;
+        }
+        
+        $head->save();
+        
+        // Create hobbies
+        foreach ($request->head_hobbies as $hobby) {
+            $head->hobbies()->create([
+                'head_id' => $head->id,
+                'hobby_name' => $hobby,
+            ]);
+        }
+        
+        // Create members if any
+        if ($request->has('members')) {
+            foreach ($request->members as $memberData) {
+                $filename = null;
+                if (isset($memberData['photo']) && $memberData['photo']) {
+                    $file = $memberData['photo'];
+                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $file->move('uploads/images/', $filename);
+                }
+                
+                $head->members()->create([
+                    'name' => $memberData['name'],
+                    'birthdate' => $memberData['birthdate'],
+                    'marital_status' => $memberData['marital_status'],
+                    'mariage_date' => $memberData['marital_status'] == 1 ? $memberData['mariage_date'] : null,
+                    'education' => $memberData['education'] ?? null,
+                    'photo_path' => $filename,
+                ]);
+            }
+        }
+        
+        Log::debug('Complete family registered: Head (' . $request->head_name . ' ' . $request->head_surname . ') with ' . count($request->members ?? []) . ' members on: ' . Carbon::now()->setTimezone('Asia/Kolkata'));
+        
+        return redirect()->route('family.registration')->with('success', 'Complete family registered successfully! Head: ' . $request->head_name . ' ' . $request->head_surname);
+    }
 
 }

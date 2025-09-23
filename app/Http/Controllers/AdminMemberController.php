@@ -213,9 +213,14 @@ class AdminMemberController extends Controller
     }
     public function delete(string $id)
     {
-
         $member = Member::find($id);
         $parentId = $member->head->id;
+        
+        // Delete member image
+        if ($member->photo_path && file_exists(public_path('uploads/images/' . $member->photo_path))) {
+            unlink(public_path('uploads/images/' . $member->photo_path));
+        }
+        
         $member->update(['status' => '9']);
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
@@ -224,10 +229,8 @@ class AdminMemberController extends Controller
         $log->logs = 'Admin Deleted Member (' . $member->name . ')  Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " on " .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
 
-
         log::channel('adminlog')->debug('Admin Deleted Member (' . $member->name . ')  Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now()->setTimezone('Asia/Kolkata'));
-         return redirect()->route('admin-member.show', $parentId)->with('success', 'Member updated successfully.')->with('name', $member->name)->with('surname', $member->surname);
-
+        return redirect()->route('admin-member.show', $parentId)->with('success', 'Member updated successfully.')->with('name', $member->name)->with('surname', $member->surname);
     }
 
     public function export()

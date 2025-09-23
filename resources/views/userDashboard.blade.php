@@ -77,115 +77,93 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>User Dashboard - Family Management System</title>
+        <title>Family Management System</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+        <style>
+            body {
+                background: #f4f6fb;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            .hero-section {
+                background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
+                color: white;
+                padding: 80px 0;
+                border-radius: 18px;
+                margin-bottom: 40px;
+            }
+            .card {
+                border: none;
+                border-radius: 18px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                transition: transform 0.15s;
+            }
+            .card:hover {
+                transform: translateY(-2px);
+            }
+            .btn {
+                border-radius: 25px;
+                font-weight: 500;
+                padding: 12px 30px;
+            }
+        </style>
     </head>
 
-    <body class="bg-light">
-
+    <body>
         @include('partials.navbar2', ['shouldShowDiv' => false])
 
         <div class="container py-4">
-
-             @if (session('error'))
-            <div class="alert alert-danger alert-dismissible mt-2 mb-4 fade show rounded-pill">
+            @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show rounded-pill">
                 {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
-        @endif
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible mt-2 mb-4 fade show rounded-pill">
+            @endif
+            @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show rounded-pill">
                 {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
-        @endif
-            <div class="text-center mb-5">
-                <h1 class="display-6 fw-bold text-primary mb-3">
-                    <i class="bi bi-house-heart me-3"></i>Welcome to Family Management System
-                </h1>
-                <p class="lead text-muted">Organize, connect, and preserve your family's legacy with our comprehensive
-                    management platform. Build meaningful relationships and create lasting memories for generations to come.
-                </p>
+            @endif
+
+            <div class="hero-section text-center">
+                <div class="container">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="bi bi-house-heart me-3"></i>Family Management System
+                    </h1>
+                    <p class="lead mb-0">Professional family data management and organization platform</p>
+                </div>
             </div>
 
-            <!-- Statistics Overview -->
-            <div class="card shadow mb-5 rounded-4">
-                <div class="card-header bg-primary text-white py-3 rounded-top-4">
-                    <h4 class="mb-0 fw-bold">
-                        <i class="bi bi-bar-chart me-2"></i>System Statistics
-                    </h4>
-                </div>
-                <div class="card-body p-4">
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="card bg-primary text-white border-0 h-100 rounded-4">
-                                <div class="card-body text-center py-4">
-                                    <i class="bi bi-house-door fs-1 mb-3"></i>
-                                    <h3 class="mb-2">{{$headcount}}</h3>
-                                    <h6 class="mb-0">Registered Families</h6>
-                                    <small class="opacity-75">Active family units in system</small>
-                                </div>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-5">
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
+                                style="width: 80px; height: 80px;">
+                                <i class="bi bi-people text-primary" style="font-size: 2rem;"></i>
                             </div>
+                            <h4 class="fw-bold mb-3 text-primary">Family Registration</h4>
+                            <p class="text-muted mb-4">Register complete family information including head and members in a single streamlined process.</p>
+                            <a href="/family-registration" class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-2"></i>Register Family
+                            </a>
                         </div>
-                        <div class="col-md-6">
-                            <div class="card bg-success text-white border-0 h-100 rounded-4">
-                                <div class="card-body text-center py-4">
-                                    <i class="bi bi-people-fill fs-1 mb-3"></i>
-                                    <h3 class="mb-2">{{$membercount}}</h3>
-                                    <h6 class="mb-0">Family Members</h6>
-                                    <small class="opacity-75">Total individuals registered</small>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
-            </div>
 
-            <!-- Action Cards -->
-            <div class="card shadow rounded-4">
-                <div class="card-header bg-white border-0 py-4">
-                    <h4 class="mb-0 fw-bold text-center">
-                        <i class="bi bi-rocket-takeoff me-2 text-primary"></i>Get Started with Your Family Journey
-                    </h4>
-                </div>
-                <div class="card-body p-4">
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="card border-primary h-100 rounded-4">
-                                <div class="card-body text-center p-4">
-                                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
-                                        style="width: 90px; height: 90px;">
-                                        <i class="bi bi-person-plus text-primary" style="font-size: 2.5rem;"></i>
-                                    </div>
-                                    <h5 class="card-title fw-bold mb-3 text-primary">Register Family Head</h5>
-                                    <p class="card-text text-muted mb-4">Begin your family tree by registering the primary
-                                        family head with complete personal information, contact details, and family
-                                        background to establish the foundation of your family network.</p>
-                                    <a href="headview" class="btn btn-outline-primary btn-lg rounded-pill">
-                                        <i class="bi bi-plus-circle me-2"></i>Start Registration
-                                    </a>
-                                </div>
+                <div class="col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-5">
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
+                                style="width: 80px; height: 80px;">
+                                <i class="bi bi-shield-check text-primary" style="font-size: 2rem;"></i>
                             </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="card border-success h-100 rounded-4">
-                                <div class="card-body text-center p-4">
-                                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-4"
-                                        style="width: 90px; height: 90px;">
-                                        <i class="bi bi-gear text-success" style="font-size: 2.5rem;"></i>
-                                    </div>
-                                    <h5 class="card-title fw-bold mb-3 text-success">Administrative Access</h5>
-                                    <p class="card-text text-muted mb-4">Access the administrative dashboard to manage all
-                                        registered families, view comprehensive reports, edit family information, and
-                                        maintain the overall system with advanced management tools.</p>
-                                    <a href="/login" class="btn btn-outline-success btn-lg rounded-pill">
-                                        <i class="bi bi-shield-lock me-2"></i>Admin Login
-                                    </a>
-                                </div>
-                            </div>
+                            <h4 class="fw-bold mb-3 text-primary">Administration</h4>
+                            <p class="text-muted mb-4">Access administrative dashboard for comprehensive family data management and system control.</p>
+                            <a href="/login" class="btn btn-outline-primary">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Admin Access
+                            </a>
                         </div>
                     </div>
                 </div>

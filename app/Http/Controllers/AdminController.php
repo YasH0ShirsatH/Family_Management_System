@@ -333,6 +333,19 @@ public function viewMemberDetails($id)
     {
         $head = Head::find($id);
         if ($head) {
+            // Delete head image
+            if ($head->photo_path && file_exists(public_path('uploads/images/' . $head->photo_path))) {
+                unlink(public_path('uploads/images/' . $head->photo_path));
+            }
+            
+            // Delete member images
+            $members = $head->members()->where('status','1')->get();
+            foreach ($members as $member) {
+                if ($member->photo_path && file_exists(public_path('uploads/images/' . $member->photo_path))) {
+                    unlink(public_path('uploads/images/' . $member->photo_path));
+                }
+            }
+            
             $head->update(['status' => '9']);
             $head->members()->where('status','1')->update(['status' => '0']);
 
