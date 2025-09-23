@@ -100,7 +100,9 @@
                                  class="profile-img-small me-3" alt="Member Photo">
                             <div>
                                 <h6 class="mb-1 fw-bold">{{ ucfirst($member->name) }}</h6>
-                                <small class="text-muted">Status :
+                                <small class="text-muted" style="font-size : 13px"><i class="bi bi-at"></i>Created at : <span class='text-success' >{{$member->created_at->format(' F jS, Y')}}</span> </small>
+                                <br> <small  class="text-muted" style="font-size : 13px"> <i class="bi bi-at"></i>Time : <span>{{$member->created_at->format('\a\t h:i A')}}</span></small>
+                               <br> <small class="text-muted">Status :
                                         @if($member->status == '1')
                                             <span class="text-success">Active</span>
                                         @else

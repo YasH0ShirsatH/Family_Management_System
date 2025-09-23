@@ -30,6 +30,8 @@ Route::post('/head', [HeadController::class, 'post_data']);
 Route::get('/headview', [HeadController::class, 'headview'])->name('head');
 Route::get('/get-cities/{stateId}', [HeadController::class, 'getCities']);
 Route::get('/', [HeadController::class, 'dashboard']);
+// Route::get('/admin/addhead', [HeadController::class, 'addHead'])->name('admin.addhead')->middleware('auth.check');
+// Route::post('/admin/posthead', [HeadController::class, 'posthead'])->name('admin.posthead')->middleware('auth.check');
 
 
 
@@ -53,6 +55,8 @@ Route::post('/reset-password', [ForgotPasswordController::class, 'resetPasswordP
 
 /// ADMIN SECTION
 Route::resource('/admin', AdminController::class)->middleware('auth.check');
+Route::get('/fulledit/{id}', [AdminController::class, 'fullEdit'])->name('admin.fulledit')->middleware('auth.check');
+Route::put('/fullupdate/{id}', [AdminController::class, 'fullUpdate'])->name('admin.fullupdate')->middleware('auth.check');
 Route::get('/allmembers', [AdminController::class, 'allMembers'])->name('admin.members')->middleware('auth.check');
 Route::get('/allmembers/{id}', [AdminController::class, 'viewMemberDetails'])->name('admin.viewMemberDetails')->middleware('auth.check');
 Route::get('/download/{id}', [AdminController::class, 'print_pdf'])->name('download');

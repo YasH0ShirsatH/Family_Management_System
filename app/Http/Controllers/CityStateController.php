@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\City;
 use App\Models\State;
 use App\Models\User;
+use App\Models\Head;
+use App\Models\Member;
 use Illuminate\Validation\Rule;
 use Session;
 use Illuminate\Support\Facades\Log;
@@ -155,6 +157,12 @@ class CityStateController extends Controller
         $state = State::find($id);
         $state->update(['status' => '9']);
         $state->cities()->update(['status' => '9']);
+        $head = Head::all();
+        $heads = Head::where('state', $state->name)->get();
+                    foreach ($heads as $head) {
+                        $head->update(['status' => '0']);
+                        $head->members()->update(['status' => '0']);
+                    }
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
@@ -219,7 +227,16 @@ class CityStateController extends Controller
             'state' => 'required|string',
         ]);
 
-        $states1 = State::firstOrCreate(['name' => $request->state]);
+        $states1 = State::firstOrCreate(
+            ['name' => $request->state],
+            [
+                'type' => $request->type,
+                'level' => $request->level,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'status' => '1'
+            ]
+        );
 
         if ($states1->wasRecentlyCreated) {
             $admin1 = User::where('id', '=', session::get('loginId'))->first();
@@ -295,6 +312,13 @@ class CityStateController extends Controller
     {
         $city = City::find($id);
         $city->update(['status' => '9']);
+        $head = Head::all();
+        $heads = Head::where('city', $city->name)->get();
+            foreach ($heads as $head) {
+                $head->update(['status' => '0']);
+                $head->members()->update(['status' => '0']);
+            }
+
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();

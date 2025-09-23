@@ -83,11 +83,11 @@
     </head>
 
     <body class="bg-light">
-       
+
         @include('partials.navbar2', ['shouldShowDiv' => false])
-    
+
         <div class="container py-4">
-           
+
              @if (session('error'))
             <div class="alert alert-danger alert-dismissible mt-2 mb-4 fade show rounded-pill">
                 {{ session('error') }}

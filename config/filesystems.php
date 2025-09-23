@@ -37,6 +37,12 @@ return [
             'throw' => false,
             'report' => false,
         ],
+        'public/uploads/images/' => [
+                        'driver' => 'local',
+                        'root' => storage_path('app/public/uploads/images'),
+                        'url' => env('APP_URL') . '/storage/uploads/images', // Adjust URL as needed
+                        'visibility' => 'public',
+                    ],
 
         'public' => [
             'driver' => 'local',

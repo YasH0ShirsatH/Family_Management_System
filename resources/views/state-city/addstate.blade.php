@@ -82,6 +82,39 @@
                                     @enderror
                                 </div>
 
+                                <div class="mb-3 form-group">
+                                    <label for="type" class="form-label">
+                                        <i class="bi bi-pen text-primary me-1"></i>State Type (optional)
+                                    </label>
+                                    <input type="text" id="type" name="type" class="form-control"
+                                        placeholder="Enter state type" value="{{ old('type') }}">
+                                        <div class="validation-error"></div>
+                                </div>
+                                <div class="mb-3 form-group">
+                                    <label for="level" class="form-label">
+                                        <i class="bi bi-geo-alt text-primary me-1"></i>State level (optional)
+                                    </label>
+                                    <input type="text" id="level" name="level" class="form-control"
+                                        placeholder="Enter state level" value="{{ old('level') }}">
+                                        <div class="validation-error"></div>
+                                </div>
+                                <div class="mb-3 form-group">
+                                    <label for="latitude" class="form-label">
+                                        <i class="bi bi-globe text-primary me-1"></i>State latitude (optional)
+                                    </label>
+                                    <input type="number" id="latitude" name="latitude" class="form-control"
+                                        placeholder="Enter state latitude" value="{{ old('latitude') }}">
+                                        <div class="validation-error"></div>
+                                </div>
+                                <div class="mb-3 form-group">
+                                    <label for="longitude" class="form-label">
+                                        <i class="bi bi-globe text-primary me-1"></i>State longitude (optional)
+                                    </label>
+                                    <input type="number" id="longitude" name="longitude" class="form-control"
+                                        placeholder="Enter state longitude" value="{{ old('longitude') }}">
+                                        <div class="validation-error"></div>
+                                </div>
+
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="bi bi-check me-1"></i>Add State
@@ -110,12 +143,12 @@
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
     <script>
         jQuery(document).ready(function () {
-      
+
 
             $('#formSubmit').validate({
                 rules: {
                     state: { required: true },
-                   
+
                 },
                 messages: {
                     state: { required: "Please enter state name" },

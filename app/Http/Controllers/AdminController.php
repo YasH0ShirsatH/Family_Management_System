@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Head;
 use App\Models\User;
 use Illuminate\Validation\Rule;
-
+use Storage;
 use App\Models\Member;
 use App\Models\Category;
 use App\Models\Hobby;
@@ -45,7 +45,7 @@ class AdminController extends Controller
             });
         }
 
-        $query->where('status', '1');
+        $query->whereIn('status', ['1','0']);
         $category1 = $request->category ?? 'name';
 
         if ($category1 == "created_at") {
@@ -62,7 +62,7 @@ class AdminController extends Controller
         }
 
         $heads = $query->paginate(10)->withQueryString();
-        $totalMembers = Member::where('status', '1')->count();
+        $totalMembers = Member::whereIn('status', ['1','0'])->count();
 
         if ($request->ajax()) {
             return view('admin.partials.index-search', compact('heads', 'totalMembers', 'admin1', 'category1'));
@@ -113,7 +113,7 @@ class AdminController extends Controller
         }
 
         $members = $query->paginate(10)->withQueryString();
-        $totalMembers = Member::where('status', '1')->count();
+        $totalMembers = Member::whereIn('status', ['1','0'])->count();
 
         // Return partial view for AJAX requests
         if ($request->ajax()) {
@@ -179,29 +179,7 @@ public function viewMemberDetails($id)
      */
     public function edit(string $id)
     {
-        $head = Head::where('status', '1')->find($id);
-        $admin1 = User::where('id', '=', session::get('loginId'))->first();
-
-        $states = State::where('country_id', 101)->orderBy('name', 'asc')->get();
-
-
-        $city = collect();
-        if ($head && $head->state) {
-            $selectedState = State::where('name', $head->state)->first();
-            if ($selectedState) {
-                $city = City::where('state_id', $selectedState->id)
-                    ->orderBy('name', 'asc')
-                    ->get();
-            }
-        }
-
-        return view("admin.edit", [
-            'head' => $head,
-            'id' => $id,
-            'states' => $states,
-            'city' => $city,
-            'admin1' => $admin1
-        ]);
+        return redirect()->route('admin.fullEdit', $id);
     }
 
     public function print_pdf($id)
@@ -353,7 +331,6 @@ public function viewMemberDetails($id)
     }
     public function delete(string $id)
     {
-
         $head = Head::find($id);
         if ($head) {
             $head->update(['status' => '9']);
@@ -366,12 +343,13 @@ public function viewMemberDetails($id)
             $log->save();
             log::debug('Admin Has Deleted (' . $head->name . ' ' . $head->surname . ') Successfully on ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A'));
 
-
             return redirect()->route('admin.index')->with('success', "Head deleted successfully.")->with('name', $head->name)->with('surname', $head->surname);
         }
-
-
     }
+
+
+
+
 
     // public function search(Request $request)
     // {
@@ -395,4 +373,196 @@ public function viewMemberDetails($id)
     //         return view('admin.index', ['heads' => $heads, 'totalMembers' => $totalMembers]);
     //     }
     // }
+
+    public function fullEdit(string $id)
+    {
+        $head = Head::with(['members' => function($query) {
+            $query->where('status', '1');
+        }, 'hobbies'])->where('status', '1')->find($id);
+        $headstatus = Head::where('id', $id)->first();
+        if ($headstatus->status == '0') {
+            return redirect()->route('admin.index')->with('error', 'Head is inactive. Activate head to edit details via admin profile');
+        }
+        if (!$head) {
+            return redirect()->route('admin.index')->with('error', 'Head not found');
+        }
+
+
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+        $states = State::where('status','1')->where('country_id', 101)->orderBy('name', 'asc')->get();
+        $city = collect();
+
+        if ($head->state) {
+            $selectedState = State::where('name', $head->state)->first();
+            if ($selectedState) {
+                $city = City::where('status','1')->where('state_id', $selectedState->id)
+                    ->orderBy('name', 'asc')
+                    ->get();
+            }
+        }
+
+        return view("admin.newUpdate", compact('head', 'id', 'states', 'city', 'admin1'));
+    }
+
+    public function fullUpdate(Request $request, string $id)
+    {
+        $user = Head::find($id);
+
+        $request->validate([
+            'name' => 'required',
+            'surname' => 'required',
+            'birthdate' => ['required', 'date', 'before:' . Carbon::now()->subYears(21)->format('Y-m-d')],
+            'mobile' => [
+                'required',
+                'digits:10',
+                Rule::unique('heads', 'mobile')->ignore($user->id),
+            ],
+            'address' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+            'pincode' => 'required|digits:6',
+            'marital_status' => 'required',
+            'mariage_date' => 'required_if:marital_status,1',
+            'hobbies' => 'required|array|min:1',
+            'hobbies.*' => ['required', 'distinct', 'min:1', 'string'],
+            'path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Update Head
+        $user->name = $request->name;
+        $user->surname = $request->surname;
+        $user->birthdate = $request->birthdate;
+        $user->mobile = $request->mobile;
+        $user->address = $request->address;
+        $user->state = $request->state;
+        $user->city = $request->city;
+        $user->pincode = $request->pincode;
+        $user->marital_status = $request->marital_status;
+
+        if ($request->input('marital_status') == 1) {
+            $user->mariage_date = $request->mariage_date;
+        }
+
+        // Update hobbies
+        $user->hobbies()->delete();
+        foreach ($request->hobbies as $hobby) {
+            $user->hobbies()->create([
+                'head_id' => $user->id,
+                'hobby_name' => $hobby,
+            ]);
+        }
+
+        // Handle photo upload
+        if ($request->hasFile('path')) {
+            Storage::disk('public/uploads/images/')->delete($user->photo_path);
+            $file = $request->file('path');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move('uploads/images/', $filename);
+            $user->photo_path = $filename;
+        }
+
+        $user->save();
+
+        // Handle deleted members
+        if ($request->has('deleted_members')) {
+            Member::whereIn('id', $request->deleted_members)->update(['status' => '0']);
+        }
+
+        // Handle existing members update
+        if ($request->has('members')) {
+            $members = $user->members()->where('status', '1')->orderBy('id')->get();
+            foreach ($request->members as $index => $memberData) {
+                $memberIndex = $index - 1;
+                if (isset($members[$memberIndex])) {
+                    $member = $members[$memberIndex];
+                    $member->name = $memberData['name'] ?? $member->name;
+                    $member->birthdate = $memberData['date'] ?? $member->birthdate;
+                    $member->marital_status = $memberData['marital_status'] ?? $member->marital_status;
+                    $member->education = $memberData['education'] ?? $member->education;
+
+                    if (isset($memberData['marital_status']) && $memberData['marital_status'] == 1 && isset($memberData['mariage_date'])) {
+                        $member->mariage_date = $memberData['mariage_date'];
+                    }
+
+                    if (isset($memberData['photo']) && $memberData['photo']) {
+                        $file = $memberData['photo'];
+                        $filename = time() . '_' . $file->getClientOriginalName();
+                        $file->move('uploads/images/', $filename);
+                        $member->photo_path = $filename;
+                    }
+
+                    $member->save();
+                }
+            }
+        }
+
+        // Handle new members
+        if ($request->has('new_members')) {
+            foreach ($request->new_members as $memberData) {
+                $member = new Member();
+                $member->head_id = $user->id;
+                $member->name = $memberData['name'];
+                $member->birthdate = $memberData['date'];
+                $member->marital_status = $memberData['marital_status'] ?? 0;
+                $member->education = $memberData['education'];
+                $member->status = '1';
+
+                if (isset($memberData['marital_status']) && $memberData['marital_status'] == 1 && isset($memberData['mariage_date'])) {
+                    $member->mariage_date = $memberData['mariage_date'];
+                }
+
+                if (isset($memberData['photo']) && $memberData['photo']) {
+                    $file = $memberData['photo'];
+                    $filename = time() . '_' . $file->getClientOriginalName();
+                    $file->move('uploads/images/', $filename);
+                    $member->photo_path = $filename;
+                }
+
+                $member->save();
+            }
+        }
+
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+        $log = new Logg();
+        $log->user_id = $admin1->id;
+        $log->logs = 'Admin has Updated Head and Members (' . $user->name . ' ' . $user->surname . ') Successfully on ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
+        $log->save();
+
+        return redirect()->route('admin.index')->with('success', 'Head and members updated successfully.');
+    }
+
+
+
+
+
+
+
+    public function deletestate($id)
+    {
+        $state = State::find($id);
+        $state->update(['status' => '0']);
+
+        $heads = Head::where('state', $state->name)->get();
+        foreach ($heads as $head) {
+            $head->update(['status' => '0']);
+            $head->members()->update(['status' => '0']);
+        }
+
+        return redirect()->back()->with('success', 'State and related data deleted successfully.');
+    }
+
+    public function deletecity($id)
+    {
+        $city = City::find($id);
+        $city->update(['status' => '0']);
+
+        $heads = Head::where('city', $city->name)->get();
+        foreach ($heads as $head) {
+            $head->update(['status' => '0']);
+            $head->members()->update(['status' => '0']);
+        }
+
+        return redirect()->back()->with('success', 'City and related data deleted successfully.');
+    }
+
 }

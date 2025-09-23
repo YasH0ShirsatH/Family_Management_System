@@ -151,6 +151,7 @@
                         </h4>
                     </div>
                     <div class="header-buttons d-flex flex-column flex-sm-row gap-2">
+                        <a href="/headview" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Add New Head">Add New Head</a>
                         <a href="{{ route('download_all') }}" class="btn btn-outline-light" data-toggle="tooltip" data-placement="bottom" title="Export Data in PDF">PDF</a>
                         <a href="{{ route('download_excel_all') }}" class="btn btn-outline-light" data-toggle="tooltip" data-placement="bottom" title="Export Data in excel">Excel</a>
                     </div>

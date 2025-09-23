@@ -18,7 +18,7 @@ class HeadController extends Controller
 
         $states = State::where('status', '1')->where('country_id', 101)->orderBy('name', 'asc')->get();
         foreach ($states as $state) {
-            $city = City::where('state_id', $state->id)->orderBy('name', 'asc')->get();
+            $city = City::where('status','1')->where('state_id', $state->id)->orderBy('name', 'asc')->get();
         }
         return view('head', compact('states', 'city'));
 
@@ -179,4 +179,13 @@ class HeadController extends Controller
         log::debug('User (' . $user2->name . ' ' . $user2->surname . ') Logged Out Successfully on : ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A'));
         return redirect('/')->with('success', 'You\'ve successfully added the head and members of the heads family..');
     }
+
+//     public function addHead(){
+//
+//     }
+//
+//     public function posthead(Request $request){
+//
+//     }
+
 }
