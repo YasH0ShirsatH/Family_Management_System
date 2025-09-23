@@ -323,6 +323,9 @@
             membersContainer.insertAdjacentHTML('beforeend', memberHtml);
             noMembersMessage.style.display = 'none';
 
+            // Add validation rules for new member
+            addMemberValidationRules(memberCount);
+
             // Add event listeners for the new member's marital status
             const marriedRadio = document.getElementById(`member_${memberCount}_married`);
             const unmarriedRadio = document.getElementById(`member_${memberCount}_unmarried`);
@@ -337,11 +340,78 @@
         }
 
         window.removeMember = function(id) {
+            // Remove validation rules for this member
+            removeMemberValidationRules(id);
             document.getElementById(`member-${id}`).remove();
             if (membersContainer.children.length === 0) {
                 noMembersMessage.style.display = 'block';
             }
         };
+
+        // Function to add validation rules for members
+        function addMemberValidationRules(count) {
+            const nameField = `members[${count}][name]`;
+            const birthdateField = `members[${count}][birthdate]`;
+            const maritalStatusField = `members[${count}][marital_status]`;
+            const mariageDateField = `members[${count}][mariage_date]`;
+            const photoField = `members[${count}][photo]`;
+
+            $(`input[name="${nameField}"]`).rules('add', {
+                required: true,
+                minlength: 2,
+                messages: {
+                    required: "Please enter member name",
+                    minlength: "Name must be at least 2 characters"
+                }
+            });
+
+            $(`input[name="${birthdateField}"]`).rules('add', {
+                required: true,
+                messages: {
+                    required: "Please enter birthdate"
+                }
+            });
+
+            $(`input[name="${maritalStatusField}"]`).rules('add', {
+                required: true,
+                messages: {
+                    required: "Please select marital status"
+                }
+            });
+
+            $(`input[name="${mariageDateField}"]`).rules('add', {
+                required: function() {
+                    return $(`#member_${count}_married`).is(':checked');
+                },
+                messages: {
+                    required: "Please enter marriage date"
+                }
+            });
+
+            $(`input[name="${photoField}"]`).rules('add', {
+                extension: "jpg|jpeg|png",
+                maxfilesize: 2,
+                messages: {
+                    extension: "Please upload a valid image (jpg, jpeg, png)",
+                    maxfilesize: "Please upload image less than 2MB"
+                }
+            });
+        }
+
+        // Function to remove validation rules for members
+        function removeMemberValidationRules(count) {
+            const nameField = `members[${count}][name]`;
+            const birthdateField = `members[${count}][birthdate]`;
+            const maritalStatusField = `members[${count}][marital_status]`;
+            const mariageDateField = `members[${count}][mariage_date]`;
+            const photoField = `members[${count}][photo]`;
+
+            $(`input[name="${nameField}"]`).rules('remove');
+            $(`input[name="${birthdateField}"]`).rules('remove');
+            $(`input[name="${maritalStatusField}"]`).rules('remove');
+            $(`input[name="${mariageDateField}"]`).rules('remove');
+            $(`input[name="${photoField}"]`).rules('remove');
+        }
 
         headMarriedRadio.addEventListener('change', toggleHeadMarriageDate);
         headUnmarriedRadio.addEventListener('change', toggleHeadMarriageDate);
