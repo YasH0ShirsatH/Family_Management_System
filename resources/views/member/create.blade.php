@@ -87,6 +87,32 @@
                                 </div>
 
                                 <div class="mb-3 form-group">
+                                    <label class="form-label fw-semibold"><i class="bi bi-people me-2"></i>Relation</label>
+                                    <select name="relation" class="form-select rounded-pill @error('relation') is-invalid @enderror">
+                                        <option value="">Select Relation</option>
+                                        <option value="spouse" {{ old('relation') == 'spouse' ? 'selected' : '' }}>Spouse</option>
+                                        <option value="son" {{ old('relation') == 'son' ? 'selected' : '' }}>Son</option>
+                                        <option value="daughter" {{ old('relation') == 'daughter' ? 'selected' : '' }}>Daughter</option>
+                                        <option value="father" {{ old('relation') == 'father' ? 'selected' : '' }}>Father</option>
+                                        <option value="mother" {{ old('relation') == 'mother' ? 'selected' : '' }}>Mother</option>
+                                        <option value="brother" {{ old('relation') == 'brother' ? 'selected' : '' }}>Brother</option>
+                                        <option value="sister" {{ old('relation') == 'sister' ? 'selected' : '' }}>Sister</option>
+                                        <option value="grandfather" {{ old('relation') == 'grandfather' ? 'selected' : '' }}>Grandfather</option>
+                                        <option value="grandmother" {{ old('relation') == 'grandmother' ? 'selected' : '' }}>Grandmother</option>
+                                        <option value="uncle" {{ old('relation') == 'uncle' ? 'selected' : '' }}>Uncle</option>
+                                        <option value="aunt" {{ old('relation') == 'aunt' ? 'selected' : '' }}>Aunt</option>
+                                        <option value="nephew" {{ old('relation') == 'nephew' ? 'selected' : '' }}>Nephew</option>
+                                        <option value="niece" {{ old('relation') == 'niece' ? 'selected' : '' }}>Niece</option>
+                                        <option value="cousin" {{ old('relation') == 'cousin' ? 'selected' : '' }}>Cousin</option>
+                                        <option value="other" {{ old('relation') == 'other' ? 'selected' : '' }}>Other</option>
+                                    </select>
+                                    <div class="validation-error"></div>
+                                    @error('relation')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="mb-3 form-group">
                                     <label class="form-label fw-semibold"><i class="bi bi-heart me-2"></i>Marital
                                         Status</label>
                                     <div class="form-check">
@@ -205,7 +231,8 @@
             $('#formSubmit').validate({
                 rules: {
                     name: { required: true },
-                    birthdate: { required: true, },
+                    birthdate: { required: true },
+                    relation: { required: true },
                     marital_status: { required: true },
                     mariage_date: {
                         required: {
@@ -214,20 +241,14 @@
                             }
                         }
                     },
-
                     photo_path: { extension: "jpg|jpeg|png", maxfilesize: 2 }
                 },
                 messages: {
                     name: { required: "Please enter name" },
-
-                    birthdate: {
-                        required: "Please enter birthdate",
-
-                    },
-
+                    birthdate: { required: "Please enter birthdate" },
+                    relation: { required: "Please select relation" },
                     marital_status: { required: "Please select marital status" },
                     mariage_date: { required: "Please enter marriage date" },
-
                     photo_path: {
                         extension: "Please upload a valid image (jpg, jpeg, png)",
                         maxfilesize: "Please upload image less than 2MB"

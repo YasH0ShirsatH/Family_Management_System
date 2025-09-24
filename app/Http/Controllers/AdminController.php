@@ -61,6 +61,7 @@ class AdminController extends Controller
             $query->orderBy('name', 'asc');
         }
 
+
         $heads = $query->paginate(10)->withQueryString();
         $totalMembers = Member::whereIn('status', ['1','0'])->count();
 
@@ -142,6 +143,44 @@ public function viewMemberDetails($id)
         $pdf->showImageErrors = true;
         $pdf->curlAllowUnsafeSslRequests = true;
         return $pdf->download('All_Family\'s_family.pdf');
+    }
+
+    public function print_search_pdf(Request $request)
+    {
+        $query = Head::query();
+
+        if ($request->filled('search')) {
+            $q = $request->input('search');
+            $query->where(function ($subQuery) use ($q) {
+                $subQuery
+                    ->where('name', 'like', "%{$q}%")
+                    ->orWhere('surname', 'like', "%{$q}%")
+                    ->orWhere('mobile', 'like', "%{$q}%")
+                    ->orWhere('city', 'like', "%{$q}%")
+                    ->orWhere('state', 'like', "%{$q}%");
+            });
+        }
+
+        $query->whereIn('status', ['1','0']);
+        $category1 = $request->category ?? 'name';
+
+        if ($category1 == "created_at") {
+            $query->orderBy('created_at', 'desc');
+        } elseif ($category1 == "updated_at") {
+            $query->orderBy('updated_at', 'desc');
+        } elseif ($category1 == "updated_at_asc") {
+            $query->orderBy('updated_at', 'asc');
+        } elseif ($category1 == "created_at_asc") {
+            $query->orderBy('created_at', 'asc');
+        } else {
+            $query->orderBy('name', 'asc');
+        }
+
+        $heads = $query->get();
+        $pdf = Pdf::loadView('pdf.all', compact('heads'));
+        $pdf->showImageErrors = true;
+        $pdf->curlAllowUnsafeSslRequests = true;
+        return $pdf->download('Search_Results.pdf');
     }
 
 
@@ -333,19 +372,19 @@ public function viewMemberDetails($id)
     {
         $head = Head::find($id);
         if ($head) {
-            // Delete head image
+
             if ($head->photo_path && file_exists(public_path('uploads/images/' . $head->photo_path))) {
                 unlink(public_path('uploads/images/' . $head->photo_path));
             }
-            
-            // Delete member images
+
+
             $members = $head->members()->where('status','1')->get();
             foreach ($members as $member) {
                 if ($member->photo_path && file_exists(public_path('uploads/images/' . $member->photo_path))) {
                     unlink(public_path('uploads/images/' . $member->photo_path));
                 }
             }
-            
+
             $head->update(['status' => '9']);
             $head->members()->where('status','1')->update(['status' => '0']);
 
@@ -490,8 +529,10 @@ public function viewMemberDetails($id)
                     $member = $members[$memberIndex];
                     $member->name = $memberData['name'] ?? $member->name;
                     $member->birthdate = $memberData['date'] ?? $member->birthdate;
+                    $member->relation = $memberData['relation'] ?? $member->relation;
                     $member->marital_status = $memberData['marital_status'] ?? $member->marital_status;
                     $member->education = $memberData['education'] ?? $member->education;
+                    $member->status = $memberData['status'] ?? $member->status;
 
                     if (isset($memberData['marital_status']) && $memberData['marital_status'] == 1 && isset($memberData['mariage_date'])) {
                         $member->mariage_date = $memberData['mariage_date'];
@@ -576,6 +617,48 @@ public function viewMemberDetails($id)
         }
 
         return redirect()->back()->with('success', 'City and related data deleted successfully.');
+    }
+
+    public function activateMember(string $id)
+    {
+        $member = Member::find($id);
+        if ($member) {
+            $member->status = '1';
+            $member->save();
+            return redirect()->back()->with('success', "Member activated successfully.")->with('name', $member->name);
+        }
+    }
+
+    public function deactivateMember(string $id)
+    {
+        $member = Member::find($id);
+        if ($member) {
+            $member->status = '0';
+            $member->save();
+            return redirect()->back()->with('success', "Member deactivated successfully.")->with('name', $member->name);
+        }
+    }
+
+    public function activateHeadOnView(string $id)
+    {
+        $head = Head::find($id);
+        if ($head) {
+            $head->status = '1';
+            $head->members()->where('status','0')->update(['status' => '1']);
+            $head->save();
+            return redirect()->back()->with('success', "head activated successfully.")->with('name', $head->name);
+        }
+    }
+
+    public function deactivateHeadOnView(string $id)
+    {
+        $head = Head::find($id);
+        if ($head) {
+            $head->status = '0';
+            $head->members()->where('status','1')->update(['status' => '0']);
+            $head->save();
+            return redirect()->back()->with('success', "head deactivated successfully.")->with('name', $head->name);
+        }
     }
 
 }

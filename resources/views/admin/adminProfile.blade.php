@@ -12,8 +12,9 @@
     <style>
     .active-class {
         background-color: #ffc107;
-        color: black;
+        color: #000;
         transform: translateX(5px);
+        transition: all 0.3s ease;
     }
 
     .validation-error label {
@@ -274,6 +275,43 @@
                         </div>
                     </div>
 
+                    <div class="card border-0 shadow-sm rounded-4 mb-4 mt-4">
+                        <div class="card-header bg-success text-white rounded-top-1 py-2">
+                            <h6 class="mb-0 d-flex align-items-center">
+                                <i class="bi bi-person-check-fill me-2"></i>Activate Individual Member
+                            </h6>
+                        </div>
+                        <div class="card-body p-4">
+                            <form id="formSubmit3" action="{{ route('activatemember.member') }}" method="post">
+                                @csrf
+                                <div class="mb-3 form-group">
+                                    <label for="active-head-member" class="form-label fw-semibold">Select Member to Activate</label>
+                                    <small class="text-muted d-block mb-2">Only  members from active families will be shown</small>
+                                    <select role="button" name="active_head_member" id="active-head-member"
+                                        class="form-select fw-6 form-select-md rounded-pill">
+                                        <option value="" selected disabled>Choose a member to activate...</option>
+                                        @foreach ($member2 as $item)
+                                            @if($item->head->status == '1')
+                                                <option value="{{ $item->id }}">
+                                                    @if($item->status == '0')
+                                                     {{ $item->name }} (Inactive) (Family: {{ $item->head->name }} {{ $item->head->surname }})
+                                                    @else
+                                                    {{ $item->name }} (Deleted) (Family: {{ $item->head->name }} {{ $item->head->surname }})
+                                                    @endif
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    <div class="validation-error"></div>
+                                </div>
+                                <div class="d-grid mt-4">
+                                    <button type="submit" class="btn btn-outline-success btn-sm rounded-pill fw-semibold py-2">
+                                        <i class="bi bi-check-circle me-2"></i>Activate Member
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-lg-8">

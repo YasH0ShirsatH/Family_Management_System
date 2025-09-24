@@ -152,11 +152,37 @@
                                            Birth</label>
                                        <input type="date" name="birthdate"
                                            class="form-control rounded-pill @error('birthdate') is-invalid @enderror"
-                                           value="{{ $member->birthdate }}" @error('birthdate')>
-                                               <div class="validation-error"></div>
+                                           value="{{ $member->birthdate }}">
+                                       <div class="validation-error"></div>
+                                       @error('birthdate')
+                                           <div class="invalid-feedback">{{ $message }}</div>
+                                       @enderror
+                                   </div>
 
-                                               <div class="invalid-feedback">{{ $message }}</div>
-                                           @enderror
+                                   <div class="mb-3 form-group">
+                                       <label class="form-label fw-semibold"><i class="bi bi-people me-2"></i>Relation</label>
+                                       <select name="relation" class="form-select rounded-pill @error('relation') is-invalid @enderror">
+                                           <option value="">Select Relation</option>
+                                           <option value="spouse" {{ $member->relation == 'spouse' ? 'selected' : '' }}>Spouse</option>
+                                           <option value="son" {{ $member->relation == 'son' ? 'selected' : '' }}>Son</option>
+                                           <option value="daughter" {{ $member->relation == 'daughter' ? 'selected' : '' }}>Daughter</option>
+                                           <option value="father" {{ $member->relation == 'father' ? 'selected' : '' }}>Father</option>
+                                           <option value="mother" {{ $member->relation == 'mother' ? 'selected' : '' }}>Mother</option>
+                                           <option value="brother" {{ $member->relation == 'brother' ? 'selected' : '' }}>Brother</option>
+                                           <option value="sister" {{ $member->relation == 'sister' ? 'selected' : '' }}>Sister</option>
+                                           <option value="grandfather" {{ $member->relation == 'grandfather' ? 'selected' : '' }}>Grandfather</option>
+                                           <option value="grandmother" {{ $member->relation == 'grandmother' ? 'selected' : '' }}>Grandmother</option>
+                                           <option value="uncle" {{ $member->relation == 'uncle' ? 'selected' : '' }}>Uncle</option>
+                                           <option value="aunt" {{ $member->relation == 'aunt' ? 'selected' : '' }}>Aunt</option>
+                                           <option value="nephew" {{ $member->relation == 'nephew' ? 'selected' : '' }}>Nephew</option>
+                                           <option value="niece" {{ $member->relation == 'niece' ? 'selected' : '' }}>Niece</option>
+                                           <option value="cousin" {{ $member->relation == 'cousin' ? 'selected' : '' }}>Cousin</option>
+                                           <option value="other" {{ $member->relation == 'other' ? 'selected' : '' }}>Other</option>
+                                       </select>
+                                       <div class="validation-error"></div>
+                                       @error('relation')
+                                           <div class="invalid-feedback">{{ $message }}</div>
+                                       @enderror
                                    </div>
 
                                    <div class="mb-3 form-group">
@@ -164,7 +190,7 @@
                                            Status</label>
                                        <div class="form-check">
                                            <input class="form-check-input" type="radio" name="marital_status" id="married"
-                                               value="1" {{ $member->marital_status == '1' ? 'checked' : '' }}>
+                                               value="1" @checked($member->marital_status == '1' && $member->relation == 'spouse')>
                                            <label class="form-check-label" for="married">Married</label>
                                        </div>
                                        <div class="form-check form-group">
@@ -183,10 +209,13 @@
                                            style="display: {{ $member->marital_status == '1' ? 'block' : 'none' }}">
                                            <label class="form-label fw-semibold"><i
                                                    class="bi bi-calendar-heart me-2"></i>Marriage Date</label>
+
                                            <input type="date" name="mariage_date"
                                                class="form-control rounded-pill @error('mariage_date') is-invalid @enderror"
                                                value="{{ $member->mariage_date }}">
+
                                            <div class="validation-error"></div>
+
                                            @error('mariage_date')
                                                <div class="invalid-feedback">{{ $message }}</div>
                                            @enderror
@@ -337,10 +366,13 @@
                    rules: {
                        name: { required: true },
                        birthdate: { required: true },
+                       relation: { required: true },
                        marital_status: { required: true },
                        mariage_date: {
-                           required: function () {
-                               return $("#married").is(":checked");
+                           required: {
+                               depends: function (element) {
+                                   return $("#married").is(":checked");
+                               }
                            }
                        },
                        photo_path: {
@@ -351,6 +383,7 @@
                    messages: {
                        name: { required: "Please enter name" },
                        birthdate: { required: "Please enter birthdate" },
+                       relation: { required: "Please select relation" },
                        marital_status: { required: "Please select marital status" },
                        mariage_date: { required: "Please enter marriage date" },
                        photo_path: {

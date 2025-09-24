@@ -10,11 +10,12 @@ class Member extends Model
         'name',
         'birthdate',
         'marital_status',
-        'mariage_date',    
+        'mariage_date',
+        'relation',
         'education',
         'photo_path',
         'status'
-];
+    ];
     public function head(){
         return $this->belongsTo(Head::class);
     }

@@ -65,6 +65,7 @@ class AdminMemberController extends Controller
                 'birthdate' => 'required|date',
                 'marital_status' => 'required',
                 'mariage_date' => 'required_if:marital_status,1',
+                'relation' => 'required',
                 'photo_path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             ]
             ,
@@ -90,6 +91,7 @@ class AdminMemberController extends Controller
             'name' => $request->name,
             'birthdate' => $request->birthdate,
             'marital_status' => $request->marital_status,
+            'relation' =>   $request->relation,
             'mariage_date' => $request->marital_status == 1 ? $request->mariage_date : null,
             'education' => $request->education,
             'photo_path' => $filename,
@@ -142,6 +144,7 @@ class AdminMemberController extends Controller
                 'name' => 'required',
                 'birthdate' => 'required|date',
                 'marital_status' => 'required',
+                'relation' => 'required',
                 'mariage_date' => 'required_if:marital_status,1',
                 'photo_path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             ]
@@ -169,6 +172,7 @@ class AdminMemberController extends Controller
 
             $member->name = $request->name;
             $member->birthdate = $request->birthdate;
+            $member->relation = $request->relation;
             $member->marital_status = $request->marital_status;
             $member->mariage_date = $request->marital_status == 1 ? $request->mariage_date : null;
             $member->education = $request->education;
@@ -215,12 +219,12 @@ class AdminMemberController extends Controller
     {
         $member = Member::find($id);
         $parentId = $member->head->id;
-        
+
         // Delete member image
         if ($member->photo_path && file_exists(public_path('uploads/images/' . $member->photo_path))) {
             unlink(public_path('uploads/images/' . $member->photo_path));
         }
-        
+
         $member->update(['status' => '9']);
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();

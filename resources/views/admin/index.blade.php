@@ -60,33 +60,70 @@
         }
 
         .search-card {
-            background-color: #fff;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
             border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .search-card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-input-group {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .search-input-group:focus-within {
+            box-shadow: 0 4px 20px rgba(0, 123, 255, 0.15);
+            transform: translateY(-1px);
         }
 
         .search-input-group .form-control {
-            border: 1px solid #ced4da;
+            border: 2px solid #e9ecef;
             box-shadow: none;
-            padding: 0.75rem 1rem;
+            padding: 0.875rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
         }
 
         .search-input-group .input-group-text {
-            background-color: white;
-            border: 1px solid #ced4da;
-            color: #007bff;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
         }
 
         .search-input-group .form-control:focus {
             border-color: #007bff;
-            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+            box-shadow: none;
         }
 
         .search-input-group:focus-within .input-group-text {
             border-color: #007bff;
+            background-color: #f8f9ff;
         }
 
-        .search-loading-spinner {
-            color: #007bff;
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            border: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
         }
 
         .form-select {
@@ -114,10 +151,17 @@
             background-color: #f8d7da;
             color: #721c24;
         }
-        .active-class-2{
-            background-color: #198754;
-            color : white;
+        .active-class-2 {
+            background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+            color: white;
             transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .search-input-group .form-control {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
         }
     </style>
 
@@ -179,25 +223,34 @@
 
                     <div class="card shadow-sm mb-4 search-card">
                         <div class="card-body p-4">
-                            <div class="row align-items-center">
-                                <div class="col-12">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-12 col-lg-8">
+                                    <label class="form-label fw-semibold text-muted mb-2">
+                                        <i class="bi bi-search me-1"></i>Search Families
+                                    </label>
                                     <div class="input-group search-input-group position-relative">
-                                        <span class="input-group-text">
-                                            <i class="bi bi-search"></i>
+                                        <span class="input-group-text bg-light border-end-0">
+                                            <i class="bi bi-search text-primary"></i>
                                         </span>
                                         <input type="text" id="searchInput"
-                                            class="form-control"
+                                            class="form-control border-start-0 ps-0"
                                             placeholder="Search by name, surname, mobile, city, state..."
                                             value="{{ request('search') }}">
-
                                         <span id="searchLoading"
                                             class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
                                             style="z-index: 10;">
-                                            <div class="spinner-border spinner-border-sm search-loading-spinner" role="status">
+                                            <div class="spinner-border spinner-border-sm text-primary" role="status">
                                                 <span class="visually-hidden">Loading...</span>
                                             </div>
                                         </span>
                                     </div>
+                                </div>
+                                <div class="col-12 col-lg-4 d-flex justify-content-sm-end">
+                                    <button id="pdfSearchBtn" class="btn btn-danger p-2 flex-fill d-none" style="width: 40%">
+                                        <i class="bi bi-file-earmark-pdf me-2"></i>
+                                        <span class="d-none d-sm-inline">Export PDF</span>
+                                        <span class="d-sm-none">PDF</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -264,6 +317,14 @@
 
             $(document).on('keyup', '#searchInput', function() {
                 const query = $(this).val();
+                
+                // Show/hide export button based on input
+                if (query.trim().length > 0) {
+                    $('#pdfSearchBtn').removeClass('d-none');
+                } else {
+                    $('#pdfSearchBtn').addClass('d-none');
+                }
+                
                 clearTimeout(debounceTimeout);
                 debounceTimeout = setTimeout(function() {
                     fetchList({
@@ -286,6 +347,29 @@
             window.addEventListener('popstate', function() {
                 const params = Object.fromEntries(new URLSearchParams(location.search));
                 fetchList(params);
+            });
+
+            // PDF export for search results
+            $(document).on('click', '#pdfSearchBtn', function() {
+                const searchQuery = $('#searchInput').val();
+                const category = $('#category').val();
+
+                let pdfUrl = "{{ route('download_search_pdf') }}";
+                const params = new URLSearchParams();
+
+                if (searchQuery) {
+                    params.append('search', searchQuery);
+                }
+
+                if (category && category !== 'name') {
+                    params.append('category', category);
+                }
+
+                if (params.toString()) {
+                    pdfUrl += '?' + params.toString();
+                }
+
+                window.location.href = pdfUrl;
             });
         });
         </script>

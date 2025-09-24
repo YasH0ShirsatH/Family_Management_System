@@ -183,7 +183,7 @@
                                         @foreach($head->members as $item)
                                         <div class="border rounded-3 p-3 mb-3 bg-white member-card" data-member-id="{{ $item->id }}">
                                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                                <h6 class="text-primary mb-0"><i class="bi bi-person me-2"></i>Member {{ $loop->iteration }}</h6>
+                                                <h6 class="text-primary mb-0"><i class="bi bi-person me-2"></i>Member {{ $loop->iteration }} ( <span class="text-success" > {{$item->name}}</span> )</h6>
                                                 <button type="button" class="btn btn-danger btn-sm" onclick="deleteMember(this)">
                                                     <i class="bi bi-trash"></i> Delete
                                                 </button>
@@ -198,7 +198,27 @@
                                                     <label class="form-label fw-semibold">Date of Birth</label>
                                                     <input type="date" name="members[{{$loop->iteration}}][date]" class="form-control rounded-pill" value="{{$item->birthdate}}" required>
                                                 </div>
+
                                             </div>
+                                                <label class="form-label fw-semibold"><i class="bi bi-people me-2"></i>Relation</label>
+                                                <select name="members[{{$loop->iteration}}][relation]" class="form-select rounded-pill @error('relation') is-invalid @enderror">
+                                                <option value="">Select Relation</option>
+                                                <option value="spouse" {{ old('relation') == 'spouse' ? 'selected' : '' }}>Spouse</option>
+                                                 <option value="son" {{ old('relation') == 'son' ? 'selected' : '' }}>Son</option>
+                                                 <option value="daughter" {{ old('relation') == 'daughter' ? 'selected' : '' }}>Daughter</option>
+                                                 <option value="father" {{ old('relation') == 'father' ? 'selected' : '' }}>Father</option>
+                                                 <option value="mother" {{ old('relation') == 'mother' ? 'selected' : '' }}>Mother</option>
+                                                 <option value="brother" {{ old('relation') == 'brother' ? 'selected' : '' }}>Brother</option>
+                                                 <option value="sister" {{ old('relation') == 'sister' ? 'selected' : '' }}>Sister</option>
+                                                 <option value="grandfather" {{ old('relation') == 'grandfather' ? 'selected' : '' }}>Grandfather</option>
+                                                 <option value="grandmother" {{ old('relation') == 'grandmother' ? 'selected' : '' }}>Grandmother</option>
+                                                 <option value="uncle" {{ old('relation') == 'uncle' ? 'selected' : '' }}>Uncle</option>
+                                                 <option value="aunt" {{ old('relation') == 'aunt' ? 'selected' : '' }}>Aunt</option>
+                                                 <option value="nephew" {{ old('relation') == 'nephew' ? 'selected' : '' }}>Nephew</option>
+                                                 <option value="niece" {{ old('relation') == 'niece' ? 'selected' : '' }}>Niece</option>
+                                                 <option value="cousin" {{ old('relation') == 'cousin' ? 'selected' : '' }}>Cousin</option>
+                                                 <option value="other" {{ old('relation') == 'other' ? 'selected' : '' }}>Other</option>
+                                            </select>
 
                                             <div class="mb-3">
                                                 <label class="form-label fw-semibold">Marital Status</label>
@@ -232,10 +252,22 @@
                                                     <label class="form-label fw-semibold">Photo</label>
                                                     <input type="file" name="members[{{$loop->iteration}}][photo]" class="form-control rounded-pill" accept="image/*">
                                                     @if($item->photo_path)
-                                                    <small class="text-muted">Current: <img src="{{ asset('/uploads/images/').'/'.$item->photo_path }}" alt="Current Image" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #007bff;"></small>
+                                                    <small class="text-muted">Current: <img src="{{ asset('/uploads/images/').'/'.$item->photo_path }}" alt="Current Image" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #007bff;">
+                                                    </small>
                                                     @endif
                                                 </div>
                                             </div>
+                                        <div class="row">
+                                           <div class="col-md-6 mb-3">
+                                                  <label class="form-label fw-semibold">Set Status</label>
+                                                    <select name="members[{{$loop->iteration}}][status]" id="status" class="form-select rounded-pill">
+                                                        <option value="">Select Status</option>
+                                                        <option value="1" {{ $item->status == '1' ? 'selected' : '' }}>Active</option>
+                                                        <option value="0" {{ $item->status == '0' ? 'selected' : '' }}>Inactive</option>
+                                                    </select>
+                                                    @error('status')<div class="text-danger">{{ $message }}</div>@enderror
+                                           </div>
+                                        </div>
                                         </div>
                                         @endforeach
 
@@ -360,7 +392,28 @@
                             <label class="form-label fw-semibold">Date of Birth</label>
                             <input type="date" name="new_members[${memberCount}][date]" class="form-control rounded-pill" required>
                         </div>
+
                     </div>
+
+                        <label class="form-label fw-semibold"><i class="bi bi-people me-2"></i>Relation</label>
+                                                                <select name="new_members[${memberCount}][relation]" class="form-select rounded-pill @error('relation') is-invalid @enderror">
+                                                                <option value="">Select Relation</option>
+                                                                <option value="spouse" {{ old('relation') == 'spouse' ? 'selected' : '' }}>Spouse</option>
+                                                                 <option value="son" {{ old('relation') == 'son' ? 'selected' : '' }}>Son</option>
+                                                                 <option value="daughter" {{ old('relation') == 'daughter' ? 'selected' : '' }}>Daughter</option>
+                                                                 <option value="father" {{ old('relation') == 'father' ? 'selected' : '' }}>Father</option>
+                                                                 <option value="mother" {{ old('relation') == 'mother' ? 'selected' : '' }}>Mother</option>
+                                                                 <option value="brother" {{ old('relation') == 'brother' ? 'selected' : '' }}>Brother</option>
+                                                                 <option value="sister" {{ old('relation') == 'sister' ? 'selected' : '' }}>Sister</option>
+                                                                 <option value="grandfather" {{ old('relation') == 'grandfather' ? 'selected' : '' }}>Grandfather</option>
+                                                                 <option value="grandmother" {{ old('relation') == 'grandmother' ? 'selected' : '' }}>Grandmother</option>
+                                                                 <option value="uncle" {{ old('relation') == 'uncle' ? 'selected' : '' }}>Uncle</option>
+                                                                 <option value="aunt" {{ old('relation') == 'aunt' ? 'selected' : '' }}>Aunt</option>
+                                                                 <option value="nephew" {{ old('relation') == 'nephew' ? 'selected' : '' }}>Nephew</option>
+                                                                 <option value="niece" {{ old('relation') == 'niece' ? 'selected' : '' }}>Niece</option>
+                                                                 <option value="cousin" {{ old('relation') == 'cousin' ? 'selected' : '' }}>Cousin</option>
+                                                                 <option value="other" {{ old('relation') == 'other' ? 'selected' : '' }}>Other</option>
+                                                            </select>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Marital Status</label>
                         <div class="row">
@@ -459,7 +512,7 @@
             ignore: [],
             submitHandler: function(form) {
                 var isValid = true;
-                
+
                 // Validate name and birthdate for all members
                 $('input[name*="[name]"], input[name*="[date]"]').each(function() {
                     if ($(this).val().trim() === '') {
@@ -469,7 +522,7 @@
                         $(this).removeClass('error');
                     }
                 });
-                
+
                 // Validate marriage date for married members
                 $('input[name*="[marital_status]"][value="1"]:checked').each(function() {
                     var memberIndex = this.name.match(/\[(\d+)\]/)[1];
@@ -479,7 +532,7 @@
                         isValid = false;
                     }
                 });
-                
+
                 if (isValid) {
                     form.submit();
                 } else {

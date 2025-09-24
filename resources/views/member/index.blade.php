@@ -103,7 +103,7 @@
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
     <style>
         .active-class-2{
-            background-color: #198754;
+            background: linear-gradient(135deg, #198754 0%, #20c997 100%);
             color : white;
             transform: translateX(5px);
         }
@@ -184,6 +184,17 @@
                                                 <small class="text-muted fw-semibold">Born:</small>
                                                 <div class="fw-semibold">{{ date('M d, Y', strtotime($member->birthdate)) }}
                                                 </div>
+                                            </div>
+
+                                            <div class="mb-2">
+                                                <i class="bi bi-people text-primary me-2"></i>
+                                                <small class="text-muted fw-semibold">Relation:</small>
+                                                @if($member->relation)
+                                                    <div class="fw-semibold">{{ ucfirst($member->relation) }}</div>
+                                                @else
+                                                        <div  class="fw-semibold" >Relation not defined yet</div>
+                                                @endif
+
                                             </div>
 
                                             <div class="mb-2">

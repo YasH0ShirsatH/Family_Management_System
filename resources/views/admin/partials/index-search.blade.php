@@ -68,13 +68,11 @@
                         <div class="d-flex align-items-center">
                             <div class="position-relative me-3">
                                 <img src="{{ asset('uploads/images/' . $user->photo_path) }}"
-                                     class="rounded-circle border border-2" 
-                                     width="70" height="70" 
-                                     style="object-fit: cover; border-color: {{ $user->status == 1 ? '#198754' : '#dc3545' }} !important;" 
+                                     class="rounded-circle border border-2"
+                                     width="70" height="70"
+                                     style="object-fit: cover; border-color: {{ $user->status == 1 ? '#198754' : '#dc3545' }} !important;"
                                      alt="Family Head Photo">
-                                @if($user->status == 1)
-                                    <span class="position-absolute bottom-0 end-0 bg-success rounded-circle" style="width: 20px; height: 20px; border: 3px solid white;"></span>
-                                @endif
+
                             </div>
                             <div class="flex-grow-1">
                                 <h5 class="mb-2 fw-bold text-dark">{{ ucfirst($user->name) }} {{ ucfirst($user->surname) }}</h5>
@@ -87,6 +85,18 @@
                                     <i class="bi bi-calendar3 me-1"></i>
                                     Created: {{ $user->created_at->format('M d, Y') }}
                                 </small>
+                            <div>
+                                <small class="text-warning">
+                                    <i class="bi bi-people me-1"></i>
+                                    Inactive Members : {{ $user->members->where('status','0')->count() }}
+                                </small>
+                            </div>
+                        <div>
+                                <small class="text-danger">
+                                    <i class="bi bi-people me-1"></i>
+                                    Deleted Members : {{ $user->members->where('status','9')->count() }}
+                                </small>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -116,12 +126,12 @@
                                 <div class="d-flex align-items-center">
                                     <i class="bi bi-people-fill text-success me-2"></i>
                                     <span class="text-success fw-bold">
-                                        @if($user->status == '0')
-                                            {{ $user->members->whereIn('status',['1','0'])->count() + 1 }}
+                                        @if($user->status == '0' || $user->status == '9')
+                                            {{ $user->members->count()  }} Total Members
                                         @elseif($user->status == '1')
-                                            {{ $user->members->where('status','1')->count() + 1 }}
+                                            {{ $user->members->where('status','1')->count()  }} Active Members
                                         @endif
-                                        Members
+
                                     </span>
                                 </div>
                             </div>
@@ -142,7 +152,7 @@
                                     <i class="bi bi-pencil me-1"></i>Edit
                                 </a>
                             </div>
-                            
+
                             <!-- Secondary Actions -->
                             <div class="d-flex gap-2">
                                 <a href="{{ route('admin-member.show',$user->id) }}"
@@ -150,11 +160,34 @@
                                     <i class="bi bi-people me-1"></i>Members
                                 </a>
                                 <a href="{{ route('delete',$user->id) }}"
+                                    @if($user->status == '0')
+                                   class="btn btn-danger btn-custom btn-sm flex-fill"
+                                   @else
                                    class="btn btn-outline-danger btn-custom btn-sm flex-fill"
+                                   @endif
                                    onclick="return confirm('Are you sure you want to delete this head?')">
                                     <i class="bi bi-trash me-1"></i>Delete
                                 </a>
                             </div>
+
+                         @if($user->status == '0')
+                             <div class="d-flex flex-column gap-2">
+                                <a href="{{ route('admin-member.activateHeadOnView', $user->id) }}"
+                                   class="btn btn-outline-success btn-custom btn-sm flex-fill {{ $user->status == 1 ? 'disabled-link' : '' }}"
+                                   onclick="return confirm('Are you sure you want to activate this head?')">
+                                <i class="bi bi-check-circle me-1"></i>Activate
+                                </a>
+                            </div>
+                         @endif
+
+                         @if($user->status == '1')
+                             <div class="d-flex flex-column gap-2">
+                             <a href="{{ route('admin-member.deactivateHeadOnView', $user->id) }}"
+                                    onclick="return confirm('Are you sure you want to deactivate this member?')"
+                                    class="btn btn-outline-danger btn-custom btn-sm flex-fill {{ $user->status == 0 ? 'disabled-link' : '' }}">
+                                    <i class="bi bi-x-circle me-1"></i>Deactivate</a>
+                             </div>
+                        @endif
                         </div>
                     </div>
                 </div>

@@ -234,6 +234,17 @@
                                                         <p class="mb-2 d-flex align-items-center">
                                                             <i class="bi bi-calendar3 text-muted me-2"></i>
                                                             <span>{{ date('M d, Y', strtotime($member->birthdate)) }}</span>
+                                                        </p><p class="mb-2 d-flex align-items-center">
+
+                                                            <span>
+                                                                @if($member->relation)
+                                                                <i class="bi bi-people text-muted me-2"></i>
+                                                                {{ ucfirst($member->relation)}} of {{ $heads->name }}
+                                                                @else
+                                                                <i class="bi bi-slash-circle"></i> &nbsp;
+                                                                Relation not defined yet
+                                                                @endif
+                                                            </span>
                                                         </p>
                                                         <p class="mb-2 d-flex align-items-center">
                                                              @if($member->marital_status == 1)

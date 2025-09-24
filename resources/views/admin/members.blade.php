@@ -115,7 +115,7 @@
             color: #721c24;
         }
          .active-class-31{
-                    background-color: #198754;
+                    background : linear-gradient(135deg, #198754 0%, #20c997 100%);
                     color : white;
                     transform: translateX(5px);
                 }

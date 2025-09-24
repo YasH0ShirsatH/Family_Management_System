@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Head;
@@ -104,10 +104,13 @@ class AuthController extends Controller
                 $state = State::where('status', '1')->get();
                 $city = City::where('status', '1')->get();
                 $admin1 = User::where('id', '=', session::get('loginId'))->first();
-                $headcount = $head->count();
-                $membercount = $member->count();
-                $statecount = $state->count();
-                $citycount = $city->count();
+
+                $headcount = Cache::remember('head_count', 300, fn() => Head::count());
+                $membercount = Cache::remember('member_count', 300, fn() => Member::count());
+                $statecount = Cache::remember('state_count', 300, fn() => State::count());
+                $citycount = Cache::remember('city_count', 300, fn() => City::count());
+
+
 
 
 
@@ -204,6 +207,8 @@ class AuthController extends Controller
 
             $heads = Head::where('status','9')->orWhere('status','0')->orderBy('name','asc')->get();
             $heads2 = Head::where('status','1')->orderBy('name','asc')->get();
+            $member2 = Member::whereIn('status',['0','9'])->orderBy('name','asc')->get();
+
             ///head
             $headcount = Head::where('status', '1')->count();
             $inactiveheadcount = Head::where('status', '0')->count();
@@ -241,7 +246,7 @@ class AuthController extends Controller
 
 
 
-            return view('admin.adminProfile', compact('user', 'headcount', 'totalhead', 'deletedheadcount', 'inactiveheadcount', 'membercount', 'inactivemembercount', 'deletedmembercount', 'totalmembercount', 'statecount', 'inactivestatecount', 'deletedstatecount', 'totalstatecount', 'citycount', 'inactivecitycount', 'deletedcitycount', 'totalcitycount', 'admin1','logs','heads','heads2'));
+            return view('admin.adminProfile', compact('user', 'headcount', 'totalhead', 'deletedheadcount', 'inactiveheadcount', 'membercount', 'inactivemembercount', 'deletedmembercount', 'totalmembercount', 'statecount', 'inactivestatecount', 'deletedstatecount', 'totalstatecount', 'citycount', 'inactivecitycount', 'deletedcitycount', 'totalcitycount', 'admin1','logs','heads','heads2','member2'));
         }
     }
 
@@ -273,6 +278,23 @@ class AuthController extends Controller
         log::debug('Admin has Updated Head  (' . $head->name . ' ' . $head->surname . ')  Successfully : ' . Carbon::now()->setTimezone('Asia/Kolkata'));
 
         return redirect('/dashboard/admin-profile')->with('success', 'Head deactivated successfully');
+    }
+
+    public function activateMember(Request $request){
+
+        $member = Member::find($request->active_head_member);
+        $member->update(['status' => '1']);
+
+
+
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+        $log = new Logg();
+        $log->user_id = $admin1->id;
+        $log->logs = 'Member has Activated   (' . $member->name  . ')' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
+        $log->save();
+        log::debug('Admin has Updated member  (' . $member->name . ')  Successfully : ' . Carbon::now()->setTimezone('Asia/Kolkata'));
+
+        return redirect('/dashboard/admin-profile')->with('success', 'Member Activated successfully');
     }
 
     public function getInactiveMembers($headId)

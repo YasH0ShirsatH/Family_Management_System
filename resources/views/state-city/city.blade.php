@@ -20,7 +20,7 @@
             color: #0d6efd;
         }
         .active-class-4{
-            background-color: #198754;
+            background: linear-gradient(135deg, #198754 0%, #20c997 100%);
             color : white;
             transform: translateX(5px);
         }
@@ -45,6 +45,49 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
+            <div class="row g-3 mb-4">
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <a href="{{ route('state.index') }}" style="text-decoration : none">
+                                    <div class="card bg-primary text-white border-0 h-100" style="border-radius: 20px;">
+                                        <div class="card-body text-center py-3 py-md-4">
+                                            <i class="bi bi-geo-alt display-5 display-md-4 mb-2 mb-md-3"></i>
+                                            <h3 class="fw-bold mb-1">{{ $state_count }}</h3>
+                                            <p class="mb-0 opacity-75 small">Total States</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <a href="{{ route('create.city') }}" class="text-decoration-none">
+                                    <div class="card bg-warning text-dark border-0 h-100 shadow-sm"
+                                        style="border-radius: 20px; transition: all 0.3s ease;"
+                                        onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.15)'"
+                                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 10px rgba(0,0,0,0.1)'">
+                                        <div class="card-body text-center py-3 py-md-4">
+                                            <i class="bi bi-plus display-5 display-md-4 mb-2 mb-md-3"></i>
+                                            <h5 class="fw-bold mb-1">Add New City</h5>
+                                            <p class="mb-0 small opacity-75">Create a new city entry</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-12 col-sm-12 col-lg-4">
+
+                                    <div class="card bg-success text-white border-0 h-100" style="border-radius: 20px;">
+                                        <div class="card-body text-center py-3 py-md-4">
+                                            <i class="bi bi-buildings display-5 display-md-4 mb-2 mb-md-3"></i>
+                                            <h3 class="fw-bold mb-1">
+                                                {{ $city_count}}
+                                            </h3>
+                                            <p class="mb-0 opacity-75 small">Total Cities</p>
+                                        </div>
+                                    </div>
+
+                            </div>
+                        </div>
+
+
+
             <!-- Search Card -->
             <div class="card shadow-sm mb-4 border-0 rounded-4">
                 <div class="card-header bg-gradient bg-primary text-white py-3 border-0 rounded-top-4 d-flex justify-content-between align-items-center">
@@ -87,46 +130,7 @@
                 </div>
             </div>
 
-            <div class="row g-3 mb-4">
-                <div class="col-12 col-sm-6 col-lg-4">
-                    <a href="{{ route('state.index') }}" style="text-decoration : none">
-                        <div class="card bg-primary text-white border-0 h-100" style="border-radius: 20px;">
-                            <div class="card-body text-center py-3 py-md-4">
-                                <i class="bi bi-geo-alt display-5 display-md-4 mb-2 mb-md-3"></i>
-                                <h3 class="fw-bold mb-1">{{ $state_count }}</h3>
-                                <p class="mb-0 opacity-75 small">Total States</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-4">
-                    <a href="{{ route('create.city') }}" class="text-decoration-none">
-                        <div class="card bg-warning text-dark border-0 h-100 shadow-sm"
-                            style="border-radius: 20px; transition: all 0.3s ease;"
-                            onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.15)'"
-                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 10px rgba(0,0,0,0.1)'">
-                            <div class="card-body text-center py-3 py-md-4">
-                                <i class="bi bi-plus display-5 display-md-4 mb-2 mb-md-3"></i>
-                                <h5 class="fw-bold mb-1">Add New City</h5>
-                                <p class="mb-0 small opacity-75">Create a new city entry</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-12 col-sm-12 col-lg-4">
 
-                        <div class="card bg-success text-white border-0 h-100" style="border-radius: 20px;">
-                            <div class="card-body text-center py-3 py-md-4">
-                                <i class="bi bi-buildings display-5 display-md-4 mb-2 mb-md-3"></i>
-                                <h3 class="fw-bold mb-1">
-                                    {{ $city_count}}
-                                </h3>
-                                <p class="mb-0 opacity-75 small">Total Cities</p>
-                            </div>
-                        </div>
-
-                </div>
-            </div>
 
             <!-- REPLACE ONLY THIS CONTAINER via AJAX -->
             <div id="tableResults">

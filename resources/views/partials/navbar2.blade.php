@@ -304,7 +304,7 @@
                         Create New
                     </h6>
                     <div class="d-grid gap-2">
-                        <a href="/headview" class="btn btn-outline-info rounded-pill text-start">
+                        <a href="/family-registration" class="btn btn-outline-info rounded-pill text-start">
                             <i class="bi bi-person-plus me-2"></i>Create Family Head
                         </a>
                         <a href="{{ route('create.state') }}" class="btn btn-outline-info rounded-pill text-start active-class-5">

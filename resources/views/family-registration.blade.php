@@ -88,7 +88,7 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-3 form-group">
                                             <label class="form-label fw-semibold">Date of Birth</label>
-                                            <input type="date" name="head_birthdate" class="form-control rounded-pill" value="{{ old('head_birthdate') }}">
+                                            <input type="date" id="dobField" name="head_birthdate" class="form-control rounded-pill" value="{{ old('head_birthdate') }}">
                                             <div class="validation-error"></div>
                                             @error('head_birthdate')<div class="text-danger">{{ $message }}</div>@enderror
                                         </div>
@@ -202,7 +202,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div id="membersContainer">
-                                        <!-- Members will be added here dynamically -->
+
                                     </div>
                                     <div class="text-center text-muted py-3" id="noMembersMessage">
                                         <i class="bi bi-person-plus-fill" style="font-size: 2rem;"></i>
@@ -319,7 +319,7 @@
                     </div>
                 </div>
             `;
-            
+
             membersContainer.insertAdjacentHTML('beforeend', memberHtml);
             noMembersMessage.style.display = 'none';
 
@@ -356,12 +356,20 @@
             const mariageDateField = `members[${count}][mariage_date]`;
             const photoField = `members[${count}][photo]`;
 
+            $.validator.addMethod("noNumbers", function(value, element) {
+                        return this.optional(element) || /^[a-zA-Z\s]*$/.test(value);
+                    }, "Please enter only letters and spaces.");
+
+
+
             $(`input[name="${nameField}"]`).rules('add', {
                 required: true,
                 minlength: 2,
+                noNumbers : true,
                 messages: {
                     required: "Please enter member name",
-                    minlength: "Name must be at least 2 characters"
+                    minlength: "Name must be at least 2 characters",
+                    noNumbers: "Numbers are not allowed",
                 }
             });
 
@@ -383,6 +391,7 @@
                 required: function() {
                     return $(`#member_${count}_married`).is(':checked');
                 },
+
                 messages: {
                     required: "Please enter marriage date"
                 }
@@ -457,6 +466,10 @@
             return true;
         }, "File size exceeds the allowed limit.");
 
+        $.validator.addMethod("noNumbers", function(value, element) {
+            return this.optional(element) || /^[a-zA-Z\s]*$/.test(value);
+        }, "Please enter only letters and spaces.");
+
         $.validator.addMethod("ageAbove21", function(value, element) {
             if (!value) return true;
             var dob = new Date(value);
@@ -467,28 +480,49 @@
             return age >= 21;
         }, "You must be at least 21 years old.");
 
+        $.validator.addMethod("minMarriageAge", function(value, element, dobSelector) {
+            if (!value || !$(dobSelector).val()) {
+                return true; // No validation if either date is empty
+            }
+
+            var marriageDate = new Date(value);
+            var dob = new Date($(dobSelector).val());
+
+            var age = marriageDate.getFullYear() - dob.getFullYear();
+            var m = marriageDate.getMonth() - dob.getMonth();
+
+            if (m < 0 || (m === 0 && marriageDate.getDate() < dob.getDate())) {
+                age--;
+            }
+
+            return age >= 18;
+        }, "The individual must be at least 18 years old at the time of marriage.");
+
         $('#formSubmit').validate({
             rules: {
-                head_name: { required: true, minlength: 3 },
-                head_surname: { required: true, minlength: 3 },
+                head_name: { required: true, minlength: 3 , noNumbers : true },
+                head_surname: { required: true, minlength: 3 ,  noNumbers : true},
                 head_birthdate: { required: true, ageAbove21: true },
                 head_mobile: { required: true, rangelength: [10, 10], number: true },
                 head_address: { required: true },
                 head_state: { required: true },
                 head_city: { required: true },
                 head_pincode: { required: true, rangelength: [6, 6], number: true },
-                head_marital_status: { required: true },
+                head_marital_status: { required: true   },
                 head_mariage_date: {
+
                     required: function() {
-                        return $("#head_married").is(":checked");
-                    }
+                                           return $("#head_married").is(":checked");
+                                       },
+                     minMarriageAge : "#dobField"
+
                 },
                 'head_hobbies[]': { required: true },
                 head_photo: { required: true, extension: "jpg|jpeg|png", maxfilesize: 2 }
             },
             messages: {
-                head_name: { required: "Please enter name" },
-                head_surname: { required: "Please enter surname" },
+                head_name: { required: "Please enter name" , noNumbers : "Numbers are not allowed in this field" },
+                head_surname: { required: "Please enter surname" ,noNumbers : "Numbers are not allowed in this field"},
                 head_birthdate: { required: "Please enter birthdate", ageAbove21: "You must be at least 21 years old to proceed." },
                 head_mobile: { required: "Please enter mobile", rangelength: "Mobile must be 10 digits", number: "Please enter valid 10 digit mobile" },
                 head_address: { required: "Please enter address" },

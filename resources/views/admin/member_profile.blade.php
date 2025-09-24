@@ -117,6 +117,24 @@
                                             </span>
                                             <span class="fw-semibold">{{ date('M d, Y', strtotime($members->birthdate)) }}</span>
                                         </div>
+                                        <div class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+                                             @if( $members->relation )
+                                                <span class="text-muted">
+                                                    <i class="bi bi-people text-primary me-2"></i>Relationship with head
+                                                </span>
+                                                <span class="fw-semibold">
+                                                        {{ ucfirst($members->relation) }}
+                                                </span>
+                                             @else
+                                                    <span class="text-muted">
+                                                        <i class="bi bi-slash-circle text-danger me-2"></i>Relationship with head
+                                                    </span>
+                                                    <span class="fw-semibold">
+                                                        Not Provided
+                                                    </span>
+                                             @endif
+
+                                        </div>
 
                                         <div class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
                                             <span class="text-muted">
@@ -131,7 +149,7 @@
                                         @if($members->mariage_date)
                                         <div class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
                                             <span class="text-muted">
-                                                <i class="bi bi-heart-fill text-danger me-2"></i>Marriage Date
+                                                <i class="bi bi-calendar3 text-danger me-2"></i>Marriage Date
                                             </span>
                                             <span class="fw-semibold">{{ date('M d, Y', strtotime($members->mariage_date)) }}</span>
                                         </div>
