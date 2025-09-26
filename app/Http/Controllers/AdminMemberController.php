@@ -243,5 +243,34 @@ class AdminMemberController extends Controller
         return Excel::download(new MembersExport, 'members.xlsx');
     }
 
+    public function activate($id)
+    {
+        $member = Member::find($id);
+        $parentId = $member->head->id;
+        $member->update(['status' => '1']);
+        
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+        $log = new Logg();
+        $log->user_id = $admin1->id;
+        $log->logs = 'Admin Activated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " on " .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
+        $log->save();
+        
+        return redirect()->route('admin-member.show', $parentId)->with('success', 'Member activated successfully.');
+    }
+
+    public function deactivate($id)
+    {
+        $member = Member::find($id);
+        $parentId = $member->head->id;
+        $member->update(['status' => '0']);
+        
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+        $log = new Logg();
+        $log->user_id = $admin1->id;
+        $log->logs = 'Admin Deactivated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " on " .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
+        $log->save();
+        
+        return redirect()->route('admin-member.show', $parentId)->with('success', 'Member deactivated successfully.');
+    }
 
 }

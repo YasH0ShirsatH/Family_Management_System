@@ -31,6 +31,7 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         $query = Head::query();
+        $states = State::where('status','1')->get();
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
         if ($request->filled('search')) {
@@ -46,19 +47,25 @@ class AdminController extends Controller
         }
 
         $query->whereIn('status', ['1','0']);
-        $category1 = $request->category ?? 'name';
+        $category1 = $request->category ?? 'created_at';
 
-        if ($category1 == "created_at") {
-            $query->orderBy('created_at', 'desc');
+        if ($category1 == "name") {
+            $query->orderBy('name', 'asc');
         } elseif ($category1 == "updated_at") {
             $query->orderBy('updated_at', 'desc');
         } elseif ($category1 == "updated_at_asc") {
             $query->orderBy('updated_at', 'asc');
         } elseif ($category1 == "created_at_asc") {
             $query->orderBy('created_at', 'asc');
+        } elseif ($category1 == "alphabetically") {
+            $query->orderBy('name', 'asc');
+        }elseif ($category1 == "inactive_asc") {
+            $query->where('status','0')->orderBy('updated_at', 'asc');
+        }elseif ($category1 == "inactive_desc") {
+            $query->where('status','0')->orderBy('updated_at', 'desc');
         }
         else {
-            $query->orderBy('name', 'asc');
+            $query->orderBy('created_at', 'desc');
         }
 
 
@@ -66,15 +73,18 @@ class AdminController extends Controller
         $totalMembers = Member::whereIn('status', ['1','0'])->count();
 
         if ($request->ajax()) {
-            return view('admin.partials.index-search', compact('heads', 'totalMembers', 'admin1', 'category1'));
+            return view('admin.partials.index-search', compact('heads', 'totalMembers','states', 'admin1', 'category1'));
         }
 
-        return view("admin.index", compact("heads", 'totalMembers', 'admin1', 'category1'));
+        return view("admin.index", compact("heads", 'totalMembers', 'admin1','states', 'category1'));
     }
 
     public function allMembers(Request $request)
     {
-        $query = Member::with('head')->whereIn('status', ['0','1']);
+        $query = Member::with('head')->whereIn('status', ['0','1'])
+            ->whereHas('head', function($q) {
+                $q->whereIn('status', ['0','1']);
+            });
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
         // Search functionality
@@ -94,9 +104,9 @@ class AdminController extends Controller
         }
 
         // Sorting functionality
-        $category1 = $request->category ?? 'name';
-        if ($category1 == "created_at") {
-            $query->orderBy('members.created_at', 'desc');
+        $category1 = $request->category ?? 'created_at';
+        if ($category1 == "name") {
+            $query->orderBy('members.name', 'asc');
         } elseif ($category1 == "updated_at") {
             $query->orderBy('members.updated_at', 'desc');
         } elseif ($category1 == "updated_at_asc") {
@@ -109,8 +119,10 @@ class AdminController extends Controller
             $query->orderBy('members.birthdate', 'asc');
         } elseif ($category1 == "inactive") {
             $query->where('status','0')->orderBy('members.status', 'asc');
-        } else {
+        } elseif ($category1 == "alphabetically") {
             $query->orderBy('members.name', 'asc');
+        } else {
+            $query->orderBy('members.created_at', 'desc');
         }
 
         $members = $query->paginate(10)->withQueryString();
@@ -126,7 +138,10 @@ class AdminController extends Controller
 
 public function viewMemberDetails($id)
     {
-        $members = Member::with('head')->find($id);
+        $members = Member::with('head')->whereIn('status',['0','1'])
+            ->whereHas('head', function($q) {
+                $q->whereIn('status', ['0','1']);
+            })->find($id);
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
         return view("admin.member_profile", ["members" => $members, 'admin1' => $admin1]);
@@ -162,7 +177,7 @@ public function viewMemberDetails($id)
         }
 
         $query->whereIn('status', ['1','0']);
-        $category1 = $request->category ?? 'name';
+        $category1 = $request->category ?? 'created_at';
 
         if ($category1 == "created_at") {
             $query->orderBy('created_at', 'desc');
@@ -172,8 +187,10 @@ public function viewMemberDetails($id)
             $query->orderBy('updated_at', 'asc');
         } elseif ($category1 == "created_at_asc") {
             $query->orderBy('created_at', 'asc');
-        } else {
+        } elseif ($category1 == "alphabetically") {
             $query->orderBy('name', 'asc');
+        } else {
+            $query->orderBy('created_at', 'desc');
         }
 
         $heads = $query->get();
@@ -431,6 +448,8 @@ public function viewMemberDetails($id)
         $head = Head::with(['members' => function($query) {
             $query->where('status', '1');
         }, 'hobbies'])->where('status', '1')->find($id);
+        $states = State::where('status','1')->get();
+
         $headstatus = Head::where('id', $id)->first();
         if ($headstatus->status == '0') {
             return redirect()->route('admin.index')->with('error', 'Head is inactive. Activate head to edit details via admin profile');

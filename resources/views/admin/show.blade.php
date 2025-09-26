@@ -11,7 +11,7 @@
         <style>
             .active-class-2 { background-color: #198754; color: white; transform: translateX(5px); }
             .status-icon { font-size: 4rem; color: #ffc107; margin-bottom: 1rem; animation: pulse 2s infinite; }
-            @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
         </style>
     </head>
     <body class="bg-light">
@@ -30,7 +30,7 @@
                                 <h4 class="fw-bold text-dark mb-3">Access Restricted</h4>
                                 <p class="text-muted mb-4 lead">This family's profile is currently inactive and cannot be viewed.</p>
                                 <div class="alert alert-warning border-0 mb-4">
-                                    <i class="bi bi-info-circle me-2"></i>Contact administrator to activate this family.
+                                    <i class="bi bi-info-circle me-2"></i>Activate this family to view family.
                                 </div>
                                 <a href="{{ route('admin.index') }}" class="btn btn-primary rounded-pill px-4">
                                     <i class="bi bi-arrow-left me-2"></i>Back to Families

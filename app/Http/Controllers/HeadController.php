@@ -205,6 +205,7 @@ class HeadController extends Controller
             'members.*.name' => 'required|string',
             'members.*.birthdate' => 'required|date',
             'members.*.marital_status' => 'required',
+            'members.*.relation' => 'required',
             'members.*.mariage_date' => 'required_if:members.*.marital_status,1',
             'members.*.photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
@@ -225,11 +226,11 @@ class HeadController extends Controller
         $head->city = $request->head_city;
         $head->pincode = $request->head_pincode;
         $head->marital_status = $request->head_marital_status;
-        
+
         if ($request->head_marital_status == 1) {
             $head->mariage_date = $request->head_mariage_date;
         }
-        
+
         // Handle head photo
         if ($request->hasFile('head_photo')) {
             $file = $request->file('head_photo');
@@ -237,9 +238,9 @@ class HeadController extends Controller
             $file->move('uploads/images/', $filename);
             $head->photo_path = $filename;
         }
-        
+
         $head->save();
-        
+
         // Create hobbies
         foreach ($request->head_hobbies as $hobby) {
             $head->hobbies()->create([
@@ -247,7 +248,7 @@ class HeadController extends Controller
                 'hobby_name' => $hobby,
             ]);
         }
-        
+
         // Create members if any
         if ($request->has('members')) {
             foreach ($request->members as $memberData) {
@@ -257,20 +258,21 @@ class HeadController extends Controller
                     $filename = time() . '_' . $file->getClientOriginalName();
                     $file->move('uploads/images/', $filename);
                 }
-                
+
                 $head->members()->create([
                     'name' => $memberData['name'],
                     'birthdate' => $memberData['birthdate'],
                     'marital_status' => $memberData['marital_status'],
+                    'relation' => $memberData['relation'],
                     'mariage_date' => $memberData['marital_status'] == 1 ? $memberData['mariage_date'] : null,
                     'education' => $memberData['education'] ?? null,
                     'photo_path' => $filename,
                 ]);
             }
         }
-        
+
         Log::debug('Complete family registered: Head (' . $request->head_name . ' ' . $request->head_surname . ') with ' . count($request->members ?? []) . ' members on: ' . Carbon::now()->setTimezone('Asia/Kolkata'));
-        
+
         return redirect()->route('family.registration')->with('success', 'Complete family registered successfully! Head: ' . $request->head_name . ' ' . $request->head_surname);
     }
 

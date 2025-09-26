@@ -83,6 +83,8 @@ Route::get('/adminfamilySection/{id}', [AdminMemberController::class, 'familySec
 Route::get('/pdf/members/download/all', [AdminMemberController::class, 'print_member_all_pdf'])->name('download_all_members');
 Route::get('/excel/members/download/all', [AdminMemberController::class, 'export'])->name('download_excel_all_members');
 Route::get('/member/delete/{id}', [AdminMemberController::class, 'delete'])->name('member.delete');
+Route::patch('/member/activate/{id}', [AdminMemberController::class, 'activate'])->name('member.activate');
+Route::patch('/member/deactivate/{id}', [AdminMemberController::class, 'deactivate'])->name('member.deactivate');
 Route::post('/admin.add-member/{id}', [AdminMemberController::class, 'addMember'])->name('adminAddMember');
 
 /// STATE AND CITY SECTION

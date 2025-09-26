@@ -13,6 +13,10 @@ class Member extends Model
         'mariage_date',
         'relation',
         'education',
+        'address',
+        'state',
+        'city',
+        'pincode',
         'photo_path',
         'status'
     ];

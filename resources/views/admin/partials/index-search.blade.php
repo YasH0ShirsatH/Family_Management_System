@@ -110,15 +110,28 @@
                                     <span class="fw-medium">{{ $user->mobile }}</span>
                                 </div>
                             </div>
+
+                            @if($states->where('status','1')->where('name',$user->state)->count() > 0 && $states->where('status','1')->where('name',$user->state)->first()->cities->where('status','1')->where('name',$user->city)->count() > 0)
                             <div class="col-12">
                                 <div class="d-flex align-items-center mb-2">
                                     <i class="bi bi-geo-alt-fill text-primary me-2"></i>
                                     <span class="fw-medium">{{ ucfirst($user->city) }}, {{ $user->state }}</span>
                                 </div>
                             </div>
+                            @else
+                            <div class="col-12">
+                                                            <div class="d-flex align-items-center mb-2">
+                                                                <i class="bi bi-geo-alt-fill text-danger me-2"></i>
+                                                                <span class="fw-medium text-danger">City or State may be deleted</span>
+                                                            </div>
+                                                        </div>
+
+                            @endif
+
+
                             <div class="col-12">
                                 <div class="d-flex align-items-center mb-2">
-                                    <i class="bi bi-cake2-fill text-primary me-2"></i>
+                                    <i class="bi bi-calendar3 text-primary me-2"></i>
                                     <span class="fw-medium">{{ date('M d, Y', strtotime($user->birthdate)) }}</span>
                                 </div>
                             </div>
@@ -147,47 +160,55 @@
                                    class="btn btn-primary btn-custom btn-sm flex-fill {{ $user->status != 1 ? 'disabled-link' : '' }}">
                                     <i class="bi bi-eye me-1"></i>View
                                 </a>
+                             @if($states->where('status','1')->where('name',$user->state)->count() > 0 && $states->where('status','1')->where('name',$user->state)->first()->cities->where('status','1')->where('name',$user->city)->count() > 0)
                                 <a href="{{ route('admin.fulledit', $user->id) }}"
                                    class="btn btn-warning btn-custom btn-sm flex-fill {{ $user->status != 1 ? 'disabled-link' : '' }}">
                                     <i class="bi bi-pencil me-1"></i>Edit
                                 </a>
+                            @else
+                            <a href="{{ route('admin.fulledit', $user->id) }}"
+                                                               class="btn btn-warning btn-custom btn-sm flex-fill ">
+                                                                <i class="bi bi-pencil me-1"></i>Edit(State/City)
+                                                            </a>
+                            @endif
                             </div>
 
                             <!-- Secondary Actions -->
-                            <div class="d-flex gap-2">
+                            <div class="d-flex gap-2 justify-content-between">
                                 <a href="{{ route('admin-member.show',$user->id) }}"
-                                   class="btn btn-outline-info btn-custom btn-sm flex-fill {{ $user->status != 1 ? 'disabled-link' : '' }}">
+                                   class="btn btn-outline-info btn-custom w-50 btn-sm flex-fill {{ $user->status != 1 ? 'disabled-link' : '' }}" >
                                     <i class="bi bi-people me-1"></i>Members
                                 </a>
-                                <a href="{{ route('delete',$user->id) }}"
-                                    @if($user->status == '0')
-                                   class="btn btn-danger btn-custom btn-sm flex-fill"
-                                   @else
-                                   class="btn btn-outline-danger btn-custom btn-sm flex-fill"
-                                   @endif
-                                   onclick="return confirm('Are you sure you want to delete this head?')">
-                                    <i class="bi bi-trash me-1"></i>Delete
-                                </a>
+                                @if($user->status == '0')
+
+                                                                <a href="{{ route('admin-member.activateHeadOnView', $user->id) }}"
+                                                                   class="btn btn-outline-success btn-custom btn-sm flex-fill {{ $user->status == 1 ? 'disabled-link' : '' }} " style="width : 48%"
+                                                                   onclick="return confirm('Are you sure you want to activate this head?')">
+                                                                <i class="bi bi-check-circle me-1"></i>Activate
+                                                                </a>
+
+                                                         @endif
+
+                                                         @if($user->status == '1')
+
+                                                             <a href="{{ route('admin-member.deactivateHeadOnView', $user->id) }}"
+                                                                    onclick="return confirm('Are you sure you want to deactivate this member?')"
+                                                                    class="btn btn-outline-danger btn-custom btn-sm flex-fill {{ $user->status == 0 ? 'disabled-link' : '' }}" style="width : 48%">
+                                                                    <i class="bi bi-x-circle me-1"></i>Deactivate</a>
+
+                                                        @endif
                             </div>
 
-                         @if($user->status == '0')
-                             <div class="d-flex flex-column gap-2">
-                                <a href="{{ route('admin-member.activateHeadOnView', $user->id) }}"
-                                   class="btn btn-outline-success btn-custom btn-sm flex-fill {{ $user->status == 1 ? 'disabled-link' : '' }}"
-                                   onclick="return confirm('Are you sure you want to activate this head?')">
-                                <i class="bi bi-check-circle me-1"></i>Activate
-                                </a>
-                            </div>
-                         @endif
 
-                         @if($user->status == '1')
-                             <div class="d-flex flex-column gap-2">
-                             <a href="{{ route('admin-member.deactivateHeadOnView', $user->id) }}"
-                                    onclick="return confirm('Are you sure you want to deactivate this member?')"
-                                    class="btn btn-outline-danger btn-custom btn-sm flex-fill {{ $user->status == 0 ? 'disabled-link' : '' }}">
-                                    <i class="bi bi-x-circle me-1"></i>Deactivate</a>
-                             </div>
-                        @endif
+                        <a href="{{ route('delete',$user->id) }}"
+                                                            @if($user->status == '0')
+                                                           class="btn btn-danger btn-custom btn-sm flex-fill"
+                                                           @else
+                                                           class="btn btn-danger btn-custom btn-sm flex-fill"
+                                                           @endif
+                                                           onclick="return confirm('Are you sure you want to delete this head?')">
+                                                            <i class="bi bi-trash me-1"></i>Delete
+                                                        </a>
                         </div>
                     </div>
                 </div>

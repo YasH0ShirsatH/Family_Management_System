@@ -263,11 +263,15 @@
                             </div>
                             <div class="col-12 col-md-auto">
                                 <select name="category" id="category" class="form-select" style="max-width: 300px;">
-                                    <option value="name">Select Category</option>
-                                    <option value="updated_at">Updated At (Latest)</option>
-                                    <option value="updated_at_asc">Updated At (Oldest)</option>
                                     <option value="created_at">Created At (Latest)</option>
                                     <option value="created_at_asc">Created At (Oldest)</option>
+                                    <option value="updated_at">Updated At (Latest)</option>
+                                    <option value="updated_at_asc">Updated At (Oldest)</option>
+                                    <option value="inactive_asc">Inactive  (Oldest)</option>
+                                    <option value="inactive_desc">Inactive (Recently)</option>
+
+                                    <option value="name">Alphabetcally</option>
+
 
                                 </select>
                             </div>
@@ -317,14 +321,14 @@
 
             $(document).on('keyup', '#searchInput', function() {
                 const query = $(this).val();
-                
+
                 // Show/hide export button based on input
                 if (query.trim().length > 0) {
                     $('#pdfSearchBtn').removeClass('d-none');
                 } else {
                     $('#pdfSearchBtn').addClass('d-none');
                 }
-                
+
                 clearTimeout(debounceTimeout);
                 debounceTimeout = setTimeout(function() {
                     fetchList({

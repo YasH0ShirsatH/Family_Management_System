@@ -203,11 +203,12 @@
                             </div>
                             <div class="col-12 col-md-auto">
                                 <select name="category" id="category" class="form-select" style="max-width: 300px;">
-                                    <option value="name">Select Category</option>
+                                    <option value="created_at">Created At (Latest)</option>
+                                                                        <option value="created_at_asc">Created At (Oldest)</option>
+                                    <option value="name">Alphabetically</option>
                                     <option value="updated_at">Updated At (Latest)</option>
                                     <option value="updated_at_asc">Updated At (Oldest)</option>
-                                    <option value="created_at">Created At (Latest)</option>
-                                    <option value="created_at_asc">Created At (Oldest)</option>
+
                                     <option value="birthdate">Age (Youngest)</option>
                                     <option value="birthdate_asc">Age (Oldest)</option>
                                     <option value="inactive">Inactive</option>

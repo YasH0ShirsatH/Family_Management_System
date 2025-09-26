@@ -35,7 +35,7 @@
         <!-- Header with Logout -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="text-primary fw-bold"><i class="bi bi-people-fill me-2"></i>Family Management</h2>
-            
+
         </div>
 
         <!-- Alerts -->
@@ -187,7 +187,7 @@
                 <i class="bi bi-box-arrow-right me-2"></i>Submit
             </a>
         </div>
-        
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

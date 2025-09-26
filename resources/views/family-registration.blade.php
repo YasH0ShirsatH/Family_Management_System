@@ -73,13 +73,13 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-3 form-group">
                                             <label class="form-label fw-semibold">First Name</label>
-                                            <input type="text" name="head_name" class="form-control rounded-pill" placeholder="Enter first name" value="{{ old('head_name') }}">
+                                            <input type="text" id="head_name" name="head_name" class="form-control rounded-pill" placeholder="Enter first name" value="{{ old('head_name') }}">
                                             <div class="validation-error"></div>
                                             @error('head_name')<div class="text-danger">{{ $message }}</div>@enderror
                                         </div>
                                         <div class="col-md-6 mb-3 form-group">
                                             <label class="form-label fw-semibold">Last Name</label>
-                                            <input type="text" name="head_surname" class="form-control rounded-pill" placeholder="Enter last name" value="{{ old('head_surname') }}">
+                                            <input type="text" id="head_surname" name="head_surname" class="form-control rounded-pill" placeholder="Enter last name" value="{{ old('head_surname') }}">
                                             <div class="validation-error"></div>
                                             @error('head_surname')<div class="text-danger">{{ $message }}</div>@enderror
                                         </div>
@@ -296,7 +296,7 @@
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="members[${memberCount}][marital_status]" id="member_${memberCount}_unmarried" value="0">
-                                        <label class="form-check-label" for="member_${memberCount}_unmarried">Single</label>
+                                        <label class="form-check-label" for="member_${memberCount}_unmarried">Unmarried</label>
                                     </div>
                                 </div>
                                 <div class="validation-error"></div>
@@ -305,7 +305,26 @@
                                     <div class="validation-error"></div>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-3 form-group">
+                            <label class="form-label fw-semibold"><i class="bi bi-people me-2"></i>Relation</label>
+                                  <select name="members[${memberCount}][relation]" class="form-select mb-4 rounded-pill @error('relation') is-invalid @enderror">
+                                                                                            <option value="">Select Relation</option>
+                                                                                            <option value="spouse" {{ old('relation') == 'spouse' ? 'selected' : '' }}>Spouse</option>
+                                                                                             <option value="son" {{ old('relation') == 'son' ? 'selected' : '' }}>Son</option>
+                                                                                             <option value="daughter" {{ old('relation') == 'daughter' ? 'selected' : '' }}>Daughter</option>
+                                                                                             <option value="father" {{ old('relation') == 'father' ? 'selected' : '' }}>Father</option>
+                                                                                             <option value="mother" {{ old('relation') == 'mother' ? 'selected' : '' }}>Mother</option>
+                                                                                             <option value="brother" {{ old('relation') == 'brother' ? 'selected' : '' }}>Brother</option>
+                                                                                             <option value="sister" {{ old('relation') == 'sister' ? 'selected' : '' }}>Sister</option>
+                                                                                             <option value="grandfather" {{ old('relation') == 'grandfather' ? 'selected' : '' }}>Grandfather</option>
+                                                                                             <option value="grandmother" {{ old('relation') == 'grandmother' ? 'selected' : '' }}>Grandmother</option>
+                                                                                             <option value="uncle" {{ old('relation') == 'uncle' ? 'selected' : '' }}>Uncle</option>
+                                                                                             <option value="aunt" {{ old('relation') == 'aunt' ? 'selected' : '' }}>Aunt</option>
+                                                                                             <option value="nephew" {{ old('relation') == 'nephew' ? 'selected' : '' }}>Nephew</option>
+                                                                                             <option value="niece" {{ old('relation') == 'niece' ? 'selected' : '' }}>Niece</option>
+                                                                                             <option value="cousin" {{ old('relation') == 'cousin' ? 'selected' : '' }}>Cousin</option>
+                                                                                             <option value="other" {{ old('relation') == 'other' ? 'selected' : '' }}>Other</option>
+                            </select>
+                            <div class="col-md-6 mt-3 mb-3 form-group">
                                 <label class="form-label fw-semibold">Education (Optional)</label>
                                 <input type="text" name="members[${memberCount}][education]" class="form-control rounded-pill" placeholder="Enter education">
                                 <div class="validation-error"></div>
@@ -497,11 +516,14 @@
 
             return age >= 18;
         }, "The individual must be at least 18 years old at the time of marriage.");
+//          $.validator.addMethod("notEqual", function(value, element, param) {
+//                return this.optional(element) || value !== $(param).val();
+//            }, "Please don't enter same value for name and surname.");
 
         $('#formSubmit').validate({
             rules: {
-                head_name: { required: true, minlength: 3 , noNumbers : true },
-                head_surname: { required: true, minlength: 3 ,  noNumbers : true},
+                head_name: { required: true, minlength: 3 , noNumbers : true  },
+                head_surname: { required: true, minlength: 3 ,  noNumbers : true },
                 head_birthdate: { required: true, ageAbove21: true },
                 head_mobile: { required: true, rangelength: [10, 10], number: true },
                 head_address: { required: true },
