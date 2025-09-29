@@ -7,88 +7,184 @@
     <title>Dashboard - Family Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+        .dashboard-card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: none;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        .origami-header {
+            background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
+            color: white;
+            padding: 20px 25px;
+            margin: 0;
+            border-radius: 0;
+        }
+        .action-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: none;
+            display: block;
+            height: 100%;
+        }
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: inherit;
+        }
+        .stat-pill {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        .welcome-banner {
+            background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
+            color: white;
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+    </style>
 </head>
 
 <body>
     <div id="mainContent">
-
         @include('partials.navbar2', ['shouldShowDiv' => true])
 
         <div class="container py-4">
-            <div class="dashboard-header text-center abc">
-                <h2><i class="bi bi-speedometer2 me-2"></i>Family Management Dashboard</h2>
-                <p class="lead mb-0">Welcome! Here’s a quick overview and access to key features.</p>
+            <!-- Welcome Banner -->
+            <div class="welcome-banner text-center">
+                <h1 class="fw-bold mb-3">
+                    <i class="bi bi-house-heart me-3"></i>
+                    Family Management Dashboard
+                </h1>
+                <p class="lead mb-0 opacity-90">Manage families, members, and locations with ease</p>
             </div>
 
             @if (session('error'))
-                <div class="alert alert-success alert-dismissible fade show rounded-pill">
+                <div class="alert alert-success alert-dismissible fade show rounded-pill mb-4">
                     {{ session('error') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
 
-            <!-- Quick Access Buttons -->
-            <div class="row quick-access g-4 mb-4">
+            <!-- Quick Actions -->
+            <div class="row g-4 mb-5">
+                <div class="col-12">
+                    <h3 class="fw-bold mb-4">
+                        <i class="bi bi-lightning me-2 text-primary"></i>
+                        Quick Actions
+                    </h3>
+                </div>
                 <div class="col-md-4">
-                    <a href="{{ route('admin.index') }}" class="btn btn-primary w-100 shadow">
-                        <i class="bi bi-people fs-2 d-block mb-2"></i>
-                        <span class="fw-bold">Manage Families</span>
-                        <div class="small">View and manage all family records</div>
+                    <a href="{{ route('admin.index') }}" class="action-card">
+                        <div class="text-center">
+                            <div class="mb-3">
+                                <i class="bi bi-people-fill text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h5 class="fw-bold text-primary mb-2">Manage Families</h5>
+                            <p class="text-muted mb-0">View, edit, and organize family records</p>
+                        </div>
                     </a>
                 </div>
                 <div class="col-md-4">
-                    <a href="/family-registration" class="btn btn-success w-100 shadow">
-                        <i class="bi bi-plus-circle fs-2 d-block mb-2"></i>
-                        <span class="fw-bold">Create Head</span>
-                        <div class="small">Create a new Family Tree</div>
+                    <a href="/family-registration" class="action-card">
+                        <div class="text-center">
+                            <div class="mb-3">
+                                <i class="bi bi-person-plus-fill text-success" style="font-size: 3rem;"></i>
+                            </div>
+                            <h5 class="fw-bold text-success mb-2">Create Family</h5>
+                            <p class="text-muted mb-0">Register new family head and members</p>
+                        </div>
                     </a>
                 </div>
                 <div class="col-md-4">
-                    <a href="/state-city" class="btn btn-warning w-100 shadow">
-                        <i class="bi bi-buildings fs-2 d-block mb-2"></i>
-                        <span class="fw-bold">Manage States</span>
-                        <div class="small">View and Manage States and Cities</div>
+                    <a href="/state-city" class="action-card">
+                        <div class="text-center">
+                            <div class="mb-3">
+                                <i class="bi bi-geo-alt-fill text-warning" style="font-size: 3rem;"></i>
+                            </div>
+                            <h5 class="fw-bold text-warning mb-2">Manage Locations</h5>
+                            <p class="text-muted mb-0">Configure states and cities</p>
+                        </div>
                     </a>
                 </div>
             </div>
 
-            <!-- Stats Section -->
-            <div class="row stats-row g-4 mb-4">
-                <div class="col-md-3 col-6">
-                    <div class="stat-card">
-                        <div class="stat-icon text-primary"><i class="bi bi-people"></i></div>
-                        <div class="stat-value text-primary">{{ $headcount }}</div>
-                        <div class="stat-label">Total Families</div>
-                    </div>
+            <!-- Statistics Overview -->
+            <div class="dashboard-card">
+                <div class="origami-header">
+                    <h4 class="fw-bold mb-0">
+                        <i class="bi bi-bar-chart me-2"></i>
+                        System Overview
+                    </h4>
                 </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-card">
-                        <div class="stat-icon text-success"><i class="bi bi-person-check"></i></div>
-                        <div class="stat-value text-success">{{ $membercount }}</div>
-                        <div class="stat-label">Active Members</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-card">
-                        <div class="stat-icon text-warning"><i class="bi bi-geo-alt"></i></div>
-                        <div class="stat-value text-warning">{{ $statecount }}</div>
-                        <div class="stat-label">Total States</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-card">
-                        <div class="stat-icon text-danger"><i class="bi bi-geo-fill"></i></div>
-                        <div class="stat-value text-danger">{{ $citycount }}</div>
-                        <div class="stat-label">Total Cities</div>
+                <div class="p-4">
+                    <div class="row g-4">
+                        <div class="col-md-3 col-6">
+                            <div class="stat-pill">
+                                <div class="mb-2">
+                                    <i class="bi bi-people text-primary" style="font-size: 2rem;"></i>
+                                </div>
+                                <h3 class="fw-bold text-primary mb-1">{{ $headcount }}</h3>
+                                <small class="text-muted">Total Families</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="stat-pill">
+                                <div class="mb-2">
+                                    <i class="bi bi-person-check text-success" style="font-size: 2rem;"></i>
+                                </div>
+                                <h3 class="fw-bold text-success mb-1">{{ $membercount }}</h3>
+                                <small class="text-muted">Active Members</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="stat-pill">
+                                <div class="mb-2">
+                                    <i class="bi bi-geo-alt text-warning" style="font-size: 2rem;"></i>
+                                </div>
+                                <h3 class="fw-bold text-warning mb-1">{{ $statecount }}</h3>
+                                <small class="text-muted">Total States</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="stat-pill">
+                                <div class="mb-2">
+                                    <i class="bi bi-geo-fill text-danger" style="font-size: 2rem;"></i>
+                                </div>
+                                <h3 class="fw-bold text-danger mb-1">{{ $citycount }}</h3>
+                                <small class="text-muted">Total Cities</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Charts Section -->
 
+        </div>
+    </div>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

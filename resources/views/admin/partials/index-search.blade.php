@@ -1,16 +1,21 @@
 <style>
     .head-card {
-        transition: all 0.3s ease;
-        border: 2px solid transparent;
+        border-radius: 50px;
+        border: none;
+        background: #fff;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        transition: transform 0.2s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .head-card:hover {
+        transform: translateY(-2px);
     }
     .head-card.active {
-        opacity: 1;
-        border-color: #198754;
-        box-shadow: 0 4px 15px rgba(25, 135, 84, 0.15);
+        box-shadow: 0 8px 32px rgba(25, 135, 84, 0.2);
     }
     .head-card.inactive {
-        position: relative;
-        border-color: #dc3545;
+        box-shadow: 0 8px 32px rgba(220, 53, 69, 0.2);
     }
     .head-card.inactive::before {
         content: '';
@@ -19,202 +24,212 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba(220, 53, 69, 0.15);
-        border-radius: inherit;
+        background: rgba(220, 53, 69, 0.05);
         z-index: 1;
-        pointer-events: none;
     }
     .head-card.inactive .card-body {
         position: relative;
         z-index: 2;
     }
-    .status-badge {
-        padding: 4px 12px;
+    .origami-fold {
+        position: relative;
+        background: #f8f9fa;
+        padding: 15px 20px;
+        margin-bottom: 15px;
+        border-radius: 50px 50px 0 0;
+    }
+    .origami-fold.active {
+        background: linear-gradient(135deg, #198754 0%, #20c997 100%);
+        color: white;
+    }
+    .origami-fold.inactive {
+        background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+        color: white;
+    }
+    .pill-section {
+        background: #f8f9fa;
+        border-radius: 25px;
+        padding: 15px 20px;
+        margin: 10px 0;
+    }
+    .status-pill {
+        background: #e9ecef;
         border-radius: 20px;
+        padding: 4px 12px;
         font-size: 0.75rem;
         font-weight: 600;
     }
-    .status-active {
-        background-color: #d1e7dd;
-        color: #0f5132;
+    .status-pill.active {
+        background: #198754;
+        color: white;
     }
-    .status-inactive {
-        background-color: #f8d7da;
-        color: #842029;
+    .status-pill.inactive {
+        background: #dc3545;
+        color: white;
     }
-    .btn-group-custom {
-        gap: 8px;
-    }
-    .btn-custom {
-        border-radius: 8px;
+    .btn-pill {
+        border-radius: 25px;
+        padding: 10px 20px;
         font-weight: 500;
         transition: all 0.2s ease;
     }
+    .btn-pill:hover {
+        transform: scale(1.02);
+    }
+    .info-row {
+        display: flex;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .info-row:last-child {
+        border-bottom: none;
+    }
     .disabled-link {
         pointer-events: none;
-        cursor: not-allowed;
-        opacity: 0.4;
+        opacity: 0.5;
     }
 </style>
 
 <div class="row">
     <div class="col-12">
         @forelse ($heads as $user)
-        <div class="card head-card shadow-sm border-0 rounded-3 mb-3 {{ $user->status == 1 ? 'active' : 'inactive' }}">
-            <div class="card-body p-4">
-                <div class="row align-items-center g-3">
-                    <!-- Profile Section -->
-                    <div class="col-12 col-lg-4">
-                        <div class="d-flex align-items-center">
-                            <div class="position-relative me-3">
-                                <img src="{{ asset('uploads/images/' . $user->photo_path) }}"
-                                     class="rounded-circle border border-2"
-                                     width="70" height="70"
-                                     style="object-fit: cover; border-color: {{ $user->status == 1 ? '#198754' : '#dc3545' }} !important;"
-                                     alt="Family Head Photo">
+        <div class="card head-card mb-4 {{ $user->status == 1 ? 'active' : 'inactive' }}">
+            <div class="card-body p-0">
+                <!-- Origami Header -->
+                <div class="origami-fold {{ $user->status == 1 ? 'active' : 'inactive' }}">
+                    <div class="d-flex align-items-center">
+                        <img src="{{ asset('uploads/images/' . $user->photo_path) }}"
+                             class="rounded-circle me-3"
+                             width="50" height="50"
+                             style="object-fit: cover; border: 2px solid rgba(255,255,255,0.5);"
+                             alt="Family Head Photo">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1 fw-bold">{{ ucfirst($user->name) }} {{ ucfirst($user->surname) }}</h6>
+                            <span class="status-pill {{ $user->status == 1 ? 'active' : 'inactive' }}">
+                                {{ $user->status == 1 ? 'Active' : 'Inactive' }}
+                            </span>
+                        </div>
+                        <small class="opacity-75">
+                            {{ $user->created_at->format('M d, Y') }}
+                        </small>
+                    </div>
+                </div>
 
+                <div class="p-3">
+                    <!-- Info Pills -->
+                    <div class="pill-section">
+                        <div class="info-row">
+                            <i class="bi bi-telephone-fill text-primary me-2"></i>
+                            <span>{{ $user->mobile }}</span>
+                        </div>
+                        
+                        @if($states->where('status','1')->where('name',$user->state)->count() > 0 && $states->where('status','1')->where('name',$user->state)->first()->cities->where('status','1')->where('name',$user->city)->count() > 0)
+                            <div class="info-row">
+                                <i class="bi bi-geo-alt-fill text-primary me-2"></i>
+                                <span>{{ ucfirst($user->city) }}, {{ $user->state }}</span>
                             </div>
-                            <div class="flex-grow-1">
-                                <h5 class="mb-2 fw-bold text-dark">{{ ucfirst($user->name) }} {{ ucfirst($user->surname) }}</h5>
-                                <div class="mb-2">
-                                    <span class="status-badge {{ $user->status == 1 ? 'status-active' : 'status-inactive' }}">
-                                        {{ $user->status == 1 ? 'Active' : 'Inactive' }}
-                                    </span>
-                                </div>
-                                <small class="text-muted">
-                                    <i class="bi bi-calendar3 me-1"></i>
-                                    Created: {{ $user->created_at->format('M d, Y') }}
-                                </small>
-                            <div>
+                        @else
+                            <div class="info-row">
+                                <i class="bi bi-geo-alt-fill text-danger me-2"></i>
+                                <span class="text-danger">City/State Deleted</span>
+                            </div>
+                        @endif
+                        
+                        <div class="info-row">
+                            <i class="bi bi-cake2-fill text-primary me-2"></i>
+                            <span>{{ date('M d, Y', strtotime($user->birthdate)) }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Member Stats Pill -->
+                    <div class="pill-section">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-success fw-bold">
+                                <i class="bi bi-people-fill me-1"></i>
+                                @if($user->status == '0' || $user->status == '9')
+                                    {{ $user->members->count() }} Total
+                                @elseif($user->status == '1')
+                                    {{ $user->members->where('status','1')->count() }} Active
+                                @endif
+                            </span>
+                            <div class="d-flex gap-3">
                                 <small class="text-warning">
-                                    <i class="bi bi-people me-1"></i>
-                                    Inactive Members : {{ $user->members->where('status','0')->count() }}
+                                    {{ $user->members->where('status','0')->count() }} Inactive
                                 </small>
-                            </div>
-                        <div>
                                 <small class="text-danger">
-                                    <i class="bi bi-people me-1"></i>
-                                    Deleted Members : {{ $user->members->where('status','9')->count() }}
+                                    {{ $user->members->where('status','9')->count() }} Deleted
                                 </small>
                             </div>
-                            </div>
                         </div>
                     </div>
 
-                    <!-- Details Section -->
-                    <div class="col-12 col-lg-4">
-                        <div class="row g-2">
-                            <div class="col-12">
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="bi bi-telephone-fill text-primary me-2"></i>
-                                    <span class="fw-medium">{{ $user->mobile }}</span>
-                                </div>
-                            </div>
+                    <!-- Action Pills -->
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="{{ route('admin.show', $user->id) }}"
+                           class="btn btn-primary btn-pill flex-fill {{ $user->status != 1 ? 'disabled-link' : '' }}">
+                            <i class="bi bi-eye me-1"></i>View
+                        </a>
+                        <button type="button" class="btn btn-success btn-pill flex-fill" 
+                                data-bs-toggle="modal" data-bs-target="#actionsModal{{ $user->id }}">
+                            <i class="bi bi-gear me-1"></i>Actions
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Actions Modal -->
+        <div class="modal fade" id="actionsModal{{ $user->id }}" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Actions for {{ ucfirst($user->name) }} {{ ucfirst($user->surname) }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-grid gap-2">
                             @if($states->where('status','1')->where('name',$user->state)->count() > 0 && $states->where('status','1')->where('name',$user->state)->first()->cities->where('status','1')->where('name',$user->city)->count() > 0)
-                            <div class="col-12">
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="bi bi-geo-alt-fill text-primary me-2"></i>
-                                    <span class="fw-medium">{{ ucfirst($user->city) }}, {{ $user->state }}</span>
-                                </div>
-                            </div>
-                            @else
-                            <div class="col-12">
-                                                            <div class="d-flex align-items-center mb-2">
-                                                                <i class="bi bi-geo-alt-fill text-danger me-2"></i>
-                                                                <span class="fw-medium text-danger">City or State may be deleted</span>
-                                                            </div>
-                                                        </div>
-
-                            @endif
-
-
-                            <div class="col-12">
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="bi bi-calendar3 text-primary me-2"></i>
-                                    <span class="fw-medium">{{ date('M d, Y', strtotime($user->birthdate)) }}</span>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-people-fill text-success me-2"></i>
-                                    <span class="text-success fw-bold">
-                                        @if($user->status == '0' || $user->status == '9')
-                                            {{ $user->members->count()  }} Total Members
-                                        @elseif($user->status == '1')
-                                            {{ $user->members->where('status','1')->count()  }} Active Members
-                                        @endif
-
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Actions Section -->
-                    <div class="col-12 col-lg-4">
-                        <div class="d-flex flex-column gap-2">
-                            <!-- Primary Actions -->
-                            <div class="d-flex gap-2">
-                                <a href="{{ route('admin.show', $user->id) }}"
-                                   class="btn btn-primary btn-custom btn-sm flex-fill {{ $user->status != 1 ? 'disabled-link' : '' }}">
-                                    <i class="bi bi-eye me-1"></i>View
-                                </a>
-                             @if($states->where('status','1')->where('name',$user->state)->count() > 0 && $states->where('status','1')->where('name',$user->state)->first()->cities->where('status','1')->where('name',$user->city)->count() > 0)
                                 <a href="{{ route('admin.fulledit', $user->id) }}"
-                                   class="btn btn-warning btn-custom btn-sm flex-fill {{ $user->status != 1 ? 'disabled-link' : '' }}">
-                                    <i class="bi bi-pencil me-1"></i>Edit
+                                   class="btn btn-warning {{ $user->status != 1 ? 'disabled-link' : '' }}">
+                                    <i class="bi bi-pencil me-2"></i>Edit Head & Members
                                 </a>
                             @else
-                            <a href="{{ route('admin-member.updateCityState', $user->id) }}"
-                                                               class="btn btn-warning btn-custom btn-sm flex-fill ">
-                                                                <i class="bi bi-pencil me-1"></i>Edit(State/City)
-                                                            </a>
-                            @endif
-                            </div>
-
-                            <!-- Secondary Actions -->
-                            <div class="d-flex gap-2 justify-content-between">
-                                <a href="{{ route('admin-member.show',$user->id) }}"
-                                   class="btn btn-outline-info btn-custom w-50 btn-sm flex-fill {{ $user->status != 1 ? 'disabled-link' : '' }}" >
-                                    <i class="bi bi-people me-1"></i>Members
+                                <a href="{{ route('admin-member.updateCityState', $user->id) }}"
+                                   class="btn btn-warning">
+                                    <i class="bi bi-pencil me-2"></i>Edit Address (State/City)
                                 </a>
-                                @if($user->status == '0')
-                                   @if($states->where('status','1')->where('name',$user->state)->count() > 0 && $states->where('status','1')->where('name',$user->state)->first()->cities->where('status','1')->where('name',$user->city)->count() > 0)
-                                     <button type="button" data-id="{{ $user->id }}"
-                                         class="btn btn-outline-success btn-custom btn-sm flex-fill activation {{ $user->status == 1 ? 'disabled-link' : '' }}" style="width : 48%">
-                                        <i class="bi bi-check-circle me-1"></i>Activate
-                                     </button>
-                                     @else
-                                     <button type="button" data-id="{{ $user->id }}"
-                                                                              class="btn btn-outline-success btn-custom btn-sm flex-fill disabled-link" style="width : 48%">
-                                                                             <i class="bi bi-check-circle me-1"></i>Activate
-                                                                          </button>
-                                     @endif
-
-
-                                                         @endif
-
-                                                         @if($user->status == '1')
-
-                                                             <a
-                                                                    data-id="{{ $user->id }}"
-                                                                    class="btn btn-outline-danger btn-custom btn-sm flex-fill {{ $user->status == 0 ? 'disabled-link' : '' }} deactivation" style="width : 48%">
-                                                                    <i class="bi bi-x-circle me-1"></i>Deactivate</a>
-
-                                                        @endif
-                            </div>
-
-
-                                                            <a  data-id="{{ $user->id }}"
-                                                            @if($user->status == '0')
-                                                           class="btn btn-danger btn-custom btn-sm flex-fill delete"
-                                                           @else
-                                                           class="btn btn-danger btn-custom btn-sm flex-fill delete"
-                                                           @endif
-                                                          >
-                                                            <i class="bi bi-trash me-1"></i>Delete
-                                                        </a>
+                            @endif
+                            
+                            <a href="{{ route('admin-member.show',$user->id) }}"
+                               class="btn btn-info {{ $user->status != 1 ? 'disabled-link' : '' }}">
+                                <i class="bi bi-people me-2"></i>Manage Members
+                            </a>
+                            
+                            @if($user->status == '0')
+                                @if($states->where('status','1')->where('name',$user->state)->count() > 0 && $states->where('status','1')->where('name',$user->state)->first()->cities->where('status','1')->where('name',$user->city)->count() > 0)
+                                    <button type="button" data-id="{{ $user->id }}"
+                                            class="btn btn-success activation" data-bs-dismiss="modal">
+                                        <i class="bi bi-check-circle me-2"></i>Activate Head
+                                    </button>
+                                @else
+                                    <button type="button" class="btn btn-success disabled-link">
+                                        <i class="bi bi-check-circle me-2"></i>Activate Head (Fix Address First)
+                                    </button>
+                                @endif
+                            @endif
+                            
+                            @if($user->status == '1')
+                                <button type="button" data-id="{{ $user->id }}"
+                                        class="btn btn-outline-danger deactivation" data-bs-dismiss="modal">
+                                    <i class="bi bi-x-circle me-2"></i>Deactivate Head
+                                </button>
+                            @endif
+                            
+                            <button type="button" data-id="{{ $user->id }}"
+                                    class="btn btn-danger delete" data-bs-dismiss="modal">
+                                <i class="bi bi-trash me-2"></i>Delete Head
+                            </button>
                         </div>
                     </div>
                 </div>
