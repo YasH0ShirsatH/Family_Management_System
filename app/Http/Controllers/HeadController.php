@@ -53,6 +53,7 @@ class HeadController extends Controller
             'pincode' => 'required|digits:6',
             'marital_status' => 'required',
             'mariage_date' => 'required_if:marital_status,1',
+
             'hobbies' => 'required|array|min:1',
             'hobbies.*' => ['required', 'distinct', 'min:1', 'string'],
             'path' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -121,6 +122,7 @@ class HeadController extends Controller
                 'name' => 'required',
                 'birthdate' => 'required|date',
                 'marital_status' => 'required',
+                'relation' => 'required',
                 'mariage_date' => 'required_if:marital_status,1',
                 'photo_path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             ]
@@ -145,6 +147,7 @@ class HeadController extends Controller
             'name' => $request->name,
             'birthdate' => $request->birthdate,
             'marital_status' => $request->marital_status,
+            'relation' => $request->relation,
             'mariage_date' => $request->marital_status == 1 ? $request->mariage_date : null,
             'education' => $request->education,
             'photo_path' => $filename,

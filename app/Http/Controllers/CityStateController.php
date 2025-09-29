@@ -161,7 +161,7 @@ class CityStateController extends Controller
         $heads = Head::where('state', $state->name)->get();
                     foreach ($heads as $head) {
                         $head->update(['status' => '0']);
-                        $head->members()->update(['status' => '0']);
+                        $head->members()->where('status','1')->update(['status' => '0']);
                     }
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
@@ -171,7 +171,7 @@ class CityStateController extends Controller
         $log->save();
         log::debug('Admin Deleted State (' . $state->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata'));
 
-        return redirect()->route('state.index')->with('success', 'State deleted successfully.');
+        return redirect()->route('state.index')->with('success', 'State deleted successfully, with heads and members.');
     }
 
 
@@ -316,7 +316,7 @@ class CityStateController extends Controller
         $heads = Head::where('city', $city->name)->get();
             foreach ($heads as $head) {
                 $head->update(['status' => '0']);
-                $head->members()->update(['status' => '0']);
+                $head->members()->where('status','1')->update(['status' => '0']);
             }
 
 

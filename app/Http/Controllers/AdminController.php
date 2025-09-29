@@ -385,7 +385,7 @@ public function viewMemberDetails($id)
             return redirect()->route('admin.index')->with('success', "Head deleted successfully.")->with('name', $head->name)->with('surname', $head->surname);
         }
     }
-    public function delete(string $id)
+    public function delete(Request $request,string $id)
     {
         $head = Head::find($id);
         if ($head) {
@@ -401,6 +401,19 @@ public function viewMemberDetails($id)
                     unlink(public_path('uploads/images/' . $member->photo_path));
                 }
             }
+
+
+             if ($request->ajax()) {
+                         $head->update(['status' => '9']);
+                         $head->members()->where('status','1')->update(['status' => '0']);
+                        return response()->json([
+                            'status' => 'success',
+                            'message' => 'Head deleted successfully.',
+                            'redirect' => route('admin.index'),
+                            'name' => $head->name,
+                            'surname' => $head->surname
+                        ]);
+                    }
 
             $head->update(['status' => '9']);
             $head->members()->where('status','1')->update(['status' => '0']);
@@ -532,6 +545,7 @@ public function viewMemberDetails($id)
             $user->photo_path = $filename;
         }
 
+
         $user->save();
 
         // Handle deleted members
@@ -601,7 +615,20 @@ public function viewMemberDetails($id)
         $log->logs = 'Admin has Updated Head and Members (' . $user->name . ' ' . $user->surname . ') Successfully on ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
 
-        return redirect()->route('admin.index')->with('success', 'Head and members updated successfully.');
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'The head successfully modified data.',
+                'redirect' => route('admin.index'),
+                'name' => $user->name,
+                'surname' => $user->surname
+            ]);
+        }
+
+        return redirect()->route('admin.index')->with('success', 'Head updated successfully.')->with('name', $user->name)->with('surname', $user->surname);
+
+
+
     }
 
 
@@ -638,46 +665,131 @@ public function viewMemberDetails($id)
         return redirect()->back()->with('success', 'City and related data deleted successfully.');
     }
 
-    public function activateMember(string $id)
+    public function activateMember(Request $request,string $id)
     {
         $member = Member::find($id);
         if ($member) {
-            $member->status = '1';
-            $member->save();
+            if ($request->ajax()) {
+                                    $member->status = '1';
+                                    $member->save();
+                                    return response()->json([
+                                        'status' => 'success',
+                                        'message' => 'Head activated successfully.',
+                                        'name' => $member->name,
+
+                                    ]);
+                                }
             return redirect()->back()->with('success', "Member activated successfully.")->with('name', $member->name);
         }
     }
 
-    public function deactivateMember(string $id)
+    public function deactivateMember(Request $request, string $id)
     {
         $member = Member::find($id);
-        if ($member) {
-            $member->status = '0';
-            $member->save();
-            return redirect()->back()->with('success', "Member deactivated successfully.")->with('name', $member->name);
-        }
+                if ($member) {
+                    if ($request->ajax()) {
+                                            $member->status = '0';
+                                            $member->save();
+                                            return response()->json([
+                                                'status' => 'success',
+                                                'message' => 'Head deactivated successfully.',
+                                                'name' => $member->name,
+
+                                            ]);
+                                        }
+                    return redirect()->back()->with('success', "Member deactivated successfully.")->with('name', $member->name);
+                }
     }
 
-    public function activateHeadOnView(string $id)
+    public function activateHeadOnView(Request $request, string $id)
     {
         $head = Head::find($id);
-        if ($head) {
-            $head->status = '1';
-            $head->members()->where('status','0')->update(['status' => '1']);
-            $head->save();
-            return redirect()->back()->with('success', "head activated successfully.")->with('name', $head->name);
+        if (!$head) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Head not found.'
+                ], 404);
+            }
+            return redirect()->back()->with('error', 'Head not found.');
         }
+
+
+
+        if ($request->ajax()) {
+        $head->status = '1';
+                $head->members()->where('status','0')->update(['status' => '1']);
+                $head->save();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Head activated successfully.',
+                'name' => $head->name,
+                'surname' => $head->surname
+            ]);
+        }
+
+        return redirect()->back()->with('success', "head activated successfully.")->with('name', $head->name, 'surname', $head->surname);
     }
 
-    public function deactivateHeadOnView(string $id)
+    public function deactivateHeadOnView(Request $request,string $id)
     {
+     $head = Head::find($id);
+     if (!$head) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Head not found.'
+                    ], 404);
+                }
+                return redirect()->back()->with('error', 'Head not found.');
+            }
         $head = Head::find($id);
         if ($head) {
-            $head->status = '0';
-            $head->members()->where('status','1')->update(['status' => '0']);
-            $head->save();
-            return redirect()->back()->with('success', "head deactivated successfully.")->with('name', $head->name);
+
+            if ($request->ajax()) {
+                $head->status = '0';
+                            $head->members()->where('status','1')->update(['status' => '0']);
+                            $head->save();
+                            return response()->json([
+                                'status' => 'success',
+                                'message' => 'Head deactivated successfully.',
+                                'name' => $head->name,
+                                'surname' => $head->surname
+                            ]);
+                        }
+                }
+            return redirect()->back()->with('success', "head deactivated successfully.")->with('name', $head->name, 'surname', $head->surname);
         }
-    }
+
+
+
+    public function updateCityState($id){
+            $head = Head::where('status','0')->find($id);
+            $states = State::where('status','1')->where('country_id', 101)->orderBy('name', 'asc')->get();
+            $city = collect();
+            $admin1 = User::where('id', '=', session::get('loginId'))->first();
+
+
+            if(!$head){
+                return redirect()->route('admin.index')->with('error', 'Head not found');
+            }
+            return view('admin.selectiveUpdate',compact('head','states','city','admin1'));
+        }
+
+    public function postCityState(Request $request,$id){
+           $user = Head::find($id);
+           $user->address = $request->address;
+           $user->state = $request->state;
+           $user->city = $request->city;
+           $user->pincode = $request->pincode;
+           $user->status = '1';
+
+           $user->save();
+
+           $user->members()->where('status','0')->update(['status' => '1']);
+
+
+            return redirect()->route('admin.index')->with('success', "Head's (City/State) Updated successfully.")->with('name', $user->name)->with('surname', $user->surname);
+        }
 
 }

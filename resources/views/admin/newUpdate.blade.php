@@ -62,7 +62,7 @@
                             </div>
                             @endif
 
-                            <form id="updateForm" action="{{ route('admin.fullupdate',$id) }}" method="post" enctype="multipart/form-data">
+                            <form id="updateForm" action="" method="post" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
 
@@ -597,7 +597,7 @@
                 city: "Please select city",
                 pincode: { required: "Please enter pincode", digits: "Only numbers allowed", minlength: "Must be 6 digits", maxlength: "Must be 6 digits" },
                 marital_status: "Please select marital status",
-                mariage_date: "Marriage date is required when married",
+                mariage_date: {required : "Marriage date is required when married", minMarriageAge: "The individual must be at least 18 years old at the time of marriage." },
                 photo : {  maxfilesize: "File size must be less than 2MB" }
             },
             errorPlacement: function(error, element) {
@@ -614,5 +614,51 @@
         });
     });
     </script>
+
+<script>
+            $(document).ready(function(){
+                $('#updateForm').on('submit', function(e){
+                    e.preventDefault();
+
+                    if(!$(this).valid()){
+                        return;
+                    }
+
+                    var formData = new FormData(this);
+                    formData.append('_method', 'PUT');
+                    formData.append('_token', '{{ csrf_token() }}');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ route('admin.fullupdate',$id) }}",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response){
+                            if (response.status === 'success') {
+                                alert(response.message + ' User: ' + response.name + ' ' + response.surname);
+
+                                window.location.href = response.redirect;
+                            } else {
+                                alert('Error: ' + response.message);
+                            }
+                        },
+                        error: function(xhr, status, error){
+                            if(xhr.status === 422) {
+                                var errors = xhr.responseJSON.errors;
+                                var errorMsg = 'Validation errors:\n';
+                                for(var field in errors) {
+                                    errorMsg += errors[field][0] + '\n';
+                                }
+                                alert(errorMsg);
+                            } else {
+                                alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+                            }
+                        }
+                    });
+                });
+            });
+
+        </script>
 </body>
 </html>

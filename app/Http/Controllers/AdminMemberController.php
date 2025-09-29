@@ -64,6 +64,7 @@ class AdminMemberController extends Controller
                 'name' => 'required',
                 'birthdate' => 'required|date',
                 'marital_status' => 'required',
+                'relation' => 'required',
                 'mariage_date' => 'required_if:marital_status,1',
                 'relation' => 'required',
                 'photo_path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -138,6 +139,17 @@ class AdminMemberController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $member = Member::find($id);
+
+        if (!$member) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Member not found.'
+                ], 404);
+            }
+            return back()->with('error', 'Member not found.');
+        }
 
         $request->validate(
             [
@@ -147,13 +159,12 @@ class AdminMemberController extends Controller
                 'relation' => 'required',
                 'mariage_date' => 'required_if:marital_status,1',
                 'photo_path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            ]
-            ,
+            ],
             [
                 'mariage_date.required_if' => 'The marriage date field is required when marital status is married.',
             ]
         );
-        $member = Member::find($id);
+
         $parentId = $member->head->id;
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
@@ -162,10 +173,6 @@ class AdminMemberController extends Controller
         $log->logs = 'Admin Updated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " on " .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
         log::channel('adminlog')->debug('Admin Updated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now()->setTimezone('Asia/Kolkata'));
-
-        if (!$member) {
-            return back()->with('error', 'member not found.');
-        }
 
 
 
@@ -183,6 +190,14 @@ class AdminMemberController extends Controller
                 $file->move(public_path('/uploads/images/'), $filename);
                 $member->photo_path = $filename;
                 $member->save();
+
+                if ($request->ajax()) {
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'The member successfully modified data and their image.'
+                    ]);
+                }
+
                 return redirect()->route('admin-member.show', $parentId)->with('success', 'The member successfully modified data and their image..')->with('name', $member->name)->with('surname', $member->surname);
             }
 
@@ -190,14 +205,26 @@ class AdminMemberController extends Controller
             {
                 $member->photo_path = null;
                 $member->save();
-                return redirect()->route('admin-member.show', $parentId)->with('success', 'The member successfully modified data and removed image..')->with('name', $member->name)->with('surname', $member->surname);
+
+                if ($request->ajax()) {
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'The member successfully modified data and removed image.',
+
+                    ]);
+                }
+                 return redirect()->route('admin-member.show', $parentId)->with('success', 'The member successfully modified data and removed image..')->with('name', $member->name)->with('surname', $member->surname);
+
             }
 
             $member->save();
 
-
-
-
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Member updated successfully.'
+            ]);
+        }
 
         return redirect()->route('admin-member.show', $parentId)->with('success', 'Member updated successfully.')->with('name', $member->name)->with('surname', $member->surname);
 
@@ -215,7 +242,7 @@ class AdminMemberController extends Controller
 
         return redirect()->route('admin-member.show', $parentId)->with('success', 'Member deleted successfully.')->with('name', $member->name)->with('surname', $member->surname);
     }
-    public function delete(string $id)
+    public function delete(Request $request,string $id)
     {
         $member = Member::find($id);
         $parentId = $member->head->id;
@@ -225,7 +252,17 @@ class AdminMemberController extends Controller
             unlink(public_path('uploads/images/' . $member->photo_path));
         }
 
-        $member->update(['status' => '9']);
+
+         if ($request->ajax()) {
+                                            $member->update(['status' => '9']);
+                                            $member->save();
+                                            return response()->json([
+                                                'status' => 'success',
+                                                'message' => 'member deleted successfully.',
+                                                'name' => $member->name,
+
+                                            ]);
+                                        }
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
@@ -248,13 +285,13 @@ class AdminMemberController extends Controller
         $member = Member::find($id);
         $parentId = $member->head->id;
         $member->update(['status' => '1']);
-        
+
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
         $log->logs = 'Admin Activated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " on " .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
-        
+
         return redirect()->route('admin-member.show', $parentId)->with('success', 'Member activated successfully.');
     }
 
@@ -263,14 +300,16 @@ class AdminMemberController extends Controller
         $member = Member::find($id);
         $parentId = $member->head->id;
         $member->update(['status' => '0']);
-        
+
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
         $log->user_id = $admin1->id;
         $log->logs = 'Admin Deactivated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " on " .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
-        
+
         return redirect()->route('admin-member.show', $parentId)->with('success', 'Member deactivated successfully.');
     }
+
+
 
 }

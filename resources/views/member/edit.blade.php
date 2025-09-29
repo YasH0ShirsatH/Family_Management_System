@@ -129,10 +129,11 @@
                                <p class="mb-0 opacity-75">Update member of your family</p>
                            </div>
                            <div class="card-body p-4">
-                               <form id="formSubmit" action="{{ route('admin-member.update', $member->id) }}" method="post"
+                              <!--  route('admin-member.update', $member->id) -->
+                               <form id="formSubmit" action="" method="post"
                                    enctype="multipart/form-data">
                                    @csrf
-                                   @method('PUT')
+                                    <input type="hidden" name="_method" value="PUT">
 
                                    <div class="mb-3 form-group">
                                        <label class="form-label fw-semibold"><i class="bi bi-person me-2"></i>Full
@@ -190,7 +191,7 @@
                                            Status</label>
                                        <div class="form-check">
                                            <input class="form-check-input" type="radio" name="marital_status" id="married"
-                                               value="1" @checked($member->marital_status == '1' && $member->relation == 'spouse')>
+                                               value="1" @checked($member->marital_status == '1')>
                                            <label class="form-check-label" for="married">Married</label>
                                        </div>
                                        <div class="form-check form-group">
@@ -409,6 +410,53 @@
                });
            });
        </script>
+
+
+        <script>
+            $(document).ready(function(){
+                $('#formSubmit').on('submit', function(e){
+                    e.preventDefault();
+
+                    if(!$(this).valid()){
+                        return;
+                    }
+
+                    var formData = new FormData(this);
+                    formData.append('_method', 'PUT');
+                    formData.append('_token', '{{ csrf_token() }}');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ route('admin-member.update', $member->id) }}",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response){
+                            if(response.status === 'success'){
+                                alert(response.message);
+                                window.location.href = "{{ route('admin.members') }}";
+                            } else {
+                                alert('Error: ' + response.message);
+                            }
+                        },
+                        error: function(xhr, status, error){
+                            if(xhr.status === 422) {
+                                var errors = xhr.responseJSON.errors;
+                                var errorMsg = 'Validation errors:\n';
+                                for(var field in errors) {
+                                    errorMsg += errors[field][0] + '\n';
+                                }
+                                alert(errorMsg);
+                            } else {
+                                alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+                            }
+                        }
+                    });
+                });
+            });
+
+        </script>
+
    </body>
 
    </html>

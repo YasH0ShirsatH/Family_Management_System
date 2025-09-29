@@ -99,80 +99,34 @@ class AuthController extends Controller
                     ->where('status', '1')
                     ->first()
             ) {
-                $head = Head::where('status', '1')->get();
-                $member = Member::where('status', '1')->get();
-                $state = State::where('status', '1')->get();
-                $city = City::where('status', '1')->get();
+
                 $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
-                $headcount = Cache::remember('head_count', 300, fn() => Head::count());
-                $membercount = Cache::remember('member_count', 300, fn() => Member::count());
-                $statecount = Cache::remember('state_count', 300, fn() => State::count());
-                $citycount = Cache::remember('city_count', 300, fn() => City::count());
+                $headcount = Head::count();
+                $membercount = Member::count();
+                $statecount = State::count();
+                $citycount = City::count();
 
 
 
 
 
 
-                $topStates = DB::table('heads')
-                            ->select('state', DB::raw('COUNT(*) as count'))
-                            ->groupBy('state')
-                            ->orderByDesc('count')
-                            ->limit(5)
-                            ->get()
-                            ->toArray();;
-                $topStateNames = DB::table('heads')
-                        ->select('state', DB::raw('count(*) as total'))
-                        ->groupBy('state')
-                        ->orderByDesc('total')
-                        ->limit(5)
-                        ->pluck('state');
-
-
-                    $headsWithAge = $head->map(function ($bday)  {
-                        return [
-                            'age' => Carbon::parse($bday->birthdate)->age,
-                            'name' => $bday->name." ".$bday->surname,
-                            'id' => $bday->id,
-                            'members' => Member::where('status','1')->where('head_id', $bday->id)->count()
-                        ];
-                    });
-
-
-                    $headsWithAgeSortedByAge = $headsWithAge->sortByDesc('age')->values();
-
-
-                    $headsWithAgeSortedByMembers = $headsWithAge->sortByDesc('members')->values();
-
-
-                    $ageData = $headsWithAgeSortedByAge->pluck('age')->toArray();
-                    $nameData = $headsWithAgeSortedByAge->pluck('name')->toArray();
-
-                    $membersPerFamilyData = $headsWithAgeSortedByMembers->pluck('members')->toArray();
-                    $membersPerFamilyLabels = $headsWithAgeSortedByMembers->pluck('name')->toArray();
-
-
-                    $states = $state->map(function ($bday)  {
-                        return [
-                            'cities' => City::where('status', '1')->where('state_id', $bday->id)->count(),
-                            'name' => $bday->name,
-                            'id' => $bday->id
-                        ];
-                    });
-
-
-
-                $topStates2 = $states->sortByDesc('cities')->take(5)->values();
-                $totalCitiesOfStates = $topStates2->pluck('cities')->toArray();
-                $nameStates = $topStates2->pluck('name')->toArray();
 
 
 
 
-                Log::debug('Admin returned to dashboard at :'.Carbon::now()->setTimezone('Asia/Kolkata'));
 
-                return view('dashboard', compact('head', 'headcount', 'membercount', 'statecount', 'citycount', 'admin1','ageData','nameData','topStates','topStateNames','membersPerFamilyData','totalCitiesOfStates','nameStates','membersPerFamilyLabels'));
+
+
+
+
+
+
+
+
+
+                return view('dashboard', compact( 'headcount', 'membercount', 'statecount', 'citycount', 'admin1'));
             }
         }
 

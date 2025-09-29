@@ -176,17 +176,17 @@
 
                                     <a href="{{ route('member.delete', $member->id) }}"
 
-                                       class="delete-btn btn btn-danger btn-custom btn-sm flex-fill"
-
-                                       onclick="return confirm('Are you sure you want to delete this member?')">
+                                       class="btn btn-danger btn-custom btn-sm flex-fill delete1"
+                                        data-id="{{  $member->id }}"
+                                       >
                                         <i class="bi bi-trash me-1"></i>Delete
                                     </a>
                                 </div>
                             @if($member->status == '0' and $member->head->status == '1')
                             <div class="d-flex flex-column gap-2">
-                               <a href="{{ route('admin-member.activate', $member->id) }}"
-                                   class="btn btn-outline-success btn-custom btn-sm flex-fill {{ $member->status == 1 ? 'disabled-link' : '' }}"
-                                   onclick="return confirm('Are you sure you want to activate this member?')">
+                               <a  data-id="{{  $member->id }}"
+                                   class="btn btn-outline-success btn-custom btn-sm flex-fill {{ $member->status == 1 ? 'disabled-link' : '' }} activation"
+                                   >
                                    <i class="bi bi-check-circle me-1"></i>Activate
                                </a>
                            </div>
@@ -202,9 +202,8 @@
 
                             @if($member->status == '1')
                             <div class="d-flex flex-column gap-2">
-                                <a href="{{ route('admin-member.deactivate', $member->id) }}"
-                                    onclick="return confirm('Are you sure you want to deactivate this member?')"
-                                   class="btn btn-outline-danger btn-custom btn-sm flex-fill {{ $member->status == 0 ? 'disabled-link' : '' }}">
+                                <a  data-id="{{  $member->id }}"
+                                   class="btn btn-outline-danger btn-custom btn-sm flex-fill {{ $member->status == 0 ? 'disabled-link' : '' }} deactivation">
                                    <i class="bi bi-x-circle me-1"></i>Deactivate</a>
                                 </div>
                             @endif
@@ -238,20 +237,112 @@
     {{ $members->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
 </div>
 
+
+
 <script>
+    $(document).ready(function(){
+        console.log('Document ready, jQuery loaded');
 
+        $(document).on('click', '.activation', function(e){
+            console.log('Activation button clicked');
+            e.preventDefault();
 
-        const deleteButtons = document.querySelectorAll('.delete-btn');
+            if(!confirm('Are you sure you want to activate this member?')) {
+                return;
+            }
 
+            var headId = $(this).data('id');
+            console.log('Head ID:', headId);
 
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function(event) {
-                // Show the confirmation dialog
-                if (!confirm('WARNING: This will permanently delete the head and ALL family members! This action cannot be undone. Are you sure?')) {
-                    // If the user clicks "Cancel", prevent the link/form from submitting
-                    event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/dashboard/admin-profile/activatemember2/' + headId,
+                data: {
+                    '_token': '{{ csrf_token() }}'
+                },
+                success: function(response){
+                    console.log('Response:', response);
+                    if(response.status === 'success'){
+                        alert(response.message + ' User: ' + response.name );
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.log('AJAX Error:', xhr.responseText);
+                    alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
                 }
             });
         });
-    </script>
+
+        $(document).on('click', '.deactivation', function(e){
+            console.log('deactivation button clicked');
+            e.preventDefault();
+
+            if(!confirm('Are you sure you want to deactivate this member?')) {
+                return;
+            }
+
+            var headId = $(this).data('id');
+            console.log('Head ID:', headId);
+
+            $.ajax({
+                type: 'POST',
+                url: '/dashboard/admin-profile/deactivatemember/' + headId,
+                data: {
+                    '_token': '{{ csrf_token() }}'
+                },
+                success: function(response){
+                    console.log('Response:', response);
+                    if(response.status === 'success'){
+                        alert(response.message + ' User: ' + response.name );
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.log('AJAX Error:', xhr.responseText);
+                    alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+                }
+            });
+        });
+
+        $(document).on('click', '.delete1', function(e){
+            console.log('delete button clicked');
+            e.preventDefault();
+
+            if(!confirm('Are you sure you want to delete this member?')) {
+                return;
+            }
+
+            var headId = $(this).data('id');
+            console.log('Head ID:', headId);
+
+            $.ajax({
+                type: 'POST',
+                url: '/member/delete/' + headId,
+                data: {
+                    '_token': '{{ csrf_token() }}'
+                },
+                success: function(response){
+                    console.log('Response:', response);
+                    if(response.status === 'success'){
+                        alert(response.message + ' User: ' + response.name );
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.log('AJAX Error:', xhr.responseText);
+                    alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+                }
+            });
+        });
+    });
+</script>
 @endif
+
+

@@ -21,12 +21,18 @@ Route::get('/dashboard/admin-profile', [AuthController::class, 'adminProfile'])-
 Route::post('/dashboard/admin-profile/activate', [AuthController::class, 'activateHead'])->name('activate.head')->middleware('auth.check');
 Route::post('/dashboard/admin-profile/deactivateHead', [AuthController::class, 'deactivateHead'])->name('deactivateHead.head')->middleware('auth.check');
 Route::post('/dashboard/admin-profile/activatemember', [AuthController::class, 'activateMember'])->name('activatemember.member')->middleware('auth.check');
-Route::get('/dashboard/admin-profile/activatemember2/{id}', [AdminController::class, 'activateMember'])->name('admin-member.activate')->middleware('auth.check');
-Route::get('/dashboard/admin-profile/deactivatemember/{id}', [AdminController::class, 'deactivateMember'])->name('admin-member.deactivate')->middleware('auth.check');
+Route::post('/dashboard/admin-profile/activatemember2/{id}', [AdminController::class, 'activateMember'])->name('admin-member.activate')->middleware('auth.check');
+Route::post('/dashboard/admin-profile/deactivatemember/{id}', [AdminController::class, 'deactivateMember'])->name('admin-member.deactivate')->middleware('auth.check');
 Route::get('/dashboard/admin-profile/deactivatemember2/{id}', [AdminController::class, 'deactivateMember'])->name('admin-member.deactivate')->middleware('auth.check');
 
-Route::get('/dashboard/admin-profile/activateHeadOnView/{id}', [AdminController::class, 'activateHeadOnView'])->name('admin-member.activateHeadOnView')->middleware('auth.check');
-Route::get('/dashboard/admin-profile/deactivateHeadOnView/{id}', [AdminController::class, 'deactivateHeadOnView'])->name('admin-member.deactivateHeadOnView')->middleware('auth.check');
+//Update city state of selective head whose city/state has been deleted
+Route::get('/dashboard/admin-profile/updateCityState/{id}', [AdminController::class, 'updateCityState'])->name('admin-member.updateCityState')->middleware('auth.check');
+Route::put('/dashboard/admin-profile/updateCityState/{id}', [AdminController::class, 'postCityState'])->name('admin-member.postCityState')->middleware('auth.check');
+
+
+
+Route::post('/dashboard/admin-profile/activateHeadOnView/{id}', [AdminController::class, 'activateHeadOnView'])->name('admin-member.activateHeadOnView')->middleware('auth.check');
+Route::post('/dashboard/admin-profile/deactivateHeadOnView/{id}', [AdminController::class, 'deactivateHeadOnView'])->name('admin-member.deactivateHeadOnView')->middleware('auth.check');
 
 /// AJAX routes for member activation
 Route::get('/dashboard/admin-profile/get-inactive-members/{headId}', [AuthController::class, 'getInactiveMembers'])->name('get.inactive.members')->middleware('auth.check');
@@ -64,7 +70,7 @@ Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'resetPa
 Route::post('/reset-password', [ForgotPasswordController::class, 'resetPasswordPost'])->name('reset.password.post');
 
 
-/// ADMIN SECTION
+/// ADMIN SECTION activateMember
 Route::resource('/admin', AdminController::class)->middleware('auth.check');
 Route::get('/fulledit/{id}', [AdminController::class, 'fullEdit'])->name('admin.fulledit')->middleware('auth.check');
 Route::put('/fullupdate/{id}', [AdminController::class, 'fullUpdate'])->name('admin.fullupdate')->middleware('auth.check');
@@ -75,14 +81,14 @@ Route::get('pdf/heads/download/all', [AdminController::class, 'print_all_pdf'])-
 Route::get('pdf/heads/download/search', [AdminController::class, 'print_search_pdf'])->name('download_search_pdf');
 Route::get('excel/heads/download/all', [AdminController::class, 'export'])->name('download_excel_all');
 Route::get('/search', [AdminController::class, 'search'])->name('search');
-Route::get('/delete/{id}', [AdminController::class, 'delete'])->name('delete');
+Route::post('/delete/{id}', [AdminController::class, 'delete'])->name('delete');
 
 /// Admin member section
 Route::resource('/admin-member', AdminMemberController::class)->middleware('auth.check');
 Route::get('/adminfamilySection/{id}', [AdminMemberController::class, 'familySection'])->name('adminFamilySection');
 Route::get('/pdf/members/download/all', [AdminMemberController::class, 'print_member_all_pdf'])->name('download_all_members');
 Route::get('/excel/members/download/all', [AdminMemberController::class, 'export'])->name('download_excel_all_members');
-Route::get('/member/delete/{id}', [AdminMemberController::class, 'delete'])->name('member.delete');
+Route::post('/member/delete/{id}', [AdminMemberController::class, 'delete'])->name('member.delete');
 Route::patch('/member/activate/{id}', [AdminMemberController::class, 'activate'])->name('member.activate');
 Route::patch('/member/deactivate/{id}', [AdminMemberController::class, 'deactivate'])->name('member.deactivate');
 Route::post('/admin.add-member/{id}', [AdminMemberController::class, 'addMember'])->name('adminAddMember');

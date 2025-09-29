@@ -94,6 +94,31 @@
                                 </div>
                                 @error('marital_status')<div class="text-danger mt-1">{{ $message }}</div>@enderror
 
+                                <div class="mb-4 mt-4 form-group ">
+
+                                                        <select name="relation" class="form-select rounded-pill">
+                                                            <option value="">Select Relation</option>
+                                                            <option value="spouse">Spouse</option>
+                                                            <option value="son">Son</option>
+                                                            <option value="daughter">Daughter</option>
+                                                            <option value="father">Father</option>
+                                                            <option value="mother">Mother</option>
+                                                            <option value="brother">Brother</option>
+                                                            <option value="sister">Sister</option>
+                                                            <option value="grandfather">Grandfather</option>
+                                                            <option value="grandmother">Grandmother</option>
+                                                            <option value="uncle">Uncle</option>
+                                                            <option value="aunt">Aunt</option>
+                                                            <option value="nephew">Nephew</option>
+                                                            <option value="niece">Niece</option>
+                                                            <option value="cousin">Cousin</option>
+                                                            <option value="other">Other</option>
+                                                        </select>
+                                                    <div class="validation-error"></div>
+                                                    </div>
+
+
+
                                 <div class="mt-3 form-group " id="mrg_date_div"
                                     style="display: {{ old('marital_status') == '1' ? 'block' : 'none' }}">
                                     <input type="date" name="mariage_date" class="form-control rounded-pill"
@@ -162,6 +187,8 @@
                                             <h6 class="fw-bold mb-1">{{ $member->name }}</h6>
                                             <small
                                                 class="text-muted d-block">{{ date('M d, Y', strtotime($member->birthdate)) }}</small>
+                                             <small
+                                                class="text-muted d-block">{{$member->relation}}</small>
                                             <div class="d-flex gap-2 mt-1">
                                                 <span
                                                     class="badge bg-light text-dark rounded-pill">{{ $member->marital_status ? 'Married' : 'Single' }}</span>
@@ -252,8 +279,8 @@
                             }
                         }
                     },
-
-                    photo_path: { extension: "jpg|jpeg|png", maxfilesize: 2 }
+                    relation : { required : true },
+                    photo_path: { extension: "jpg|jpeg|png", maxfilesize: 2 },
                 },
                 messages: {
                     name: { required: "Please enter name" },
@@ -269,7 +296,12 @@
                     photo_path: {
                         extension: "Please upload a valid image (jpg, jpeg, png)",
                         maxfilesize: "Please upload image less than 2MB"
+                    },
+
+                    relation : {
+                        required: "Please select Relation with head"
                     }
+
                 },
                 errorPlacement: function (error, element) {
                     var $container = element.parents('.form-group').find('.validation-error');

@@ -86,84 +86,9 @@
             </div>
 
             <!-- Charts Section -->
-            <div class="charts-section mb-4">
-                <div class="charts-title"><i class="bi bi-bar-chart-line me-2"></i>Statistics Overview</div>
-                <div class="row g-4">
-                    <div class="col-lg-6 col-12 mb-3 mb-lg-0">
-                        <h5 class="text-danger mb-3 text-center">
-                            Age Distribution of Family Heads
-                        </h5>
-                        <canvas style="width:100%;max-height:350px;" id="myChart"></canvas>
-                    </div>
-                    <div class="col-lg-6 col-12 mb-3 mb-lg-0">
-                        <h5 class="text-success mb-3 text-center">
-                            Members per Family
-                        </h5>
-                        <canvas style="width:100%;max-height:350px;" id="myChart3"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('myChart');
-            const ctx3 = document.getElementById('myChart3');
 
-            if (ctx) {
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: @json($nameData ?? []),
-                        datasets: [{
-                            label: 'Age',
-                            data: @json($ageData ?? []),
-                            borderWidth: 1,
-                            backgroundColor: '#dc3545'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: false,
-                                min: 20
-                            }
-                        }
-                    }
-                });
-            }
 
-            if (ctx3) {
-                new Chart(ctx3, {
-                    type: 'bar',
-                    data: {
-                        labels: @json($membersPerFamilyLabels ?? []),
-                        datasets: [{
-                            label: 'Members',
-                            data: @json($membersPerFamilyData ?? []),
-                            borderWidth: 1,
-                            backgroundColor: '#198754'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    precision: 0,
-                                    stepSize: 1
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        });
-    </script>
 </body>
 
 </html>

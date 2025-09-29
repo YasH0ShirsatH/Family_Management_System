@@ -166,7 +166,7 @@
                                     <i class="bi bi-pencil me-1"></i>Edit
                                 </a>
                             @else
-                            <a href="{{ route('admin.fulledit', $user->id) }}"
+                            <a href="{{ route('admin-member.updateCityState', $user->id) }}"
                                                                class="btn btn-warning btn-custom btn-sm flex-fill ">
                                                                 <i class="bi bi-pencil me-1"></i>Edit(State/City)
                                                             </a>
@@ -180,33 +180,39 @@
                                     <i class="bi bi-people me-1"></i>Members
                                 </a>
                                 @if($user->status == '0')
+                                   @if($states->where('status','1')->where('name',$user->state)->count() > 0 && $states->where('status','1')->where('name',$user->state)->first()->cities->where('status','1')->where('name',$user->city)->count() > 0)
+                                     <button type="button" data-id="{{ $user->id }}"
+                                         class="btn btn-outline-success btn-custom btn-sm flex-fill activation {{ $user->status == 1 ? 'disabled-link' : '' }}" style="width : 48%">
+                                        <i class="bi bi-check-circle me-1"></i>Activate
+                                     </button>
+                                     @else
+                                     <button type="button" data-id="{{ $user->id }}"
+                                                                              class="btn btn-outline-success btn-custom btn-sm flex-fill disabled-link" style="width : 48%">
+                                                                             <i class="bi bi-check-circle me-1"></i>Activate
+                                                                          </button>
+                                     @endif
 
-                                                                <a href="{{ route('admin-member.activateHeadOnView', $user->id) }}"
-                                                                   class="btn btn-outline-success btn-custom btn-sm flex-fill {{ $user->status == 1 ? 'disabled-link' : '' }} " style="width : 48%"
-                                                                   onclick="return confirm('Are you sure you want to activate this head?')">
-                                                                <i class="bi bi-check-circle me-1"></i>Activate
-                                                                </a>
 
                                                          @endif
 
                                                          @if($user->status == '1')
 
-                                                             <a href="{{ route('admin-member.deactivateHeadOnView', $user->id) }}"
-                                                                    onclick="return confirm('Are you sure you want to deactivate this member?')"
-                                                                    class="btn btn-outline-danger btn-custom btn-sm flex-fill {{ $user->status == 0 ? 'disabled-link' : '' }}" style="width : 48%">
+                                                             <a
+                                                                    data-id="{{ $user->id }}"
+                                                                    class="btn btn-outline-danger btn-custom btn-sm flex-fill {{ $user->status == 0 ? 'disabled-link' : '' }} deactivation" style="width : 48%">
                                                                     <i class="bi bi-x-circle me-1"></i>Deactivate</a>
 
                                                         @endif
                             </div>
 
 
-                        <a href="{{ route('delete',$user->id) }}"
+                                                            <a  data-id="{{ $user->id }}"
                                                             @if($user->status == '0')
-                                                           class="btn btn-danger btn-custom btn-sm flex-fill"
+                                                           class="btn btn-danger btn-custom btn-sm flex-fill delete"
                                                            @else
-                                                           class="btn btn-danger btn-custom btn-sm flex-fill"
+                                                           class="btn btn-danger btn-custom btn-sm flex-fill delete"
                                                            @endif
-                                                           onclick="return confirm('Are you sure you want to delete this head?')">
+                                                          >
                                                             <i class="bi bi-trash me-1"></i>Delete
                                                         </a>
                         </div>
@@ -236,3 +242,120 @@
     {{ $heads->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
 </div>
 @endif
+
+<script>
+$(document).ready(function(){
+    console.log('Document ready, jQuery loaded');
+
+    $(document).on('click', '.activation', function(e){
+        console.log('Activation button clicked');
+        e.preventDefault();
+
+        if(!confirm('Are you sure you want to activate this head?')) {
+            return;
+        }
+
+        var headId = $(this).data('id');
+        console.log('Head ID:', headId);
+
+        $.ajax({
+            type: 'POST',
+            url: '/dashboard/admin-profile/activateHeadOnView/' + headId,
+            data: {
+                '_token': '{{ csrf_token() }}'
+            },
+            success: function(response){
+                console.log('Response:', response);
+                if(response.status === 'success'){
+                    alert(response.message + ' User: ' + response.name + ' ' + response.surname);
+                    location.reload();
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function(xhr, status, error){
+                console.log('AJAX Error:', xhr.responseText);
+                alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+            }
+        });
+    });
+
+    $(document).on('click', '.deactivation', function(e){
+        console.log('Deactivation button clicked');
+        e.preventDefault();
+
+        if(!confirm('Are you sure you want to deactivate this head?')) {
+            return;
+        }
+
+        var headId = $(this).data('id');
+        console.log('Head ID:', headId);
+
+        $.ajax({
+            type: 'POST',
+            url: '/dashboard/admin-profile/deactivateHeadOnView/' + headId,
+            data: {
+                            '_token': '{{ csrf_token() }}'
+                        },
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response){
+                console.log('Response:', response);
+                if(response.status === 'success'){
+                    alert(response.message + ' User: ' + response.name + ' ' + response.surname);
+                    location.reload();
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function(xhr, status, error){
+                console.log('AJAX Error:', xhr.responseText);
+                alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+            }
+        });
+    });
+
+    $(document).on('click', '.delete', function(e){
+        console.log('delete button clicked');
+        e.preventDefault();
+
+        if(!confirm('Are you sure you want to delete this head?')) {
+            return;
+        }
+
+        var headId = $(this).data('id');
+        console.log('Head ID:', headId);
+
+        $.ajax({
+            type: 'POST',
+            url: "/delete/" + headId,
+            data: {
+                            '_token': '{{ csrf_token() }}'
+                        },
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response){
+                console.log('Response:', response);
+                if(response.status === 'success'){
+                    alert(response.message + ' User: ' + response.name + ' ' + response.surname);
+                    location.reload();
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function(xhr, status, error){
+                console.log('AJAX Error:', xhr.responseText);
+                alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+            }
+        });
+    });
+
+
+
+
+});
+</script>
+
+
