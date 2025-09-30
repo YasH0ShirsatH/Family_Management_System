@@ -7,93 +7,178 @@
     <title>State & City Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
     <style>
-        .active-class-9{
-            background-color: #0d6efd;
-            color : white;
-            transform: translateX(5px);
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+        .management-card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: none;
+        }
+        .management-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        .origami-header {
+            background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
+            color: white;
+            padding: 25px 30px;
+            margin: 0;
+            border-radius: 0;
+        }
+        .action-card {
+            background: white;
+            border-radius: 18px;
+            padding: 30px 20px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: none;
+            display: block;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .stat-pill {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        .welcome-banner {
+            background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
+            color: white;
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 30px;
         }
     </style>
-
 </head>
-<div id="mainContent">
 
-    @include('partials.navbar2', ['shouldShowDiv' => true])
+<body>
+    <div id="mainContent">
+        @include('partials.navbar2', ['shouldShowDiv' => true])
 
+        <div class="container py-4">
+            <!-- Back Button -->
+            <div class="text-center mb-4">
+                <a href="/dashboard" class="btn btn-outline-primary rounded-pill">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
 
-    <div class="text-center  mt-5">
-        <a href="/dashboard" class="btn btn-outline-secondary rounded-pill">
-            <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
-        </a>
-    </div>
+            <!-- Welcome Banner -->
+            <div class="welcome-banner text-center">
+                <h1 class="fw-bold mb-3">
+                    <i class="bi bi-geo-alt-fill me-3"></i>
+                    Location Management
+                </h1>
+                <p class="lead mb-0 opacity-90">Manage states and cities for the family management system</p>
+            </div>
 
-
-
-    <body class="bg-light" id="main">
-        <div class="container py-5">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card border-0 shadow-lg rounded-4">
-                        <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
-                            <h2 class="text-white mb-2 fw-bold">
-                                <i class="bi bi-geo-alt me-2"></i>State & City Management
-                            </h2>
-                            <p class="text-white-50 mb-0">Manage geographical data for the system</p>
-                        </div>
-
-                        <div class="card-body p-5">
-                            <div class="row text-center mb-4">
-                                <div class="col-md-6 mb-2">
-                                    <div class="card bg-primary text-white border-0 h-100 rounded-4">
-                                        <div class="card-body py-4">
-                                            <i class="bi bi-map display-4 mb-3"></i>
-                                            <h4 class="fw-bold">{{ $states->count() }}</h4>
-                                            <p class="mb-0">Total States</p>
-                                        </div>
-                                    </div>
+            <!-- Statistics Overview -->
+            <div class="management-card mb-5">
+                <div class="origami-header">
+                    <h4 class="fw-bold mb-0">
+                        <i class="bi bi-bar-chart me-2"></i>
+                        Location Statistics
+                    </h4>
+                </div>
+                <div class="p-4">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="stat-pill">
+                                <div class="mb-3">
+                                    <i class="bi bi-map text-primary" style="font-size: 3rem;"></i>
                                 </div>
-                                <div class="col-md-6 mb-2">
-                                    <div class="card bg-success text-white border-0 h-100 rounded-4">
-                                        <div class="card-body py-4">
-                                            <i class="bi bi-buildings display-4 mb-3"></i>
-                                            <h4 class="fw-bold">{{ $cities->count() }}</h4>
-                                            <p class="mb-0">Total Cities</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                <h2 class="fw-bold text-primary mb-2">{{ $states->count() }}</h2>
+                                <p class="text-muted mb-0">Total States</p>
                             </div>
-
-                            <div class="d-grid gap-3">
-                                <span class="w-100 d-flex justify-content-between">
-                                    <a style="  width: 48%;" href="admin/state-city/states"
-                                        class="btn btn-primary btn-lg rounded-pill">
-                                        <i class="bi bi-map me-2"></i>Manage States
-                                    </a>
-                                    <a href="admin/state-city/city" style="  width: 48%;"
-                                        class="btn  btn-success btn-lg rounded-pill">
-                                        <i class="bi bi-buildings me-2"></i>Manage Cities
-                                    </a>
-
-                                </span>
-                                <span class="w-100 d-flex justify-content-between">
-                                    <a style="  width: 48%;" href="admin/state-city/createState"
-                                        class="btn btn-primary btn-lg rounded-pill">
-                                        <i class="bi bi-plus me-2"></i>Add States
-                                    </a>
-                                    <a href="admin/state-city/createcity" style="  width: 48%;"
-                                        class="btn btn-success btn-lg rounded-pill">
-                                        <i class="bi bi-plus me-2"></i>Add Cities
-                                    </a>
-                                </span>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="stat-pill">
+                                <div class="mb-3">
+                                    <i class="bi bi-buildings text-success" style="font-size: 3rem;"></i>
+                                </div>
+                                <h2 class="fw-bold text-success mb-2">{{ $cities->count() }}</h2>
+                                <p class="text-muted mb-0">Total Cities</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Quick Actions Grid -->
+            <div class="row g-4">
+                <div class="col-12">
+                    <h3 class="fw-bold mb-4 text-center">
+                        <i class="bi bi-lightning me-2 text-primary"></i>
+                        Quick Actions
+                    </h3>
+                </div>
+
+                <!-- View States -->
+                <div class="col-md-6 col-lg-3">
+                    <a href="admin/state-city/states" class="action-card text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-map-fill text-primary" style="font-size: 3.5rem;"></i>
+                        </div>
+                        <h5 class="fw-bold text-primary mb-2">View States</h5>
+                        <p class="text-muted mb-0 small">Browse and manage all states</p>
+                    </a>
+                </div>
+
+                <!-- Add State -->
+                <div class="col-md-6 col-lg-3">
+                    <a href="admin/state-city/createState" class="action-card text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-plus-square-fill text-success" style="font-size: 3.5rem;"></i>
+                        </div>
+                        <h5 class="fw-bold text-success mb-2">Add State</h5>
+                        <p class="text-muted mb-0 small">Create new state entry</p>
+                    </a>
+                </div>
+
+                <!-- View Cities -->
+                <div class="col-md-6 col-lg-3">
+                    <a href="admin/state-city/city" class="action-card text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-buildings-fill text-warning" style="font-size: 3.5rem;"></i>
+                        </div>
+                        <h5 class="fw-bold text-warning mb-2">View Cities</h5>
+                        <p class="text-muted mb-0 small">Browse and manage all cities</p>
+                    </a>
+                </div>
+
+                <!-- Add City -->
+                <div class="col-md-6 col-lg-3">
+                    <a href="admin/state-city/createcity" class="action-card text-center">
+                        <div class="mb-3">
+                            <i class="bi bi-plus-circle-fill text-info" style="font-size: 3.5rem;"></i>
+                        </div>
+                        <h5 class="fw-bold text-info mb-2">Add City</h5>
+                        <p class="text-muted mb-0 small">Create new city entry</p>
+                    </a>
+                </div>
+            </div>
         </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

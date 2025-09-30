@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Request;
 use App\Models\City;
 use App\Models\State;
@@ -91,11 +91,13 @@ class CityStateController extends Controller
 
     public function showcity(Request $request, $id)
     {
+        $decryptedId = Crypt::decryptString($id);
+
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
-        $state = State::findOrFail($id);
+        $state = State::findOrFail($decryptedId);
 
-        $city = City::where('state_id', $id)->where('status', '1')
+        $city = City::where('state_id', $decryptedId)->where('status', '1')
             ->when($request->search, function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->search . '%');
             })
@@ -118,12 +120,15 @@ class CityStateController extends Controller
 
     public function editstate(Request $request, $id)
     {
-        $state = State::where('status', '1')->find($id);
+        $decryptedId = Crypt::decryptString($id);
+
+        $state = State::where('status', '1')->find($decryptedId);
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         return view('state-city.editstate', compact('state', 'admin1'));
     }
     public function updatestate(Request $request, $id)
     {
+    if ($request->ajax()) {
         $state = State::find($id);
         $request->validate([
             'name' => [
@@ -148,29 +153,43 @@ class CityStateController extends Controller
         $log->logs = 'Admin has Updated State  to (' . $state->name . ') Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
         log::debug('State Updated to (' . $state->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata'));
+         return response()->json([
+                            'status' => 'success',
+                            'message' => 'The State has been successfully modified .',
+                            'redirect' => route('admin.index'),
+                            'state_name' => $state->name,
 
+                        ]);
+                    }
         return redirect()->route('state.index')->with('success', 'State updated successfully.');
     }
 
-    public function deletestate($id)
+    public function deletestate(Request $request,$id)
     {
-        $state = State::find($id);
-        $state->update(['status' => '9']);
-        $state->cities()->update(['status' => '9']);
-        $head = Head::all();
-        $heads = Head::where('state', $state->name)->get();
-                    foreach ($heads as $head) {
-                        $head->update(['status' => '0']);
-                        $head->members()->where('status','1')->update(['status' => '0']);
-                    }
+    if ($request->ajax()) {
+            $state = State::find($id);
+            $state->update(['status' => '9']);
+            $state->cities()->update(['status' => '9']);
+            $head = Head::all();
+            $heads = Head::where('state', $state->name)->get();
+                        foreach ($heads as $head) {
+                            $head->update(['status' => '0']);
+                            $head->members()->where('status','1')->update(['status' => '0']);
+                        }
 
-        $admin1 = User::where('id', '=', session::get('loginId'))->first();
-        $log = new Logg();
-        $log->user_id = $admin1->id;
-        $log->logs = 'Admin Deleted State (' . $state->name . ') Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
-        $log->save();
-        log::debug('Admin Deleted State (' . $state->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata'));
-
+            $admin1 = User::where('id', '=', session::get('loginId'))->first();
+            $log = new Logg();
+            $log->user_id = $admin1->id;
+            $log->logs = 'Admin Deleted State (' . $state->name . ') Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
+            $log->save();
+            log::debug('Admin Deleted State (' . $state->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata'));
+            return response()->json([
+                                    'status' => 'success',
+                                    'message' => 'State deleted successfully.',
+                                    'redirect' => route('state.index'),
+                                    'state_name' => $state->name,
+                                ]);
+        }
         return redirect()->route('state.index')->with('success', 'State deleted successfully, with heads and members.');
     }
 
@@ -186,6 +205,7 @@ class CityStateController extends Controller
     }
     public function storeCity(Request $request)
     {
+
         $request->validate([
             'states' => 'required',
             'city' => 'required',
@@ -201,12 +221,20 @@ class CityStateController extends Controller
 
 
         if ($city->wasRecentlyCreated) {
+            if ($request->ajax()) {
             $admin1 = User::where('id', '=', session::get('loginId'))->first();
             $log = new Logg();
             $log->user_id = $admin1->id;
             $log->logs = 'City (' . $city->name . ') Added to (' . $state->name . ') Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
             $log->save();
             log::debug('City (' . $city->name . ') Added to (' . $state->name . ') Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A'));
+             return response()->json([
+                                                        'status' => 'success',
+                                                        'message' => 'City Added successfully.',
+                                                        'redirect' => route('city.index'),
+                                                        'city' => $city->name,
+                                                    ]);
+
             return redirect()->route('create.city', ['state_id' => $state->id])
                 ->with('success', 'City added successfully.');
         }
@@ -214,6 +242,7 @@ class CityStateController extends Controller
         return redirect()->route('create.city', ['state_id' => $state->id])
             ->with('error', 'The city already exists for this state.');
     }
+}
 
     public function createState(Request $request)
     {
@@ -270,14 +299,17 @@ class CityStateController extends Controller
 
     public function editcity(Request $request, $id)
     {
+        $decryptedId = Crypt::decryptString($id);
+
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
-        $city = City::where('status', '1')->find($id);
+        $city = City::where('status', '1')->find($decryptedId);
         $states = State::where('status', '1')->get();
         return view('state-city.editcity', ['city' => $city, 'states' => $states, 'admin1' => $admin1]);
     }
 
     public function updatecity(Request $request, $id)
     {
+        if ($request->ajax()) {
         $city = City::find($id);
 
         $request->validate([
@@ -303,10 +335,16 @@ class CityStateController extends Controller
         $log->logs = 'Admin  Updated City to (' . $city->name . ') Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
         log::debug('City Updated to (' . $city->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata'));
-
+        return response()->json([
+                                            'status' => 'success',
+                                            'message' => 'City Updated successfully.',
+                                            'redirect' => route('city.index'),
+                                            'state_name' => $city->name,
+                                        ]);
 
         return redirect()->route('city.index')->with('success', 'City updated successfully.');
     }
+}
 
     public function deletecity($id)
     {

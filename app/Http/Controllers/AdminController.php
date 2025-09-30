@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Crypt;
 use App\Exports\HeadsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
@@ -138,10 +138,11 @@ class AdminController extends Controller
 
 public function viewMemberDetails($id)
     {
+     $decryptedId = Crypt::decryptString($id);
         $members = Member::with('head')->whereIn('status',['0','1'])
             ->whereHas('head', function($q) {
                 $q->whereIn('status', ['0','1']);
-            })->find($id);
+            })->find($decryptedId);
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
         return view("admin.member_profile", ["members" => $members, 'admin1' => $admin1]);
@@ -222,7 +223,8 @@ public function viewMemberDetails($id)
      */
     public function show(string $id)
     {
-        $heads = Head::find($id);
+        $decryptedId = Crypt::decryptString($id);
+        $heads = Head::find($decryptedId);
         $members = $heads->members;
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
@@ -404,8 +406,16 @@ public function viewMemberDetails($id)
 
 
              if ($request->ajax()) {
-                         $head->update(['status' => '9']);
-                         $head->members()->where('status','1')->update(['status' => '0']);
+
+                        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+                        $log = new Logg();
+                        $log->user_id = $admin1->id;
+                        $log->logs = 'Admin Has Deleted Head  (' . ucfirst($head->name) . ' ' . ucfirst($head->surname) . ') Successfully ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
+                        $log->save();
+                        log::debug('Admin Has Deleted (' . $head->name . ' ' . $head->surname . ') Successfully on ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A'));
+
+                        $head->update(['status' => '9']);
+                        $head->members()->where('status','1')->update(['status' => '0']);
                         return response()->json([
                             'status' => 'success',
                             'message' => 'Head deleted successfully.',
@@ -418,12 +428,6 @@ public function viewMemberDetails($id)
             $head->update(['status' => '9']);
             $head->members()->where('status','1')->update(['status' => '0']);
 
-            $admin1 = User::where('id', '=', session::get('loginId'))->first();
-            $log = new Logg();
-            $log->user_id = $admin1->id;
-            $log->logs = 'Admin Has Deleted Head  (' . ucfirst($head->name) . ' ' . ucfirst($head->surname) . ') Successfully ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
-            $log->save();
-            log::debug('Admin Has Deleted (' . $head->name . ' ' . $head->surname . ') Successfully on ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A'));
 
             return redirect()->route('admin.index')->with('success', "Head deleted successfully.")->with('name', $head->name)->with('surname', $head->surname);
         }
@@ -458,12 +462,13 @@ public function viewMemberDetails($id)
 
     public function fullEdit(string $id)
     {
+        $decryptedId = Crypt::decryptString($id);
         $head = Head::with(['members' => function($query) {
             $query->where('status', '1');
-        }, 'hobbies'])->where('status', '1')->find($id);
+        }, 'hobbies'])->where('status', '1')->find($decryptedId);
         $states = State::where('status','1')->get();
 
-        $headstatus = Head::where('id', $id)->first();
+        $headstatus = Head::where('id', $decryptedId)->first();
         if ($headstatus->status == '0') {
             return redirect()->route('admin.index')->with('error', 'Head is inactive. Activate head to edit details via admin profile');
         }
@@ -489,83 +494,111 @@ public function viewMemberDetails($id)
     }
 
     public function fullUpdate(Request $request, string $id)
-    {
-        $user = Head::find($id);
+        {
+            $decryptedId = Crypt::decryptString($id);
+            $user = Head::find($decryptedId);
 
-        $request->validate([
-            'name' => 'required',
-            'surname' => 'required',
-            'birthdate' => ['required', 'date', 'before:' . Carbon::now()->subYears(21)->format('Y-m-d')],
-            'mobile' => [
-                'required',
-                'digits:10',
-                Rule::unique('heads', 'mobile')->ignore($user->id),
-            ],
-            'address' => 'required',
-            'state' => 'required',
-            'city' => 'required',
-            'pincode' => 'required|digits:6',
-            'marital_status' => 'required',
-            'mariage_date' => 'required_if:marital_status,1',
-            'hobbies' => 'required|array|min:1',
-            'hobbies.*' => ['required', 'distinct', 'min:1', 'string'],
-            'path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        // Update Head
-        $user->name = $request->name;
-        $user->surname = $request->surname;
-        $user->birthdate = $request->birthdate;
-        $user->mobile = $request->mobile;
-        $user->address = $request->address;
-        $user->state = $request->state;
-        $user->city = $request->city;
-        $user->pincode = $request->pincode;
-        $user->marital_status = $request->marital_status;
-
-        if ($request->input('marital_status') == 1) {
-            $user->mariage_date = $request->mariage_date;
-        }
-
-        // Update hobbies
-        $user->hobbies()->delete();
-        foreach ($request->hobbies as $hobby) {
-            $user->hobbies()->create([
-                'head_id' => $user->id,
-                'hobby_name' => $hobby,
+            $request->validate([
+                'name' => 'required',
+                'surname' => 'required',
+                'birthdate' => ['required', 'date', 'before:' . Carbon::now()->subYears(21)->format('Y-m-d')],
+                'mobile' => [
+                    'required',
+                    'digits:10',
+                    Rule::unique('heads', 'mobile')->ignore($user->id),
+                ],
+                'address' => 'required',
+                'state' => 'required',
+                'city' => 'required',
+                'pincode' => 'required|digits:6',
+                'marital_status' => 'required',
+                'mariage_date' => 'required_if:marital_status,1',
+                'hobbies' => 'required|array|min:1',
+                'hobbies.*' => ['required', 'distinct', 'min:1', 'string'],
+                'path' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
-        }
 
-        // Handle photo upload
-        if ($request->hasFile('path')) {
-            Storage::disk('public/uploads/images/')->delete($user->photo_path);
-            $file = $request->file('path');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move('uploads/images/', $filename);
-            $user->photo_path = $filename;
-        }
+            // Update Head
+            $user->name = $request->name;
+            $user->surname = $request->surname;
+            $user->birthdate = $request->birthdate;
+            $user->mobile = $request->mobile;
+            $user->address = $request->address;
+            $user->state = $request->state;
+            $user->city = $request->city;
+            $user->pincode = $request->pincode;
+            $user->marital_status = $request->marital_status;
+
+            if ($request->input('marital_status') == 1) {
+                $user->mariage_date = $request->mariage_date;
+            }
+
+            // Update hobbies
+            $user->hobbies()->delete();
+            foreach ($request->hobbies as $hobby) {
+                $user->hobbies()->create([
+                    'head_id' => $user->id,
+                    'hobby_name' => $hobby,
+                ]);
+            }
+
+            // Handle photo upload
+            if ($request->hasFile('path')) {
+                Storage::disk('public/uploads/images/')->delete($user->photo_path);
+                $file = $request->file('path');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move('uploads/images/', $filename);
+                $user->photo_path = $filename;
+            }
 
 
-        $user->save();
+            $user->save();
 
-        // Handle deleted members
-        if ($request->has('deleted_members')) {
-            Member::whereIn('id', $request->deleted_members)->update(['status' => '0']);
-        }
+            // Handle deleted members
+            if ($request->has('deleted_members')) {
+                Member::whereIn('id', $request->deleted_members)->update(['status' => '0']);
+            }
 
-        // Handle existing members update
-        if ($request->has('members')) {
-            $members = $user->members()->where('status', '1')->orderBy('id')->get();
-            foreach ($request->members as $index => $memberData) {
-                $memberIndex = $index - 1;
-                if (isset($members[$memberIndex])) {
-                    $member = $members[$memberIndex];
-                    $member->name = $memberData['name'] ?? $member->name;
-                    $member->birthdate = $memberData['date'] ?? $member->birthdate;
-                    $member->relation = $memberData['relation'] ?? $member->relation;
-                    $member->marital_status = $memberData['marital_status'] ?? $member->marital_status;
-                    $member->education = $memberData['education'] ?? $member->education;
-                    $member->status = $memberData['status'] ?? $member->status;
+            // Handle existing members update
+            if ($request->has('members')) {
+                $members = $user->members()->where('status', '1')->orderBy('id')->get();
+                foreach ($request->members as $index => $memberData) {
+                    $memberIndex = $index - 1;
+                    if (isset($members[$memberIndex])) {
+                        $member = $members[$memberIndex];
+                        $member->name = $memberData['name'] ?? $member->name;
+                        $member->birthdate = $memberData['date'] ?? $member->birthdate;
+                        $member->relation = $memberData['relation'] ?? $member->relation;
+                        $member->marital_status = $memberData['marital_status'] ?? $member->marital_status;
+                        $member->education = $memberData['education'] ?? $member->education;
+                        $member->status = $memberData['status'] ?? $member->status;
+
+                        if (isset($memberData['marital_status']) && $memberData['marital_status'] == 1 && isset($memberData['mariage_date'])) {
+                            $member->mariage_date = $memberData['mariage_date'];
+                        }
+
+                        if (isset($memberData['photo']) && $memberData['photo']) {
+                            $file = $memberData['photo'];
+                            $filename = time() . '_' . $file->getClientOriginalName();
+                            $file->move('uploads/images/', $filename);
+                            $member->photo_path = $filename;
+                        }
+
+                        $member->save();
+                    }
+                }
+            }
+
+            // Handle new members
+            if ($request->has('new_members')) {
+                foreach ($request->new_members as $memberData) {
+                    $member = new Member();
+                    $member->head_id = $user->id;
+                    $member->name = $memberData['name'];
+                    $member->birthdate = $memberData['date'];
+                    $member->marital_status = $memberData['marital_status'] ?? 0;
+                    $member->education = $memberData['education'];
+                    $member->status = '1';
 
                     if (isset($memberData['marital_status']) && $memberData['marital_status'] == 1 && isset($memberData['mariage_date'])) {
                         $member->mariage_date = $memberData['mariage_date'];
@@ -581,55 +614,29 @@ public function viewMemberDetails($id)
                     $member->save();
                 }
             }
-        }
 
-        // Handle new members
-        if ($request->has('new_members')) {
-            foreach ($request->new_members as $memberData) {
-                $member = new Member();
-                $member->head_id = $user->id;
-                $member->name = $memberData['name'];
-                $member->birthdate = $memberData['date'];
-                $member->marital_status = $memberData['marital_status'] ?? 0;
-                $member->education = $memberData['education'];
-                $member->status = '1';
 
-                if (isset($memberData['marital_status']) && $memberData['marital_status'] == 1 && isset($memberData['mariage_date'])) {
-                    $member->mariage_date = $memberData['mariage_date'];
-                }
+            if ($request->ajax()) {
+             $admin1 = User::where('id', '=', session::get('loginId'))->first();
+                    $log = new Logg();
+                    $log->user_id = $admin1->id;
+                    $log->logs = 'Admin has Updated Head and Members (' . $user->name . ' ' . $user->surname . ') Successfully on ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
+                    $log->save();
 
-                if (isset($memberData['photo']) && $memberData['photo']) {
-                    $file = $memberData['photo'];
-                    $filename = time() . '_' . $file->getClientOriginalName();
-                    $file->move('uploads/images/', $filename);
-                    $member->photo_path = $filename;
-                }
-
-                $member->save();
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'The head successfully modified data.',
+                    'redirect' => route('admin.index'),
+                    'name' => $user->name,
+                    'surname' => $user->surname
+                ]);
             }
+
+            return redirect()->route('admin.index')->with('success', 'Head updated successfully.')->with('name', $user->name)->with('surname', $user->surname);
+
+
+
         }
-
-        $admin1 = User::where('id', '=', session::get('loginId'))->first();
-        $log = new Logg();
-        $log->user_id = $admin1->id;
-        $log->logs = 'Admin has Updated Head and Members (' . $user->name . ' ' . $user->surname . ') Successfully on ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
-        $log->save();
-
-        if ($request->ajax()) {
-            return response()->json([
-                'status' => 'success',
-                'message' => 'The head successfully modified data.',
-                'redirect' => route('admin.index'),
-                'name' => $user->name,
-                'surname' => $user->surname
-            ]);
-        }
-
-        return redirect()->route('admin.index')->with('success', 'Head updated successfully.')->with('name', $user->name)->with('surname', $user->surname);
-
-
-
-    }
 
 
 
@@ -778,15 +785,26 @@ public function viewMemberDetails($id)
 
     public function postCityState(Request $request,$id){
            $user = Head::find($id);
-           $user->address = $request->address;
-           $user->state = $request->state;
-           $user->city = $request->city;
-           $user->pincode = $request->pincode;
-           $user->status = '1';
 
-           $user->save();
+           if ($request->ajax()) {
 
-           $user->members()->where('status','0')->update(['status' => '1']);
+                      $user->address = $request->address;
+                      $user->state = $request->state;
+                      $user->city = $request->city;
+                      $user->pincode = $request->pincode;
+                      $user->status = '1';
+
+                      $user->save();
+
+                      $user->members()->where('status','0')->update(['status' => '1']);
+                               return response()->json([
+                                                               'status' => 'success',
+                                                               'message' => 'Head updated location successfully.',
+                                                               'name' => $user->name,
+                                                               'surname' => $user->surname
+                                                           ]);
+           }
+
 
 
             return redirect()->route('admin.index')->with('success', "Head's (City/State) Updated successfully.")->with('name', $user->name)->with('surname', $user->surname);

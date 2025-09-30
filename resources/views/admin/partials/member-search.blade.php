@@ -106,7 +106,7 @@
                         <div class="row g-2">
                             <div class="col-12">
                                 <div class="d-flex align-items-center mb-2">
-                                    <i class="bi bi-cake2-fill text-primary me-2"></i>
+                                    <i class="bi bi-calendar3 text-primary me-2"></i>
                                     <span class="fw-medium">{{ date('M d, Y', strtotime($member->birthdate)) }}</span>
                                 </div>
                             </div>
@@ -156,11 +156,11 @@
                             @if($member->head)
                                 <!-- Primary Actions -->
                                 <div class="d-flex gap-2">
-                                    <a href="{{ route('admin.show', $member->head->id) }}"
+                                    <a href="{{ route('admin.show', Crypt::encryptString($member->head->id)) }}"
                                        class="btn btn-primary btn-custom btn-sm flex-fill {{ $member->status != 1 ? 'disabled-link' : '' }}">
                                         <i class="bi bi-eye me-1"></i>View Family
                                     </a>
-                                    <a href="{{ route('admin.viewMemberDetails', $member->id) }}"
+                                    <a href="{{ route('admin.viewMemberDetails', Crypt::encryptString($member->id)) }}"
                                        class="btn btn-info btn-custom btn-sm flex-fill {{ $member->status != 1 ? 'disabled-link' : '' }}">
                                         <i class="bi bi-person me-1"></i>View Member
                                     </a>
@@ -169,7 +169,7 @@
                                 <!-- Secondary Actions -->
                                 <div class="d-flex gap-2">
 
-                                        <a href="{{ route('admin-member.edit', $member->id) }}"
+                                        <a href="{{ route('admin-member.edit', Crypt::encryptString($member->id)) }}"
                                            class="btn btn-warning btn-custom btn-sm flex-fill  {{ $member->status == 0 ? 'disabled-link' : '' }}">
                                             <i class="bi bi-pencil me-1"></i>Edit
                                         </a>

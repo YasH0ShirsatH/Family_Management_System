@@ -91,60 +91,18 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
     $(function () {
-        const listUrl = "{{ Route('show.city', $state->id) }}";
         let debounceTimeout = null;
 
-        function showLoading() {
-            $('#searchLoading').removeClass('d-none');
-            $('#searchInput').prop('disabled', true);
-        }
-
-        function hideLoading() {
-            $('#searchLoading').addClass('d-none');
-            $('#searchInput').prop('disabled', false);
-        }
-
-        function fetchList(params = {}) {
-            showLoading();
-            $.get(listUrl, params)
-                .done(function (response) {
-                    // replace only the table + pagination area
-                    $('#tableResults').html(response);
-                })
-                .fail(function () {
-                    // optional: show a brief message or console error
-                    console.error('Failed to fetch list');
-                })
-                .always(function () {
-                    hideLoading();
-                });
-        }
-
-        // Live search  method applied here
+        // Live search with form submission
         $(document).on('keyup', '#searchInput', function () {
             const query = $(this).val();
             clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(function () {
-                fetchList({
-                    search: query
-                });
-            }, 800);
-        });
-
-        // AJAX pagination done here via https://youtu.be/g0EWWgtA0a0?si=sug4h_xrzTOrmngb
-        $(document).on('click', '#tableResults .pagination a', function (e) {
-            e.preventDefault();
-            const url = new URL($(this).attr('href'), window.location.origin);
-            const params = Object.fromEntries(url.searchParams.entries());
-            params.search = $('#searchInput').val() || params.search;
-            fetchList(params);
-            window.history.pushState({}, '', $(this).attr('href'));
-        });
-
-        // restore on back/forward
-        window.addEventListener('popstate', function () {
-            const params = Object.fromEntries(new URLSearchParams(location.search));
-            fetchList(params);
+                const currentUrl = new URL(window.location.href);
+                currentUrl.searchParams.set('search', query);
+                currentUrl.searchParams.delete('page'); // Reset to page 1
+                window.location.href = currentUrl.toString();
+            }, 1000);
         });
     });
 </script>

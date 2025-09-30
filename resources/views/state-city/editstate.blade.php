@@ -151,12 +151,12 @@
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
     <script>
         jQuery(document).ready(function () {
-      
+
 
             $('#formSubmit').validate({
                 rules: {
                     name: { required: true },
-                   
+
                 },
                 messages: {
                     name: { required: "Please enter state name" },
@@ -179,6 +179,51 @@
             });
         });
     </script>
+
+<script>
+            $(document).ready(function(){
+                $('#formSubmit').on('submit', function(e){
+                    e.preventDefault();
+
+                    if(!$(this).valid()){
+                        return;
+                    }
+
+                    var formData = new FormData(this);
+                    formData.append('_method', 'PUT');
+                    formData.append('_token', '{{ csrf_token() }}');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ route('state.update', $state->id) }}",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response){
+                            if(response.status === 'success'){
+                                alert(response.message);
+                                window.location.href = "{{ route('state.index') }}";
+                            } else {
+                                alert('Error: ' + response.message);
+                            }
+                        },
+                        error: function(xhr, status, error){
+                            if(xhr.status === 422) {
+                                var errors = xhr.responseJSON.errors;
+                                var errorMsg = 'Validation errors:\n';
+                                for(var field in errors) {
+                                    errorMsg += errors[field][0] + '\n';
+                                }
+                                alert(errorMsg);
+                            } else {
+                                alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+                            }
+                        }
+                    });
+                });
+            });
+
+        </script>
 
 
 </body>

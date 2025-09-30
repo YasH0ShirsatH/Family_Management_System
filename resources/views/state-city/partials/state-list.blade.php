@@ -68,16 +68,16 @@
                                 </td>
                                 <td class="align-middle text-center align-div">
                                     <div class="d-flex justify-content-center flex-wrap gap-2">
-                                        <a href="{{ route('show.city', $item->id) }}"
+                                        <a href="{{ route('show.city',  Crypt::encryptString($item->id)) }}"
                                             class="btn btn-outline-primary rounded-pill py-2 fw-semibold btn-sm">
                                             <i class="bi bi-eye me-1"></i>View
                                         </a>
-                                        <a href="{{ route('state.edit', $item->id) }}"
+                                        <a href="{{ route('state.edit', Crypt::encryptString($item->id)) }}"
                                             class="btn btn-outline-info rounded-pill py-2 fw-semibold btn-sm">
                                             <i class="bi bi-pen me-1"></i>Edit
                                         </a>
-                                        <a href="{{ route('state.delete', $item->id) }}"
-                                            class="deleteBtn btn btn-outline-danger rounded-pill py-2 fw-semibold btn-sm">
+                                        <a  data-id="{{ $item->id }}"
+                                            class="delete  btn btn-outline-danger rounded-pill py-2 fw-semibold btn-sm">
                                             <i class="bi bi-trash me-1"></i>Delete
                                         </a>
                                     </div>
@@ -107,17 +107,45 @@
 @endif
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const deleteButtons = document.getElementsByClassName('deleteBtn');
 
-    for (let i = 0; i < deleteButtons.length; i++) {
-        deleteButtons[i].addEventListener('click', function(event) {
-            if (!confirm(
-                    'WARNING: This will permanently delete the "STATE" and all included "CITIES"! This action cannot be undone. Are you sure?'
-                )) {
-                event.preventDefault();
-            }
-        });
-    }
-});
 </script>
+<script>
+    $(document).ready(function(){
+        console.log('Document ready, jQuery loaded');
+    $(document).on('click', '.delete', function(e){
+            console.log('delete button clicked');
+            e.preventDefault();
+
+            if(!confirm('Are you sure you want to delete this head?')) {
+                return;
+            }
+
+            var headId = $(this).data('id');
+            console.log('Head ID:', headId);
+
+            $.ajax({
+                type: 'POST',
+                url: "/admin/state-city/deletestate/" + headId,
+                data: {
+                                '_token': '{{ csrf_token() }}'
+                            },
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function(response){
+                    console.log('Response:', response);
+                    if(response.status === 'success'){
+                        alert(response.message + ' User: ' + response.state_name + ' ');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error){
+                    console.log('AJAX Error:', xhr.responseText);
+                    alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+                }
+            });
+        });
+        });
+    </script>

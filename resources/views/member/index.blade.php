@@ -299,7 +299,7 @@
 
                                         <div class="mt-auto">
                                             <div class="d-grid gap-2">
-                                                <a href="{{ route('admin-member.edit', $member->id) }}"
+                                                <a href="{{ route('admin-member.edit', Crypt::encryptString($member->id)) }}"
                                                     class="btn btn-primary btn-sm rounded-pill">
                                                     <i class="bi bi-pencil me-1"></i>Edit
                                                 </a>
@@ -311,9 +311,10 @@
                                                     </button>
                                                 </form>
                                                 <a href="{{ route('member.delete', $member->id) }}"
-                                                    class="btn btn-danger btn-sm rounded-pill deleteBtn">
-                                                    <i class="bi bi-trash me-1 "></i>Delete
-                                                </a>
+                                                                                                                    class="btn btn-danger btn-sm rounded-pill delete1"
+                                                                                                                      data-id="{{  $member->id }}">
+                                                                                                                    <i class="bi bi-trash me-1"></i>Delete
+                                                                                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -406,7 +407,8 @@
                                                                     </button>
                                                                 </form>
                                                                 <a href="{{ route('member.delete', $member->id) }}"
-                                                                    class="btn btn-danger btn-sm rounded-pill deleteBtn">
+                                                                    class="btn btn-danger btn-sm rounded-pill delete1"
+                                                                      data-id="{{  $member->id }}">
                                                                     <i class="bi bi-trash me-1"></i>Delete
                                                                 </a>
                                                             </div>
@@ -448,5 +450,45 @@
 
 </body>
 
+<script>
+    $(document).ready(function(){
+        console.log('Document ready, jQuery loaded');
+        $(document).on('click', '.delete1', function(e){
+                console.log('delete button clicked');
+                e.preventDefault();
+
+                if(!confirm('Are you sure you want to delete this member?')) {
+                    return;
+                }
+
+                var headId = $(this).data('id');
+                console.log('Head ID:', headId);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/member/delete/' + headId,
+                    data: {
+                        '_token': '{{ csrf_token() }}'
+                    },
+                    success: function(response){
+                        console.log('Response:', response);
+                        if(response.status === 'success'){
+                            alert(response.message + ' User: ' + response.name );
+                            location.reload();
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    },
+                    error: function(xhr, status, error){
+                        console.log('AJAX Error:', xhr.responseText);
+                        alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+                    }
+                });
+            });
+        });
+    </script>
+
 </html>
 @endif
+
+

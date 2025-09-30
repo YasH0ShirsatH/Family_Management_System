@@ -25,7 +25,7 @@
         border-color: #dc3545;
         background-color: #fff0f0;
     }
-    
+
         .active-class-6{
             background-color: #0dcaf0;
             color : white;
@@ -172,6 +172,50 @@
         });
     });
     </script>
+    <script>
+             $(document).ready(function(){
+                 $('#formSubmit').on('submit', function(e){
+                     e.preventDefault();
+
+                     if(!$(this).valid()){
+                         return;
+                     }
+
+                     var formData = new FormData(this);
+                     formData.append('_method', 'POST');
+                     formData.append('_token', '{{ csrf_token() }}');
+
+                     $.ajax({
+                         type: 'POST',
+                         url: "{{ route('store.city') }}",
+                         data: formData,
+                         contentType: false,
+                         processData: false,
+                         success: function(response){
+                             if(response.status === 'success'){
+                                 alert(response.message);
+                                 $('#city').val('');
+                             } else {
+                                 alert('Error: ' + response.message);
+                             }
+                         },
+                         error: function(xhr, status, error){
+                             if(xhr.status === 422) {
+                                 var errors = xhr.responseJSON.errors;
+                                 var errorMsg = 'Validation errors:\n';
+                                 for(var field in errors) {
+                                     errorMsg += errors[field][0] + '\n';
+                                 }
+                                 alert(errorMsg);
+                             } else {
+                                 alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+                             }
+                         }
+                     });
+                 });
+             });
+
+         </script>
 </body>
 
 </html>
