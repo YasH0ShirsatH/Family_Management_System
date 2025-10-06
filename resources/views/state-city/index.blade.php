@@ -130,7 +130,7 @@
                         Quick Actions
                     </h3>
                 </div>
-                
+
                 <!-- View States -->
                 <div class="col-md-6 col-lg-3">
                     <a href="admin/state-city/states" class="action-card text-center">

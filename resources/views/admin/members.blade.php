@@ -180,7 +180,7 @@
                                         </span>
                                         <input type="text" id="searchInput"
                                             class="form-control"
-                                            placeholder="Search by member name, education, marital status..."
+                                            placeholder="Search by member name, head's name..."
                                             value="{{ request('search') }}">
 
                                         <span id="searchLoading"

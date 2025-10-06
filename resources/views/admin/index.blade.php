@@ -221,21 +221,21 @@
                         </div>
                     </div>
 
-                    <div class="card shadow-sm mb-4" style="border-radius: 25px; background: #f8f9fa;">
+                    <div class="card shadow-sm mb-4 search-card">
                         <div class="card-body p-4">
-                            <div class="row g-3 align-items-center">
+                            <div class="row g-3 align-items-end">
                                 <div class="col-12 col-lg-8">
-                                    <div class="position-relative">
-                                        <div class="input-group" style="border-radius: 25px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                                            <span class="input-group-text bg-white border-0" style="padding: 12px 15px;">
-                                                <i class="bi bi-search text-primary"></i>
-                                            </span>
-                                            <input type="text" id="searchInput"
-                                                class="form-control border-0" 
-                                                style="padding: 12px 15px; font-size: 0.95rem;"
-                                                placeholder="Search families by name, mobile, location..."
-                                                value="{{ request('search') }}">
-                                        </div>
+                                    <label class="form-label fw-semibold text-muted mb-2">
+                                        <i class="bi bi-search me-1"></i>Search Families
+                                    </label>
+                                    <div class="input-group search-input-group position-relative">
+                                        <span class="input-group-text bg-light border-end-0">
+                                            <i class="bi bi-search text-primary"></i>
+                                        </span>
+                                        <input type="text" id="searchInput"
+                                            class="form-control border-start-0 ps-0"
+                                            placeholder="Search by name, surname, mobile, city, state..."
+                                            value="{{ request('search') }}">
                                         <span id="searchLoading"
                                             class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
                                             style="z-index: 10;">
@@ -245,9 +245,11 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-12 col-lg-4">
-                                    <button id="pdfSearchBtn" class="btn btn-danger d-none" style="border-radius: 20px; padding: 10px 20px; width: 100%;">
-                                        <i class="bi bi-file-earmark-pdf me-2"></i>Export Search Results
+                                <div class="col-12 col-lg-4 d-flex justify-content-sm-end">
+                                    <button id="pdfSearchBtn" class="btn btn-danger p-2 flex-fill d-none" style="width: 40%">
+                                        <i class="bi bi-file-earmark-pdf me-2"></i>
+                                        <span class="d-none d-sm-inline">Export PDF</span>
+                                        <span class="d-sm-none">PDF</span>
                                     </button>
                                 </div>
                             </div>

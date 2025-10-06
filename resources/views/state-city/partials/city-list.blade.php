@@ -7,7 +7,7 @@
             <a href="{{ route('create.city') }}" class="btn btn-primary rounded-pill py-2 fw-semibold btn-sm">
                 <i class="bi bi-plus-circle me-2"></i>Add City
             </a>
-            
+
         </div>
     </div>
     <div class="card-body p-0">
@@ -27,13 +27,13 @@
                         <th scope="row" class="align-middle">{{ $cities->firstItem() + $index }}</th>
                         <td class="align-middle fw-bold text-dark">{{ $item->name }}</td>
                         <td class="align-middle">
-                            <a class="statelinks text-primary fw-semibold" href="{{ route('show.city', $item->state->id) }}">
+                            <a class="statelinks text-primary fw-semibold" href="{{ route('show.city', Crypt::encryptString( $item->state->id)) }}">
                                 {{ $item->state->name }}
                             </a>
                         </td>
                         <td class="align-middle text-center">
                             <div class="d-flex justify-content-center flex-wrap gap-2">
-                                <a href="{{ route('city.edit', $item->id) }}" class="btn btn-outline-info rounded-pill py-2 fw-semibold btn-sm">
+                                <a href="{{ route('city.edit', Crypt::encryptString( $item->id)) }}" class="btn btn-outline-info rounded-pill py-2 fw-semibold btn-sm">
                                     <i class="bi bi-pen me-1"></i>Edit
                                 </a>
                                 <a class="deleteBtn btn btn-outline-danger rounded-pill py-2 fw-semibold btn-sm" href="{{ route('city.delete', $item->id) }}">

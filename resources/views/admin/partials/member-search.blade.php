@@ -1,61 +1,52 @@
-<div class="row g-4">
+<div class="row">
     <div class="col-12">
         <style>
             .member-card {
-                background: white;
-                border-radius: 18px;
-                overflow: hidden;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
                 transition: all 0.3s ease;
-                border: none;
+                border: 2px solid transparent;
             }
-            .member-card:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            .member-card.active {
+                opacity: 1;
+                border-color: #198754;
+                box-shadow: 0 4px 15px rgba(25, 135, 84, 0.15);
             }
-            .origami-header {
-                background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
-                color: white;
-                padding: 20px 25px;
-                margin: 0;
-                border-radius: 0;
+            .member-card.inactive {
+                position: relative;
+                border-color: #dc3545;
             }
-            .member-card.inactive .origami-header {
-                background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+            .member-card.inactive::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(220, 53, 69, 0.15);
+                border-radius: inherit;
+                z-index: 1;
+                pointer-events: none;
             }
-            .pill-section {
-                background: #f8f9fa;
-                border-radius: 25px;
-                padding: 12px 18px;
-                margin: 8px 0;
-                border: 1px solid #e9ecef;
+            .member-card.inactive .card-body {
+                position: relative;
+                z-index: 2;
             }
-            .pill-info {
-                background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            .status-badge {
+                padding: 4px 12px;
                 border-radius: 20px;
-                padding: 15px 20px;
-                margin: 8px 0;
-                border: 1px solid #e1f5fe;
+                font-size: 0.75rem;
+                font-weight: 600;
             }
-            .pill-stats {
-                background: linear-gradient(135deg, #f1f8e9 0%, #e8f5e8 100%);
-                border-radius: 20px;
-                padding: 15px 20px;
-                margin: 10px 0;
-                border: 1px solid #c8e6c9;
+            .status-active {
+                background-color: #d1e7dd;
+                color: #0f5132;
             }
-            .action-pill {
-                background: #fff;
-                border-radius: 15px;
-                padding: 12px 15px;
-                border: 1px solid #dee2e6;
+            .status-inactive {
+                background-color: #f8d7da;
+                color: #842029;
             }
-            .btn-pill {
-                border-radius: 20px;
-                padding: 6px 16px;
-                font-size: 0.85rem;
+            .btn-custom {
+                border-radius: 8px;
                 font-weight: 500;
-                border: none;
                 transition: all 0.2s ease;
             }
             .disabled-link {
@@ -66,194 +57,159 @@
         </style>
 
         @forelse ($members as $member)
-        <div class="member-card mb-4 {{ $member->status == 1 ? 'active' : 'inactive' }}">
-            <!-- Origami Header -->
-            <div class="origami-header">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <img src="{{ $member->photo_path ? asset('uploads/images/' . $member->photo_path) : asset('uploads/images/noimage.png') }}"
-                             class="rounded-circle me-4"
-                             width="60" height="60"
-                             style="object-fit: cover; border: 3px solid rgba(255,255,255,0.3);"
-                             alt="Member Photo">
-                        <div>
-                            <h5 class="mb-1 fw-bold">{{ ucfirst($member->name) }}</h5>
-                            <small class="opacity-75">
-                                <i class="bi bi-house-door me-1"></i>
-                                @if($member->head)
-                                    {{ ucfirst($member->head->name) }} {{ ucfirst($member->head->surname) }}
-                                @else
-                                    No Family Head
-                                @endif
-                            </small>
-                        </div>
-                    </div>
-                    <div class="text-end">
-                        <div class="badge bg-light text-dark px-3 py-2 rounded-pill">
-                            {{ $member->status == 1 ? 'Active' : 'Inactive' }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-5">
-                <!-- Member Info Pills -->
-                <div class="row g-3">
-                    <div class="col-12 col-md-4">
-                        <div class="pill-info text-center">
-                            <div class="d-flex align-items-center justify-content-center mb-2">
-                                <i class="bi bi-calendar-heart text-primary me-2"></i>
-                                <span class="fw-bold text-primary">{{ \Carbon\Carbon::parse($member->birthdate)->age }} Years</span>
+        <div class="card member-card shadow-sm border-0 rounded-3 mb-3 {{ $member->status == 1 ? 'active' : 'inactive' }}">
+            <div class="card-body p-4">
+                <div class="row align-items-center g-3">
+                    <!-- Profile Section -->
+                    <div class="col-12 col-lg-4">
+                        <div class="d-flex align-items-center">
+                            <div class="position-relative me-3">
+                                <img src="{{ $member->photo_path ? asset('uploads/images/' . $member->photo_path) : asset('uploads/images/noimage.png') }}"
+                                     class="rounded-circle border border-2"
+                                     width="70" height="70"
+                                     style="object-fit: cover; border-color: {{ $member->status == 1 ? '#198754' : '#dc3545' }} !important;"
+                                     alt="Member Photo">
                             </div>
-                            <small class="text-muted d-block">
-                                Born: {{ date('M d, Y', strtotime($member->birthdate)) }}
-                            </small>
-                        </div>
-                    </div>
-                    
-                    <div class="col-12 col-md-4">
-                        <div class="pill-info">
-                            <div class="text-center mb-2">
-                                <i class="bi bi-diagram-3 text-warning me-1"></i>
-                                <span class="fw-bold text-warning">
-                                    @if($member->relation)
-                                        {{ucfirst($member->relation) }}
-                                    @else
-                                        Family Member
-                                    @endif
-                                </span>
-                            </div>
-                            <div class="text-center">
+                            <div class="flex-grow-1">
+                                <h5 class="mb-2 fw-bold text-dark">{{ ucfirst($member->name) }}</h5>
+                                <div class="mb-2">
+                                    <span class="status-badge {{ $member->status == 1 ? 'status-active' : 'status-inactive' }}">
+                                        {{ $member->status == 1 ? 'Active' : 'Inactive' }}
+                                    </span>
+                                </div>
                                 <small class="text-muted">
+                                    <i class="bi bi-calendar3 me-1"></i>
+                                    Created: {{ $member->created_at->format('M d, Y') }}
+                                </small>
+                                <br>
+                                <small class="text-success fw-bold">
+                                    <i class="bi bi-house-door me-1"></i>
                                     @if($member->head)
-                                        <i class="bi bi-arrow-right me-1"></i>{{ $member->head->name }}
+                                        {{ ucfirst($member->head->name) }} {{ ucfirst($member->head->surname) }}
+                                        @if($member->head->status == '1')
+                                            <span class="text-success">(Active)</span>
+                                        @elseif($member->head->status == '0')
+                                            <span class="text-danger">(Inactive)</span>
+                                        @elseif($member->head->status == '9')
+                                            <span class="text-secondary">(Deleted)</span>
+                                        @endif
                                     @else
-                                        No Head Assigned
+                                        No Family Head
                                     @endif
                                 </small>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="col-12 col-md-4">
-                        <div class="pill-info">
-                            <div class="row g-2">
-                                <div class="col-12">
-                                    <div class="d-flex align-items-center justify-content-center mb-1">
-                                        <i class="bi bi-mortarboard text-info me-2"></i>
-                                        <span class="fw-medium text-info">{{ ucfirst($member->education ?? 'Not specified') }}</span>
-                                    </div>
+
+                    <!-- Details Section -->
+                    <div class="col-12 col-lg-4">
+                        <div class="row g-2">
+                            <div class="col-12">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-calendar3 text-primary me-2"></i>
+                                    <span class="fw-medium">{{ date('M d, Y', strtotime($member->birthdate)) }}</span>
                                 </div>
-                                <div class="col-12">
-                                    <div class="d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-heart text-danger me-2"></i>
-                                        <span class="fw-medium text-danger">
-                                            @if($member->marital_status == 1)
-                                                Married
-                                                @if($member->mariage_date)
-                                                    <small class="d-block text-muted">({{ date('M Y', strtotime($member->mariage_date)) }})</small>
-                                                @endif
-                                            @else
-                                                Single
+                            </div>
+                             <span class="mb-2" >
+                                   @if($member->relation)
+                                        <i class="bi bi-people text-muted me-2"></i> {{ucfirst($member->relation) }} of {{ $member->head->name }}
+                                        @else
+                                        <i class="bi bi-slash-circle"></i>&nbsp;
+                                        Relation not defined yet
+                                        @endif
+                             </span>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-mortarboard-fill text-primary me-2"></i>
+                                    <span class="fw-medium">{{ ucfirst($member->education ?? 'Not specified') }}</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-heart-fill text-primary me-2"></i>
+                                    <span class="fw-medium">
+                                        @if($member->marital_status == 1)
+                                            Married
+                                            @if($member->mariage_date)
+                                                ({{ date('M Y', strtotime($member->mariage_date)) }})
                                             @endif
-                                        </span>
-                                    </div>
+                                        @else
+                                            Single
+                                        @endif
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-person-badge-fill text-success me-2"></i>
+                                    <span class="text-success fw-bold">
+                                        Age: {{ \Carbon\Carbon::parse($member->birthdate)->age }} years
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Stats Pill -->
-                <div class="pill-stats mt-3">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <small class="text-muted">
-                            <i class="bi bi-calendar3 me-1"></i>
-                            Created: {{ $member->created_at->format('M d, Y') }}
-                        </small>
-                        @if($member->head)
-                            <small class="fw-bold">
-                                @if($member->head->status == '1')
-                                    <span class="text-success">Family Active</span>
-                                @elseif($member->head->status == '0')
-                                    <span class="text-danger">Family Inactive</span>
-                                @elseif($member->head->status == '9')
-                                    <span class="text-secondary">Family Deleted</span>
-                                @endif
-                            </small>
-                        @endif
-                    </div>
-                </div>
+                    <!-- Actions Section -->
+                    <div class="col-12 col-lg-4">
+                        <div class="d-flex flex-column gap-2">
+                            @if($member->head)
+                                <!-- Primary Actions -->
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('admin.show', Crypt::encryptString($member->head->id)) }}"
+                                       class="btn btn-primary btn-custom btn-sm flex-fill {{ $member->status != 1 ? 'disabled-link' : '' }}">
+                                        <i class="bi bi-eye me-1"></i>View Family
+                                    </a>
+                                    <a href="{{ route('admin.viewMemberDetails', Crypt::encryptString($member->id)) }}"
+                                       class="btn btn-info btn-custom btn-sm flex-fill {{ $member->status != 1 ? 'disabled-link' : '' }}">
+                                        <i class="bi bi-person me-1"></i>View Member
+                                    </a>
+                                </div>
 
-                <!-- Action Pills -->
-                @if($member->head)
-                <div class="action-pill mt-3">
-                    <div class="d-flex flex-wrap gap-2">
-                        <button class="btn btn-primary btn-pill" data-bs-toggle="modal" data-bs-target="#memberModal{{ $member->id }}">
-                            <i class="bi bi-three-dots me-1"></i>Actions
-                        </button>
-                        <a href="{{ route('admin.viewMemberDetails', $member->id) }}"
-                           class="btn btn-info btn-pill {{ $member->status != 1 ? 'disabled-link' : '' }}">
-                            <i class="bi bi-person me-1"></i>View Member
-                        </a>
-                        </a>
-                    </div>
-                </div>
-                @else
-                    <div class="action-pill mt-3">
-                        <span class="text-muted small">No actions available - No family head assigned</span>
-                    </div>
-                @endif
-            </div>
-        </div>
+                                <!-- Secondary Actions -->
+                                <div class="d-flex gap-2">
 
-        <!-- Member Action Modal -->
-        <div class="modal fade" id="memberModal{{ $member->id }}" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg" style="border-radius: 18px;">
-                    <div class="modal-header border-0 pb-0">
-                        <h5 class="modal-title fw-bold">Member Actions</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body pt-2">
-                        <div class="d-grid gap-2">
-                            <a href="{{ route('admin.show', $member->head->id) }}"
-                               class="btn btn-outline-primary rounded-pill {{ $member->status != 1 ? 'disabled-link' : '' }}">
-                                <i class="bi bi-eye me-2"></i>View Family
-                            </a>
-                            <a href="{{ route('admin-member.edit', $member->id) }}"
-                               class="btn btn-outline-warning rounded-pill {{ $member->status == 0 ? 'disabled-link' : '' }}">
-                                <i class="bi bi-pencil me-2"></i>Edit Member
-                            </a>
-                            
+                                        <a href="{{ route('admin-member.edit', Crypt::encryptString($member->id)) }}"
+                                           class="btn btn-warning btn-custom btn-sm flex-fill  {{ $member->status == 0 ? 'disabled-link' : '' }}">
+                                            <i class="bi bi-pencil me-1"></i>Edit
+                                        </a>
+
+                                    <a href="{{ route('member.delete', $member->id) }}"
+
+                                       class="btn btn-danger btn-custom btn-sm flex-fill delete1"
+                                        data-id="{{  $member->id }}"
+                                       >
+                                        <i class="bi bi-trash me-1"></i>Delete
+                                    </a>
+                                </div>
                             @if($member->status == '0' and $member->head->status == '1')
-                                <button data-id="{{ $member->id }}"
-                                       class="btn btn-outline-success rounded-pill activation"
-                                       data-bs-dismiss="modal">
-                                    <i class="bi bi-check-circle me-2"></i>Activate Member
-                                </button>
+                            <div class="d-flex flex-column gap-2">
+                               <a  data-id="{{  $member->id }}"
+                                   class="btn btn-outline-success btn-custom btn-sm flex-fill {{ $member->status == 1 ? 'disabled-link' : '' }} activation"
+                                   >
+                                   <i class="bi bi-check-circle me-1"></i>Activate
+                               </a>
+                           </div>
                             @elseif($member->status == '0' and $member->head->status == '0')
+                             <div class="d-flex flex-column gap-2">
                                 <a href="/dashboard/admin-profile"
-                                   class="btn btn-outline-secondary rounded-pill"
-                                   onclick="return confirm('Want to Activate this member? Click OK to go Admin Profile and Activate head {{$member->head->name}} {{$member->head->surname}}')">
-                                    <i class="bi bi-exclamation-triangle me-2"></i>Activate Head First
+                                   class="btn btn-outline-danger btn-custom btn-sm flex-fill {{ $member->status == 1 ? 'disabled-link' : '' }}"
+                                   onclick="return confirm('Want to Activate this member? Click \'OK\' to go Admin Profile and  Activate head {{$member->head->name}} {{$member->head->surname}}')">
+                                <i class="bi bi-x-circle me-1"></i>Activate Head to activate member
                                 </a>
+                                </div>
                             @endif
 
                             @if($member->status == '1')
-                                <button data-id="{{ $member->id }}"
-                                       class="btn btn-outline-secondary rounded-pill deactivation"
-                                       data-bs-dismiss="modal">
-                                    <i class="bi bi-pause-circle me-2"></i>Deactivate Member
-                                </button>
+                            <div class="d-flex flex-column gap-2">
+                                <a  data-id="{{  $member->id }}"
+                                   class="btn btn-outline-danger btn-custom btn-sm flex-fill {{ $member->status == 0 ? 'disabled-link' : '' }} deactivation">
+                                   <i class="bi bi-x-circle me-1"></i>Deactivate</a>
+                                </div>
                             @endif
-                            
-                            <hr class="my-2">
-                            <button data-id="{{ $member->id }}"
-                                   class="btn btn-outline-danger rounded-pill delete1"
-                                   data-bs-dismiss="modal">
-                                <i class="bi bi-trash me-2"></i>Delete Member
-                            </button>
+                            @else
+                                <span class="text-muted small">No actions available</span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -388,5 +344,3 @@
     });
 </script>
 @endif
-
-

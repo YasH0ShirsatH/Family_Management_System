@@ -1,6 +1,6 @@
 <style>
     .head-card {
-        border-radius: 50px;
+
         border: none;
         background: #fff;
         box-shadow: 0 8px 32px rgba(0,0,0,0.1);
@@ -36,7 +36,7 @@
         background: #f8f9fa;
         padding: 15px 20px;
         margin-bottom: 15px;
-        border-radius: 50px 50px 0 0;
+        border-radius: 5px  5px  0 0;
     }
     .origami-fold.active {
         background: linear-gradient(135deg, #198754 0%, #20c997 100%);
@@ -73,9 +73,7 @@
         font-weight: 500;
         transition: all 0.2s ease;
     }
-    .btn-pill:hover {
-        transform: scale(1.02);
-    }
+
     .info-row {
         display: flex;
         align-items: center;
@@ -123,7 +121,7 @@
                             <i class="bi bi-telephone-fill text-primary me-2"></i>
                             <span>{{ $user->mobile }}</span>
                         </div>
-                        
+
                         @if($states->where('status','1')->where('name',$user->state)->count() > 0 && $states->where('status','1')->where('name',$user->state)->first()->cities->where('status','1')->where('name',$user->city)->count() > 0)
                             <div class="info-row">
                                 <i class="bi bi-geo-alt-fill text-primary me-2"></i>
@@ -135,9 +133,9 @@
                                 <span class="text-danger">City/State Deleted</span>
                             </div>
                         @endif
-                        
+
                         <div class="info-row">
-                            <i class="bi bi-cake2-fill text-primary me-2"></i>
+                            <i class="bi bi bi-calendar-month text-primary me-2"></i>
                             <span>{{ date('M d, Y', strtotime($user->birthdate)) }}</span>
                         </div>
                     </div>
@@ -166,11 +164,11 @@
 
                     <!-- Action Pills -->
                     <div class="d-flex gap-2 mt-3">
-                        <a href="{{ route('admin.show', $user->id) }}"
+                        <a href="{{ route('admin.show', ['admin' => Crypt::encryptString($user->id)]) }}"
                            class="btn btn-primary btn-pill flex-fill {{ $user->status != 1 ? 'disabled-link' : '' }}">
                             <i class="bi bi-eye me-1"></i>View
                         </a>
-                        <button type="button" class="btn btn-success btn-pill flex-fill" 
+                        <button type="button" class="btn btn-success btn-pill flex-fill"
                                 data-bs-toggle="modal" data-bs-target="#actionsModal{{ $user->id }}">
                             <i class="bi bi-gear me-1"></i>Actions
                         </button>
@@ -190,7 +188,7 @@
                     <div class="modal-body">
                         <div class="d-grid gap-2">
                             @if($states->where('status','1')->where('name',$user->state)->count() > 0 && $states->where('status','1')->where('name',$user->state)->first()->cities->where('status','1')->where('name',$user->city)->count() > 0)
-                                <a href="{{ route('admin.fulledit', $user->id) }}"
+                                <a href="{{ route('admin.fulledit', Crypt::encryptString($user->id)) }}"
                                    class="btn btn-warning {{ $user->status != 1 ? 'disabled-link' : '' }}">
                                     <i class="bi bi-pencil me-2"></i>Edit Head & Members
                                 </a>
@@ -200,12 +198,12 @@
                                     <i class="bi bi-pencil me-2"></i>Edit Address (State/City)
                                 </a>
                             @endif
-                            
-                            <a href="{{ route('admin-member.show',$user->id) }}"
+
+                            <a href="{{ route('admin-member.show',Crypt::encryptString($user->id)) }}"
                                class="btn btn-info {{ $user->status != 1 ? 'disabled-link' : '' }}">
                                 <i class="bi bi-people me-2"></i>Manage Members
                             </a>
-                            
+
                             @if($user->status == '0')
                                 @if($states->where('status','1')->where('name',$user->state)->count() > 0 && $states->where('status','1')->where('name',$user->state)->first()->cities->where('status','1')->where('name',$user->city)->count() > 0)
                                     <button type="button" data-id="{{ $user->id }}"
@@ -218,14 +216,14 @@
                                     </button>
                                 @endif
                             @endif
-                            
+
                             @if($user->status == '1')
                                 <button type="button" data-id="{{ $user->id }}"
                                         class="btn btn-outline-danger deactivation" data-bs-dismiss="modal">
                                     <i class="bi bi-x-circle me-2"></i>Deactivate Head
                                 </button>
                             @endif
-                            
+
                             <button type="button" data-id="{{ $user->id }}"
                                     class="btn btn-danger delete" data-bs-dismiss="modal">
                                 <i class="bi bi-trash me-2"></i>Delete Head
@@ -372,5 +370,3 @@ $(document).ready(function(){
 
 });
 </script>
-
-

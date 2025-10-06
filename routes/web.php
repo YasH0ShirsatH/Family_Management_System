@@ -100,7 +100,7 @@ Route::match(['get', 'post'], 'admin/state-city/states', [CityStateController::c
 //* FOR STATE
 Route::get('admin/state-city/editstate/{id}', [CityStateController::class, 'editstate'])->name('state.edit');
 Route::put('admin/state-city/updatestate/{id}', [CityStateController::class, 'updatestate'])->name('state.update');
-Route::get('admin/state-city/deletestate/{id}', [CityStateController::class, 'deletestate'])->name('state.delete');
+Route::post('admin/state-city/deletestate/{id}', [CityStateController::class, 'deletestate'])->name('state.delete');
 
 //* FOR CITY
 Route::get('admin/state-city/editcity/{id}', [CityStateController::class, 'editcity'])->name('city.edit');

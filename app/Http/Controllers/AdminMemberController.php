@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Http\Request;
 use App\Models\Head;
 use App\Models\Member;
@@ -116,7 +116,9 @@ class AdminMemberController extends Controller
      */
     public function show(string $id)
     {
-        $head = Head::find($id);
+        $decryptedId = Crypt::decryptString($id);
+
+        $head = Head::find($decryptedId);
         $id = $head->id;
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $members = $head->members()->where('status', '1')->paginate(4);
@@ -128,8 +130,8 @@ class AdminMemberController extends Controller
      */
     public function edit(string $id)
     {
-
-        $member = Member::whereIn('status', ['1','0'])->find($id);
+        $decryptedId = Crypt::decryptString($id);
+        $member = Member::whereIn('status', ['1','0'])->find($decryptedId);
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         return view('member.edit', compact('member', 'admin1'));
     }
@@ -283,7 +285,9 @@ class AdminMemberController extends Controller
     public function activate($id)
     {
         $member = Member::find($id);
-        $parentId = $member->head->id;
+
+        $parentId = Crypt::encryptString($member->head->id);
+
         $member->update(['status' => '1']);
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
@@ -297,8 +301,9 @@ class AdminMemberController extends Controller
 
     public function deactivate($id)
     {
+//         $decryptedId = Crypt::encryptString($id);
         $member = Member::find($id);
-        $parentId = $member->head->id;
+        $parentId = Crypt::encryptString($member->head->id);
         $member->update(['status' => '0']);
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
@@ -309,7 +314,5 @@ class AdminMemberController extends Controller
 
         return redirect()->route('admin-member.show', $parentId)->with('success', 'Member deactivated successfully.');
     }
-
-
 
 }

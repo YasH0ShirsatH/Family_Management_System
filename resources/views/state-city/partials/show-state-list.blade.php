@@ -12,7 +12,7 @@
             .disable-div {
                 display: none;
             }
-            
+
         }
         </style>
     </div>

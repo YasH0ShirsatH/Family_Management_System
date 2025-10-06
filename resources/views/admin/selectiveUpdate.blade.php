@@ -79,8 +79,7 @@ textarea.error {
                             </div>
                             @endif
 
-                            <form action="{{ route('admin-member.postCityState',$head->id) }}" id="formSubmit" method="post"
-                                enctype="multipart/form-data">
+                            <form id="updateForm" method="post" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
 
@@ -150,13 +149,8 @@ textarea.error {
     </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
-
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
     <script>
@@ -186,7 +180,40 @@ textarea.error {
     jQuery(document).ready(function() {
 
 
-        $('#formSubmit').validate({
+        $('#updateForm').validate({
+            submitHandler: function(form) {
+                var formData = new FormData(form);
+                formData.append('_method', 'PUT');
+                formData.append('_token', '{{ csrf_token() }}');
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('admin-member.postCityState',$head->id) }}",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response){
+                        if (response.status === 'success') {
+                            alert(response.message + ' User: ' + response.name + ' ' + response.surname);
+                            window.location.href = '/admin';
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    },
+                    error: function(xhr, status, error){
+                        if(xhr.status === 422) {
+                            var errors = xhr.responseJSON.errors;
+                            var errorMsg = 'Validation errors:\n';
+                            for(var field in errors) {
+                                errorMsg += errors[field][0] + '\n';
+                            }
+                            alert(errorMsg);
+                        } else {
+                            alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+                        }
+                    }
+                });
+            },
             rules: {
 
                 address: {
@@ -245,9 +272,7 @@ textarea.error {
             unhighlight: function(element) {
                 $(element).removeClass('error');
 
-                if ($(element).attr("name") === "hobbies[]") {
-                    $('.hobby-input').removeClass('error');
-                }
+
                 $(element).closest('.form-group').find('.validation-error').empty();
             }
         });
