@@ -67,7 +67,7 @@
                         </div>
 
                         <div class="card-body">
-                            <form id="formSubmit" action="{{ route('store.state') }}" method="post">
+                            <form id="formSubmit"  method="post">
                                 @csrf
 
                                 <div class="mb-3 form-group">
@@ -112,6 +112,15 @@
                                     </label>
                                     <input type="number" id="longitude" name="longitude" class="form-control"
                                         placeholder="Enter state longitude" value="{{ old('longitude') }}">
+                                        <div class="validation-error"></div>
+                                </div>
+
+                                <div class="mb-3 form-group">
+                                    <label for="country_id" class="form-label">
+                                        <i class="bi bi-globe text-primary me-1"></i>Country_id (optional)
+                                    </label>
+                                    <input type="number" id="country_id" name="country_id" class="form-control"
+                                        placeholder="Enter Country Id " value="{{ old('country_id') }}">
                                         <div class="validation-error"></div>
                                 </div>
 
@@ -171,6 +180,51 @@
             });
         });
     </script>
+<script>
+             $(document).ready(function(){
+                 $('#formSubmit').on('submit', function(e){
+                     e.preventDefault();
+
+                     if(!$(this).valid()){
+                         return;
+                     }
+
+                     var formData = new FormData(this);
+                     formData.append('_method', 'POST');
+                     formData.append('_token', '{{ csrf_token() }}');
+
+                     $.ajax({
+                         type: 'POST',
+                         url: "{{ route('store.state') }}",
+                         data: formData,
+                         contentType: false,
+                         processData: false,
+                         success: function(response){
+                             if(response.status === 'success'){
+                                 alert(response.message);
+                                 window.location.href = response.redirect;
+                                 $('#state').val('');
+                             } else {
+                                 alert('Error: ' + response.message);
+                             }
+                         },
+                         error: function(xhr, status, error){
+                             if(xhr.status === 422) {
+                                 var errors = xhr.responseJSON.errors;
+                                 var errorMsg = 'Validation errors:\n';
+                                 for(var field in errors) {
+                                     errorMsg += errors[field][0] + '\n';
+                                 }
+                                 alert(errorMsg);
+                             } else {
+                                 alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+                             }
+                         }
+                     });
+                 });
+             });
+
+         </script>
 </body>
 
 </html>

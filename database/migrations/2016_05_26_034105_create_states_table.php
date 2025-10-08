@@ -26,6 +26,7 @@ class CreateStatesTable extends Migration
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->string('timezone')->nullable();
+            $table->bigInteger('country_id')->nullable();
             $table->enum('status', ['0', '1', '9'])->default('1'); // Defines an enum column named 'status'
             $table->timestamps();
         });

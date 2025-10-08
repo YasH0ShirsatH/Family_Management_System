@@ -193,7 +193,7 @@
                          processData: false,
                          success: function(response){
                              if(response.status === 'success'){
-                                 alert(response.message);
+                                 alert(response.message + ' => ' + response.city + ', ' + ' You can add another city now.');
                                  $('#city').val('');
                              } else {
                                  alert('Error: ' + response.message);

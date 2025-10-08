@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Cities by State</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -106,5 +107,47 @@
         });
     });
 </script>
+
+ <script>
+        $(function () {
+            const listUrl = "{{ url('admin/state-city/city') }}";
+            let debounceTimeout = null;
+
+
+
+
+
+
+
+
+
+            // AJAX delete functionality
+            $(document).on('click', '.deleteBtn', function (e) {
+                e.preventDefault();
+                const deleteUrl = $(this).attr('href');
+                const cityId = $(this).data('id');
+
+                if (confirm('Are you sure you want to delete this city?')) {
+                    $.ajax({
+                        url: deleteUrl,
+                        type: 'POST',
+                        data: {
+                            '_token': $('meta[name="csrf-token"]').attr('content'),
+                            '_method': 'POST'
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                 location.reload(true);
+
+                            }
+                        },
+                        error: function(xhr) {
+                            alert('Error deleting city. Please try again.');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 
 </html>

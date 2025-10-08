@@ -7,7 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class State extends Model
 {
 
-    protected $fillable = ['name','status'];
+     protected $fillable = [
+            'name',
+            'type',
+            'level',
+            'latitude',
+            'longitude',
+            'country_id',
+            'status',
+        ];
 
 
 

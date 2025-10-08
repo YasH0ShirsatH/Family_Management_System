@@ -191,7 +191,7 @@
                 e.preventDefault();
                 const deleteUrl = $(this).attr('href');
                 const cityId = $(this).data('id');
-                
+
                 if (confirm('Are you sure you want to delete this city?')) {
                     $.ajax({
                         url: deleteUrl,
@@ -206,7 +206,7 @@
                             if (response.status === 'success') {
                                 const currentSearch = $('#searchInput').val();
                                 fetchList({ search: currentSearch });
-                                
+
                                 $('<div class="alert alert-success alert-dismissible fade show rounded-pill mt-4"><i class="bi bi-check-circle-fill me-2"></i>' + response.message + '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>').insertAfter('.container .row:first').delay(3000).fadeOut();
                             }
                         },

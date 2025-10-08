@@ -158,7 +158,7 @@
         $(document).on('click', '#tableResults .deleteBtn', function (e) {
             e.preventDefault();
             const stateId = $(this).data('id');
-            
+
             if (confirm('Are you sure you want to delete this state?')) {
                 $.ajax({
                     url: "/admin/state-city/deletestate/" + stateId,

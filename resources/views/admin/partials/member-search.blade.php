@@ -174,10 +174,10 @@
                                             <i class="bi bi-pencil me-1"></i>Edit
                                         </a>
 
-                                    <a href="{{ route('member.delete', $member->id) }}"
+                                    <a href=""
 
                                        class="btn btn-danger btn-custom btn-sm flex-fill delete1"
-                                        data-id="{{  $member->id }}"
+                                        data-id="{{  Crypt::encryptString($member->id) }}"
                                        >
                                         <i class="bi bi-trash me-1"></i>Delete
                                     </a>

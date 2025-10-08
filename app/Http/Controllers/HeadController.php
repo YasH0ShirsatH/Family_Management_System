@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Validation\ValidationException;
 class HeadController extends Controller
 {
     //Add Constructor here
@@ -235,6 +235,7 @@ class HeadController extends Controller
         $head->city = $request->head_city;
         $head->pincode = $request->head_pincode;
         $head->marital_status = $request->head_marital_status;
+        $head->full_name = $request->head_name . ' ' . $request->head_surname;
 
         if ($request->head_marital_status == 1) {
             $head->mariage_date = $request->head_mariage_date;
@@ -284,11 +285,13 @@ class HeadController extends Controller
         Log::debug('Complete family registered: Head (' . $request->head_name . ' ' . $request->head_surname . ') with ' . count($request->members ?? []) . ' members on: ' . Carbon::now()->setTimezone('Asia/Kolkata'));
 
         return redirect()->route('family.registration')->with('success', 'Complete family registered successfully! Head: ' . $request->head_name . ' ' . $request->head_surname);
-        } catch (\Exception $e) {
-                    DB::rollBack();
-                    Log::error('Error during family registration: ' . $e->getMessage());
-                    return back()->with('error', 'An error occurred while registering the family. Please try again.');
-                }
+        } catch (ValidationException $e) {
+              DB::rollBack();
+              $firstError = collect($e->errors())->flatten()->first();
+              Log::error('Error during family registration: ' . $firstError);
+              return back()->with('error', $firstError);
+          }
+
     }
 
 }

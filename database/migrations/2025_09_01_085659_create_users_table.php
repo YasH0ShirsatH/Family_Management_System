@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('mobile')->unique();
+            $table->bigInteger('mobile')->unique();
             $table->string('address')->nullable();
             $table->enum('superuser', ['0', '1'])->default('0');
             $table->enum('status', ['0', '1', '9'])->default('1');

@@ -648,14 +648,14 @@
                             }
                         },
                         error: function(xhr, status, error){
-                            if(xhr.status === 500) {
+                                if(xhr.status === 422) {
                                 var errors = xhr.responseJSON.errors;
-                                var errorMsg = 'Validation errors:\n';
-                                for(var field in errors) {
-                                    errorMsg += errors[field][0] + '\n';
-                                }
-                                alert(errorMsg);
-                            } else {
+                                 var errorMsg = 'Validation errors:\n';
+                                 for(var field in errors) {
+                                            errorMsg += errors[field][0] + '\n';
+                                 }
+                                 alert(errorMsg);
+                                 } else {
                                 alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
                             }
                         }

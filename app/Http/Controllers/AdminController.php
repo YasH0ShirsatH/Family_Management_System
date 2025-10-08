@@ -41,6 +41,7 @@ class AdminController extends Controller
                 $subQuery
                     ->where('name', 'like', "%{$q}%")
                     ->orWhere('surname', 'like', "%{$q}%")
+                    ->orWhere('full_name', 'like', "%{$q}%")
                     ->orWhere('mobile', 'like', "%{$q}%")
                     ->orWhere('city', 'like', "%{$q}%")
                     ->orWhere('state', 'like', "%{$q}%");
@@ -98,6 +99,7 @@ class AdminController extends Controller
                     ->orWhereHas('head', function($headQuery) use ($q) {
                         $headQuery->where('name', 'like', "%{$q}%")
                             ->orWhere('surname', 'like', "%{$q}%")
+                            ->orWhere('full_name', 'like', "%{$q}%")
                             ->orWhere('city', 'like', "%{$q}%")
                             ->orWhere('state', 'like', "%{$q}%");
                     });
@@ -559,6 +561,7 @@ public function viewMemberDetails($id)
             $user->city = $request->city;
             $user->pincode = $request->pincode;
             $user->marital_status = $request->marital_status;
+            $user->full_name = $request->name . ' ' . $request->surname;
 
             if ($request->input('marital_status') == 1) {
                 $user->mariage_date = $request->mariage_date;
@@ -691,7 +694,7 @@ public function viewMemberDetails($id)
                                 'message' => 'An error occurred while updating the head: ' . $e->getMessage(),
                             ], 500);
                         }
-                        return redirect()->back()->with('error', 'An error occurred while updating the head: ' . $e->getMessage());
+
                     }
 
 

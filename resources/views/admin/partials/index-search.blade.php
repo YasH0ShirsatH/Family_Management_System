@@ -146,7 +146,7 @@
                             <span class="text-success fw-bold">
                                 <i class="bi bi-people-fill me-1"></i>
 
-                                    {{ $user->members->whereIn('status',['0','1'])->count() }} Total Members
+                                    {{ $user->members->whereIn('status',['0','1'])->count() }} Members Registered
 
 
                             </span>

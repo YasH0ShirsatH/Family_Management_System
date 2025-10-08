@@ -144,6 +144,7 @@ class CityStateController extends Controller
         $state->level = $request->level;
         $state->latitude = $request->latitude;
         $state->longitude = $request->longitude;
+        $state->country_id = $request->country_id;
         $state->save();
 
 
@@ -205,22 +206,28 @@ class CityStateController extends Controller
     }
     public function storeCity(Request $request)
     {
-
         $request->validate([
             'states' => 'required',
-            'city' => 'required',
+            'city' => [
+                'required',
+                Rule::unique('cities', 'name')->where(function ($query) use ($request) {
+                    return $query->where('state_id', $request->states)
+                                ->where('status', '1');
+                })
+            ],
         ]);
-
 
         $state = State::findOrFail($request->states);
 
+        $city = new City();
+        $city->name = trim($request->city);
+        $city->state_id = $state->id;
+        $city->state_new_id = 'SID'.$state->id;
+        $city->status = '1';
+        $city->save();
 
-        $city = City::firstOrCreate(
-            ['name' => $request->city, 'state_id' => $state->id, 'state_new_id' => 'SID'.$state->id]
-        );
 
-
-        if ($city->wasRecentlyCreated) {
+        if ($city) {
             if ($request->ajax()) {
             $admin1 = User::where('id', '=', session::get('loginId'))->first();
             $log = new Logg();
@@ -229,14 +236,13 @@ class CityStateController extends Controller
             $log->save();
             log::debug('City (' . $city->name . ') Added to (' . $state->name . ') Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A'));
              return response()->json([
-                                                        'status' => 'success',
-                                                        'message' => 'City Added successfully.',
-                                                        'redirect' => route('city.index'),
-                                                        'city' => $city->name,
-                                                    ]);
-            }
-            return redirect()->route('create.city', ['state_id' => $state->id])
-                ->with('success', 'City added successfully.');
+                                                                        'status' => 'success',
+                                                                        'message' => 'City Added successfully.',
+                                                                        'redirect' => route('city.index'),
+                                                                        'city' => $city->name,
+                                                                    ]);
+                            }
+
         }
 
         return redirect()->route('create.city', ['state_id' => $state->id])
@@ -252,32 +258,40 @@ class CityStateController extends Controller
     public function storeState(Request $request)
     {
         $request->validate([
-            'state' => 'required|string',
+            'state' => [
+                'required',
+                'string',
+                Rule::unique('states', 'name')->where(function ($query) {
+                    return $query->where('status', '1');
+                })
+            ],
         ]);
 
-        $states1 = State::firstOrCreate(
-            ['name' => $request->state],
-            [
-                'type' => $request->type,
-                'level' => $request->level,
-                'latitude' => $request->latitude,
-                'longitude' => $request->longitude,
-                'status' => '1'
-            ]
-        );
+        $states1 = new State();
+        $states1->name = trim($request->state);
+        $states1->type = $request->type;
+        $states1->level = $request->level;
+        $states1->latitude = $request->latitude;
+        $states1->longitude = $request->longitude;
+        $states1->country_id = $request->country_id;
+        $states1->status = '1';
+        $states1->save();
 
-        if ($states1->wasRecentlyCreated) {
+        if ($states1) {
             $admin1 = User::where('id', '=', session::get('loginId'))->first();
             $log = new Logg();
             $log->user_id = $admin1->id;
             $log->logs = 'Admin Added State (' . $states1->name . ')  Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
             $log->save();
             log::debug('State (' . $states1->name . ') Added Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A'));
-            return redirect()->route('create.city', ['state_id' => $states1->id])
-                ->with('success', 'State added successfully.');
 
 
+                 return response()->json([
+                                                                                        'status' => 'success',
+                                                                                        'message' => 'State Added successfully.',
+                                                                                        'redirect' => route('create.city', ['state_id' => $states1->id])
 
+                                                                                    ]);
         }
 
         return redirect()->route('create.state')->with('error', 'The State already exists.');
@@ -336,9 +350,9 @@ class CityStateController extends Controller
         log::debug('City Updated to (' . $city->name . ') Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata'));
         return response()->json([
                                             'status' => 'success',
-                                            'message' => 'City Updated successfully.',
+                                            'message' => 'City Updated successfully',
                                             'redirect' => route('city.index'),
-                                            'state_name' => $city->name,
+                                            'city' => $city->name,
                                         ]);
         }
         return redirect()->route('city.index')->with('success', 'City updated successfully.');

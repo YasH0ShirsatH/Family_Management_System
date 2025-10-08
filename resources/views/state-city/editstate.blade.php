@@ -131,6 +131,17 @@
 
                             </div>
 
+                            <div class="mb-4">
+                                <label for="country_id">Country Id :</label>
+
+                                <input class="form-control form-control-lg" type="number" step="any" name="country_id"
+                                    value="{{ $state->country_id }}"
+                                    placeholder="{{ empty($state->country_id) ? 'country_id is not available in database' : 'Enter country_id of state' }}">
+                                    <div class="validation-error"></div>
+
+
+                            </div>
+
                             <button type="submit" class="btn btn-primary w-100 rounded-pill py-2">
                                 <i class="bi bi-geo-alt-fill me-2"></i>Update State
                             </button>
