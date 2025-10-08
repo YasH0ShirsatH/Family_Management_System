@@ -73,13 +73,13 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-3 form-group">
                                             <label class="form-label fw-semibold">First Name</label>
-                                            <input type="text" id="head_name" name="head_name" class="form-control rounded-pill" placeholder="Enter first name" value="{{ old('head_name') }}">
+                                            <input type="text" id="head_name" name="head_name" class="form-control rounded-pill" placeholder="Enter first name" value="{{ old('head_name') }}" onkeydown="return noSpaces(event);">
                                             <div class="validation-error"></div>
                                             @error('head_name')<div class="text-danger">{{ $message }}</div>@enderror
                                         </div>
                                         <div class="col-md-6 mb-3 form-group">
                                             <label class="form-label fw-semibold">Last Name</label>
-                                            <input type="text" id="head_surname" name="head_surname" class="form-control rounded-pill" placeholder="Enter last name" value="{{ old('head_surname') }}">
+                                            <input type="text" id="head_surname" name="head_surname" class="form-control rounded-pill" placeholder="Enter last name" value="{{ old('head_surname') }}" onkeydown="return noSpaces(event);">
                                             <div class="validation-error"></div>
                                             @error('head_surname')<div class="text-danger">{{ $message }}</div>@enderror
                                         </div>
@@ -94,7 +94,7 @@
                                         </div>
                                         <div class="col-md-6 mb-3 form-group">
                                             <label class="form-label fw-semibold">Mobile Number</label>
-                                            <input type="text" maxlength="10" name="head_mobile" class="form-control rounded-pill" placeholder="Enter mobile number" value="{{ old('head_mobile') }}">
+                                            <input type="text" maxlength="10" name="head_mobile" class="form-control rounded-pill" placeholder="Enter mobile number" onkeydown="return noSpaces(event);" value="{{ old('head_mobile') }}">
                                             <div class="validation-error"></div>
                                             @error('head_mobile')<div class="text-danger">{{ $message }}</div>@enderror
                                         </div>
@@ -129,8 +129,8 @@
                                         </div>
                                         <div class="col-md-4 mb-3 form-group">
                                             <label class="form-label fw-semibold">Pincode</label>
-                                            <input type="text" maxlength="6" name="head_pincode" class="form-control rounded-pill" placeholder="Enter pincode" value="{{ old('head_pincode') }}">
-                                            <div class="validation-error"></div>
+                                            <input type="text" maxlength="6" name="head_pincode" onkeydown="return noSpaces(event);" class="form-control rounded-pill" placeholder="Enter pincode" value="{{ old('head_pincode') }}">
+                                            <div class="validation-error" ></div>
                                             @error('head_pincode')<div class="text-danger">{{ $message }}</div>@enderror
                                         </div>
                                     </div>
@@ -229,6 +229,18 @@
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 
     <script>
+        function noSpaces(event) {
+            // Get the key code of the pressed key
+            var key = event.keyCode || event.charCode || event.which;
+
+
+            if (key === 32) {
+                alert('In this field, Spaces not allowed here !!');
+                return false;
+            }
+
+            return true;
+        }
     let memberCount = 0;
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -484,6 +496,9 @@
             }
             return true;
         }, "File size exceeds the allowed limit.");
+        $.validator.addMethod("noSpace", function(value, element) {
+            return value.indexOf(" ") < 0 && value !== "";
+        }, "Spaces are not allowed.");
 
         $.validator.addMethod("noNumbers", function(value, element) {
             return this.optional(element) || /^[a-zA-Z\s]*$/.test(value);
@@ -522,14 +537,14 @@
 
         $('#formSubmit').validate({
             rules: {
-                head_name: { required: true, minlength: 3 , noNumbers : true  },
-                head_surname: { required: true, minlength: 3 ,  noNumbers : true },
+                head_name: { required: true, minlength: 3 , noNumbers : true ,noSpace : true },
+                head_surname: { required: true, minlength: 3 ,  noNumbers : true ,noSpace: true },
                 head_birthdate: { required: true, ageAbove21: true },
-                head_mobile: { required: true, rangelength: [10, 10], number: true },
+                head_mobile: { required: true, rangelength: [10, 10], number: true, noSpace: true },
                 head_address: { required: true },
                 head_state: { required: true },
                 head_city: { required: true },
-                head_pincode: { required: true, rangelength: [6, 6], number: true },
+                head_pincode: { required: true, rangelength: [6, 6], number: true,noSpace: true },
                 head_marital_status: { required: true   },
                 head_mariage_date: {
 

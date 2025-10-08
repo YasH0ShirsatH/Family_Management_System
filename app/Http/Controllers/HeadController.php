@@ -10,9 +10,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class HeadController extends Controller
 {
+    //Add Constructor here
     public function headview()
     {
 
@@ -191,6 +193,10 @@ class HeadController extends Controller
 
     public function storeWithFamily(Request $request)
     {
+    try{
+    DB::beginTransaction();
+
+
         $request->validate([
             'head_name' => 'required|min:3',
             'head_surname' => 'required|min:3',
@@ -269,14 +275,20 @@ class HeadController extends Controller
                     'relation' => $memberData['relation'],
                     'mariage_date' => $memberData['marital_status'] == 1 ? $memberData['mariage_date'] : null,
                     'education' => $memberData['education'] ?? null,
-                    'photo_path' => $filename,
+                    'photo_path' => $filename ?? null,
                 ]);
             }
         }
+        DB::commit();
 
         Log::debug('Complete family registered: Head (' . $request->head_name . ' ' . $request->head_surname . ') with ' . count($request->members ?? []) . ' members on: ' . Carbon::now()->setTimezone('Asia/Kolkata'));
 
         return redirect()->route('family.registration')->with('success', 'Complete family registered successfully! Head: ' . $request->head_name . ' ' . $request->head_surname);
+        } catch (\Exception $e) {
+                    DB::rollBack();
+                    Log::error('Error during family registration: ' . $e->getMessage());
+                    return back()->with('error', 'An error occurred while registering the family. Please try again.');
+                }
     }
 
 }

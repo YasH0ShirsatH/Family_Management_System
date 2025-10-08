@@ -146,7 +146,7 @@
                                     <i class="bi bi-people text-primary" style="font-size: 2rem;"></i>
                                 </div>
                                 <h3 class="fw-bold text-primary mb-1">{{ $headcount }}</h3>
-                                <small class="text-muted">Total Families</small>
+                                <small class="text-muted">Total Family Heads</small>
                             </div>
                         </div>
                         <div class="col-md-3 col-6">
@@ -155,7 +155,7 @@
                                     <i class="bi bi-person-check text-success" style="font-size: 2rem;"></i>
                                 </div>
                                 <h3 class="fw-bold text-success mb-1">{{ $membercount }}</h3>
-                                <small class="text-muted">Active Members</small>
+                                <small class="text-muted">Total Members</small>
                             </div>
                         </div>
                         <div class="col-md-3 col-6">

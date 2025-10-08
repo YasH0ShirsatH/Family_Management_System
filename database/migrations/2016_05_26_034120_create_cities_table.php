@@ -16,16 +16,15 @@ class CreateCitiesTable extends Migration
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedInteger('state_id')->index();
-            $table->string('state_code');
-            $table->unsignedInteger('country_id')->index();
-            $table->string('country_code');
+            $table->foreignId('state_id')->constrained('states')->onDelete('cascade');
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
-            $table->timestamps();
-            $table->boolean('flag')->default(false);
+            $table->string('timezone')->nullable();
+            $table->boolean('flag')->default(true);
+            $table->string('state_new_id')->nullable();
             $table->string('wikiDataId')->nullable();
-            $table->enum('status', ['0', '1', '9'])->default('1'); 
+            $table->enum('status', ['0', '1', '9'])->default('1');
+            $table->timestamps();
         });
     }
 

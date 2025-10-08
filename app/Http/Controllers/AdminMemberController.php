@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MembersExport;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\DB;
 use Session;
 
 
@@ -74,9 +74,11 @@ class AdminMemberController extends Controller
                 'mariage_date.required_if' => 'The marriage date field is required when marital status is married.',
             ]
         );
-        $user = Head::find($id);
+        $decryptedId = Crypt::decryptString($id);
+        $user = Head::find($decryptedId);
 
         $familyid = $user->id;
+        $decryptedId2 = Crypt::encryptString($familyid);
         if (!$user) {
             return back()->with('error', 'Head not found.');
         }
@@ -105,7 +107,7 @@ class AdminMemberController extends Controller
 
 
         log::channel('adminlog')->debug('Admin Added  User (' . $user->name . ' ' . $user->surname . '\'s)  Member (' . $request->name . ') To the Database Successfully');
-        return redirect()->route('admin-member.show', $familyid)->with('success', 'Member added successfully.');
+        return redirect()->route('admin-member.show', $decryptedId2)->with('success', 'Member added successfully.');
 
 
 
@@ -119,10 +121,11 @@ class AdminMemberController extends Controller
         $decryptedId = Crypt::decryptString($id);
 
         $head = Head::find($decryptedId);
+        $total_members = $head->members()->where('status', '1')->count();
         $id = $head->id;
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
-        $members = $head->members()->where('status', '1')->paginate(4);
-        return view("member.index", data: compact("members", 'id', 'admin1','head'));
+        $members = $head->members()->where('status', '1')->get();
+        return view("member.index", data: compact("members", 'id', 'admin1','head','total_members'));
     }
 
     /**
@@ -141,6 +144,7 @@ class AdminMemberController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
         $member = Member::find($id);
 
         if (!$member) {
@@ -166,7 +170,8 @@ class AdminMemberController extends Controller
                 'mariage_date.required_if' => 'The marriage date field is required when marital status is married.',
             ]
         );
-
+        try{
+                DB::beginTransaction();
         $parentId = $member->head->id;
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
@@ -192,7 +197,7 @@ class AdminMemberController extends Controller
                 $file->move(public_path('/uploads/images/'), $filename);
                 $member->photo_path = $filename;
                 $member->save();
-
+                DB::commit();
                 if ($request->ajax()) {
                     return response()->json([
                         'status' => 'success',
@@ -207,7 +212,7 @@ class AdminMemberController extends Controller
             {
                 $member->photo_path = null;
                 $member->save();
-
+                DB::commit();
                 if ($request->ajax()) {
                     return response()->json([
                         'status' => 'success',
@@ -219,8 +224,9 @@ class AdminMemberController extends Controller
 
             }
 
-            $member->save();
 
+            $member->save();
+            DB::commit();
         if ($request->ajax()) {
             return response()->json([
                 'status' => 'success',
@@ -229,6 +235,16 @@ class AdminMemberController extends Controller
         }
 
         return redirect()->route('admin-member.show', $parentId)->with('success', 'Member updated successfully.')->with('name', $member->name)->with('surname', $member->surname);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error('Error updating member: ' . $e->getMessage());
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while updating the member.'
+            ], 500);
+            }
+        }
 
 
     }
@@ -238,6 +254,7 @@ class AdminMemberController extends Controller
      */
     public function destroy(string $id)
     {
+
         $member = Member::find($id);
         $parentId = $member->head->id;
         $member->delete();
@@ -246,25 +263,14 @@ class AdminMemberController extends Controller
     }
     public function delete(Request $request,string $id)
     {
-        $member = Member::find($id);
+        $decryptedId = Crypt::decryptString($id);
+        $member = Member::find($decryptedId);
         $parentId = $member->head->id;
 
         // Delete member image
         if ($member->photo_path && file_exists(public_path('uploads/images/' . $member->photo_path))) {
             unlink(public_path('uploads/images/' . $member->photo_path));
         }
-
-
-         if ($request->ajax()) {
-                                            $member->update(['status' => '9']);
-                                            $member->save();
-                                            return response()->json([
-                                                'status' => 'success',
-                                                'message' => 'member deleted successfully.',
-                                                'name' => $member->name,
-
-                                            ]);
-                                        }
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
         $log = new Logg();
@@ -273,7 +279,31 @@ class AdminMemberController extends Controller
         $log->save();
 
         log::channel('adminlog')->debug('Admin Deleted Member (' . $member->name . ')  Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " at : " . Carbon::now()->setTimezone('Asia/Kolkata'));
-        return redirect()->route('admin-member.show', $parentId)->with('success', 'Member updated successfully.')->with('name', $member->name)->with('surname', $member->surname);
+
+        if ($request->ajax()) {
+        try{
+        DB::beginTransaction();
+            $member->update(['status' => '9']);
+            DB::commit();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Member deleted successfully.',
+                'name' => $member->name,
+            ]);
+            }
+            catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Error deleting member: ' . $e->getMessage());
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'An error occurred while deleting the member.'
+                ], 500);
+            }
+
+        }
+
+        $member->update(['status' => '9']);
+        return redirect()->route('admin-member.show', $parentId)->with('success', 'Member deleted successfully.')->with('name', $member->name)->with('surname', $member->surname);
     }
 
     public function export()
@@ -282,12 +312,23 @@ class AdminMemberController extends Controller
         return Excel::download(new MembersExport, 'members.xlsx');
     }
 
-    public function activate($id)
+    public function activate(Request $request, $id)
     {
-        $member = Member::find($id);
+        $decryptedId = Crypt::decryptString($id);
+        $member = Member::find($decryptedId);
 
-        $parentId = Crypt::encryptString($member->head->id);
+        if (!$member || !$member->head) {
 
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Member or family head not found.'
+                ], 404);
+            }
+            return back()->with('error', 'Member not found.');
+        }
+        try{
+        DB::beginTransaction();
         $member->update(['status' => '1']);
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
@@ -295,15 +336,45 @@ class AdminMemberController extends Controller
         $log->user_id = $admin1->id;
         $log->logs = 'Admin Activated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " on " .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
+        DB::commit();
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Member activated successfully.',
+                'name' => $member->name
+            ]);
+        }
 
+        $parentId = Crypt::encryptString($member->head->id);
         return redirect()->route('admin-member.show', $parentId)->with('success', 'Member activated successfully.');
+        }
+        catch (\Exception $e) {
+                    DB::rollBack();
+                    Log::error('Error deleting member: ' . $e->getMessage());
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'An error occurred while deleting the member.'
+                    ], 500);
+                }
     }
 
-    public function deactivate($id)
+    public function deactivate(Request $request, $id)
     {
-//         $decryptedId = Crypt::encryptString($id);
-        $member = Member::find($id);
-        $parentId = Crypt::encryptString($member->head->id);
+
+        $decryptedId = Crypt::decryptString($id);
+        $member = Member::find($decryptedId);
+
+        if (!$member || !$member->head) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Member or family head not found.'
+                ], 404);
+            }
+            return back()->with('error', 'Member not found.');
+        }
+        try{
+        DB::beginTransaction();
         $member->update(['status' => '0']);
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
@@ -311,8 +382,26 @@ class AdminMemberController extends Controller
         $log->user_id = $admin1->id;
         $log->logs = 'Admin Deactivated Member (' . $member->name . ') Successfully of Family : ' . $member->head->name . ' ' . $member->head->surname . " on " .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
+        DB::commit();
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Member deactivated successfully.',
+                'name' => $member->name
+            ]);
+        }
 
+        $parentId = Crypt::encryptString($member->head->id);
         return redirect()->route('admin-member.show', $parentId)->with('success', 'Member deactivated successfully.');
     }
+    catch (\Exception $e) {
+                    DB::rollBack();
+                    Log::error('Error deleting member: ' . $e->getMessage());
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'An error occurred while deleting the member.'
+                    ], 500);
+                }
 
-}
+        }
+    }

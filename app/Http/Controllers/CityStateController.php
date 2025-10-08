@@ -234,7 +234,7 @@ class CityStateController extends Controller
                                                         'redirect' => route('city.index'),
                                                         'city' => $city->name,
                                                     ]);
-
+            }
             return redirect()->route('create.city', ['state_id' => $state->id])
                 ->with('success', 'City added successfully.');
         }
@@ -242,7 +242,6 @@ class CityStateController extends Controller
         return redirect()->route('create.city', ['state_id' => $state->id])
             ->with('error', 'The city already exists for this state.');
     }
-}
 
     public function createState(Request $request)
     {
@@ -341,13 +340,13 @@ class CityStateController extends Controller
                                             'redirect' => route('city.index'),
                                             'state_name' => $city->name,
                                         ]);
-
+        }
         return redirect()->route('city.index')->with('success', 'City updated successfully.');
     }
-}
 
-    public function deletecity($id)
+    public function deletecity(Request $request,$id)
     {
+     if ($request->ajax()) {
         $city = City::find($id);
         $city->update(['status' => '9']);
         $head = Head::all();
@@ -364,6 +363,13 @@ class CityStateController extends Controller
         $log->logs = 'Admin Deleted City (' . $city->name . ') Successfully on :' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
         $log->save();
         log::debug('City (' . $city->name . ') Deleted Successfully at :' . Carbon::now()->setTimezone('Asia/Kolkata'));
+        return response()->json([
+                                            'status' => 'success',
+                                            'message' => 'City deleted successfully.',
+                                            'redirect' => route('city.index'),
+                                            'city_name' => $city->name,
+                                        ]);
+                }
         return redirect()->back()->with('success', 'City deleted successfully.');
     }
 

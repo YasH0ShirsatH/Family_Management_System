@@ -193,10 +193,28 @@
                                         class="form-select fw-6 form-select-md rounded-pill">
                                         <option value="" selected disabled>Choose a family head to activate...
                                         </option>
+                                        <option disabled>Inactive</option>
                                         @foreach ($heads as $head)
+                                        @if($head->where('status','0')->count() > 0)
+                                        @if ($head->status == '0' )
                                             <option value="{{ $head->id }}">{{ $head->name }}
                                                 {{ $head->surname }}</option>
+
+                                         @endif
+                                         @else
+                                          <option disabled><---- No inactive heads available ----></option>
+                                         @break
+                                          @endif
                                         @endforeach
+
+                                        <option disabled>Deleted</option>
+                                            @foreach ($heads as $head)
+                                            @if ($head->status == '9')
+                                            <option value="{{ $head->id }}">{{ $head->name }} {{ $head->surname }}</option>
+                                            @endif
+                                            @endforeach
+
+
                                     </select>
                                     <div class="validation-error"></div>
                                 </div>
@@ -298,19 +316,30 @@
                                         class="form-select fw-6 form-select-md rounded-pill">
                                         <option value="" selected disabled>Choose a member to activate...
                                         </option>
-                                        @foreach ($member2 as $item)
-                                            @if ($item->head->status == '1')
+
+                                            <option disabled>Inactive</option>
+                                            @foreach ($member2 as $item)
+                                            @if ($item->status == '0' && $item->head->status == '1')
+
                                                 <option value="{{ $item->id }}">
-                                                    @if ($item->status == '0')
                                                         {{ $item->name }} (Inactive) (Family:
                                                         {{ $item->head->name }} {{ $item->head->surname }})
-                                                    @else
-                                                        {{ $item->name }} (Deleted) (Family: {{ $item->head->name }}
-                                                        {{ $item->head->surname }})
-                                                    @endif
                                                 </option>
                                             @endif
-                                        @endforeach
+                                                @endforeach
+
+                                                <option disabled>Deleted</option>
+                                                @foreach ($member2 as $item)
+                                                @if ($item->status == '9' && $item->head->status == '1')
+
+                                                        <option value="{{ $item->id }}">
+                                                        {{ $item->name }} (Deleted) (Family: {{ $item->head->name }}
+                                                        {{ $item->head->surname }})
+                                                        </option>
+                                                     @endif
+                                                     @endforeach
+
+
                                     </select>
                                     <div class="validation-error"></div>
                                 </div>

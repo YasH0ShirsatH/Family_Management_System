@@ -145,20 +145,12 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="text-success fw-bold">
                                 <i class="bi bi-people-fill me-1"></i>
-                                @if($user->status == '0' || $user->status == '9')
-                                    {{ $user->members->count() }} Total
-                                @elseif($user->status == '1')
-                                    {{ $user->members->where('status','1')->count() }} Active
-                                @endif
+
+                                    {{ $user->members->whereIn('status',['0','1'])->count() }} Total Members
+
+
                             </span>
-                            <div class="d-flex gap-3">
-                                <small class="text-warning">
-                                    {{ $user->members->where('status','0')->count() }} Inactive
-                                </small>
-                                <small class="text-danger">
-                                    {{ $user->members->where('status','9')->count() }} Deleted
-                                </small>
-                            </div>
+
                         </div>
                     </div>
 
@@ -256,117 +248,4 @@
 </div>
 @endif
 
-<script>
-$(document).ready(function(){
-    console.log('Document ready, jQuery loaded');
 
-    $(document).on('click', '.activation', function(e){
-        console.log('Activation button clicked');
-        e.preventDefault();
-
-        if(!confirm('Are you sure you want to activate this head?')) {
-            return;
-        }
-
-        var headId = $(this).data('id');
-        console.log('Head ID:', headId);
-
-        $.ajax({
-            type: 'POST',
-            url: '/dashboard/admin-profile/activateHeadOnView/' + headId,
-            data: {
-                '_token': '{{ csrf_token() }}'
-            },
-            success: function(response){
-                console.log('Response:', response);
-                if(response.status === 'success'){
-                    alert(response.message + ' User: ' + response.name + ' ' + response.surname);
-                    location.reload();
-                } else {
-                    alert('Error: ' + response.message);
-                }
-            },
-            error: function(xhr, status, error){
-                console.log('AJAX Error:', xhr.responseText);
-                alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
-            }
-        });
-    });
-
-    $(document).on('click', '.deactivation', function(e){
-        console.log('Deactivation button clicked');
-        e.preventDefault();
-
-        if(!confirm('Are you sure you want to deactivate this head?')) {
-            return;
-        }
-
-        var headId = $(this).data('id');
-        console.log('Head ID:', headId);
-
-        $.ajax({
-            type: 'POST',
-            url: '/dashboard/admin-profile/deactivateHeadOnView/' + headId,
-            data: {
-                            '_token': '{{ csrf_token() }}'
-                        },
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            success: function(response){
-                console.log('Response:', response);
-                if(response.status === 'success'){
-                    alert(response.message + ' User: ' + response.name + ' ' + response.surname);
-                    location.reload();
-                } else {
-                    alert('Error: ' + response.message);
-                }
-            },
-            error: function(xhr, status, error){
-                console.log('AJAX Error:', xhr.responseText);
-                alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
-            }
-        });
-    });
-
-    $(document).on('click', '.delete', function(e){
-        console.log('delete button clicked');
-        e.preventDefault();
-
-        if(!confirm('Are you sure you want to delete this head?')) {
-            return;
-        }
-
-        var headId = $(this).data('id');
-        console.log('Head ID:', headId);
-
-        $.ajax({
-            type: 'POST',
-            url: "/delete/" + headId,
-            data: {
-                            '_token': '{{ csrf_token() }}'
-                        },
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            success: function(response){
-                console.log('Response:', response);
-                if(response.status === 'success'){
-                    alert(response.message + ' User: ' + response.name + ' ' + response.surname);
-                    location.reload();
-                } else {
-                    alert('Error: ' + response.message);
-                }
-            },
-            error: function(xhr, status, error){
-                console.log('AJAX Error:', xhr.responseText);
-                alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
-            }
-        });
-    });
-
-
-
-
-});
-</script>

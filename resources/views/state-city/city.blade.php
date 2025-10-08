@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>City Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -158,11 +159,9 @@
                 showLoading();
                 $.get(listUrl, params)
                     .done(function (response) {
-                        // replace only the table + pagination area
                         $('#tableResults').html(response);
                     })
                     .fail(function () {
-                        // optional: show a brief message or console error
                         console.error('Failed to fetch list');
                     })
                     .always(function () {
@@ -170,7 +169,7 @@
                     });
             }
 
-            // Live search (debounced)
+            // Live search
             $(document).on('keyup', '#searchInput', function () {
                 const query = $(this).val();
                 clearTimeout(debounceTimeout);
@@ -179,20 +178,43 @@
                 }, 800);
             });
 
-            // AJAX pagination — delegated to the table container
+            // AJAX pagination
             $(document).on('click', '#tableResults .pagination a', function (e) {
                 e.preventDefault();
                 const url = new URL($(this).attr('href'), window.location.origin);
-                const params = Object.fromEntries(url.searchParams.entries());
-                params.search = $('#searchInput').val() || params.search;
+                const params = Object.fromEntries(url.searchParams);
                 fetchList(params);
-                window.history.pushState({}, '', $(this).attr('href'));
             });
 
-            // restore on back/forward
-            window.addEventListener('popstate', function () {
-                const params = Object.fromEntries(new URLSearchParams(location.search));
-                fetchList(params);
+            // AJAX delete functionality
+            $(document).on('click', '#tableResults .deleteBtn', function (e) {
+                e.preventDefault();
+                const deleteUrl = $(this).attr('href');
+                const cityId = $(this).data('id');
+                
+                if (confirm('Are you sure you want to delete this city?')) {
+                    $.ajax({
+                        url: deleteUrl,
+                        type: 'POST',
+                        data: {
+                            '_token': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                const currentSearch = $('#searchInput').val();
+                                fetchList({ search: currentSearch });
+                                
+                                $('<div class="alert alert-success alert-dismissible fade show rounded-pill mt-4"><i class="bi bi-check-circle-fill me-2"></i>' + response.message + '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>').insertAfter('.container .row:first').delay(3000).fadeOut();
+                            }
+                        },
+                        error: function(xhr) {
+                            alert('Error deleting city. Please try again.');
+                        }
+                    });
+                }
             });
         });
     </script>
@@ -200,5 +222,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
-
 </html>

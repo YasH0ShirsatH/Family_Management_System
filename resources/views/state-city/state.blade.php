@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>State Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -19,12 +20,8 @@
 
 </head>
 
-
-
 <body class="bg-light">
     <div id="mainContent">
-
-
         <div class="container py-4">
             @include('partials.navbar2', ['shouldShowDiv' => true])
             @if(session('success'))
@@ -33,32 +30,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
-            <!-- Header Card -->
-            <!-- <div class="card shadow mb-4 border-0" style="border-radius: 20px;">
-            <div class="card-header bg-gradient bg-primary text-white py-4 border-0"
-                style="border-radius: 20px 20px 0 0;">
-                <div class="d-flex justify-content-between align-items-center flex-wrap">
-                    <div>
-                        <h3 class="mb-1 fw-bold">
-                            <i class="bi bi-map me-2"></i>State Management
-                        </h3>
-                        <p class="mb-0 opacity-75">Manage all states and their cities</p>
-                    </div>
-                    <div class="d-flex gap-2 flex-wrap">
-                        <a href="/admin" class="btn btn-light rounded-pill px-4 py-2 fw-semibold">
-                            <i class="bi bi-arrow-left me-2"></i>Dashboard
-                        </a>
-                        <a href="{{ route('create.state') }}"
-                            class="btn btn-success rounded-pill px-4 py-2 fw-semibold">
-                            <i class="bi bi-plus-circle me-2"></i>Add State
-                        </a>
-                        <a href="/admin/state-city/city" class="btn btn-warning rounded-pill px-4 py-2 fw-semibold">
-                            <i class="bi bi-buildings me-2"></i>Cities
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div> -->
 
          <!-- Stats Cards -->
                     <div class="row g-3 mb-4">
@@ -99,9 +70,6 @@
                             </a>
                         </div>
                     </div>
-
-
-
 
             <!-- Search Bar -->
             <div class="card shadow-sm mb-4 border-0 rounded-4">
@@ -147,78 +115,69 @@
                 </div>
             </div>
 
-
-
-
             <!-- States List -->
-
-
             <div id="tableResults">
                 @include('state-city.partials.state-list', ['states' => $states])
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    </div>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
     $(function () {
         const listUrl = "{{ url('admin/state-city/states') }}";
         let debounceTimeout = null;
 
-        function showLoading() {
-            $('#searchLoading').removeClass('d-none');
-            $('#searchInput').prop('disabled', true);
-        }
-
-        function hideLoading() {
-            $('#searchLoading').addClass('d-none');
-            $('#searchInput').prop('disabled', false);
-        }
-
         function fetchList(params = {}) {
-            showLoading();
+            $('#searchLoading').removeClass('d-none');
             $.get(listUrl, params)
                 .done(function (response) {
-                    // replace only the table + pagination area
                     $('#tableResults').html(response);
                 })
-                .fail(function () {
-                    // optional: show a brief message or console error
-                    console.error('Failed to fetch list');
-                })
                 .always(function () {
-                    hideLoading();
+                    $('#searchLoading').addClass('d-none');
                 });
         }
 
-        // Live search  method applied here
         $(document).on('keyup', '#searchInput', function () {
             const query = $(this).val();
             clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(function () {
-                fetchList({
-                    search: query
-                });
+                fetchList({ search: query });
             }, 800);
         });
 
-        // AJAX pagination done here via https://youtu.be/g0EWWgtA0a0?si=sug4h_xrzTOrmngb
         $(document).on('click', '#tableResults .pagination a', function (e) {
             e.preventDefault();
             const url = new URL($(this).attr('href'), window.location.origin);
-            const params = Object.fromEntries(url.searchParams.entries());
-            params.search = $('#searchInput').val() || params.search;
+            const params = Object.fromEntries(url.searchParams);
             fetchList(params);
-            window.history.pushState({}, '', $(this).attr('href'));
         });
 
-        // restore on back/forward
-        window.addEventListener('popstate', function () {
-            const params = Object.fromEntries(new URLSearchParams(location.search));
-            fetchList(params);
+        $(document).on('click', '#tableResults .deleteBtn', function (e) {
+            e.preventDefault();
+            const stateId = $(this).data('id');
+            
+            if (confirm('Are you sure you want to delete this state?')) {
+                $.ajax({
+                    url: "/admin/state-city/deletestate/" + stateId,
+                    type: 'POST',
+                    data: { '_token': $('meta[name="csrf-token"]').attr('content') },
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            fetchList({ search: $('#searchInput').val() });
+                            $('<div class="alert alert-success alert-dismissible fade show rounded-pill mt-4"><i class="bi bi-check-circle-fill me-2"></i>' + response.message + '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>').insertAfter('.container .row:first').delay(3000).fadeOut();
+                        }
+                    },
+                    error: function() {
+                        alert('Error deleting state. Please try again.');
+                    }
+                });
+            }
         });
     });
-</script>
-
+    </script>
+</body>
 </html>

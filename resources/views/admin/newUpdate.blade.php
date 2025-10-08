@@ -550,7 +550,7 @@
                     var m = today.getMonth() - dob.getMonth();
                     if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
                     return age <= 120;
-                }, "Aint no way you are more than 120yr old.");
+                }, "Your age exceeds 120yrs.");
 
                 $.validator.addMethod("minMarriageAge", function(value, element, dobSelector) {
                     if (!value || !$(dobSelector).val()) {
@@ -570,16 +570,20 @@
                     return age >= 18;
                 }, "The individual must be at least 18 years old at the time of marriage.");
 
+                $.validator.addMethod("noSpace", function(value, element) {
+                            return value.indexOf(" ") < 0 && value !== "";
+                        }, "Spaces are not allowed.");
+
         $('#updateForm').validate({
             rules: {
-                name: { required: true, noNumbers: true },
-                surname: { required: true, noNumbers: true },
+                name: { required: true, noNumbers: true , noSpace:true},
+                surname: { required: true, noNumbers: true, noSpace:true },
                 birthdate: {required : true, ageAbove21: true,agebelow116 : true },
-                mobile: { required: true, digits: true, minlength: 10, maxlength: 10 },
+                mobile: { required: true, digits: true, minlength: 10, maxlength: 10, noSpace:true },
                 address: "required",
                 state: "required",
                 city: "required",
-                pincode: { required: true, digits: true, minlength: 6, maxlength: 6 },
+                pincode: { required: true, digits: true, minlength: 6, maxlength: 6, noSpace:true },
                 marital_status: "required",
                 mariage_date: { required: function() {
                                                                            return $("#married").is(":checked");
@@ -644,7 +648,7 @@
                             }
                         },
                         error: function(xhr, status, error){
-                            if(xhr.status === 422) {
+                            if(xhr.status === 500) {
                                 var errors = xhr.responseJSON.errors;
                                 var errorMsg = 'Validation errors:\n';
                                 for(var field in errors) {

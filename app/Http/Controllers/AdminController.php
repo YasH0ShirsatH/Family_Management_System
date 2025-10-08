@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Session;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -317,7 +318,8 @@ public function viewMemberDetails($id)
 
 
 
-
+        try{
+        DB::beginTransaction();
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
@@ -360,10 +362,23 @@ public function viewMemberDetails($id)
             $file->move('uploads/images/', $filename);
             $user->photo_path = $filename;
             $user->save();
+            DB::commit();
+
             return redirect()->route('admin.index', ['id' => $user->id])->with('success', "Head Updated With Image successfully.")->with('name', $user->name)->with('surname', $user->surname);
         }
         $user->save();
-
+        DB::commit();
+        }
+        catch(\Exception $e){
+        DB::rollBack();
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'An error occurred while updating the head: ' . $e->getMessage(),
+                ], 500);
+            }
+            return redirect()->back()->with('error', 'An error occurred while updating the head: ' . $e->getMessage());
+        }
 
 
 
@@ -406,12 +421,16 @@ public function viewMemberDetails($id)
 
 
              if ($request->ajax()) {
-
+                        try{
+                        DB::beginTransaction();
                         $admin1 = User::where('id', '=', session::get('loginId'))->first();
                         $log = new Logg();
                         $log->user_id = $admin1->id;
                         $log->logs = 'Admin Has Deleted Head  (' . ucfirst($head->name) . ' ' . ucfirst($head->surname) . ') Successfully ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A');
                         $log->save();
+                        DB::commit();
+
+
                         log::debug('Admin Has Deleted (' . $head->name . ' ' . $head->surname . ') Successfully on ' .  Carbon::now()->setTimezone('Asia/Kolkata')->format('l, F jS, Y \a\t h:i A'));
 
                         $head->update(['status' => '9']);
@@ -423,7 +442,15 @@ public function viewMemberDetails($id)
                             'name' => $head->name,
                             'surname' => $head->surname
                         ]);
+                        }
+                    catch(\Exception $e){
+                        DB::rollBack();
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => 'An error occurred while deleting the head: ' . $e->getMessage(),
+                        ], 500);
                     }
+                }
 
             $head->update(['status' => '9']);
             $head->members()->where('status','1')->update(['status' => '0']);
@@ -495,6 +522,10 @@ public function viewMemberDetails($id)
 
     public function fullUpdate(Request $request, string $id)
         {
+
+
+        try{
+            DB::beginTransaction();
             $decryptedId = Crypt::decryptString($id);
             $user = Head::find($decryptedId);
 
@@ -556,15 +587,23 @@ public function viewMemberDetails($id)
 
             // Handle deleted members
             if ($request->has('deleted_members')) {
-                Member::whereIn('id', $request->deleted_members)->update(['status' => '0']);
+
+
+                Member::whereIn('id', $request->deleted_members)->update(['status' => '9']);
+
+
+
             }
 
             // Handle existing members update
             if ($request->has('members')) {
+
+
                 $members = $user->members()->where('status', '1')->orderBy('id')->get();
                 foreach ($request->members as $index => $memberData) {
                     $memberIndex = $index - 1;
                     if (isset($members[$memberIndex])) {
+
                         $member = $members[$memberIndex];
                         $member->name = $memberData['name'] ?? $member->name;
                         $member->birthdate = $memberData['date'] ?? $member->birthdate;
@@ -585,17 +624,22 @@ public function viewMemberDetails($id)
                         }
 
                         $member->save();
+
+                        }
                     }
-                }
+
             }
 
             // Handle new members
             if ($request->has('new_members')) {
+
                 foreach ($request->new_members as $memberData) {
+
                     $member = new Member();
                     $member->head_id = $user->id;
                     $member->name = $memberData['name'];
                     $member->birthdate = $memberData['date'];
+                    $member->relation = $memberData['relation'];
                     $member->marital_status = $memberData['marital_status'] ?? 0;
                     $member->education = $memberData['education'];
                     $member->status = '1';
@@ -612,8 +656,11 @@ public function viewMemberDetails($id)
                     }
 
                     $member->save();
-                }
+
+                    }
+
             }
+            DB::commit();
 
 
             if ($request->ajax()) {
@@ -634,6 +681,18 @@ public function viewMemberDetails($id)
 
             return redirect()->route('admin.index')->with('success', 'Head updated successfully.')->with('name', $user->name)->with('surname', $user->surname);
 
+                    }
+
+                    catch(\Exception $e){
+                    DB::rollBack();
+                        if ($request->ajax()) {
+                            return response()->json([
+                                'status' => 'error',
+                                'message' => 'An error occurred while updating the head: ' . $e->getMessage(),
+                            ], 500);
+                        }
+                        return redirect()->back()->with('error', 'An error occurred while updating the head: ' . $e->getMessage());
+                    }
 
 
         }
@@ -674,18 +733,19 @@ public function viewMemberDetails($id)
 
     public function activateMember(Request $request,string $id)
     {
+
         $member = Member::find($id);
         if ($member) {
-            if ($request->ajax()) {
-                                    $member->status = '1';
-                                    $member->save();
-                                    return response()->json([
-                                        'status' => 'success',
-                                        'message' => 'Head activated successfully.',
-                                        'name' => $member->name,
+            $member->status = '1';
+            $member->save();
 
-                                    ]);
-                                }
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Member activated successfully.',
+                    'name' => $member->name,
+                ]);
+            }
             return redirect()->back()->with('success', "Member activated successfully.")->with('name', $member->name);
         }
     }
@@ -693,19 +753,19 @@ public function viewMemberDetails($id)
     public function deactivateMember(Request $request, string $id)
     {
         $member = Member::find($id);
-                if ($member) {
-                    if ($request->ajax()) {
-                                            $member->status = '0';
-                                            $member->save();
-                                            return response()->json([
-                                                'status' => 'success',
-                                                'message' => 'Head deactivated successfully.',
-                                                'name' => $member->name,
+        if ($member) {
+            $member->status = '0';
+            $member->save();
 
-                                            ]);
-                                        }
-                    return redirect()->back()->with('success', "Member deactivated successfully.")->with('name', $member->name);
-                }
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Member deactivated successfully.',
+                    'name' => $member->name,
+                ]);
+            }
+            return redirect()->back()->with('success', "Member deactivated successfully.")->with('name', $member->name);
+        }
     }
 
     public function activateHeadOnView(Request $request, string $id)

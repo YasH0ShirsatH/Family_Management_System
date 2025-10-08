@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('head_id')->constrained('heads')->onDelete('cascade');
             $table->string('hobby_name');
-            $table->enum('status', ['0', '1', '9'])->default('1'); 
+
             $table->timestamps();
         });
     }

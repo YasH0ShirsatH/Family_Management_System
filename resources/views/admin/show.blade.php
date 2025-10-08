@@ -191,7 +191,7 @@
                             <div class="mt-4">
                                 <span class="badge bg-success fs-6 px-4 py-3 rounded-pill">
                                     <i class="bi bi-people me-2"></i>
-                                    {{ $heads->members->where('status', '1')->count() }} Family Members
+                                    {{ $heads->members->where('status', '1')->count() }} Active Members
                                 </span>
                             </div>
                             <div class="mt-4">

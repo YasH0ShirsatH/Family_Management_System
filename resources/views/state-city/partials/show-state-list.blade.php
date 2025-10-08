@@ -37,7 +37,7 @@
                         <td class="align-middle disable-div">{{ $item->created_at->format('M d, Y') }}</td>
                         <td class="align-middle text-center">
                             <div class="d-flex justify-content-center flex-wrap gap-2">
-                                <a href="{{ route('city.edit', $item->id) }}" class="btn btn-outline-info rounded-pill py-2 fw-semibold btn-sm">
+                                <a href="{{ route('city.edit', Crypt::encryptString($item->id)) }}" class="btn btn-outline-info rounded-pill py-2 fw-semibold btn-sm">
                                     <i class="bi bi-pen me-1"></i>Edit
                                 </a>
                                 <a href="{{ route('city.delete',$item->id) }}" class="deleteBtn btn btn-outline-danger rounded-pill py-2 fw-semibold btn-sm">

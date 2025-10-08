@@ -93,6 +93,14 @@ Route::patch('/member/activate/{id}', [AdminMemberController::class, 'activate']
 Route::patch('/member/deactivate/{id}', [AdminMemberController::class, 'deactivate'])->name('member.deactivate');
 Route::post('/admin.add-member/{id}', [AdminMemberController::class, 'addMember'])->name('adminAddMember');
 
+/// AJAX routes for head and member operations
+Route::post('/ajax/head/activate/{id}', [AdminController::class, 'activateHeadOnView'])->name('ajax.head.activate')->middleware('auth.check');
+Route::post('/ajax/head/deactivate/{id}', [AdminController::class, 'deactivateHeadOnView'])->name('ajax.head.deactivate')->middleware('auth.check');
+Route::post('/ajax/head/delete/{id}', [AdminController::class, 'delete'])->name('ajax.head.delete')->middleware('auth.check');
+Route::post('/ajax/member/activate/{id}', [AdminController::class, 'activateMember'])->name('ajax.member.activate')->middleware('auth.check');
+Route::post('/ajax/member/deactivate/{id}', [AdminController::class, 'deactivateMember'])->name('ajax.member.deactivate')->middleware('auth.check');
+Route::post('/ajax/member/delete/{id}', [AdminMemberController::class, 'delete'])->name('ajax.member.delete')->middleware('auth.check');
+
 /// STATE AND CITY SECTION
 Route::resource('/state-city', CityStateController::class)->middleware('auth.check');
 Route::match(['get', 'post'], 'admin/state-city/states', [CityStateController::class, 'stateindex'])->name('state.index')->middleware('auth.check');
@@ -105,7 +113,7 @@ Route::post('admin/state-city/deletestate/{id}', [CityStateController::class, 'd
 //* FOR CITY
 Route::get('admin/state-city/editcity/{id}', [CityStateController::class, 'editcity'])->name('city.edit');
 Route::put('admin/state-city/updatecity/{id}', [CityStateController::class, 'updatecity'])->name('city.update');
-Route::get('admin/state-city/deletecity/{id}', [CityStateController::class, 'deletecity'])->name('city.delete');
+Route::post('admin/state-city/deletecity/{id}', [CityStateController::class, 'deletecity'])->name('city.delete');
 
 
 Route::get('admin/state-city/city', [CityStateController::class, 'cityindex'])->name('city.index')->middleware('auth.check');

@@ -57,7 +57,7 @@
                                 ({{ $users->name . " " . $users->surname }})</p>
                         </div>
                         <div class="card-body p-4">
-                            <form id="formSubmit" action="{{ route('adminAddMember', $id) }}" method="post"
+                            <form id="formSubmit" action="{{ route('adminAddMember', Crypt::encryptString($id)) }}" method="post"
                                 enctype="multipart/form-data">
                                 @csrf
 

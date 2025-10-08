@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Family Management - Members Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -304,6 +305,167 @@
             });
         });
         </script>
+
+    <script>
+        $(document).ready(function(){
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            function showSuccessMessage(message, name) {
+                const alertHtml = `
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>${name}</strong>: ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+                $('.container.py-4').prepend(alertHtml);
+
+                setTimeout(() => {
+                    $('.alert').fadeOut();
+                }, 5000);
+            }
+
+
+            function updateMemberStatus(memberId, newStatus) {
+                const card = $(`.member-card:has([data-id="${memberId}"])`).first();
+                const statusBadge = card.find('.status-badge');
+                const profileImg = card.find('img');
+                const actionBtns = card.find('.btn-primary, .btn-info, .btn-warning');
+
+                card.removeClass('active inactive');
+                statusBadge.removeClass('status-active status-inactive');
+
+                if (newStatus === '1') {
+                    card.addClass('active');
+                    statusBadge.addClass('status-active').text('Active');
+                    profileImg.css('border-color', '#198754');
+                    actionBtns.removeClass('disabled-link');
+                } else {
+                    card.addClass('inactive');
+                    statusBadge.addClass('status-inactive').text('Inactive');
+                    profileImg.css('border-color', '#dc3545');
+                    actionBtns.addClass('disabled-link');
+                }
+            }
+
+
+            function removeMemberCard(memberId) {
+                const card = $(`.member-card:has([data-id="${memberId}"])`).first();
+                card.fadeOut(300, function() {
+                    $(this).remove();
+                });
+            }
+
+            // Member activation
+            $(document).on('click', '.activation', function(e){
+                e.preventDefault();
+
+                if(!confirm('Are you sure you want to activate this member?')) {
+                    return;
+                }
+
+                const $btn = $(this);
+                const memberId = $btn.data('id');
+                const $container = $btn.closest('.d-flex');
+
+                $btn.prop('disabled', true).html('<i class="bi bi-hourglass-split me-1"></i>Activating...');
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/ajax/member/activate/' + memberId,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    success: function(response){
+                        if(response.status === 'success'){
+                            updateMemberStatus(memberId, '1');
+                            showSuccessMessage(response.message, response.name);
+
+                            // Replace the button container with deactivation button
+                            $container.html(`
+                                <a data-id="${memberId}" class="btn btn-outline-danger btn-custom btn-sm flex-fill deactivation">
+                                    <i class="bi bi-x-circle me-1"></i>Deactivate
+                                </a>
+                            `);
+                        }
+                    },
+                    error: function(xhr){
+                        alert('Error: ' + (xhr.responseJSON?.message || 'An error occurred'));
+                        $btn.prop('disabled', false).html('<i class="bi bi-check-circle me-1"></i>Activate');
+                    }
+                });
+            });
+
+
+            $(document).on('click', '.deactivation', function(e){
+                e.preventDefault();
+
+                if(!confirm('Are you sure you want to deactivate this member?')) {
+                    return;
+                }
+
+                const $btn = $(this);
+                const memberId = $btn.data('id');
+                const $container = $btn.closest('.d-flex');
+
+                $btn.prop('disabled', true).html('<i class="bi bi-hourglass-split me-1"></i>Deactivating...');
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/ajax/member/deactivate/' + memberId,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    success: function(response){
+                        if(response.status === 'success'){
+                            updateMemberStatus(memberId, '0');
+                            showSuccessMessage(response.message, response.name);
+
+                            // Replace the button container with activation button
+                            $container.html(`
+                                <a data-id="${memberId}" class="btn btn-outline-success btn-custom btn-sm flex-fill activation">
+                                    <i class="bi bi-check-circle me-1"></i>Activate
+                                </a>
+                            `);
+                        }
+                    },
+                    error: function(xhr){
+                        alert('Error: ' + (xhr.responseJSON?.message || 'An error occurred'));
+                        $btn.prop('disabled', false).html('<i class="bi bi-x-circle me-1"></i>Deactivate');
+                    }
+                });
+            });
+
+            $(document).on('click', '.delete1', function(e){
+                e.preventDefault();
+
+                if(!confirm('Are you sure you want to delete this member? This action cannot be undone.')) {
+                    return;
+                }
+
+                const $btn = $(this);
+                const memberId = $btn.data('id');
+
+                $btn.prop('disabled', true).html('<i class="bi bi-hourglass-split me-1"></i>Deleting...');
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/ajax/member/delete/' + memberId,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    success: function(response){
+                        if(response.status === 'success'){
+                            showSuccessMessage(response.message, response.name);
+                            removeMemberCard(memberId);
+                        }
+                    },
+                    error: function(xhr){
+                        alert('Error: ' + (xhr.responseJSON?.message || 'An error occurred'));
+                        $btn.prop('disabled', false).html('<i class="bi bi-trash me-1"></i>Delete');
+                    }
+                });
+            });
+        });
+    </script>
 
 
 </body>

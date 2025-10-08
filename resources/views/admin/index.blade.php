@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Family Management - Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -158,6 +159,21 @@
             box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
         }
 
+        /* Loading state for buttons */
+        .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Smooth transitions for status changes */
+        .head-card {
+            transition: all 0.3s ease;
+        }
+
+        .status-pill {
+            transition: all 0.3s ease;
+        }
+
         @media (max-width: 768px) {
             .search-input-group .form-control {
                 font-size: 16px; /* Prevents zoom on iOS */
@@ -195,7 +211,7 @@
                         </h4>
                     </div>
                     <div class="header-buttons d-flex flex-column flex-sm-row gap-2">
-                        <a href="/headview" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Add New Head">Add New Head</a>
+                        <a href="/family-registration" class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Add New Head">Add New Head</a>
                         <a href="{{ route('download_all') }}" class="btn btn-outline-light" data-toggle="tooltip" data-placement="bottom" title="Export Data in PDF">PDF</a>
                         <a href="{{ route('download_excel_all') }}" class="btn btn-outline-light" data-toggle="tooltip" data-placement="bottom" title="Export Data in excel">Excel</a>
                     </div>
@@ -402,6 +418,176 @@
             });
         });
         </script>
+
+    <script>
+    $(document).ready(function(){
+        // Setup CSRF token for all AJAX requests
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        // Show success message
+        function showSuccessMessage(message, name, surname) {
+            const alertHtml = `
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>${name} ${surname}</strong>: ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            $('.container.py-4').prepend(alertHtml);
+
+            // Auto dismiss after 5 seconds
+            setTimeout(() => {
+                $('.alert').fadeOut();
+            }, 5000);
+        }
+
+        // Update card status visually
+        function updateCardStatus(headId, newStatus) {
+            const modal = $(`#actionsModal${headId}`);
+            const card = modal.prev('.head-card');
+            const origamiFold = card.find('.origami-fold');
+            const statusPill = card.find('.status-pill');
+            const viewBtn = card.find('.btn-primary');
+            const modalBtns = modal.find('.btn-warning, .btn-info');
+
+            // Remove old classes and add new ones
+            card.removeClass('active inactive');
+            origamiFold.removeClass('active inactive');
+            statusPill.removeClass('active inactive');
+
+            if (newStatus === '1') {
+                card.addClass('active');
+                origamiFold.addClass('active');
+                statusPill.addClass('active').text('Active');
+                viewBtn.removeClass('disabled-link');
+                modalBtns.removeClass('disabled-link');
+            } else {
+                card.addClass('inactive');
+                origamiFold.addClass('inactive');
+                statusPill.addClass('inactive').text('Inactive');
+                viewBtn.addClass('disabled-link');
+                modalBtns.addClass('disabled-link');
+            }
+        }
+
+
+        function removeCard(headId) {
+            const modal = $(`#actionsModal${headId}`);
+            const card = modal.prev('.head-card');
+            card.fadeOut(300, function() {
+                $(this).remove();
+                modal.remove();
+            });
+        }
+
+        // Activation handler
+        $(document).on('click', '.activation', function(e){
+            e.preventDefault();
+
+            if(!confirm('Are you sure you want to activate this head?')) {
+                return;
+            }
+
+            const $btn = $(this);
+            const headId = $btn.data('id');
+
+            // Disable button and show loading
+            $btn.prop('disabled', true).html('<i class="bi bi-hourglass-split me-2"></i>Activating...');
+
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/head/activate/' + headId,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function(response){
+                    if(response.status === 'success'){
+                        updateCardStatus(headId, '1');
+                        showSuccessMessage(response.message, response.name, response.surname);
+
+                        // Update button to deactivate
+                        $btn.removeClass('btn-success activation')
+                           .addClass('btn-outline-danger deactivation')
+                           .html('<i class="bi bi-x-circle me-2"></i>Deactivate Head')
+                           .prop('disabled', false);
+                    }
+                },
+                error: function(xhr){
+                    alert('Error: ' + (xhr.responseJSON?.message || 'An error occurred'));
+                    $btn.prop('disabled', false).html('<i class="bi bi-check-circle me-2"></i>Activate Head');
+                }
+            });
+        });
+
+        // Deactivation handler
+        $(document).on('click', '.deactivation', function(e){
+            e.preventDefault();
+
+            if(!confirm('Are you sure you want to deactivate this head?')) {
+                return;
+            }
+
+            const $btn = $(this);
+            const headId = $btn.data('id');
+
+            // Disable button and show loading
+            $btn.prop('disabled', true).html('<i class="bi bi-hourglass-split me-2"></i>Deactivating...');
+
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/head/deactivate/' + headId,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function(response){
+                    if(response.status === 'success'){
+                        updateCardStatus(headId, '0');
+                        showSuccessMessage(response.message, response.name, response.surname);
+
+                        // Update button to activate
+                        $btn.removeClass('btn-outline-danger deactivation')
+                           .addClass('btn-success activation')
+                           .html('<i class="bi bi-check-circle me-2"></i>Activate Head')
+                           .prop('disabled', false);
+                    }
+                },
+                error: function(xhr){
+                    alert('Error: ' + (xhr.responseJSON?.message || 'An error occurred'));
+                    $btn.prop('disabled', false).html('<i class="bi bi-x-circle me-2"></i>Deactivate Head');
+                }
+            });
+        });
+
+        // Delete handler
+        $(document).on('click', '.delete', function(e){
+            e.preventDefault();
+
+            if(!confirm('Are you sure you want to delete this head? This action cannot be undone.')) {
+                return;
+            }
+
+            const $btn = $(this);
+            const headId = $btn.data('id');
+
+            // Disable button and show loading
+            $btn.prop('disabled', true).html('<i class="bi bi-hourglass-split me-2"></i>Deleting...');
+
+            $.ajax({
+                type: 'POST',
+                url: '/ajax/head/delete/' + headId,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                success: function(response){
+                    if(response.status === 'success'){
+                        showSuccessMessage(response.message);
+                        removeCard(headId);
+                    }
+                },
+                error: function(xhr){
+                    alert('Error: ' + (xhr.responseJSON?.message || 'An error occurred'));
+                    $btn.prop('disabled', false).html('<i class="bi bi-trash me-2"></i>Delete Head');
+                }
+            });
+        });
+    });
+    </script>
 </body>
 
 </html>

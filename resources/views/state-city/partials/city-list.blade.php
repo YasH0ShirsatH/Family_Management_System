@@ -36,7 +36,7 @@
                                 <a href="{{ route('city.edit', Crypt::encryptString( $item->id)) }}" class="btn btn-outline-info rounded-pill py-2 fw-semibold btn-sm">
                                     <i class="bi bi-pen me-1"></i>Edit
                                 </a>
-                                <a class="deleteBtn btn btn-outline-danger rounded-pill py-2 fw-semibold btn-sm" href="{{ route('city.delete', $item->id) }}">
+                                <a class="deleteBtn btn btn-outline-danger rounded-pill py-2 fw-semibold btn-sm delete" href="{{ route('city.delete', $item->id) }}" data-id="{{ $item->id }}">
                                     <i class="bi bi-trash me-1"></i>Delete
                                 </a>
                             </div>
@@ -63,16 +63,6 @@
 </div>
 @endif
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const deleteButtons = document.getElementsByClassName('deleteBtn');
 
-        for (let i = 0; i < deleteButtons.length; i++) {
-            deleteButtons[i].addEventListener('click', function(event) {
-                if (!confirm('WARNING: This will permanently delete the "CITY"! This action cannot be undone. Are you sure?')) {
-                    event.preventDefault();
-                }
-            });
-        }
-    });
-</script>
+
+

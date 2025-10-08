@@ -97,6 +97,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Family Members - Family Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -229,7 +230,7 @@
                 <div class="row mb-4">
                     <div class="col-12">
                         <h4 class="text-success fw-bold mb-3">
-                            <i class="bi bi-check-circle me-2"></i>Active Members ({{ $activeMembers->count() }})
+                            <i class="bi bi-check-circle me-2"></i>Active Members ({{ $total_members }})
                         </h4>
                     </div>
                 </div>
@@ -303,18 +304,14 @@
                                                     class="btn btn-primary btn-sm rounded-pill">
                                                     <i class="bi bi-pencil me-1"></i>Edit
                                                 </a>
-                                                <form action="{{ route('member.deactivate', $member->id) }}" method="POST" class="d-inline">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <button type="submit" class="btn btn-warning btn-sm rounded-pill w-100">
-                                                        <i class="bi bi-pause-circle me-1"></i>Deactivate
-                                                    </button>
-                                                </form>
-                                                <a href="{{ route('member.delete', $member->id) }}"
-                                                                                                                    class="btn btn-danger btn-sm rounded-pill delete1"
-                                                                                                                      data-id="{{  $member->id }}">
-                                                                                                                    <i class="bi bi-trash me-1"></i>Delete
-                                                                                                                </a>
+                                                <button class="btn btn-warning btn-sm rounded-pill w-100 deactivation" data-id="{{ Crypt::encryptString($member->id) }}">
+                                                    <i class="bi bi-pause-circle me-1"></i>Deactivate
+                                                </button>
+                                                <a href=""
+                                                   class="btn btn-danger btn-sm rounded-pill delete1"
+                                                   data-id="{{  Crypt::encryptString($member->id) }}">
+                                                   <i class="bi bi-trash me-1"></i>Delete
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -326,9 +323,7 @@
                     </div>
                     @endforeach
                 </div>
-                @if($members->count() > 0)
-                    {{ $members->links('pagination::bootstrap-4') }}
-                @endif
+
             @endif
 
 
@@ -399,16 +394,12 @@
 
                                                         <div class="mt-auto">
                                                             <div class="d-grid gap-2">
-                                                                <form action="{{ route('member.activate', $member->id) }}" method="POST" class="d-inline">
-                                                                    @csrf
-                                                                    @method('PATCH')
-                                                                    <button type="submit" class="btn btn-success btn-sm rounded-pill w-100">
-                                                                        <i class="bi bi-check-circle me-1"></i>Activate
-                                                                    </button>
-                                                                </form>
-                                                                <a href="{{ route('member.delete', $member->id) }}"
+                                                                    <button class="btn btn-success btn-sm rounded-pill w-100 activation" data-id="{{ Crypt::encryptString($member->id) }}">
+                                                                    <i class="bi bi-check-circle me-1"></i>Activate
+                                                                </button>
+                                                                <a href=""
                                                                     class="btn btn-danger btn-sm rounded-pill delete1"
-                                                                      data-id="{{  $member->id }}">
+                                                                      data-id="{{  Crypt::encryptString($member->id) }}">
                                                                     <i class="bi bi-trash me-1"></i>Delete
                                                                 </a>
                                                             </div>
@@ -430,9 +421,7 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-
-    </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script>
         const deleteButtons = document.getElementsByClassName('deleteBtn');
@@ -452,43 +441,125 @@
 
 <script>
     $(document).ready(function(){
-        console.log('Document ready, jQuery loaded');
-        $(document).on('click', '.delete1', function(e){
-                console.log('delete button clicked');
-                e.preventDefault();
+        // Setup CSRF token for all AJAX requests
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-                if(!confirm('Are you sure you want to delete this member?')) {
-                    return;
-                }
+        // Show success message
+        function showSuccessMessage(message, name) {
+            const alertHtml = `
+                <div class="alert alert-success alert-dismissible fade show rounded-pill" role="alert">
+                    <i class="bi bi-check-circle me-2"></i><strong>${name}</strong>: ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            $('.container.py-4').prepend(alertHtml);
 
-                var headId = $(this).data('id');
-                console.log('Head ID:', headId);
+            // Auto dismiss after 5 seconds
+            setTimeout(() => {
+                $('.alert').fadeOut();
+            }, 5000);
+        }
 
-                $.ajax({
-                    type: 'POST',
-                    url: '/member/delete/' + headId,
-                    data: {
-                        '_token': '{{ csrf_token() }}'
-                    },
-                    success: function(response){
-                        console.log('Response:', response);
-                        if(response.status === 'success'){
-                            alert(response.message + ' User: ' + response.name );
-                            location.reload();
-                        } else {
-                            alert('Error: ' + response.message);
-                        }
-                    },
-                    error: function(xhr, status, error){
-                        console.log('AJAX Error:', xhr.responseText);
-                        alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+        // Activation handler
+        $(document).on('click', '.activation', function(e){
+            e.preventDefault();
+
+            if(!confirm('Are you sure you want to activate this member?')) {
+                return;
+            }
+
+            const $btn = $(this);
+            const memberId = $btn.data('id');
+
+            // Disable button and show loading
+            $btn.prop('disabled', true).html('<i class="bi bi-hourglass-split me-1"></i>Activating...');
+
+            $.ajax({
+                type: 'PATCH',
+                url: '/member/activate/' + memberId,
+                success: function(response){
+                    if(response.status === 'success'){
+                        showSuccessMessage(response.message, response.name);
+                        setTimeout(() => location.reload(), 1000);
                     }
-                });
+                },
+                error: function(xhr){
+                    alert('Error: ' + (xhr.responseJSON?.message || 'An error occurred'));
+                    $btn.prop('disabled', false).html('<i class="bi bi-check-circle me-1"></i>Activate');
+                }
             });
         });
+
+        // Deactivation handler
+        $(document).on('click', '.deactivation', function(e){
+            e.preventDefault();
+
+            if(!confirm('Are you sure you want to deactivate this member?')) {
+                return;
+            }
+
+            const $btn = $(this);
+            const memberId = $btn.data('id');
+
+            // Disable button and show loading
+            $btn.prop('disabled', true).html('<i class="bi bi-hourglass-split me-1"></i>Deactivating...');
+
+            $.ajax({
+                type: 'PATCH',
+                url: '/member/deactivate/' + memberId,
+                success: function(response){
+                    if(response.status === 'success'){
+                        showSuccessMessage(response.message, response.name);
+                        setTimeout(() => location.reload(), 1000);
+                    }
+                },
+                error: function(xhr){
+                    alert('Error: ' + (xhr.responseJSON?.message || 'An error occurred'));
+                    $btn.prop('disabled', false).html('<i class="bi bi-pause-circle me-1"></i>Deactivate');
+                }
+            });
+        });
+
+        // Delete handler
+        $(document).on('click', '.delete1', function(e){
+            e.preventDefault();
+
+            if(!confirm('Are you sure you want to delete this member?')) {
+                return;
+            }
+
+            var memberId = $(this).data('id');
+
+            $.ajax({
+                type: 'POST',
+                url: '/member/delete/' + memberId,
+                data: {
+                    '_token': '{{ csrf_token() }}'
+                },
+                success: function(response){
+                    if(response.status === 'success'){
+                        location.reload();
+                        showSuccessMessage(response.message, response.name);
+                        $btn.closest('.card').parent().fadeOut(300, function() {
+                            $(this).remove();
+
+                        });
+
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error){
+                    alert('An error occurred: ' + (xhr.responseJSON?.message || xhr.responseText));
+                }
+            });
+        });
+    });
     </script>
 
 </html>
 @endif
-
-
