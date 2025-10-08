@@ -53,8 +53,8 @@ jobs:
       - name: Setup problem matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: Test with PHPUnit
-        run: ./vendor/bin/phpunit
+      - name: Test with Pest
+        run: ./vendor/bin/pest
 
   phpcs:
     runs-on: ubuntu-latest
@@ -116,4 +116,4 @@ jobs:
 
       - name: Coverage
         run: |
-          ./vendor/bin/phpunit --coverage-text
+          ./vendor/bin/pest --coverage
