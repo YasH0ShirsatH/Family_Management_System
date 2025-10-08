@@ -45,25 +45,28 @@ jobs:
       - name: Install dependencies
         run: composer update --no-progress --prefer-dist --optimize-autoloader ${{ steps.composer-lock.outputs.flags }}
 
+      - name: Create SQLite database
+        run: touch database/database.sqlite
+
       - name: Setup Laravel environment
         run: |
           cp .env.example .env
           php artisan key:generate
         env:
           DB_CONNECTION: sqlite
-          DB_DATABASE: ':memory:'
+          DB_DATABASE: database/database.sqlite
 
       - name: Run migrations
         run: php artisan migrate --force
         env:
           DB_CONNECTION: sqlite
-          DB_DATABASE: ':memory:'
+          DB_DATABASE: database/database.sqlite
 
       - name: Test with Pest
         run: ./vendor/bin/pest
         env:
           DB_CONNECTION: sqlite
-          DB_DATABASE: ':memory:'
+          DB_DATABASE: database/database.sqlite
 
   coverage:
     runs-on: ubuntu-latest
@@ -92,23 +95,26 @@ jobs:
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
+      - name: Create SQLite database
+        run: touch database/database.sqlite
+
       - name: Setup Laravel environment
         run: |
           cp .env.example .env
           php artisan key:generate
         env:
           DB_CONNECTION: sqlite
-          DB_DATABASE: ':memory:'
+          DB_DATABASE: database/database.sqlite
 
       - name: Run migrations
         run: php artisan migrate --force
         env:
           DB_CONNECTION: sqlite
-          DB_DATABASE: ':memory:'
+          DB_DATABASE: database/database.sqlite
 
       - name: Coverage
         run: |
           ./vendor/bin/pest --coverage
         env:
           DB_CONNECTION: sqlite
-          DB_DATABASE: ':memory:'
+          DB_DATABASE: database/database.sqlite
