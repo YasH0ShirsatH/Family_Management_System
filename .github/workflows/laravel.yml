@@ -51,7 +51,15 @@ jobs:
         run: |
           cp .env.example .env
           php artisan key:generate
-          php artisan migrate --force
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ':memory:'
+
+      - name: Run migrations
+        run: php artisan migrate --force
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ':memory:'
 
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
@@ -61,6 +69,9 @@ jobs:
 
       - name: Test with Pest
         run: ./vendor/bin/pest
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ':memory:'
 
   phpcs:
     runs-on: ubuntu-latest
@@ -124,8 +135,19 @@ jobs:
         run: |
           cp .env.example .env
           php artisan key:generate
-          php artisan migrate --force
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ':memory:'
+
+      - name: Run migrations
+        run: php artisan migrate --force
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ':memory:'
 
       - name: Coverage
         run: |
           ./vendor/bin/pest --coverage
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ':memory:'
