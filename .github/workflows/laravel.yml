@@ -51,6 +51,7 @@ jobs:
         run: |
           cp .env.example .env
           php artisan key:generate
+          php artisan migrate --force
 
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
@@ -123,6 +124,7 @@ jobs:
         run: |
           cp .env.example .env
           php artisan key:generate
+          php artisan migrate --force
 
       - name: Coverage
         run: |
