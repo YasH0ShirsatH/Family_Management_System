@@ -41,7 +41,7 @@
                                     <i class="bi bi-pen me-1"></i>Edit
                                 </a>
 
-                                <a class="deleteBtn btn btn-outline-danger rounded-pill py-2 fw-semibold btn-sm delete"     href="{{ route('city.delete', $item->id) }}" data-id="{{ $item->id }}">
+                                <a class="deleteBtn btn btn-outline-danger rounded-pill py-2 fw-semibold btn-sm delete"     href="{{ route('city.delete', Crypt::encryptString( $item->id)) }}" data-id="{{ Crypt::encryptString( $item->id)  }}">
                                     <i class="bi bi-trash me-1"></i>Delete
                                 </a>
                             </div>

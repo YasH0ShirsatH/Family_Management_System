@@ -5,6 +5,12 @@
         padding-top: 105px;
     }
 
+    .new_font_2{
+                    font-family: "graduate", serif;
+                    font-weight: 400;
+                    font-style: normal;
+                }
+
     /* transition for main content when sidebar toggles */
     #mainContent {
         transition: margin-left 0.25s cubic-bezier(0.42, 0, 0.58, 1);
@@ -224,7 +230,7 @@
                     <i class="bi bi-house-heart text-primary fs-5"></i>
                 </div>
                 <div class="flex-grow-1">
-                    <span class="fw-bold text1">Family Management System</span>
+                    <span class="fw-bold text1 new_font_2" style=" font-family: graduate, serif;" >Family Management System</span>
                     <div class="small opacity-75 text2 d-none d-sm-block">Database for your family</div>
                 </div>
             </a>

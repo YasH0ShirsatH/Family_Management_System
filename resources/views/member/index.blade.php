@@ -8,6 +8,8 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('css/heading.css') }}">
+        <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
+
         <style>
             .active-class-2 { background-color: #198754; color: white; transform: translateX(5px); }
             .status-icon { font-size: 4rem; color: #ffc107; margin-bottom: 1rem; animation: pulse 2s infinite; }

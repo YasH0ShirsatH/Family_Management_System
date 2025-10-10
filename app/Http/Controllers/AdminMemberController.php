@@ -170,8 +170,7 @@ class AdminMemberController extends Controller
                 'mariage_date.required_if' => 'The marriage date field is required when marital status is married.',
             ]
         );
-        try{
-                DB::beginTransaction();
+
         $parentId = $member->head->id;
 
         $admin1 = User::where('id', '=', session::get('loginId'))->first();
@@ -197,7 +196,7 @@ class AdminMemberController extends Controller
                 $file->move(public_path('/uploads/images/'), $filename);
                 $member->photo_path = $filename;
                 $member->save();
-                DB::commit();
+
                 if ($request->ajax()) {
                     return response()->json([
                         'status' => 'success',
@@ -212,7 +211,7 @@ class AdminMemberController extends Controller
             {
                 $member->photo_path = null;
                 $member->save();
-                DB::commit();
+
                 if ($request->ajax()) {
                     return response()->json([
                         'status' => 'success',
@@ -235,16 +234,7 @@ class AdminMemberController extends Controller
         }
 
         return redirect()->route('admin-member.show', $parentId)->with('success', 'Member updated successfully.')->with('name', $member->name)->with('surname', $member->surname);
-    } catch (\Exception $e) {
-        DB::rollBack();
-        Log::error('Error updating member: ' . $e->getMessage());
-        if ($request->ajax()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'An error occurred while updating the member.'
-            ], 500);
-            }
-        }
+
 
 
     }

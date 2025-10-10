@@ -119,6 +119,10 @@
                 <td colspan="2" class="section-header">Personal Information</td>
             </tr>
             <tr>
+                <td class="data-label">Family Head</td>
+                <td>{{ $member->head->name }} {{$member->head->surname}}</td>
+            </tr>
+            <tr>
                 <td class="data-label">Date of Birth</td>
                 <td>{{ date('M d, Y', strtotime($member->birthdate)) }}</td>
             </tr>
@@ -128,11 +132,18 @@
                 <td>{{ date('M d, Y', strtotime($member->mariage_date)) }}</td>
             </tr>
             @endif
-
+            @if($member->relation)
             <tr>
-                <td class="data-label">Address</td>
+                <td class="data-label">Relation with Head</td>
+                <td>{{ ucfirst($member->relation)}}</td>
+            </tr>
+            @endif
+             @if($member->education )
+            <tr>
+                <td class="data-label">Education</td>
                 <td>{{ $member->education }}</td>
             </tr>
+            @endif
 
         </tbody>
     </table>

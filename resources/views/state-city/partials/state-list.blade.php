@@ -22,12 +22,12 @@
         <div class="card shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
             <div class="card-header bg-white d-flex justify-content-between align-items-center"
                 style="border-radius: 20px 20px 0 0;">
-                <h4 class="mb-0 text-primary">
+                <h4 class="mb-0 text-primary new-font">
                     <i class="bi bi-list me-2"></i>All States ({{ $states->total() }})
                 </h4>
                 <div class="d-flex justify-content-end align-items-center">
-                    <a href="{{ route('create.state') }}" class="btn btn-primary rounded-pill py-2 fw-semibold btn-sm">
-                        <i class="bi bi-plus-circle me-2"></i>Add State
+                    <a href="{{ route('create.state') }}" class="btn  btn-primary rounded-pill py-2 fw-semibold btn-sm">
+                        <i class="bi bi-plus-circle me-2 "></i>Add State
                     </a>
 
                 </div>
@@ -76,7 +76,7 @@
                                             class="btn btn-outline-info rounded-pill py-2 fw-semibold btn-sm">
                                             <i class="bi bi-pen me-1"></i>Edit
                                         </a>
-                                        <a href="{{ route('state.delete', $item->id) }}" data-id="{{ $item->id }}"
+                                        <a  data-id="{{ Crypt::encryptString($item->id) }}"
                                             class="deleteBtn btn btn-outline-danger rounded-pill py-2 fw-semibold btn-sm">
                                             <i class="bi bi-trash me-1"></i>Delete
                                         </a>

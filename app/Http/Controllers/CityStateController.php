@@ -168,7 +168,8 @@ class CityStateController extends Controller
     public function deletestate(Request $request,$id)
     {
     if ($request->ajax()) {
-            $state = State::find($id);
+            $decryptedId = Crypt::decryptString($id);
+            $state = State::find($decryptedId);
             $state->update(['status' => '9']);
             $state->cities()->update(['status' => '9']);
             $head = Head::all();
@@ -361,7 +362,8 @@ class CityStateController extends Controller
     public function deletecity(Request $request,$id)
     {
      if ($request->ajax()) {
-        $city = City::find($id);
+        $decryptedId = Crypt::decryptString($id);
+        $city = City::find($decryptedId);
         $city->update(['status' => '9']);
         $head = Head::all();
         $heads = Head::where('city', $city->name)->get();

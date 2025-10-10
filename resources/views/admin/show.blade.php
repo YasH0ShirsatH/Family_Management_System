@@ -7,8 +7,14 @@
         <title>Family Inactive - Family Management System</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
         <link rel="stylesheet" href="{{ asset('css/heading.css') }}">
         <style>
+            .new-font{
+                font-family: "lora", serif;
+                font-weight: 400;
+                font-style: normal;
+            }
             .active-class-2 { background-color: #198754; color: white; transform: translateX(5px); }
             .status-icon { font-size: 4rem; color: #ffc107; margin-bottom: 1rem; animation: pulse 2s infinite; }
 
@@ -22,7 +28,7 @@
                     <div class="col-lg-6">
                         <div class="card shadow rounded-4">
                             <div class="card-header bg-warning text-dark text-center py-3 rounded-top-4">
-                                <h2 class="mb-1 fw-bold"><i class="bi bi-x-circle me-2"></i>Family Inactive</h2>
+                                <h2 class="mb-1 fw-bold new-font"><i class="bi bi-x-circle me-2"></i>Family Inactive</h2>
                                 <p class="mb-0 opacity-75">This family is currently inactive</p>
                             </div>
                             <div class="card-body p-5 text-center">
@@ -55,8 +61,14 @@
     <title>Family Details - Family Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
     <style>
+        .new-font{
+            font-family: "lora", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
         .active-class-2{
             background-color: #198754;
             color : white;
@@ -82,7 +94,7 @@
                 <div class="col-lg-10">
                     <div class="card shadow-sm border-0 mb-4 rounded-4">
                         <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
-                            <h2 class="mb-0">
+                            <h2 class="mb-0 new-font">
                                 <i class="bi bi-person-badge me-2"></i>
                                 {{ ucfirst($heads->name) }}'s Family Details
                             </h2>
@@ -328,8 +340,14 @@
         <title>Family Deleted - Family Management System</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
         <link rel="stylesheet" href="{{ asset('css/heading.css') }}">
         <style>
+            .new-font{
+                font-family: "lora", serif;
+                font-weight: 400;
+                font-style: normal;
+            }
             .active-class-2 { background-color: #198754; color: white; transform: translateX(5px); }
             .status-icon { font-size: 4rem; color: #dc3545; margin-bottom: 1rem; animation: pulse 2s infinite; }
             @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
@@ -343,7 +361,7 @@
                     <div class="col-lg-6">
                         <div class="card shadow rounded-4">
                             <div class="card-header bg-danger text-white text-center py-3 rounded-top-4">
-                                <h2 class="mb-1 fw-bold"><i class="bi bi-trash me-2"></i>Family Deleted or Never Existed</h2>
+                                <h2 class="mb-1 fw-bold new-font"><i class="bi bi-trash me-2"></i>Family Deleted or Never Existed</h2>
                                 <p class="mb-0 opacity-75">This family has been deleted or Never Existed</p>
                             </div>
                             <div class="card-body p-5 text-center">

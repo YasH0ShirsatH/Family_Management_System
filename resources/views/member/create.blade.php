@@ -7,8 +7,14 @@
     <title>Add Family Member - Family Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
     <style>
+        .new-font{
+            font-family: "lora", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
         .active-class-31{
                    background-color: #198754;
                    color : white;
@@ -52,7 +58,7 @@
                 <div class="col-lg-8">
                     <div class="card shadow rounded-4">
                         <div class="card-header bg-primary text-white text-center py-3 rounded-top-4">
-                            <h2 class="mb-1 fw-bold"><i class="bi bi-person-plus me-2"></i>Add Family Member</h2>
+                            <h2 class="mb-1 fw-bold new-font"><i class="bi bi-person-plus me-2"></i>Add Family Member</h2>
                             <p class="mb-0 opacity-75">Enter members of family head
                                 ({{ $users->name . " " . $users->surname }})</p>
                         </div>

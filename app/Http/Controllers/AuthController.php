@@ -139,9 +139,10 @@ class AuthController extends Controller
 
     public function logout()
     {
+        $user = User::where('id', '=', session::get('loginId'))->first();
         if (Session::has('loginId')) {
             Session::pull('loginId');
-            return redirect('/login')->with('error', 'You have been logged out');
+            return redirect('/')->with('error', 'Admin ('.$user->first_name. ' '.$user->last_name.') → '.'You have been logged out',);
         }
     }
 

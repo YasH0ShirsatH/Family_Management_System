@@ -1,6 +1,6 @@
 <div class="card shadow-sm border-0 " style="border-radius: 20px;">
     <div class="card-header bg-white d-flex justify-content-between align-items-center" style="border-radius: 20px 20px 0 0;">
-        <h4 class="mb-0 text-primary">
+        <h4 class="mb-0 text-primary new-font">
             <i class="bi bi-list me-2"></i>All Cities ({{ $cities->total() }})
         </h4>
         <div class="d-flex justify-content-end align-items-center">
@@ -36,7 +36,7 @@
                                 <a href="{{ route('city.edit', Crypt::encryptString( $item->id)) }}" class="btn btn-outline-info rounded-pill py-2 fw-semibold btn-sm">
                                     <i class="bi bi-pen me-1"></i>Edit
                                 </a>
-                                <a class="deleteBtn btn btn-outline-danger rounded-pill py-2 fw-semibold btn-sm delete" href="{{ route('city.delete', $item->id) }}" data-id="{{ $item->id }}">
+                                <a class="deleteBtn btn btn-outline-danger rounded-pill py-2 fw-semibold btn-sm delete" href="{{ route('city.delete', Crypt::encryptString( $item->id)) }}" data-id="{{ Crypt::encryptString( $item->id) }}">
                                     <i class="bi bi-trash me-1"></i>Delete
                                 </a>
                             </div>

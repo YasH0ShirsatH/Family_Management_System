@@ -5,6 +5,12 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
+     .new-font{
+               font-family: "lora", serif;
+               font-weight: 400;
+               font-style: normal;
+            }
+
     .offcanvas-body > div:first-child {
         font-size: 1.1rem;
         font-weight: 500;
@@ -21,7 +27,7 @@
     }
 
     .dropdown::before {
-        
+
         display: block;
         font-weight: 600;
         font-size: 1.05rem;

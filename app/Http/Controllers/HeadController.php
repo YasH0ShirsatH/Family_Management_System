@@ -284,7 +284,7 @@ class HeadController extends Controller
 
         Log::debug('Complete family registered: Head (' . $request->head_name . ' ' . $request->head_surname . ') with ' . count($request->members ?? []) . ' members on: ' . Carbon::now()->setTimezone('Asia/Kolkata'));
 
-        return redirect()->route('family.registration')->with('success', 'Complete family registered successfully! Head: ' . $request->head_name . ' ' . $request->head_surname);
+        return redirect('/')->with('success', 'Complete family registered successfully! Head: ' . $request->head_name . ' ' . $request->head_surname);
         } catch (ValidationException $e) {
               DB::rollBack();
               $firstError = collect($e->errors())->flatten()->first();

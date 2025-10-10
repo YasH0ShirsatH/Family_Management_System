@@ -7,6 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
+    <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
+
+
     <style>
         .validation-error {
             color: #dc3545;
@@ -24,6 +27,13 @@
             border-color: #dc3545 !important;
             background-color: #fff0f0;
         }
+
+        .new-font{
+           font-family: "lora", serif;
+           font-weight: 400;
+           font-style: normal;
+        }
+
     </style>
 </head>
 
@@ -44,8 +54,8 @@
                 <div class="col-lg-8">
                     <div class="card shadow rounded-4">
                         <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
-                            <h2 class="mb-0 fw-bold"><i class="bi bi-person-badge me-2"></i>Edit Family Head</h2>
-                            <p class="mb-0 mt-2">Update family head information</p>
+                            <h2 class="mb-0 fw-bold new-font "><i class="bi bi-person-badge me-2"></i>Edit Family Head</h2>
+                            <p class="mb-0 mt-2 ">Update family head information</p>
                         </div>
 
                         <div class="card-body p-4">
@@ -70,13 +80,13 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3 form-group">
                                         <label class="form-label fw-semibold">First Name</label>
-                                        <input type="text" name="name" class="form-control rounded-pill" value="{{ $head->name }}">
+                                        <input type="text" name="name" class="form-control rounded-pill" value="{{ $head->name }}" onkeydown="return noSpaces(event);" >
                                         <div class="validation-error"></div>
                                         @error('name')<div class="text-danger">{{ $message }}</div>@enderror
                                     </div>
                                     <div class="col-md-6 mb-3 form-group">
                                         <label class="form-label fw-semibold">Last Name</label>
-                                        <input type="text" name="surname" class="form-control rounded-pill" value="{{ $head->surname }}">
+                                        <input type="text" name="surname" class="form-control rounded-pill" value="{{ $head->surname }}" onkeydown="return noSpaces(event);" >
                                         <div class="validation-error"></div>
                                         @error('surname')<div class="text-danger">{{ $message }}</div>@enderror
                                     </div>
@@ -91,7 +101,7 @@
                                     </div>
                                     <div class="col-md-6 mb-3 form-group">
                                         <label class="form-label fw-semibold">Mobile Number</label>
-                                        <input type="text" maxlength="10" name="mobile" class="form-control rounded-pill" value="{{ $head->mobile }}">
+                                        <input type="text" maxlength="10" name="mobile" class="form-control rounded-pill" value="{{ $head->mobile }}" onkeydown="return noSpaces(event);" >
                                         <div class="validation-error"></div>
                                         @error('mobile')<div class="text-danger">{{ $message }}</div>@enderror
                                     </div>
@@ -200,6 +210,7 @@
                                     @endif
                                     @error('path')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
+
 
                                 <!-- Family Members Section -->
                                 @if(isset($head->members) && !$head->members->isEmpty())
@@ -310,7 +321,13 @@
                                     </div>
                                 </div>
                                 @endif
-
+                                @if($head->members->isEmpty())
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-success rounded-pill mb-3" onclick="addMember()">
+                                           <i class="bi bi-plus-circle me-2"></i>Add New Member
+                                    </button>
+                                </div>
+                                @endif
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5">
                                         <i class="bi bi-check-circle me-2"></i>Update Family Head & Members
@@ -328,7 +345,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script>
+        function noSpaces(event) {
+                            // Get the key code of the pressed key
+                            var key = event.keyCode || event.charCode || event.which;
 
+
+                            if (key === 32) {
+                                alert('In this field, Spaces not allowed here !!');
+                                return false;
+                            }
+
+                            return true;
+                        }
+        </script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const marriedRadio = document.getElementById('married');
@@ -337,6 +367,8 @@
         const hobbyContainer = document.getElementById('hobbyContainer');
         const addHobbyBtn = document.getElementById('addHobby');
         const removeHobbyBtn = document.getElementById('removeHobby');
+
+
 
         function addHobbyInput() {
             const input = document.createElement('input');
@@ -573,6 +605,7 @@
                 $.validator.addMethod("noSpace", function(value, element) {
                             return value.indexOf(" ") < 0 && value !== "";
                         }, "Spaces are not allowed.");
+
 
         $('#updateForm').validate({
             rules: {

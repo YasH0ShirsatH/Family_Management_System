@@ -30,6 +30,10 @@
         <title>Resume Session</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+        <style>
+
+            </style>
     </head>
 
     <body>
@@ -80,7 +84,19 @@
         <title>Family Management System</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
+
         <style>
+            .new-font{
+                                   font-family: "lora", serif;
+                                   font-weight: 400;
+                                   font-style: normal;
+                                }
+            .new_font_2{
+                font-family: "graduate", serif;
+                font-weight: 400;
+                font-style: normal;
+            }
             body {
                 background: #f4f6fb;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -128,8 +144,8 @@
 
             <div class="hero-section text-center">
                 <div class="container">
-                    <h1 class="display-4 fw-bold mb-4">
-                        <i class="bi bi-house-heart me-3"></i>Family Management System
+                    <h1 class="display-4 fw-bold mb-4 new_font_2">
+                        <i class="bi bi-house-heart me-3 "></i>Family Management System
                     </h1>
                     <p class="lead mb-0">Professional family data management and organization platform</p>
                 </div>
@@ -143,7 +159,7 @@
                                 style="width: 80px; height: 80px;">
                                 <i class="bi bi-people text-primary" style="font-size: 2rem;"></i>
                             </div>
-                            <h4 class="fw-bold mb-3 text-primary">Family Registration</h4>
+                            <h4 class="fw-bold mb-3 text-primary new-font">Family Registration</h4>
                             <p class="text-muted mb-4">Register complete family information including head and members in a single streamlined process.</p>
                             <a href="/family-registration" class="btn btn-primary">
                                 <i class="bi bi-plus-circle me-2"></i>Register Family
@@ -159,11 +175,17 @@
                                 style="width: 80px; height: 80px;">
                                 <i class="bi bi-shield-check text-primary" style="font-size: 2rem;"></i>
                             </div>
-                            <h4 class="fw-bold mb-3 text-primary">Administration</h4>
+                            <h4 class="fw-bold mb-3 text-primary new-font">Administration</h4>
                             <p class="text-muted mb-4">Access administrative dashboard for comprehensive family data management and system control.</p>
-                            <a href="/login" class="btn btn-outline-primary">
-                                <i class="bi bi-box-arrow-in-right me-2"></i>Admin Access
+                            @if(session()->has('loginId'))
+                            <a href="/dashboard" class="btn btn-outline-primary">
+                                <i class="bi bi-house me-2"></i>Dashboard
                             </a>
+                            @else
+                            <a href="/login" class="btn btn-outline-primary">
+                                 <i class="bi bi-box-arrow-in-right me-2"></i>Admin Access
+                            </a>
+                            @endif
                         </div>
                     </div>
                 </div>

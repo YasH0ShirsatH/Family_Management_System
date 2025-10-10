@@ -9,11 +9,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
+    <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
+
     <style>
         body {
             font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: #f4f5f7;
         }
+
+        .new-font{
+                    font-family: "lora", serif;
+                    font-weight: 400;
+                    font-style: normal;
+                }
 
         .card {
             border: none;
@@ -147,8 +155,8 @@
             <div class="card shadow mb-4">
                 <div class="card-header-main d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
                     <div class="flex-grow-1">
-                        <h4 class="mb-0 fw-bold">
-                            <i class="bi bi-people-fill me-2"></i>Manage Members
+                        <h4 class="mb-0 fw-bold new-font">
+                            <i class="bi bi-people-fill me-2 "></i>Manage Members
                         </h4>
                     </div>
                     <div class="header-buttons d-flex flex-column flex-sm-row gap-2">

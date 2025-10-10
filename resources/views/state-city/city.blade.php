@@ -9,12 +9,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
-    <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
+            <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
+
     <style>
         .statelinks {
             text-decoration: none;
             color: #6c757d;
         }
+
+        .new-font{
+                    font-family: "lora", serif;
+                    font-weight: 400;
+                    font-style: normal;
+                }
 
         .statelinks:hover {
             text-decoration: underline;
@@ -92,7 +99,7 @@
             <!-- Search Card -->
             <div class="card shadow-sm mb-4 border-0 rounded-4">
                 <div class="card-header bg-gradient bg-primary text-white py-3 border-0 rounded-top-4 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold">
+                    <h5 class="mb-0 fw-bold new-font">
                         <i class="bi bi-search me-2"></i>Search Cities
                     </h5>
                     <a href="{{ route('state.index') }}" class="ms-2 btn ms-2 btn-outline-warning rounded-pill py-2 fw-semibold btn-sm">

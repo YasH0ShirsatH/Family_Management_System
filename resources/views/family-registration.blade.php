@@ -7,7 +7,13 @@
     <title>Family Registration - Family Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
     <style>
+        .new-font{
+            font-family: "lora", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
         .validation-error {
             color: #dc3545;
             font-size: 14px;
@@ -43,7 +49,7 @@
             <div class="col-lg-10">
                 <div class="card shadow rounded-4">
                     <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
-                        <h2 class="mb-0 fw-bold"><i class="bi bi-people-fill me-2"></i>Complete Family Registration</h2>
+                        <h2 class="mb-0 fw-bold new-font"><i class="bi bi-people-fill me-2"></i>Complete Family Registration</h2>
                         <p class="mb-0 mt-2">Register family head and add members in one go</p>
                     </div>
 
@@ -502,7 +508,7 @@
 
         $.validator.addMethod("noNumbers", function(value, element) {
             return this.optional(element) || /^[a-zA-Z\s]*$/.test(value);
-        }, "Please enter only letters and spaces.");
+        }, "Please enter only letters.");
 
         $.validator.addMethod("ageAbove21", function(value, element) {
             if (!value) return true;

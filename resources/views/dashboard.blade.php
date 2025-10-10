@@ -7,7 +7,13 @@
     <title>Dashboard - Family Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
     <style>
+        .new-font{
+            font-family: "lora", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
         body {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             min-height: 100vh;
@@ -73,7 +79,7 @@
         <div class="container py-4">
             <!-- Welcome Banner -->
             <div class="welcome-banner text-center">
-                <h1 class="fw-bold mb-3">
+                <h1 class="fw-bold mb-3 new-font">
                     <i class="bi bi-house-heart me-3"></i>
                     Family Management Dashboard
                 </h1>
@@ -90,7 +96,7 @@
             <!-- Quick Actions -->
             <div class="row g-4 mb-5">
                 <div class="col-12">
-                    <h3 class="fw-bold mb-4">
+                    <h3 class="fw-bold mb-4 new-font">
                         <i class="bi bi-lightning me-2 text-primary"></i>
                         Quick Actions
                     </h3>
@@ -133,7 +139,7 @@
             <!-- Statistics Overview -->
             <div class="dashboard-card">
                 <div class="origami-header">
-                    <h4 class="fw-bold mb-0">
+                    <h4 class="fw-bold mb-0 new-font">
                         <i class="bi bi-bar-chart me-2"></i>
                         System Overview
                     </h4>

@@ -7,7 +7,13 @@
     <title>Admin Registration - Family Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
     <style>
+        .new-font{
+            font-family: "lora", serif;
+            font-weight: 400;
+            font-style: normal;
+        }
         :root {
             --primary-color: #2563eb;
             --secondary-color: #64748b;
@@ -115,7 +121,7 @@
 
     <div class="register-container">
         <div class="register-header">
-            <h1><i class="bi bi-person-plus"></i> Admin Registration</h1>
+            <h1 class="new-font"><i class="bi bi-person-plus"></i> Admin Registration</h1>
         </div>
 
         <div class="register-body">
@@ -251,7 +257,7 @@
                           <i class="bi bi-shield-lock-fill text-danger"></i>
                       </div>
 
-                      <h1 class="card-title fw-bold text-danger mb-3">Access Denied</h1>
+                      <h1 class="card-title fw-bold text-danger mb-3 new-font">Access Denied</h1>
 
                       <p class="text-muted mb-4">
                           Sorry, your account does not have the necessary permissions to view this page. If you believe this is an error, please contact a system administrator.
