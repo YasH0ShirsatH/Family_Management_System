@@ -1,5 +1,8 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Borel&family=Miniver&family=Pacifico&family=Playwrite+DE+Grund:wght@100..400&display=swap');
+    @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+   @import url('https://fonts.googleapis.com/css2?family=Cookie&family=Playwrite+DE+SAS:wght@100..400&display=swap');
 
     body {
         padding-top: 105px;
@@ -87,7 +90,7 @@
 
     .sidebar-header {
         background: #007bff;
-        padding: 23px 10px 22px 23px;
+        padding: 27px 10px 27px 23px;
         border-bottom: 1px solid #fff2;
         display: flex;
         align-items: center;
@@ -117,7 +120,7 @@
     }
 
     .sidebar-body .btn {
-        font-size: 1.05rem;
+        font-size: 0.95rem;
     }
 
     .btn-close-white {
@@ -152,7 +155,7 @@
     }
 
     .btn-menu-style:hover {
-        transform: translateY(-2px);
+
         box-shadow: 3px 6px 12px rgba(214, 212, 212, 0.5);
     }
 
@@ -195,7 +198,216 @@
         }
     }
 
-    @media (max-width: 576px) {
+    @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+    *,
+    *::after,
+    *::before {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      --gray-100: #f3f4f6;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --emerald-500: #10b981;
+      --ff-roboto: "Roboto", sans-serif;
+    }
+
+
+    /* Notification Icon */
+    ion-icon[name="notifications-outline"] {
+      font-size: 1.85rem;
+      color: var(--gray-100);
+    }
+
+    /* Profile Dropdown */
+    .dropdown-wrapper {
+      position: relative;
+      margin-left: 0.5rem;
+    }
+
+    .dropdown-toggle {
+      display: none;
+    }
+
+    .dropdown-label {
+      height: 2.8rem;
+      width: 2.8rem;
+      display: block;
+      border: 3px solid #ffffff;
+      background-color: #007bff;
+      cursor: pointer;
+      border-radius: 50%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z'/%3E%3C/svg%3E");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 60%;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .dropdown-label:hover {
+
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 4rem;
+      right: 0;
+      min-width: 250px;
+      padding: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      border: 1px solid #e9ecef;
+      z-index: 1050;
+    }
+
+    .upper-triangle {
+      position: absolute;
+      right: 1rem;
+      top: -8px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 8px solid white;
+    }
+
+    .dropdown-menu-display {
+      display: none;
+      animation: fadeInDown 0.5s ease;
+
+
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+
+    .dropdown-toggle:checked + .dropdown-label + .dropdown-menu-display {
+      display: block;
+    }
+
+
+    .dropdown-header {
+      padding: 1rem;
+      border-bottom: 1px solid #e9ecef;
+      background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+      border-radius: 12px 12px 0 0;
+      color: white;
+      text-align: center;
+    }
+
+    .dropdown-header .admin-avatar {
+      width: 50px;
+      height: 50px;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.5rem;
+    }
+
+    .dropdown-header .admin-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+
+      font-family : 'graduate' , serif;
+    }
+    .rainbow-text{
+        background-image: linear-gradient(
+                              45deg,
+                              #FF3D00,
+                              #FF8C00,
+                              #FFEE00,
+                              #4DE94C,
+                              #3A9FFF,
+                              #C800FF
+                            );
+          -webkit-background-clip: text; /* For Safari/Chrome */
+          background-clip: text;
+          color: transparent;
+    }
+    .dropdown-header .admin-role {
+      font-size: 0.8rem;
+        font-weight: 800;
+      opacity: 0.8;
+    }
+
+    .dropdown-list {
+      list-style: none;
+      margin: 0;
+      padding: 0.5rem 0;
+    }
+
+    .dropdown-list a {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      color: #495057;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border-left: 4px solid transparent;
+    }
+
+    .dropdown-list a:hover {
+      border-radius : 7px;
+      background-color: #f8f9fa;
+
+      border-left-color: #007bff;
+      color: #007bff;
+    }
+    .dropdown-list a.logout-hov:hover{
+           background-color: rgba(245, 0, 0, 0.05);
+                 border-left-color: red;
+                 color: red;
+    }
+
+    .dropdown-list-icon {
+      font-size: 1.1rem;
+      margin-right: 0.75rem;
+      width: 20px;
+      text-align: center;
+    }
+
+    .dropdown-list span {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: #e9ecef;
+      margin: 0.5rem 0;
+    }
+
+    .admin-email{
+        color  : rgba(255, 255, 255, 0.70);
+        font-family: "Cookie", cursive;
+    }
+
+
+    @media (max-width: 800px) {
         .navbar-brand {
             font-size: 0.9rem;
         }
@@ -220,6 +432,11 @@
             padding-bottom: 0.45rem;
         }
     }
+
+ul p {
+    margin  : 5px 0px 0px 0px;
+    font-family: "graduate", serif;
+}
 </style>
 
 <div class="fixed-top" style="padding-bottom: 10px;z-index:100">
@@ -230,33 +447,79 @@
                     <i class="bi bi-house-heart text-primary fs-5"></i>
                 </div>
                 <div class="flex-grow-1">
-                    <span class="fw-bold text1 new_font_2" style=" font-family: graduate, serif;" >Family Management System</span>
+                    <span class="fw-bold text1 new_font_2 " id="title-fms"  style=" font-family: graduate, serif;" >Family Management System</span>
                     <div class="small opacity-75 text2 d-none d-sm-block">Database for your family</div>
                 </div>
             </a>
             <div class="d-flex align-items-center flex-shrink-0">
-                @if ($shouldShowDiv ?? true)
-                <a href="/dashboard/admin-profile" class="btn btn-admin-profile me-2 name">
-                    <i class="p-1 px-2 rounded-pill bi bi-person-circle me-1 border border-white"></i>
-                    <span class="fw-semibold text-start" style="font-family: Playwrite DE Grund, cursive;">
-                        {{ $admin1->first_name . ' ' . $admin1->last_name ?? 'Admin' }}
-                    </span>
-                </a>
-                @endif
+
                 @if ($shouldShowDiv ?? true)
                 <button class="btn btn-menu-style btn-outline-light rounded-pill px-3" type="button" id="openSidebarPush">
                     <i class="bi bi-list fs-5 me-1"></i>
                     <span class="d-none d-sm-inline">Menu</span>
                 </button>
                 @endif
+                @if ($shouldShowDiv ?? true)
+                                <!-- Profile Dropdown -->
+                                <div class="dropdown-wrapper" style="margin-right  : 5px">
+                                    <input type="checkbox" class="dropdown-toggle" id="dropdown-toggle">
+                                    <label for="dropdown-toggle" class="dropdown-label" title="Profile Menu"></label>
+                                    <div class="dropdown-menu dropdown-menu-display">
+                                        <div class="upper-triangle"></div>
+                                        <div class="dropdown-header">
+                                            <small class="admin-email" style="font-size : 18px">{{$admin1->email}}</small>
+
+                                            <div class="admin-avatar mt-2">
+                                                <i class="bi bi-person-fill" style="font-size: 1.5rem;"></i>
+                                            </div>
+                                            <div class="admin-name">{{ $admin1->first_name . ' ' . $admin1->last_name ?? 'Admin User' }}</div>
+                                            @if ($admin1->superuser == '1')
+                                            <div class="admin-role rainbow-text ">Super Administrator</div>
+                                            @else
+                                            <div class="admin-role">System Administrator</div>
+                                            @endif
+
+                                        </div>
+                                        <ul class="dropdown-list">
+                                            <a href="/dashboard/admin-profile">
+                                                <i class="bi bi-person dropdown-list-icon"></i>
+                                                <span>Your Profile</span>
+                                            </a>
+                                            <a href="/dashboard">
+                                                <i class="bi bi-speedometer2 dropdown-list-icon"></i>
+                                                <span>Admin Dashboard</span>
+                                            </a>
+                                            <a href="/admin">
+                                                <i class="bi bi-people dropdown-list-icon"></i>
+                                                <span>Manage Families</span>
+                                            </a>
+                                            <a href="{{ route('admin.members') }}">
+                                                <i class="bi bi-person-lines-fill dropdown-list-icon"></i>
+                                                <span>Manage Members</span>
+                                            </a>
+                                            <a href="/state-city">
+                                                <i class="bi bi-geo-alt dropdown-list-icon"></i>
+                                                <span>Manage Location</span>
+                                            </a>
+                                            <a href="/logout" class="logout-hov" >
+                                                <i class="bi bi-box-arrow-right dropdown-list-icon "></i>
+                                                <span>Logout</span>
+                                            </a>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- Admin Profile Button -->
+
+                                @endif
             </div>
+
         </div>
     </nav>
 
     @if ($shouldShowDiv ?? true)
     <div id="sidebarPush" class="sidebar-push bg-primary text-white">
         <div class="sidebar-header">
-            <h5 class="fw-bold mb-1"><i class="bi bi-grid-3x3-gap me-2"></i>Navigation Menu</h5>
+            <h6 class="fw-bold mb-1" style=" font-family: graduate, serif;" ><i class="bi bi-grid-3x3-gap me-2"></i>Navigation Menu</h5>
             <button type="button" class="border-0" style="background-color: #007bff" id="closeSidebarPush">
                 <i class="bi bi-list text-white fs-5 me-1"></i>
             </button>
@@ -371,6 +634,7 @@
             const mainNavbar = $('#mainNavbar');
             const overlay = $('#sidebarOverlay');
             const breakpoint = 992;
+            const title_fms = document.getElementById('title-fms') ;
 
 
             function applySidebarState() {
@@ -421,6 +685,26 @@
             });
 
             initializeSidebar();
+
+
         @endif
+
+
     });
+   function updateTitle() {
+       const title_fms = document.getElementById('title-fms');
+       if (title_fms) {
+           const windowWidth = window.innerWidth;
+           if (windowWidth < 480) {
+               title_fms.innerText = 'FMS';
+               title_fms.style.fontSize = '1em';
+           } else {
+               title_fms.innerText = 'Family Management System';
+               title_fms.style.fontSize = '1.2em';
+           }
+       }
+   }
+
+   document.addEventListener('DOMContentLoaded', updateTitle);
+   window.addEventListener('resize', updateTitle);
 </script>

@@ -16,7 +16,9 @@
             font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: #f4f5f7;
         }
-
+        select{
+                    cursor:pointer;
+                }
         .new-font{
                     font-family: "lora", serif;
                     font-weight: 400;

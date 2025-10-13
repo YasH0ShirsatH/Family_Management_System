@@ -191,13 +191,26 @@
                                </a>
                            </div>
                             @elseif($member->status == '0' and $member->head->status == '0')
-                             <div class="d-flex flex-column gap-2">
-                                <a href="/dashboard/admin-profile"
-                                   class="btn btn-outline-danger btn-custom btn-sm flex-fill {{ $member->status == 1 ? 'disabled-link' : '' }}"
-                                   onclick="return confirm('Want to Activate this member? Click \'OK\' to go Admin Profile and  Activate head {{$member->head->name}} {{$member->head->surname}}')">
-                                <i class="bi bi-x-circle me-1"></i>Activate Head to activate member
-                                </a>
-                                </div>
+                            <style>
+                                .disabled-message {
+                                    cursor: not-allowed;
+                                    pointer-events: none;
+                                    opacity: 0.6;
+                                    margin-bottom: 0;
+                                    text-align: center;
+                                    background-color: rgba(245, 0, 0, 0.36);
+                                    border-color: rgba(245, 0, 0, 0.36);
+                                    color: red;
+                                    padding  : 15px 0px
+                                }
+
+                                </style>
+                            <div class="d-flex flex-column gap-2">
+                                <p class="btn btn-outline-danger btn-custom btn-sm flex-fill disabled-message {{ $member->status == 1 ? 'disabled-link' : '' }}"
+                                   title="Want to Activate this member? Go to Admin Profile and Activate head {{$member->head->name}} {{$member->head->surname}}">
+                                    <i class="bi bi-person-x-fill me-1"></i>Activate Head to activate member
+                                </p>
+                            </div>
                             @endif
 
                             @if($member->status == '1')

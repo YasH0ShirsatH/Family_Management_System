@@ -108,6 +108,9 @@
                 border-radius: 18px;
                 margin-bottom: 40px;
             }
+        .sidebar-body .btn {
+          font-size: 0.85rem;
+        }
             .card {
                 border: none;
                 border-radius: 18px;
@@ -120,15 +123,21 @@
             .btn {
                 border-radius: 25px;
                 font-weight: 500;
-                padding: 12px 30px;
+
             }
+
         </style>
     </head>
 
     <body>
-        @include('partials.navbar2', ['shouldShowDiv' => false])
+         <div id="mainContent">
+        @if(session()->has('loginId'))
+            @include('partials.navbar2', ['shouldShowDiv' => true])
+        @else
+            @include('partials.navbar2', ['shouldShowDiv' => false])
+        @endif
 
-        <div class="container py-4">
+        <div class="container py-4"  >
             @if (session('error'))
             <div class="alert alert-danger alert-dismissible fade show rounded-pill">
                 {{ session('error') }}
@@ -191,7 +200,7 @@
                 </div>
             </div>
         </div>
-
+    </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 

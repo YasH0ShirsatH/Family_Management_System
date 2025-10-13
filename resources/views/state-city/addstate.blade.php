@@ -115,7 +115,7 @@
                                         placeholder="Enter state longitude" value="{{ old('longitude') }}">
                                         <div class="validation-error"></div>
                                 </div>
-
+                                @if($admin1->superuser == '1')
                                 <div class="mb-3 form-group">
                                     <label for="country_id" class="form-label">
                                         <i class="bi bi-globe text-primary me-1"></i>Country_id (optional)
@@ -124,6 +124,7 @@
                                         placeholder="Enter Country Id " value="{{ old('country_id') }}">
                                         <div class="validation-error"></div>
                                 </div>
+                            @endif
 
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-primary">

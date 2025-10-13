@@ -16,6 +16,9 @@
             font-weight: 400;
             font-style: normal;
         }
+        select{
+            cursor:pointer;
+        }
         body {
             font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: #f4f5f7;

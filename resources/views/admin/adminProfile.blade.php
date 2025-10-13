@@ -15,6 +15,8 @@
     .active-class {
         background-color: #ffc107;
         color: #000;
+          pointer-events: none;
+
         transform: translateX(5px);
         transition: all 0.3s ease;
     }
@@ -35,6 +37,171 @@
         border-color: #dc3545;
         background-color: #fff0f0;
     }
+.super-admin{
+    background-image: linear-gradient(45deg,#FF3D00,#FFEE00,#4DE94C,#3A9FFF,#C800FF);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight : 800;
+}
+
+/* Contact Form Styles */
+.contact-form {
+    background: #fff;
+    margin: 2rem auto;
+    max-width: 800px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,123,255,0.1);
+    overflow: hidden;
+}
+
+.contact-form .form-control {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    background-color: #f8f9fa;
+}
+
+.contact-form .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+    background-color: #fff;
+    transform: translateY(-1px);
+}
+
+.contact-form .form-control:hover {
+    border-color: #007bff;
+    background-color: #fff;
+}
+
+.contact-image {
+    text-align: center;
+    margin-bottom: 25px;
+    padding: 20px 0;
+    background: linear-gradient(135deg, rgba(0,123,255,0.1), rgba(0,123,255,0.05));
+}
+
+.contact-image img {
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border: 4px solid #007bff;
+    box-shadow: 0 5px 15px rgba(0,123,255,0.3);
+    transition: all 0.3s ease;
+}
+
+.contact-image img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(0,123,255,0.4);
+}
+
+.contact-form form {
+    padding: 40px;
+    background: #fff;
+}
+
+.contact-form form .row {
+    margin-bottom: 20px;
+}
+
+.contact-form h3 {
+    margin-bottom: 30px;
+    text-align: center;
+    color: #007bff;
+    font-weight: 700;
+    font-size: 2.2rem;
+    position: relative;
+}
+
+.contact-form h3::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    border-radius: 2px;
+}
+
+.contact-form .form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.contact-form .btnContact {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 20px;
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-form .btnContact::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.contact-form .btnContact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,123,255,0.4);
+    background: linear-gradient(45deg, #0056b3, #004085);
+}
+
+.contact-form .btnContact:hover::before {
+    left: 100%;
+}
+
+.contact-form .btnContact:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+}
+
+.contact-form textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.contact-form .form-group {
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .contact-form {
+        margin: 1rem;
+        border-radius: 10px;
+    }
+
+    .contact-form form {
+        padding: 25px;
+    }
+
+    .contact-form h3 {
+        font-size: 1.8rem;
+    }
+}
     </style>
 </head>
 
@@ -76,13 +243,13 @@
                                 <h4 class="fw-bold text-primary mb-1">
                                     {{ $user->first_name . ' ' . $user->last_name }}
                                 </h4>
-                                <p class="text-primary mb-2">Super Administrator</p>
+                                <p class=" mb-2 super-admin " >Super Administrator</p>
                                 <span class="badge bg-primary px-3 py-2">SUPER ADMIN ACCESS</span>
                                 @else
                                 <h4 class="fw-bold text-secondary mb-1">
                                     {{ $user->first_name . ' ' . $user->last_name }}
                                 </h4>
-                                <p class="text-muted mb-2">System Administrator</p>
+                                <p class="text-muted mb-2" >System Administrator</p>
                                 <span class="badge bg-secondary px-3 py-2">ADMIN ACCESS</span>
                                 @endif
                             </div>
@@ -379,7 +546,7 @@
                                 <div class="col-md-6">
                                     <div class="bg-light p-3 rounded">
                                         <label class="fw-bold text-primary mb-1">Email</label>
-                                        <p class="mb-0 h6">{{ $user->email }}</p>
+                                        <p class="mb-0 fs-5" style="font-family: Cookie, cursive; letter-spacing  :1.5px " >{{ $user->email }}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -521,6 +688,20 @@
                         @endforeach
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support Section -->
+    <div class="container my-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center p-5">
+                <i class="bi bi-headset text-primary" style="font-size: 3rem;"></i>
+                <h4 class="mt-3 mb-3 text-primary">Need Support?</h4>
+                <p class="text-muted mb-4">Drop changes required in database or get help with any issues</p>
+                <a href="/support" class="btn btn-primary btn-lg px-4">
+                    <i class="bi bi-envelope me-2"></i>Contact Support
+                </a>
             </div>
         </div>
     </div>
@@ -918,6 +1099,8 @@ alert('Error activating member');
 
 });
 </script>
-
+<!-- Ionicons -->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 </html>

@@ -105,21 +105,21 @@
                     <a href="{{ route('admin.index') }}" class="action-card">
                         <div class="text-center">
                             <div class="mb-3">
-                                <i class="bi bi-people-fill text-primary" style="font-size: 3rem;"></i>
+                                <i class="bi bi-person-lines-fill text-primary" style="font-size: 3rem;"></i>
                             </div>
-                            <h5 class="fw-bold text-primary mb-2">Manage Families</h5>
-                            <p class="text-muted mb-0">View, edit, and organize family records</p>
+                            <h5 class="fw-bold text-primary mb-2">Manage Heads</h5>
+                            <p class="text-muted mb-0">View, edit, and organize Heads information</p>
                         </div>
                     </a>
                 </div>
                 <div class="col-md-4">
-                    <a href="/family-registration" class="action-card">
+                    <a href="/allmembers" class="action-card">
                         <div class="text-center">
                             <div class="mb-3">
-                                <i class="bi bi-person-plus-fill text-success" style="font-size: 3rem;"></i>
+                                <i class="bi bi-people text-success" style="font-size: 3rem;"></i>
                             </div>
-                            <h5 class="fw-bold text-success mb-2">Create Family</h5>
-                            <p class="text-muted mb-0">Register new family head and members</p>
+                            <h5 class="fw-bold text-success mb-2">Manage Members</h5>
+                            <p class="text-muted mb-0">View, edit, and organize Members information</p>
                         </div>
                     </a>
                 </div>
@@ -149,7 +149,7 @@
                         <div class="col-md-3 col-6">
                             <div class="stat-pill">
                                 <div class="mb-2">
-                                    <i class="bi bi-people text-primary" style="font-size: 2rem;"></i>
+                                    <i class="bi bi-person-lines-fill  text-primary" style="font-size: 2rem;"></i>
                                 </div>
                                 <h3 class="fw-bold text-primary mb-1">{{ $headcount }}</h3>
                                 <small class="text-muted">Total Family Heads</small>
@@ -158,7 +158,7 @@
                         <div class="col-md-3 col-6">
                             <div class="stat-pill">
                                 <div class="mb-2">
-                                    <i class="bi bi-person-check text-success" style="font-size: 2rem;"></i>
+                                    <i class="bi bi-people text-success" style="font-size: 2rem;"></i>
                                 </div>
                                 <h3 class="fw-bold text-success mb-1">{{ $membercount }}</h3>
                                 <small class="text-muted">Total Members</small>

@@ -16,6 +16,9 @@
     }
     .head-card.inactive {
         box-shadow: 0 8px 32px rgba(220, 53, 69, 0.2);
+        background: linear-gradient(135deg, rgba(220, 53, 69, 1) 5%, rgba(253, 126, 20, 0.2) 100%);
+
+
     }
     .head-card.inactive::before {
         content: '';
@@ -43,7 +46,7 @@
         color: white;
     }
     .origami-fold.inactive {
-        background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+        background: transparent;
         color: white;
     }
     .pill-section {

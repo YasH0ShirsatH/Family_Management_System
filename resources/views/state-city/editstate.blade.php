@@ -131,7 +131,7 @@
 
 
                             </div>
-
+                            @if($admin1->superuser == '1')
                             <div class="mb-4">
                                 <label for="country_id">Country Id :</label>
 
@@ -142,6 +142,7 @@
 
 
                             </div>
+                         @endif
 
                             <button type="submit" class="btn btn-primary w-100 rounded-pill py-2">
                                 <i class="bi bi-geo-alt-fill me-2"></i>Update State

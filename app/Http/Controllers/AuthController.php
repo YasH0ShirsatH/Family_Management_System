@@ -40,6 +40,7 @@ class AuthController extends Controller
             'password' => 'required|min:6',
             'mobile' => 'required|digits:10',
             'address' => 'required',
+            'access_type' => 'required|in:0,1',
         ]);
         $user = new User;
         $user->first_name = $request->first_name;
@@ -47,8 +48,10 @@ class AuthController extends Controller
         $user->mobile = $request->mobile;
         $user->address = $request->address;
         $user->email = $request->email;
+        $user->superuser = $request->access_type;
         $user->password = bcrypt($request->password);
         if ($user->save()) {
+
             return back()->with('success', 'Registration successful! You can now log in.');
         } else {
             return back()->with('error', 'User was not registered');
@@ -106,26 +109,6 @@ class AuthController extends Controller
                 $membercount = Member::count();
                 $statecount = State::count();
                 $citycount = City::count();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 return view('dashboard', compact( 'headcount', 'membercount', 'statecount', 'citycount', 'admin1'));
             }
         }

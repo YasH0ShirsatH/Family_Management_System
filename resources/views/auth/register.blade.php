@@ -176,6 +176,19 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
+                <div class="form-floating mb-3">
+                    <select  name="access_type"  id="access"
+                           class="form-control"
+                            required>
+                            <option value="" disabled selected>Select Access Type</option>
+                            <option value="0" >Simple Admin Access</option>
+                            <option value="1" >Super Admin Access</option>
+                            </select>
+                    <label for="access"><i class="bi bi-person me-2"></i>Admin Type</label>
+                    @error('mobile')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
 
                 <div class="form-floating mb-3">
                     <input type="text" name="address" value="{{ old('address') }}" id="address"
@@ -267,7 +280,7 @@
                           <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
                           <div>
                               <h6 class="alert-heading fw-semibold">Super User Access Required</h6>
-                              This area is restricted. Repeated unauthorized attempts to access it may be logged.
+                              This area is restricted. Repeated unauthorized attempts to access it, will lead to trouble.
                           </div>
                       </div>
 

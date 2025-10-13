@@ -9,6 +9,7 @@ use App\Models\State;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Session;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -30,13 +31,14 @@ class HeadController extends Controller
     {
         $head = Head::where('status', '1')->get();
         $member = Member::where('status', '1')->get();
+         $admin1 = User::where('id', '=', session::get('loginId'))->first();
 
         $user = User::where('status', '1')->get();
         $headcount = $head->count();
         $membercount = $member->count();
 
         $usercount = $user->count();
-        return view('userDashboard', ['headcount' => $headcount, 'membercount' => $membercount, 'usercount' => $usercount]);
+        return view('userDashboard', ['headcount' => $headcount, 'membercount' => $membercount, 'usercount' => $usercount,'admin1' => $admin1]);
     }
 
 

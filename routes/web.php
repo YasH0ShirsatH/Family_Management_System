@@ -7,6 +7,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminMemberController;
 use App\Http\Controllers\CityStateController;
+use App\Http\Controllers\SupportController;
 
 Route::get('/login', [AuthController::class, 'login'])->middleware('already.in');
 Route::get('/register', [AuthController::class, 'register'])->middleware('auth.check');
@@ -123,3 +124,7 @@ Route::post('admin/state-city/storecity', [CityStateController::class, 'storeCit
 Route::post('admin/state-city/storestate', [CityStateController::class, 'storestate'])->name('store.state');
 Route::get('admin/state-city/showcity/{id}', [CityStateController::class, 'showcity'])->name('show.city');
 Route::get('admin/state-city/createViaShowCity/{id}', [CityStateController::class, 'createViaShowCity'])->name('show.createViaShowCity');
+
+/// SUPPORT SECTION
+Route::get('/support', [SupportController::class, 'showForm'])->name('support.form');
+Route::post('/support', [SupportController::class, 'sendSupport'])->name('support.send');
