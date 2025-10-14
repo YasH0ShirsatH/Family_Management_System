@@ -18,8 +18,16 @@ class SupportController extends Controller
         return view('support',['admin1' => $admin1]);
     }
 
+    public function about()
+    {
+        $admin1 = User::where('id', '=', session::get('loginId'))->first();
+        $admins = User::all();
+        return view('about',['admin1' => $admin1,'admins' => $admins]);
+    }
+
     public function sendSupport(Request $request)
     {
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
@@ -27,8 +35,8 @@ class SupportController extends Controller
             'message' => 'required|string'
         ]);
 
-        if(Mail::to('yashshirsath.datagrid@gmail.com')
-            ->send(new SupportEmail($request->all(), $request->subject)))
+        if(Mail::to('suppportfms@gmail.com')
+            ->send(new SupportEmail($request->all(), $request->subject , $request->fromName )))
 {
         return back()->with('success', 'Your message has been sent successfully!');
         }

@@ -190,7 +190,8 @@ class HeadController extends Controller
     public function familyRegistration()
     {
         $states = State::where('status', '1')->where('country_id', 101)->orderBy('name', 'asc')->get();
-        return view('family-registration', compact('states'));
+         $admin1 = User::where('id', '=', session::get('loginId'))->first();
+        return view('family-registration', compact('states','admin1'));
     }
 
     public function storeWithFamily(Request $request)

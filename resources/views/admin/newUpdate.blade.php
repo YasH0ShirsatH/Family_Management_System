@@ -8,9 +8,55 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
     <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 
 
     <style>
+
+
+        /* Select2 Custom Styling */
+        .select2-container {
+            width: 100% !important;
+        }
+
+        .select2-container--default .select2-selection--single {
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 50px !important;
+            height: 38px;
+            padding: 6px 12px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #495057;
+            line-height: 26px;
+            padding-left: 8px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px;
+            right: 10px;
+        }
+
+        .select2-dropdown {
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #0d6efd;
+        }
+
+        /* Pincode field styling */
+
+
+        .select2-selection__clear{
+            display:none !important;
+        }
+
         .validation-error {
             color: #dc3545;
             font-size: 14px;
@@ -33,7 +79,6 @@
            font-weight: 400;
            font-style: normal;
         }
-
     </style>
 </head>
 
@@ -117,7 +162,7 @@
                                 <div class="row">
                                     <div class="col-md-4 mb-3 form-group">
                                         <label class="form-label fw-semibold">State</label>
-                                        <select name="state" id="stateSelect" class="form-select rounded-pill">
+                                        <select name="state" id="stateSelect" class="form-select select2 rounded-pill">
                                             <option value="">Select State</option>
                                             @if(isset($states) && !$states->isEmpty())
                                                 @foreach ($states as $state)
@@ -130,7 +175,7 @@
                                     </div>
                                     <div class="col-md-4 mb-3 form-group">
                                         <label class="form-label fw-semibold">City</label>
-                                        <select name="city" id="citySelect" class="form-select rounded-pill">
+                                        <select name="city" id="citySelect" class="form-select select2 rounded-pill">
                                             <option value="">Select City</option>
                                             @if(isset($city) && !$city->isEmpty())
                                                 @foreach ($city as $cities)
@@ -143,7 +188,7 @@
                                     </div>
                                     <div class="col-md-4 mb-3 form-group">
                                         <label class="form-label fw-semibold">Pincode</label>
-                                        <input type="text" maxlength="6" name="pincode" class="form-control rounded-pill" value="{{ $head->pincode }}">
+                                        <input type="text" maxlength="6" name="pincode" class="form-control rounded-pill" value="{{ $head->pincode }}" style="padding: 0.375rem .75rem;" >
                                         <div class="validation-error"></div>
                                         @error('pincode')<div class="text-danger">{{ $message }}</div>@enderror
                                     </div>
@@ -343,6 +388,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
     <script>
@@ -650,6 +696,19 @@
             }
         });
     });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Initialize Select2 with custom styling
+            $('.select2').select2({
+                theme: 'default',
+                width: '100%',
+                placeholder: function() {
+                    return $(this).data('placeholder');
+                },
+                allowClear: true
+            });
+        });
     </script>
 
 <script>

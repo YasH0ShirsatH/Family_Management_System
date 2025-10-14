@@ -501,6 +501,10 @@ ul p {
                                                 <i class="bi bi-geo-alt dropdown-list-icon"></i>
                                                 <span>Manage Location</span>
                                             </a>
+                                            <a href="/support">
+                                                <i class="bi bi-headset dropdown-list-icon"></i>
+                                                <span>Contact Support</span>
+                                            </a>
                                             <a href="/logout" class="logout-hov" >
                                                 <i class="bi bi-box-arrow-right dropdown-list-icon "></i>
                                                 <span>Logout</span>
@@ -573,7 +577,7 @@ ul p {
                         Create New
                     </h6>
                     <div class="d-grid gap-2">
-                        <a href="/family-registration" class="btn btn-outline-info rounded-pill text-start">
+                        <a href="/family-registration" class="btn btn-outline-info rounded-pill text-start active-class-12">
                             <i class="bi bi-person-plus me-2"></i>Create Family Head
                         </a>
                         <a href="{{ route('create.state') }}" class="btn btn-outline-info rounded-pill text-start active-class-5">
@@ -614,7 +618,10 @@ ul p {
                         </div>
                         Account
                     </h6>
-                    <a href="/logout" class="btn btn-danger w-100 rounded-pill shadow-sm">
+                    <a href="/support" class="btn btn-outline-danger mb-2 text-start w-100 rounded-pill shadow-sm active-class-11">
+                        <i class="bi bi-headset me-2"></i>Contact Support
+                    </a>
+                    <a href="/logout" class="btn btn-danger w-100 text-start rounded-pill shadow-sm">
                         <i class="bi bi-box-arrow-right me-2"></i>Logout
                     </a>
                 </div>

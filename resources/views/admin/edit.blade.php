@@ -502,13 +502,13 @@ textarea.error {
                     require_from_group: "Please enter at least one hobby"
                 }
             },
-           
+
             groups: {
                 hobbies: "hobbies[]"
             },
             errorPlacement: function(error, element) {
                 var $container;
-               
+
                 if (element.attr("name") === "hobbies[]") {
                     $container = element.closest('.form-group').find('.validation-error');
                 } else {
@@ -526,7 +526,7 @@ textarea.error {
             },
             unhighlight: function(element) {
                 $(element).removeClass('error');
-               
+
                 if ($(element).attr("name") === "hobbies[]") {
                     $('.hobby-input').removeClass('error');
                 }

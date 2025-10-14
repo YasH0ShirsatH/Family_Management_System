@@ -9,7 +9,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css')  }}">
     <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
     <style>
+        .dropdown-wrapper{
+            display:none;
+        }
     .validation-error label {
         color: #dc3545;
         font-size: 14px;
@@ -88,7 +96,7 @@
                                     <label for="states" class="form-label">
                                         <i class="bi bi-map text-primary me-1"></i>State
                                     </label>
-                                    <select name="states" id="states" class="form-select">
+                                    <select name="states" id="states" class="form-select select2">
                                         <option value="">Select State</option>
                                         @foreach ($states as $state)
                                         <option value="{{ $state->id }}"
@@ -133,6 +141,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script>
     jQuery(document).ready(function() {
 
@@ -217,6 +226,9 @@
              });
 
          </script>
+     <script>
+         $('.select2').select2();
+     </script>
 </body>
 
 </html>

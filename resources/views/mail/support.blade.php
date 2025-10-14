@@ -19,6 +19,9 @@
         </div>
         <div class="content">
             <div class="field">
+                <span class="label">Usertype:</span> {{ $data['usertype'] }}
+            </div>
+            <div class="field">
                 <span class="label">Name:</span> {{ $data['name'] }}
             </div>
             <div class="field">
@@ -29,7 +32,7 @@
             </div>
             <div class="field">
                 <span class="label">Message:</span>
-                <p>{{ $data['message'] }}</p>
+                <pre>{{ $data['message'] }}</pre>
             </div>
         </div>
     </div>

@@ -15,7 +15,7 @@ Route::post('/register-user', [AuthController::class, 'registerUser'])->name('re
 Route::post('/login-user', [AuthController::class, 'loginUser'])->name('login-user');
 
 Route::get('/dashboard', [AuthController::class, 'dashboard'])->middleware('auth.check');
-Route::get('/logout', [AuthController::class, 'logout']);
+Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth.check');
 Route::get('/dashboard/admin-profile', [AuthController::class, 'adminProfile'])->middleware('auth.check');
 
 /// Activate Head
@@ -128,3 +128,4 @@ Route::get('admin/state-city/createViaShowCity/{id}', [CityStateController::clas
 /// SUPPORT SECTION
 Route::get('/support', [SupportController::class, 'showForm'])->name('support.form');
 Route::post('/support', [SupportController::class, 'sendSupport'])->name('support.send');
+Route::get('/about', [SupportController::class, 'about'])->name('about.landing');
