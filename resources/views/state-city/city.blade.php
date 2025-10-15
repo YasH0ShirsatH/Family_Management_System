@@ -12,6 +12,15 @@
             <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
 
     <style>
+        body{
+
+            font-family: "Exo", sans-serif;
+                         font-optical-sizing: auto;
+                         font-weight: 400;
+                         font-style: normal;
+                         letter-spacing: 0.5px;
+        }
+
         .statelinks {
             text-decoration: none;
             color: #6c757d;

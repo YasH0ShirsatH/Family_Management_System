@@ -8,9 +8,21 @@
     <title>Support - Family Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
+
+
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cookie&family=Playwrite+DE+SAS:wght@100..400&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+
         body {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+              font-family: "Exo", sans-serif;
+                                         font-optical-sizing: auto;
+                                         font-weight: 400;
+                                         font-style: normal;
+                                         letter-spacing: 0.5px;
+
             min-height: 100vh;
         }
 
@@ -64,16 +76,19 @@
             text-align: center;
             margin-bottom: 30px;
         }
+
+        .active-class-11 { background-color: #dc3545; color: white; transform: translateX(5px); }
+
     </style>
 </head>
 
 <body>
     <div id="mainContent">
-        @if (session()->has('loginId'))
-            @include('partials.navbar2', ['shouldShowDiv' => true])
-        @else
-            @include('partials.navbar2', ['shouldShowDiv' => false])
-        @endif
+          @if(session()->has('loginId'))
+                    @include('partials.navbar2', ['shouldShowDiv' => true,'shouldShowLoginDiv' => false])
+                @else
+                    @include('partials.navbar2', ['shouldShowDiv' => false,'shouldShowLoginDiv' => true])
+                @endif
 
         <div class="container py-4">
             <!-- Back Button -->
@@ -83,6 +98,37 @@
                     <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
                 </a>
             </div>
+
+             @if(!$admin1)
+                        <!-- Additional Info -->
+                        <div class="row justify-content-center mt-4 mb-4">
+                            <div class="col-lg-8">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="support-card text-center p-4">
+                                            <i class="bi bi-clock text-primary mb-2" style="font-size: 2rem;"></i>
+                                            <h6 class="fw-bold">Response Time</h6>
+                                            <p class="text-muted small mb-0">24-48 hours <br>for most requests</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="support-card text-center p-4">
+                                            <i class="bi bi-shield-check text-success mb-2" style="font-size: 2rem;"></i>
+                                            <h6 class="fw-bold">Secure</h6>
+                                            <p class="text-muted small mb-0">All requests are encrypted and secure</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="support-card text-center p-4">
+                                            <i class="bi bi-people text-info mb-2" style="font-size: 2rem;"></i>
+                                            <h6 class="fw-bold">Expert Support</h6>
+                                            <p class="text-muted small mb-0">Handled by experienced administrators</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
 
             <!-- Alerts -->
             @if (session('success'))
@@ -185,6 +231,14 @@
                                                     <option value="Restore Deleted Member">Restore Deleted Member
                                                     </option>
                                                 </optgroup>
+                                                <optgroup label="Location Management">
+                                                    <option value="Update Location Information(not accesible via admin panel)">Update Location Information (not accesible via admin panel)
+                                                    </option>
+                                                    <option value="Transfer location">Transfer City Between States
+                                                    </option>
+                                                    <option value="Restore Deleted location">Restore Deleted Location
+                                                    </option>
+                                                </optgroup>
                                                 <optgroup label="System Issues">
                                                     <option value="Database Inconsistency">Database Inconsistency
                                                     </option>
@@ -192,17 +246,21 @@
                                                     <option value="System Error">System Error</option>
                                                 </optgroup>
                                             @else
-                                                <option value="Account Issues">Account Issues</option>
+                                                <option value="Account Issues">Information Issues</option>
                                                 <option value="Technical Support">Technical Support</option>
                                                 <option value="Feature Request">Feature Request</option>
                                                 <option value="Bug Report">Bug Report</option>
                                                 <option value="General Inquiry">General Inquiry</option>
                                             @endif
+                                             <optgroup label="Not listed here">
+                                                <option value="Other">Other</option>
+                                                </optgroup>
+
                                         </select>
                                     </div>
-
+                                    @if($admin1)
                                     <div class="mb-3">
-                                        <label class="form-label fw-medium">Priority Level</label>
+                                        <label class="form-label fw-medium">Priority Level <span class="text-muted">(scrutinised later by DB admin)</span></label>
                                         <select name="priority" class="form-select" required>
                                             <option value="">Select Priority</option>
                                             <option value="Low">Low - General inquiry</option>
@@ -211,6 +269,9 @@
                                             <option value="Critical">Critical - System down</option>
                                         </select>
                                     </div>
+                                    @else
+                                      <input type='hidden' class="priority-none" name='priority' value='None' >
+                                    @endif
                                 </div>
 
                                 <!-- Message -->
@@ -227,6 +288,8 @@
                                 </div>
                                 <input type="hidden" name="usertype"
                                     value="@if ($admin1) Administrator @else User @endif">
+                                    <input type="hidden" name="fromName"
+                                    value="@if ($admin1) Request from Administrator @else Request from User @endif">
                                 <!-- Submit Button -->
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary btn-pill px-5">
@@ -239,35 +302,12 @@
                 </div>
             </div>
 
-            <!-- Additional Info -->
-            <div class="row justify-content-center mt-4">
-                <div class="col-lg-8">
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <div class="support-card text-center p-4">
-                                <i class="bi bi-clock text-primary mb-2" style="font-size: 2rem;"></i>
-                                <h6 class="fw-bold">Response Time</h6>
-                                <p class="text-muted small mb-0">24-48 hours for most requests</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="support-card text-center p-4">
-                                <i class="bi bi-shield-check text-success mb-2" style="font-size: 2rem;"></i>
-                                <h6 class="fw-bold">Secure</h6>
-                                <p class="text-muted small mb-0">All requests are encrypted and secure</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="support-card text-center p-4">
-                                <i class="bi bi-people text-info mb-2" style="font-size: 2rem;"></i>
-                                <h6 class="fw-bold">Expert Support</h6>
-                                <p class="text-muted small mb-0">Handled by experienced administrators</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
+
+        @if(!$admin1)
+        @include('partials.footer')
+        @endif
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

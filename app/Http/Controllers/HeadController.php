@@ -13,6 +13,10 @@ use Session;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Mail;
+
+
+use App\Mail\UserEmail;
 class HeadController extends Controller
 {
     //Add Constructor here
@@ -205,6 +209,7 @@ class HeadController extends Controller
             'head_surname' => 'required|min:3',
             'head_birthdate' => ['required', 'date', 'before:' . Carbon::now()->subYears(21)->format('Y-m-d')],
             'head_mobile' => 'required|digits:10|unique:heads,mobile',
+            'head_email' => 'required|unique:heads,email',
             'head_address' => 'required',
             'head_state' => 'required',
             'head_city' => 'required',
@@ -233,6 +238,7 @@ class HeadController extends Controller
         $head->surname = $request->head_surname;
         $head->birthdate = $request->head_birthdate;
         $head->mobile = $request->head_mobile;
+        $head->email = $request->head_email;
         $head->address = $request->head_address;
         $head->state = $request->head_state;
         $head->city = $request->head_city;
@@ -287,7 +293,21 @@ class HeadController extends Controller
 
         Log::debug('Complete family registered: Head (' . $request->head_name . ' ' . $request->head_surname . ') with ' . count($request->members ?? []) . ' members on: ' . Carbon::now()->setTimezone('Asia/Kolkata'));
 
-        return redirect('/')->with('success', 'Complete family registered successfully! Head: ' . $request->head_name . ' ' . $request->head_surname);
+        if($request->radioConfirm == 1)
+        {
+        if(Mail::to($request->head_email)
+                    ->send(new UserEmail($request->all(), $request->subject , $request->fromName )))
+        {
+        return redirect('/')->with('success', 'Complete family registered successfully! Head: ' . $request->head_name . ' ' . $request->head_surname .'. Email Send to registered email ' );
+        }
+
+        else{
+            return redirect('/')->with('error', 'Failed to send notification email. Please try again later.');
+            }
+        }
+        else{
+            return redirect('/')->with('success', 'Complete family registered successfully! Head: ' . $request->head_name . ' ' . $request->head_surname );
+        }
         } catch (ValidationException $e) {
               DB::rollBack();
               $firstError = collect($e->errors())->flatten()->first();

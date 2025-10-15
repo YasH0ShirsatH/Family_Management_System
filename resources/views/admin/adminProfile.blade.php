@@ -30,7 +30,13 @@
         min-height: 18px;
         transition: all 0.2s;
     }
-
+    body{
+         font-family: "Exo", sans-serif;
+                      font-optical-sizing: auto;
+                      font-weight: 400;
+                      font-style: normal;
+                      letter-spacing: 0.5px;
+    }
     input.error,
     select.error,
     textarea.error {
@@ -693,18 +699,48 @@
     </div>
 
     <!-- Support Section -->
-    <div class="container my-5">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body text-center p-5">
-                <i class="bi bi-headset text-primary" style="font-size: 3rem;"></i>
-                <h4 class="mt-3 mb-3 text-primary">Need Support?</h4>
-                <p class="text-muted mb-4">Drop changes required in database or get help with any issues</p>
-                <a href="/support" class="btn btn-primary btn-lg px-4">
-                    <i class="bi bi-envelope me-2"></i>Contact Support
-                </a>
+    <footer style="background: rgba(0, 109, 214, 0.09); border-radius: 18px 18px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); margin-top: 100px; color: #6c757d;">
+        <div class="container py-5">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5 class="fw-bold text-primary mb-3">
+                        <i class="bi bi-house-heart me-2"></i>Family Management System
+                    </h5>
+                    <p class="text-muted mb-0">Professional family data management and organization platform for modern families.</p>
+                </div>
+                
+                <div class="col-lg-4">
+                    <h6 class="fw-bold mb-3">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="/dashboard" class="text-decoration-none text-muted"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+                        <li class="mb-2"><a href="/admin" class="text-decoration-none text-muted"><i class="bi bi-people me-2"></i>Manage Families</a></li>
+                        <li class="mb-2"><a href="/about" class="text-decoration-none text-muted"><i class="bi bi-info-circle me-2"></i>About Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-4">
+                    <h6 class="fw-bold mb-3">Need Technical Support?</h6>
+                    <p class="text-muted mb-3">Drop changes required in database or get help with any technical issues you're experiencing.</p>
+                    <a href='/support' class="btn btn-outline-primary" style="border-radius: 25px;">
+                        <i class="bi bi-headset me-2"></i>Contact Support
+                    </a>
+                </div>
+            </div>
+            
+            <hr class="my-4" style="border-color: rgba(0,0,0,0.1);">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 text-muted">
+                        © 2025 <strong>Family Information Management System</strong>
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="" class="text-primary text-decoration-none fw-bold">fims.com</a>
+                </div>
             </div>
         </div>
-    </div>
+    </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>

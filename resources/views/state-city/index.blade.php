@@ -10,10 +10,18 @@
         <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
 
     <style>
-        body {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            min-height: 100vh;
-        }
+
+        body{
+                font-family: "Exo", sans-serif;
+                             font-optical-sizing: auto;
+                             font-weight: 400;
+                             font-style: normal;
+                             letter-spacing: 0.5px;
+
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                            min-height: 100vh;
+            }
+
         .management-card {
             background: white;
             border-radius: 18px;

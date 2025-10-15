@@ -540,6 +540,11 @@ public function viewMemberDetails($id)
                     'digits:10',
                     Rule::unique('heads', 'mobile')->ignore($user->id),
                 ],
+                'email' => [
+                    'required','email'                  ,
+                    Rule::unique('heads', 'email')->ignore($user->id),
+                ],
+
                 'address' => 'required',
                 'state' => 'required',
                 'city' => 'required',
@@ -556,6 +561,7 @@ public function viewMemberDetails($id)
             $user->surname = $request->surname;
             $user->birthdate = $request->birthdate;
             $user->mobile = $request->mobile;
+            $user->email = $request->email;
             $user->address = $request->address;
             $user->state = $request->state;
             $user->city = $request->city;

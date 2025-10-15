@@ -7,7 +7,10 @@
     <title>Support Request</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+             font-family: "Titillium Web", sans-serif;
+                        font-weight: 400;
+                        font-style: normal;
+                        letter-spacing: 0.5px;
             line-height: 1.5;
             color: #1d1d1f;
             background: #f5f5f7;
@@ -89,6 +92,11 @@
             color: #de350b;
         }
 
+        .priority-none {
+            background: grey;
+            color: white;
+        }
+
         .priority-critical {
             background: #ffebe6;
             color: #de350b;
@@ -158,7 +166,7 @@
                 <div class="field-label">Subject</div>
                 <div class="field-value">{{ $data['subject'] }}</div>
             </div>
-
+            @if($data['priority'])
             <div class="field">
                 <div class="field-label">Priority</div>
                 <div class="field-value">
@@ -167,6 +175,7 @@
                     </span>
                 </div>
             </div>
+            @endif
 
             <div class="field">
                 <div class="field-label">User Type</div>

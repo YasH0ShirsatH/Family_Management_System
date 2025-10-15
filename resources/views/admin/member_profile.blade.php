@@ -9,8 +9,15 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
         <link rel="stylesheet" href="{{ asset('css/heading.css') }}">
         <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
-        
+
         <style>
+            body{
+                font-family: "Exo", sans-serif;
+                             font-optical-sizing: auto;
+                             font-weight: 400;
+                             font-style: normal;
+                             letter-spacing: 0.5px;
+            }
             .active-class-2 { background-color: #198754; color: white; transform: translateX(5px); }
             .status-icon { font-size: 4rem; color: #ffc107; margin-bottom: 1rem; animation: pulse 2s infinite; }
             @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
@@ -62,6 +69,15 @@
             color : white;
             transform: translateX(5px);
         }
+
+     body{
+                                         font-family: "Exo", sans-serif;
+                                          font-optical-sizing: auto;
+                                          font-weight: 400;
+                                          font-style: normal;
+                                          letter-spacing: 0.5px;
+
+                             }
     </style>
 </head>
 <body class="bg-light">

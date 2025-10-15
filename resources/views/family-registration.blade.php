@@ -12,7 +12,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <style>
+            body{
+              font-family: "Exo", sans-serif;
+                                         font-optical-sizing: auto;
+                                         font-weight: 400;
+                                         font-style: normal;
+                                         letter-spacing: 0.5px;
 
+            }
              .active-class-12 {
                                              background: #0dcaf0;
                                              color: white;
@@ -55,7 +62,7 @@
                     background-color: #0d6efd;
                 }
 
-                /* Pincode field styling */
+
 
 
                 .select2-selection__clear{
@@ -98,11 +105,11 @@
 
 <body class="bg-light">
     <div id="mainContent">
-            @if(session()->has('loginId'))
-                @include('partials.navbar2', ['shouldShowDiv' => true])
-            @else
-                @include('partials.navbar2', ['shouldShowDiv' => false])
-            @endif
+              @if(session()->has('loginId'))
+                        @include('partials.navbar2', ['shouldShowDiv' => true,'shouldShowLoginDiv' => false])
+                    @else
+                        @include('partials.navbar2', ['shouldShowDiv' => false,'shouldShowLoginDiv' => true])
+                    @endif
     <div class="container py-4">
         <div class="row justify-content-center">
             <div class="col-lg-10">
@@ -163,8 +170,25 @@
                                             <div class="validation-error"></div>
                                             @error('head_mobile')<div class="text-danger">{{ $message }}</div>@enderror
                                         </div>
+
                                     </div>
 
+                                    <div class="col-md-12 mb-3 form-group">
+                                        <label class="form-label fw-semibold">Email Address</label>
+                                        <input type="email"  name="head_email" class="form-control rounded-pill" placeholder="Enter email address" onkeydown="return noSpaces(event);" value="{{ old('head_email') }}">
+                                        <div class="validation-error"></div>
+                                           @error('head_email')<div class="text-danger">{{ $message }}</div>@enderror
+                                    </div>
+                                    <div class="col-md-12 mb-3 form-group">
+                                        <label class="form-label fw-semibold">Do You want email of this data registered</label>
+                                        <input type="radio" id='radioConfirm' name="radioConfirm"    value="1">
+                                        <label for="radioConfirm">Yes</label>
+                                        <input type="radio" id='radioConfirm2' name="radioConfirm" checked="checked"   value="0">
+                                        <label for="radioConfirm2">No</label>
+
+                                    </div>
+
+                                         <input type="text"  name="subject"  value="User details" hidden>
                                     <div class="mb-3 form-group">
                                         <label class="form-label fw-semibold">Address</label>
                                         <textarea name="head_address" class="form-control rounded-4" rows="3" placeholder="Enter complete address">{{ old('head_address') }}</textarea>
@@ -286,7 +310,10 @@
                 </div>
             </div>
         </div>
+
     </div>
+        @include('partials.footer')
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -606,6 +633,7 @@
                 head_surname: { required: true, minlength: 3 ,  noNumbers : true ,noSpace: true },
                 head_birthdate: { required: true, ageAbove21: true },
                 head_mobile: { required: true, rangelength: [10, 10], number: true, noSpace: true },
+                head_email: { required: true, rangelength: [0,50], noSpace: true },
                 head_address: { required: true },
                 head_state: { required: true },
                 head_city: { required: true },

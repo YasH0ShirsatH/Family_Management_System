@@ -108,7 +108,11 @@
             }
             body {
                 background: #f4f6fb;
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              font-family: "Exo", sans-serif;
+                                         font-optical-sizing: auto;
+                                         font-weight: 400;
+                                         font-style: normal;
+                                         letter-spacing: 0.5px;
             }
             .hero-section {
                 background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
@@ -141,9 +145,9 @@
     <body>
          <div id="mainContent">
         @if(session()->has('loginId'))
-            @include('partials.navbar2', ['shouldShowDiv' => true])
+            @include('partials.navbar2', ['shouldShowDiv' => true,'shouldShowLoginDiv' => false])
         @else
-            @include('partials.navbar2', ['shouldShowDiv' => false])
+            @include('partials.navbar2', ['shouldShowDiv' => false,'shouldShowLoginDiv' => true])
         @endif
 
         <div class="container py-4"  >
@@ -179,7 +183,7 @@
                             </div>
                             <h4 class="fw-bold mb-3 text-primary new-font">Family Registration</h4>
                             <p class="text-muted mb-4">Register complete family information including head and members in a single streamlined process.</p>
-                            <a href="/family-registration" class="btn btn-primary">
+                            <a href="/family-registration" class="btn btn-primary fs-5" style="padding : 12px 30px;">
                                 <i class="bi bi-plus-circle me-2"></i>Register Family
                             </a>
                         </div>
@@ -196,11 +200,11 @@
                             <h4 class="fw-bold mb-3 text-primary new-font">Administration</h4>
                             <p class="text-muted mb-4">Access administrative dashboard for comprehensive family data management and system control.</p>
                             @if(session()->has('loginId'))
-                            <a href="/dashboard" class="btn btn-outline-primary">
+                            <a href="/dashboard" class="btn btn-outline-primary fs-5 " style="padding : 12px 30px;">
                                 <i class="bi bi-house me-2"></i>Dashboard
                             </a>
                             @else
-                            <a href="/login" class="btn btn-outline-primary">
+                            <a href="/login" class="btn btn-outline-primary fs-5 " style="padding : 12px 30px;">
                                  <i class="bi bi-box-arrow-in-right me-2"></i>Admin Access
                             </a>
                             @endif
@@ -209,51 +213,7 @@
                 </div>
             </div>
         </div>
-     <footer style="background: rgba(0, 109, 214, 0.09); border-radius: 18px 18px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); margin-top: 200px; color: #6c757d;">
-        <div class="container py-5">
-          <div class="row g-4">
-            <div class="col-lg-4">
-              <h5 class="fw-bold text-primary mb-3">
-                <i class="bi bi-house-heart me-2"></i>Family Management System
-              </h5>
-              <p class="text-muted mb-0">Professional family data management and organization platform for modern families.</p>
-            </div>
-
-            <div class="col-lg-4">
-              <h6 class="fw-bold mb-3">Quick Links</h6>
-              <ul class="list-unstyled">
-                <li class="mb-2"><a href="/family-registration" class="text-decoration-none text-muted"><i class="bi bi-people me-2"></i>Family Registration</a></li>
-                <li class="mb-2"><a href="/login" class="text-decoration-none text-muted"><i class="bi bi-shield-check me-2"></i>Admin Access</a></li>
-                <li class="mb-2"><a href="/about" class="text-decoration-none text-muted"><i class="bi bi-info-circle me-2"></i>About Us</a></li>
-              </ul>
-            </div>
-
-            <div class="col-lg-4">
-              <h6 class="fw-bold mb-3">Need Assistance?</h6>
-              <p class="text-muted mb-3">Encountered an issue during registration? Contact our administrator for help.</p>
-              @if($admin1)
-              <p><small class="text-danger mb-3">Admin login detected.<br>Sign out to file a complaint as user!!</small></p>
-              @endif
-              <a href='/support' class="btn btn-outline-primary" style="border-radius: 25px;">
-                <i class="bi bi-envelope me-2"></i>Contact Support
-              </a>
-            </div>
-          </div>
-
-          <hr class="my-4" style="border-color: rgba(0,0,0,0.1);">
-
-          <div class="row align-items-center">
-            <div class="col-md-6">
-              <p class="mb-0 text-muted">
-                © 2025 <strong>Family Information Management System</strong>
-              </p>
-            </div>
-            <div class="col-md-6 text-md-end">
-              <a href="" class="text-primary text-decoration-none fw-bold">fims.com</a>
-            </div>
-          </div>
-        </div>
-      </footer>
+        @include('partials.footer')
     </div>
 
 

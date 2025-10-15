@@ -11,6 +11,13 @@
     <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
 
     <style>
+        body{
+            font-family: "Exo", sans-serif;
+                         font-optical-sizing: auto;
+                         font-weight: 400;
+                         font-style: normal;
+                         letter-spacing: 0.5px;
+        }
         .validation-error  label {
             color: #dc3545;
             font-size: 14px;
@@ -127,18 +134,24 @@
                                 </div>
                             @endif
 
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-check me-1"></i>Add State
-                                    </button>
-                                </div>
+
 
                                 <div class="d-grid mt-2">
                                     <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-buildings me-1 "></i>Add Corrosponding Cities
+                                        <i class="bi bi-buildings me-1 "></i>Submit And Add Corrosponding Cities
                                     </button>
                                 </div>
-
+                            <div class="alert alert-info border-0 mt-4" style="background: linear-gradient(135deg, #d1ecf1, #bee5eb); border-radius: 7px;">
+                                                        <div class="d-flex align-items-center justify-content-between">
+                                                            <div class="d-flex align-items-center">
+                                                                <i class="bi bi-info-circle-fill text-info me-2" style="font-size: 1.2rem;"></i>
+                                                                <span class="text-dark fw-medium">State Already Exists?</span>
+                                                            </div>
+                                                            <a href="{{ route('create.city') }}" class="btn btn-info  px-3 py-2">
+                                                                <i class="bi bi-plus-circle me-1"></i>Add New City
+                                                            </a>
+                                                        </div>
+                                                    </div>
 
                             </form>
                         </div>

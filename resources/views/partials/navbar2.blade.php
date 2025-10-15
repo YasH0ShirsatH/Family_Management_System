@@ -2,7 +2,8 @@
     @import url('https://fonts.googleapis.com/css2?family=Borel&family=Miniver&family=Pacifico&family=Playwrite+DE+Grund:wght@100..400&display=swap');
     @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
-   @import url('https://fonts.googleapis.com/css2?family=Cookie&family=Playwrite+DE+SAS:wght@100..400&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Cookie&family=Exo:ital,wght@0,100..900;1,100..900&family=Playwrite+DE+SAS:wght@100..400&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
 
     body {
         padding-top: 105px;
@@ -228,7 +229,7 @@
     }
 
     /* Profile Dropdown */
-    .dropdown-wrapper {
+    .dropdown-wrapper-2 {
       position: relative;
       margin-left: 0.5rem;
     }
@@ -382,6 +383,11 @@
                  border-left-color: red;
                  color: red;
     }
+    .dropdown-list a.login-hov:hover{
+           background-color: rgba(25, 135, 84, 0.05).;
+                 border-left-color: green;
+                 color: green;
+    }
 
     .dropdown-list-icon {
       font-size: 1.1rem;
@@ -442,7 +448,7 @@ ul p {
 <div class="fixed-top" style="padding-bottom: 10px;z-index:100">
     <nav id="mainNavbar" class="navbar navbar-expand-lg mb-3 navbar-dark bg-primary bg-gradient shadow-lg">
         <div class="container mediaclass">
-            <a href="/" class="navbar-brand d-flex align-items-center flex-grow-1">
+            <a @if($admin1) href="/dashboard" @else href='/' @endif class="navbar-brand d-flex align-items-center flex-grow-1">
                 <div class="bg-white rounded-circle p-2 px-3 me-2 me-md-3">
                     <i class="bi bi-house-heart text-primary fs-5"></i>
                 </div>
@@ -461,9 +467,9 @@ ul p {
                 @endif
                 @if ($shouldShowDiv ?? true)
                                 <!-- Profile Dropdown -->
-                                <div class="dropdown-wrapper" style="margin-right  : 5px">
+                                <div class="dropdown-wrapper-2" style="margin-right  : 5px">
                                     <input type="checkbox" class="dropdown-toggle" id="dropdown-toggle">
-                                    <label for="dropdown-toggle" class="dropdown-label" title="Profile Menu"></label>
+                                    <label for="dropdown-toggle"  style='margin-bottom : 0px' class="dropdown-label" title="Profile Menu"></label>
                                     <div class="dropdown-menu dropdown-menu-display">
                                         <div class="upper-triangle"></div>
                                         <div class="dropdown-header">
@@ -503,7 +509,7 @@ ul p {
                                             </a>
                                             <a href="/support">
                                                 <i class="bi bi-headset dropdown-list-icon"></i>
-                                                <span>Contact Support</span>
+                                                <span>Admin Support</span>
                                             </a>
                                             <a href="/logout" class="logout-hov" >
                                                 <i class="bi bi-box-arrow-right dropdown-list-icon "></i>
@@ -515,6 +521,52 @@ ul p {
                                 <!-- Admin Profile Button -->
 
                                 @endif
+
+                 @if ($shouldShowLoginDiv ?? false)
+                                                 <!-- Profile Dropdown -->
+                                                 <div class="dropdown-wrapper-2" style="margin-right  : 5px">
+                                                     <input type="checkbox" class="dropdown-toggle" id="dropdown-toggle">
+                                                     <label for="dropdown-toggle" class="dropdown-label" title="Profile Menu"></label>
+                                                     <div class="dropdown-menu dropdown-menu-display">
+                                                         <div class="upper-triangle"></div>
+                                                            <div class="dropdown-header">
+                                                              <div class="admin-avatar mt-2">
+                                                                  <i class="bi bi-person-fill" style="font-size: 1.5rem;"></i>
+                                                              </div>
+                                                              <div class="admin-name">Guest</div>
+
+                                                              <div class="admin-role rainbow-text ">Hello,Guest</div>
+
+
+                                                          </div>
+                                                         <ul class="dropdown-list">
+                                                             <a href="/login" class='login-hov' >
+                                                                 <i class="bi bi-person dropdown-list-icon"></i>
+                                                                 <span>Admin Login</span>
+                                                             </a>
+                                                            <a href="/" >
+                                                                 <i class="bi bi-speedometer2 dropdown-list-icon"></i>
+                                                                 <span>User Dashboard</span>
+                                                             </a>
+                                                            <a href="/family-registration" >
+                                                                 <i class="bi bi-plus-circle dropdown-list-icon"></i>
+                                                                 <span>Register Family</span>
+                                                             </a>
+                                                            <a href="/about" >
+                                                                 <i class="bi bi-info-circle dropdown-list-icon"></i>
+                                                                 <span>About Us</span>
+                                                             </a>
+                                                            <a href="/support" >
+                                                                 <i class="bi bi-headset dropdown-list-icon"></i>
+                                                                 <span>Contact Support</span>
+                                                             </a>
+                                                         </ul>
+                                                     </div>
+                                                 </div>
+
+
+                                                 @endif
+
             </div>
 
         </div>
@@ -619,7 +671,7 @@ ul p {
                         Account
                     </h6>
                     <a href="/support" class="btn btn-outline-danger mb-2 text-start w-100 rounded-pill shadow-sm active-class-11">
-                        <i class="bi bi-headset me-2"></i>Contact Support
+                        <i class="bi bi-headset me-2"></i>Admin Support
                     </a>
                     <a href="/logout" class="btn btn-danger w-100 text-start rounded-pill shadow-sm">
                         <i class="bi bi-box-arrow-right me-2"></i>Logout

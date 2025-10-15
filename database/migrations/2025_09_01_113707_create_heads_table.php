@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('surname',50);
             $table->date('birthdate');
             $table->bigInteger('mobile');
+            $table->string('email')->unique();
             $table->text('address');
             $table->string('state');
             $table->string('city');
@@ -24,7 +25,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('marital_status');
             $table->date('mariage_date')->nullable();
             $table->string('photo_path');
-            $table->enum('status', ['0', '1', '9'])->default('1'); 
+            $table->enum('status', ['0', '1', '9'])->default('1');
             $table->timestamps();
         });
     }

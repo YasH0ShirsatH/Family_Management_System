@@ -13,11 +13,24 @@
             font-weight: 400;
             font-style: normal;
         }
+
+    body{
+    font-family: "Exo", sans-serif;
+                 font-optical-sizing: auto;
+                 font-weight: 400;
+                 font-style: normal;
+                 letter-spacing: 0.5px;
+
+    }
+
+
     </style>
 </head>
-   
+
 
 <body class="bg-light d-flex align-items-center min-vh-100">
+
+
     <div class="container" >
         <div class="row justify-content-center">
             <div class="col-md-6 col-lg-4">
@@ -25,7 +38,7 @@
                     <div class="card-header bg-primary text-white text-center py-4 rounded-top-4">
                         <h2 class="mb-0 fw-bold new-font"><i class="bi bi-shield-lock me-2"></i>Admin Login</h2>
                     </div>
-                    
+
                     <div class="card-body p-4">
                         @if (session('error'))
                         <div class="alert alert-danger alert-dismissible fade show rounded-pill">
@@ -42,11 +55,11 @@
 
                         <form action="{{ route('login-user') }}" method="post">
                             @csrf
-                            
+
                             <div class="mb-3">
                                 <label for="email" class="form-label fw-semibold">Email Address</label>
-                                <input type="email" name="email" value="{{ old('email') }}" id="email" 
-                                       class="form-control rounded-pill @error('email') is-invalid @enderror" 
+                                <input type="email" name="email" value="{{ old('email') }}" id="email"
+                                       class="form-control rounded-pill @error('email') is-invalid @enderror"
                                        placeholder="Enter your email" required>
                                 @error('email')
                                 <div class="text-danger">{{ $message }}</div>
@@ -55,8 +68,8 @@
 
                             <div class="mb-3">
                                 <label for="password" class="form-label fw-semibold">Password</label>
-                                <input type="password" name="password" id="password" 
-                                       class="form-control rounded-pill @error('password') is-invalid @enderror" 
+                                <input type="password" name="password" id="password"
+                                       class="form-control rounded-pill @error('password') is-invalid @enderror"
                                        placeholder="Enter your password" required>
                                 @error('password')
                                 <div class="text-danger">{{ $message }}</div>
@@ -80,7 +93,7 @@
             </div>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

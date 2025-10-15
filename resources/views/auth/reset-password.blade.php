@@ -20,7 +20,11 @@
     }
 
     body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: "Exo", sans-serif;
+                     font-optical-sizing: auto;
+                     font-weight: 400;
+                     font-style: normal;
+                     letter-spacing: 0.5px;
         background: linear-gradient(135deg, var(--light-bg) 0%, #e2e8f0 100%);
         min-height: 100vh;
         display: flex;
@@ -181,7 +185,7 @@
                     @enderror
                 </div>
 
-                
+
 
                 <div class="form-floating mb-3">
                     <input type="password" name="password" id="password"

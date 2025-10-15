@@ -13,7 +13,11 @@
 
     <style>
         body {
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+           font-family: "Exo", sans-serif;
+                        font-optical-sizing: auto;
+                        font-weight: 400;
+                        font-style: normal;
+                        letter-spacing: 0.5px;
             background-color: #f4f5f7;
         }
         select{

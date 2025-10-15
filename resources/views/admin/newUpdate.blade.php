@@ -15,40 +15,40 @@
     <style>
 
 
-        /* Select2 Custom Styling */
-        .select2-container {
-            width: 100% !important;
-        }
+           /* Select2 Custom Styling */
+                        .select2-container {
+                            width: 100% !important;
+                        }
 
-        .select2-container--default .select2-selection--single {
-            background-color: #fff;
-            border: 1px solid #ced4da;
-            border-radius: 50px !important;
-            height: 38px;
-            padding: 6px 12px;
-            font-size: 16px;
-            line-height: 1.5;
-        }
+                        .select2-container--default .select2-selection--single {
+                            background-color: #fff;
+                            border: 1px solid #ced4da;
+                            border-radius: 50px !important;
+                            height: 38px;
+                            padding: 6px 12px;
+                            font-size: 16px;
+                            line-height: 1.5;
+                        }
 
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            color: #495057;
-            line-height: 26px;
-            padding-left: 8px;
-        }
+                        .select2-container--default .select2-selection--single .select2-selection__rendered {
+                            color: #495057;
+                            line-height: 26px;
+                            padding-left: 8px;
+                        }
 
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 36px;
-            right: 10px;
-        }
+                        .select2-container--default .select2-selection--single .select2-selection__arrow {
+                            height: 36px;
+                            right: 10px;
+                        }
 
-        .select2-dropdown {
-            border: 1px solid #ced4da;
-            border-radius: 8px;
-        }
+                        .select2-dropdown {
+                            border: 1px solid #ced4da;
+                            border-radius: 8px;
+                        }
 
-        .select2-container--default .select2-results__option--highlighted[aria-selected] {
-            background-color: #0d6efd;
-        }
+                        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+                            background-color: #0d6efd;
+                        }
 
         /* Pincode field styling */
 
@@ -79,6 +79,8 @@
            font-weight: 400;
            font-style: normal;
         }
+
+
     </style>
 </head>
 
@@ -152,6 +154,13 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-12 mb-3 form-group">
+                                    <label class="form-label fw-semibold">Email Address</label>
+                                    <input type="email"  name="email" class="form-control rounded-pill" value="{{ $head->email }}" onkeydown="return noSpaces(event);" >
+                                    <div class="validation-error"></div>
+                                    @error('email')<div class="text-danger">{{ $message }}</div>@enderror
+                                </div>
+
                                 <div class="mb-3 form-group">
                                     <label class="form-label fw-semibold">Address</label>
                                     <textarea name="address" class="form-control rounded-4" rows="3">{{ $head->address }}</textarea>
@@ -177,11 +186,6 @@
                                         <label class="form-label fw-semibold">City</label>
                                         <select name="city" id="citySelect" class="form-select select2 rounded-pill">
                                             <option value="">Select City</option>
-                                            @if(isset($city) && !$city->isEmpty())
-                                                @foreach ($city as $cities)
-                                                <option value="{{ $cities->name }}" {{ $head && $head->city == $cities->name ? 'selected' : '' }}>{{ $cities->name }}</option>
-                                                @endforeach
-                                            @endif
                                         </select>
                                         <div class="validation-error"></div>
                                         @error('city')<div class="text-danger">{{ $message }}</div>@enderror
@@ -251,7 +255,7 @@
                                     <label class="form-label fw-semibold">Profile Picture</label>
                                     <input type="file" name="path" class="form-control rounded-pill" accept="image/*">
                                     @if($head->photo_path)
-                                    <small class="text-muted">Current: <img src="{{ asset('/uploads/images/').'/'.$head->photo_path }}" alt="Current" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #007bff;"></small>
+                                    <small class="text-muted">Current: <img src="{{ asset('/uploads/images/').'/'.$head->photo_path  }}  " alt="Current" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #007bff;"></small>
                                     @endif
                                     @error('path')<div class="text-danger">{{ $message }}</div>@enderror
                                 </div>
@@ -659,6 +663,7 @@
                 surname: { required: true, noNumbers: true, noSpace:true },
                 birthdate: {required : true, ageAbove21: true,agebelow116 : true },
                 mobile: { required: true, digits: true, minlength: 10, maxlength: 10, noSpace:true },
+                email: { required: true,email : true, minlength: 0, maxlength: 30, noSpace:true },
                 address: "required",
                 state: "required",
                 city: "required",
@@ -675,6 +680,7 @@
                 surname: { required: "Please enter last name", noNumbers: "Surname cannot contain numbers" },
                 birthdate: {required : "Please enter date of birth", ageAbove21: "You must be at least 21 years old" },
                 mobile: { required: "Please enter mobile number", digits: "Only numbers allowed", minlength: "Must be 10 digits", maxlength: "Must be 10 digits" },
+                 email: { required: "Please enter email",email : "Please enter valid email", minlength: "Must more than 0 characters", maxlength: "Must be less than 50 characters" },
                 address: "Please enter address",
                 state: "Please select state",
                 city: "Please select city",
@@ -697,19 +703,20 @@
         });
     });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Initialize Select2 with custom styling
-            $('.select2').select2({
-                theme: 'default',
-                width: '100%',
-                placeholder: function() {
-                    return $(this).data('placeholder');
-                },
-                allowClear: true
+            $(document).ready(function() {
+                // Initialize Select2 with custom styling
+                $('.select2').select2({
+                    theme: 'default',
+                    width: '100%',
+                    placeholder: function() {
+                        return $(this).data('placeholder');
+                    },
+                    allowClear: true
+                });
             });
-        });
-    </script>
+        </script>
 
 <script>
             $(document).ready(function(){
@@ -754,6 +761,37 @@
                     });
                 });
             });
+
+
+            const oldCity = @json(old('city'));
+            const citydb = @json($head->city);
+                jQuery(document).ready(function() {
+                    jQuery('select[name="state"]').on('change', function() {
+                        let stateID = jQuery(this).val();
+                        jQuery.ajax({
+                            url: '/get-cities/' + stateID,
+                            type: "GET",
+                            dataType: "json",
+                            success: function(data) {
+                                const cityDropdown = jQuery('select[name="city"]');
+                                cityDropdown.empty().append('<option value="">Select City</option>');
+                                jQuery.each(data, function(key, value) {
+                                    cityDropdown.append('<option value="' + value.name + '" >' + value.name + '</option>');
+                                });
+                                if (oldCity) {
+                                    cityDropdown.val(oldCity);
+                                }
+                                if (citydb) {
+                                    cityDropdown.val(citydb);
+                                }
+
+                            }
+                        });
+                    });
+                    if (jQuery('select[name="state"]').val()) {
+                        jQuery('select[name="state"]').trigger('change');
+                    }
+                });
 
         </script>
 </body>

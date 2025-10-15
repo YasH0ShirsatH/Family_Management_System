@@ -15,9 +15,14 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 
     <style>
-        .dropdown-wrapper{
-            display:none;
-        }
+
+    body{
+        font-family: "Exo", sans-serif;
+                     font-optical-sizing: auto;
+                     font-weight: 400;
+                     font-style: normal;
+                     letter-spacing: 0.5px;
+    }
     .validation-error label {
         color: #dc3545;
         font-size: 14px;
@@ -39,6 +44,62 @@
             background-color: #0dcaf0;
             color : white;
             transform: translateX(5px);
+        }
+        .dropdown-wrapper{
+        display : none;
+        }
+        /* Select2 Bootstrap 5 Styling */
+        .select2-container--default .select2-selection--single {
+            height: 38px;
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+            padding: 6px 12px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #495057;
+            line-height: 26px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 36px;
+        }
+
+        .select2-dropdown {
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #0d6efd;
+        }
+
+        .select2-container--default.select2-container--focus .select2-selection--single {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        @media (max-width: 1000px) {
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .col-md-6 {
+                max-width: 100%;
+                padding: 0 15px;
+            }
+            
+            .alert .d-flex {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
@@ -129,6 +190,17 @@
                                     </button>
                                 </div>
                             </form>
+                        <div class="alert alert-info border-0 mt-4" style="background: linear-gradient(135deg, #d1ecf1, #bee5eb); border-radius: 7px;">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-info-circle-fill text-info me-2" style="font-size: 1.2rem;"></i>
+                                    <span class="text-dark fw-medium">Is the state missing<br> from the list?</span>
+                                </div>
+                                <a href="{{ route('create.state') }}" class="btn btn-info  px-3 py-2">
+                                    <i class="bi bi-plus-circle me-1"></i>Add New State
+                                </a>
+                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -227,7 +299,17 @@
 
          </script>
      <script>
-         $('.select2').select2();
+         $(document).ready(function() {
+                     // Initialize Select2 with custom styling
+                     $('.select2').select2({
+                         theme: 'default',
+                         width: '100%',
+                         placeholder: function() {
+                             return $(this).data('placeholder');
+                         },
+                         allowClear: false
+                     });
+                 });
      </script>
 </body>
 

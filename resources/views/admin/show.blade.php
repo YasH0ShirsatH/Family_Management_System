@@ -15,6 +15,16 @@
                 font-weight: 400;
                 font-style: normal;
             }
+
+            body{
+                        font-family: "Exo", sans-serif;
+                         font-optical-sizing: auto;
+                         font-weight: 400;
+                         font-style: normal;
+                         letter-spacing: 0.5px;
+
+            }
+
             .active-class-2 { background-color: #198754; color: white; transform: translateX(5px); }
             .status-icon { font-size: 4rem; color: #ffc107; margin-bottom: 1rem; animation: pulse 2s infinite; }
 
@@ -74,6 +84,15 @@
             color : white;
             transform: translateX(5px);
         }
+        body{
+                                font-family: "Exo", sans-serif;
+                                 font-optical-sizing: auto;
+                                 font-weight: 400;
+                                 font-style: normal;
+                                 letter-spacing: 0.5px;
+
+                    }
+
     </style>
 </head>
 
@@ -101,7 +120,7 @@
                         </div>
 
                         <div class="card-body p-5 text-center">
-                            <img src="{{ asset('uploads/images/' . $heads->photo_path) }}"
+                            <img src="{{ asset('uploads/images/' . $heads->photo_path) ?? asset('uploads/images/noimage.png') }}"
                                 class="rounded-circle mb-4  border-4 border-light shadow"
                                 style="width: 150px; height: 150px; object-fit: cover;" alt="Family Head Photo">
 
@@ -140,6 +159,12 @@
                                                             class="fw-semibold">{{ date('M d, Y', strtotime($heads->mariage_date)) }}</span>
                                                     </div>
                                                 @endif
+                                                <div class="list-group-item bg-transparent d-flex justify-content-between px-0 py-2">
+                                                     <span class="text-muted">
+                                                        <i class="bi bi-envelope text-info me-2"></i>Email Address
+                                                     </span>
+                                                     <span class="fw-semibold">{{ $heads->email }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

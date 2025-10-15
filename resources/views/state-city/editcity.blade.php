@@ -22,6 +22,14 @@
             color : white;
             transform: translateX(5px);
         }
+
+    body{
+        font-family: "Exo", sans-serif;
+                     font-optical-sizing: auto;
+                     font-weight: 400;
+                     font-style: normal;
+                     letter-spacing: 0.5px;
+    }
     section {
         display: flex;
         justify-content: center;

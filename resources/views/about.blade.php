@@ -8,9 +8,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/heading.css') }}">
+    <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
+
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+             font-family: "Exo", sans-serif;
+                                        font-optical-sizing: auto;
+                                        font-weight: 400;
+                                        font-style: normal;
+                                        letter-spacing: 0.5px;
             line-height: 1.6;
             color: #1b1b18;
             background: #FDFDFC;
@@ -154,13 +160,159 @@
             transform: translateY(-2px);
         }
 
+        .team-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 48px 32px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            transition: all 0.1s ;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        }
+
+        .team-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 64px rgba(0, 0, 0, 0.08);
+            border-color: rgba(13, 110, 253, 0.1);
+        }
+
+        .team-avatar {
+            margin-bottom: 32px;
+        }
+
+        .avatar-circle {
+            width: 96px;
+            height: 96px;
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 8px 32px rgba(0, 122, 255, 0.25);
+            position: relative;
+        }
+
+        .avatar-circle::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, #007AFF, #5856D6);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .avatar-initials {
+            color: white;
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .team-name {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .team-role {
+            margin-bottom: 24px;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            border: none;
+        }
+
+        .role-badge.super-admin {
+            background: rgba(0, 122, 255, 0.1);
+            color: #007AFF;
+        }
+
+        .role-badge.admin {
+            background: rgba(88, 86, 214, 0.1);
+            color: #5856D6;
+        }
+
+        .team-description {
+            color: #86868b;
+            font-size: 1rem;
+            margin-bottom: 32px;
+            line-height: 1.4;
+            font-weight: 400;
+        }
+
+        .team-contact {
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 16px;
+            padding: 20px;
+            margin: -16px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: #86868b;
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        .contact-item i {
+            color: #007AFF;
+            font-size: 1.1rem;
+        }
+
         @media (max-width: 768px) {
             .stats-section {
                 margin: 0 10px;
             }
-            
+
             .section-title {
                 font-size: 2rem;
+            }
+
+            .team-card {
+                padding: 40px 24px;
+            }
+
+            .avatar-circle {
+                width: 80px;
+                height: 80px;
+            }
+
+            .avatar-initials {
+                font-size: 1.5rem;
+            }
+
+            .team-name {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -169,11 +321,11 @@
 <body>
 
     <div id="mainContent">
-        @if (session()->has('loginId'))
-            @include('partials.navbar2', ['shouldShowDiv' => true])
-        @else
-            @include('partials.navbar2', ['shouldShowDiv' => false])
-        @endif
+         @if(session()->has('loginId'))
+                   @include('partials.navbar2', ['shouldShowDiv' => true,'shouldShowLoginDiv' => false])
+               @else
+                   @include('partials.navbar2', ['shouldShowDiv' => false,'shouldShowLoginDiv' => true])
+               @endif
 
         <!-- Hero Section -->
         <section class="hero-section text-white">
@@ -249,7 +401,7 @@
                         <div class="stat-item">
                             <div class="stat-number">100%</div>
                             <h5 class="mt-2">Secure</h5>
-                            <p class="text-muted mb-0">Data Protection</p>
+                            <p class="text-muted mb-0">All Data Encrypted</p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
@@ -284,24 +436,36 @@
                     <h2 class="section-title">Meet the Team</h2>
                     <p class="section-subtitle">The talented developers behind this platform</p>
                 </div>
-                <div class="row g-4">
-                    @foreach ($admins->where('superuser', '1') as $admin)
-                        <div class="col-lg-12 col-md-6">
-                            <div class="feature-card text-center">
-                                <div class="feature-icon mx-auto">
-                                    <i class="bi bi-person-circle text-white" style="font-size: 1.8rem;"></i>
+                <div class="row justify-content-center g-4">
+                    @foreach ($admins->where('superuser', '1')->where('first_name','Yash')->where('last_name','Shirsath') as $admin)
+                        <div class="col-lg-6 col-md-8">
+                            <div class="team-card">
+                                <div class="team-avatar">
+                                    <div class="avatar-circle">
+                                        <span class="avatar-initials">{{ substr($admin->first_name, 0, 1) }}{{ substr($admin->last_name, 0, 1) }}</span>
+                                    </div>
                                 </div>
-                                <h4 class="mb-2">{{ $admin->first_name }} {{ $admin->last_name }}</h4>
+                                <div class="team-info">
+                                    <h3 class="team-name">{{ $admin->first_name }} {{ $admin->last_name }}</h3>
+                                    <div class="team-role">
+                                            <span class="role-badge text-danger admin">Frontend Developer</span>
 
-                                <p class="text-primary mb-3">
-                                    @if ($admin->superuser == '1')
-                                        Super Admin
-                                    @else
-                                        System Admin
-                                    @endif
-                                </p>
-                                <b>Contact</b>
-                                <p class="text-muted">{{ $admin->mobile }}</p>
+                                        @if ($admin->superuser == '1')
+                                            <span class="role-badge super-admin">Super Admin</span>
+                                        @else
+                                            <span class="role-badge admin">System Admin</span>
+                                        @endif
+                                            <span class="role-badge text-info admin">Backend Developer</span>
+
+                                    </div>
+                                    <p class="team-description">Junior Software Developer</p>
+                                    <div class="team-contact">
+                                        <div class="contact-item">
+                                            <i class="bi bi-phone"></i>
+                                            <span>{{ $admin->mobile }}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     @endforeach
@@ -320,7 +484,7 @@
                             <p class="lead mb-4">To empower families with digital tools that strengthen connections,
                                 preserve memories, and simplify the management of family information across generations.
                             </p>
-                            <a href="/" class="btn btn-primary-custom">
+                            <a href="/" class="btn text-white btn-primary-custom">
                                 Get Started Today <i class="bi bi-arrow-right ms-2"></i>
                             </a>
                         </div>
@@ -330,61 +494,7 @@
         </section>
 
 
-        <footer
-            style="background: rgba(0, 109, 214, 0.09); border-radius: 18px 18px 0 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); margin-top: 200px; color: #6c757d;">
-            <div class="container py-5">
-                <div class="row g-4">
-                    <div class="col-lg-4">
-                        <h5 class="fw-bold text-primary mb-3">
-                            <i class="bi bi-house-heart me-2"></i>Family Management System
-                        </h5>
-                        <p class="text-muted mb-0">Professional family data management and organization platform for
-                            modern
-                            families.</p>
-                    </div>
-
-                    <div class="col-lg-4">
-                        <h6 class="fw-bold mb-3">Quick Links</h6>
-                        <ul class="list-unstyled">
-                            <li class="mb-2"><a href="/family-registration"
-                                    class="text-decoration-none text-muted"><i class="bi bi-people me-2"></i>Family
-                                    Registration</a></li>
-                            <li class="mb-2"><a href="/login" class="text-decoration-none text-muted"><i
-                                        class="bi bi-shield-check me-2"></i>Admin Access</a></li>
-                            <li class="mb-2"><a href="/about" class="text-decoration-none text-muted"><i
-                                        class="bi bi-info-circle me-2"></i>About Us</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="col-lg-4">
-                        <h6 class="fw-bold mb-3">Need Assistance?</h6>
-                        <p class="text-muted mb-3">Encountered an issue during registration? Contact our administrator
-                            for
-                            help.</p>
-                        @if ($admin1)
-                            <p><small class="text-danger mb-3">Admin login detected.<br>Sign out to file a complaint as
-                                    user!!</small></p>
-                        @endif
-                        <a href='/support' class="btn btn-outline-primary" style="border-radius: 25px;">
-                            <i class="bi bi-envelope me-2"></i>Contact Support
-                        </a>
-                    </div>
-                </div>
-
-                <hr class="my-4" style="border-color: rgba(0,0,0,0.1);">
-
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <p class="mb-0 text-muted">
-                            © 2025 <strong>Family Information Management System</strong>
-                        </p>
-                    </div>
-                    <div class="col-md-6 text-md-end">
-                        <a href="" class="text-primary text-decoration-none fw-bold">fims.com</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        @include('partials.footer')
     </div>
 
 
