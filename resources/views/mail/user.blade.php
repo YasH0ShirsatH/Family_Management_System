@@ -183,6 +183,17 @@
                     </div>
                 </div>
 
+                <div class="field">
+                    <div class="field-label">Hobbies</div>
+                    <div class="field-value">
+                         @foreach ($data['head_hobbies'] as $hobby)
+                        <span class="status-badge">
+                                {{ $hobby }}
+                        </span>
+                      @endforeach
+                    </div>
+                </div>
+
                 @if($data['head_marital_status'] == 1)
                 <div class="field">
                     <div class="field-label">Marriage Date</div>
@@ -191,7 +202,9 @@
                 @endif
             </div>
 
-            @if(count($data['members']) > 0)
+
+
+            @if(isset($data['members']))
             <div class="section">
                 <div class="section-title">
                     <div class="icon"></div>

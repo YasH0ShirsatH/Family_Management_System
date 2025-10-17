@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('surname',50);
             $table->date('birthdate');
             $table->bigInteger('mobile');
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->text('address');
             $table->string('state');
             $table->string('city');

@@ -173,25 +173,26 @@
 
                                     </div>
 
-                                    <div class="col-md-12 mb-3 form-group">
-                                        <label class="form-label fw-semibold">Email Address</label>
-                                        <input type="email"  name="head_email" class="form-control rounded-pill" placeholder="Enter email address" onkeydown="return noSpaces(event);" value="{{ old('head_email') }}">
+                                    <div class="col-md-12 mb-2 form-group">
+                                        <label class="form-label fw-semibold">Email Address <button type="button"  data-toggle="tooltip" class="bg-transparent border-0"  data-placement="left" title="Including an email address will make it easier to contact you when seeking support."><i class="bi bi-info-circle"></i></button> </label>
+                                        <div class="col-md-12 ms-3 text-muted form-group">
+                                            <label class="form-label fw-semibold">Send your registered data to your email?</label>
+                                            <input type="radio" id='radioConfirm' name="radioConfirm"    value="1">
+                                            <label for="radioConfirm">Yes</label>
+                                            <input type="radio" id='radioConfirm2' name="radioConfirm" checked="checked"   value="0">
+                                            <label for="radioConfirm2">No</label>
+
+                                        </div>
+                                        <input type="email" id="textInputField" name="head_email" class="form-control rounded-pill" placeholder="Enter email address" onkeydown="return noSpaces(event);" value="{{ old('head_email') }}">
                                         <div class="validation-error"></div>
                                            @error('head_email')<div class="text-danger">{{ $message }}</div>@enderror
                                     </div>
-                                    <div class="col-md-12 mb-3 form-group">
-                                        <label class="form-label fw-semibold">Do You want email of this data registered</label>
-                                        <input type="radio" id='radioConfirm' name="radioConfirm"    value="1">
-                                        <label for="radioConfirm">Yes</label>
-                                        <input type="radio" id='radioConfirm2' name="radioConfirm" checked="checked"   value="0">
-                                        <label for="radioConfirm2">No</label>
 
-                                    </div>
 
                                          <input type="text"  name="subject"  value="User details" hidden>
                                     <div class="mb-3 form-group">
                                         <label class="form-label fw-semibold">Address</label>
-                                        <textarea name="head_address" class="form-control rounded-4" rows="3" placeholder="Enter complete address">{{ old('head_address') }}</textarea>
+                                        <textarea name="head_address" style="resize:none" class="form-control rounded-4" rows="3" placeholder="Enter complete address">{{ old('head_address') }}</textarea>
                                         <div class="validation-error"></div>
                                         @error('head_address')<div class="text-danger">{{ $message }}</div>@enderror
                                     </div>
@@ -633,7 +634,7 @@
                 head_surname: { required: true, minlength: 3 ,  noNumbers : true ,noSpace: true },
                 head_birthdate: { required: true, ageAbove21: true },
                 head_mobile: { required: true, rangelength: [10, 10], number: true, noSpace: true },
-                head_email: { required: true, rangelength: [0,50], noSpace: true },
+
                 head_address: { required: true },
                 head_state: { required: true },
                 head_city: { required: true },
@@ -645,6 +646,17 @@
                                            return $("#head_married").is(":checked");
                                        },
                      minMarriageAge : "#dobField"
+
+                },
+                head_email: {
+
+                    required: function() {
+                              return $("#radioConfirm").is(":checked");
+                    },
+                    noSpace: function() {
+                                                           return $("#radioConfirm").is(":checked");
+                                                 },
+
 
                 },
                 'head_hobbies[]': { required: true },
@@ -690,8 +702,36 @@
                 },
                 allowClear: true
             });
+
+        $('#textInputField').prop("disabled", true);
+        $("#textInputField").css("font-style", "italic");
+        $("#textInputField").css("opacity", "0.5");
+
+        $('input[name="radioConfirm"]').change(function() {
+            if ($('input[name="radioConfirm"]:checked').val() == 1) {
+                $('#textInputField').removeAttr('disabled');
+                $("#textInputField").css("font-style", "normal");
+                $("#textInputField").css("opacity", "1");
+
+            } else {
+                $('#textInputField').val('');
+                $('#textInputField').prop("disabled", true);
+                $("#textInputField").css("font-style", "italic");
+                $("#textInputField").css("opacity", "0.5");
+
+
+            }
+        });
         });
     </script>
+
+
+    <script>
+
+
+
+    </script>
+
 </body>
 
 </html>

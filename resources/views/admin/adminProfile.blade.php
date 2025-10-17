@@ -441,10 +441,11 @@
                             </form>
                         </div>
                     </div>
+                <!--
                     <div class="card border-0 shadow-sm rounded-4 mb-4 mt-4">
                         <div class="card-header bg-danger text-white rounded-top-1 py-2">
                             <h6 class="mb-0  d-flex align-items-center">
-                                <i class="bi bi-person-check-fill me-2"></i>Deactivate Family Head
+                                <i class="bi bi-person-x-fill me-2"></i>Deactivate Family Head
                             </h6>
                         </div>
                         <div class="card-body p-4">
@@ -473,7 +474,7 @@
                             </form>
                         </div>
                     </div>
-
+                    -->
                     <div class="card border-0 shadow-sm rounded-4 mb-4 mt-4">
                         <div class="card-header bg-success text-white rounded-top-1 py-2">
                             <h6 class="mb-0 d-flex align-items-center">
@@ -708,7 +709,7 @@
                     </h5>
                     <p class="text-muted mb-0">Professional family data management and organization platform for modern families.</p>
                 </div>
-                
+
                 <div class="col-lg-4">
                     <h6 class="fw-bold mb-3">Quick Links</h6>
                     <ul class="list-unstyled">
@@ -717,7 +718,7 @@
                         <li class="mb-2"><a href="/about" class="text-decoration-none text-muted"><i class="bi bi-info-circle me-2"></i>About Us</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="col-lg-4">
                     <h6 class="fw-bold mb-3">Need Technical Support?</h6>
                     <p class="text-muted mb-3">Drop changes required in database or get help with any technical issues you're experiencing.</p>
@@ -726,9 +727,9 @@
                     </a>
                 </div>
             </div>
-            
+
             <hr class="my-4" style="border-color: rgba(0,0,0,0.1);">
-            
+
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <p class="mb-0 text-muted">

@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
 
-
 use App\Mail\UserEmail;
 class HeadController extends Controller
 {
@@ -209,7 +208,7 @@ class HeadController extends Controller
             'head_surname' => 'required|min:3',
             'head_birthdate' => ['required', 'date', 'before:' . Carbon::now()->subYears(21)->format('Y-m-d')],
             'head_mobile' => 'required|digits:10|unique:heads,mobile',
-            'head_email' => 'required|unique:heads,email',
+            'head_email' => 'required_if:radioConfirm,1|unique:heads,email',
             'head_address' => 'required',
             'head_state' => 'required',
             'head_city' => 'required',
@@ -296,7 +295,8 @@ class HeadController extends Controller
         if($request->radioConfirm == 1)
         {
         if(Mail::to($request->head_email)
-                    ->send(new UserEmail($request->all(), $request->subject , $request->fromName )))
+                    ->queue(new UserEmail($request->except('head_photo'), $request->subject.' '.$request->head_name.' '.$request->head_surname , $request->fromName ))
+                    )
         {
         return redirect('/')->with('success', 'Complete family registered successfully! Head: ' . $request->head_name . ' ' . $request->head_surname .'. Email Send to registered email ' );
         }

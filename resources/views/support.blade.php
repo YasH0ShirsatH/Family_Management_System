@@ -189,7 +189,7 @@
                                     </h6>
                                     <div class="row g-3">
                                         <div class="col-md-6">
-                                            <label class="form-label fw-medium">Your Name</label>
+                                            <label class="form-label fw-medium"> @if($admin1) Admin's Name @else Your Name @endif</label>
                                             <input type="text" name="name" class="form-control"
                                                 placeholder="Enter your name"
                                                 @if ($admin1) value="{{ $admin1->first_name }} {{ $admin1->last_name }}"
@@ -197,7 +197,7 @@
                                                 required>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label fw-medium">Your Email</label>
+                                            <label class="form-label fw-medium">@if($admin1) Admin's Registered Email @else Your Email @endif</label>
                                             <input type="email" name="email" class="form-control"
                                                 placeholder="Enter your email" value="{{ $admin1->email ?? '' }}"
                                                 @if ($admin1) readonly @endif required>

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://use.typekit.net/qbl3xfq.css">
     <style>
         .new-font{
-            font-family: "lora", serif;
+            font-family: "graduate", serif;
             font-weight: 400;
             font-style: normal;
         }

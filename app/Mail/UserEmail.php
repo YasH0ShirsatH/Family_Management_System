@@ -14,12 +14,13 @@ class UserEmail extends Mailable
         public $data;
         public $emailSubject;
 
+
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($data, $subject, )
+    public function __construct($data, $subject )
         {
             $this->data = $data;
             $this->emailSubject = $subject;
@@ -54,6 +55,7 @@ class UserEmail extends Mailable
      */
     public function attachments(): array
     {
+
         return [];
     }
 }
