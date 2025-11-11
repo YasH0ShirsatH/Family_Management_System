@@ -17,6 +17,9 @@ RUN if [ -f package.json ]; then npm ci --omit=dev && npm run build; fi
 # Copy the rest of the app
 COPY . .
 
+# Run composer scripts after copying all files
+RUN composer run-script post-autoload-dump
+
 # ---- Stage 2: Nginx + PHP-FPM + Supervisor ----
 FROM php:8.2-fpm-alpine AS app
 
@@ -46,11 +49,11 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh && \
     chown -R www-data:www-data /var/www/html && \
     chmod -R 775 storage bootstrap/cache
 
-# Healthcheck for port 80
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD curl -f http://localhost/ || exit 1
+# Healthcheck for Railway
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:$PORT/ || exit 1
 
-EXPOSE 80
+EXPOSE $PORT
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
