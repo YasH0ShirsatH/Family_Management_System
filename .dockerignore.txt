@@ -1,0 +1,22 @@
+# Ignore directories/files not needed in image
+node_modules
+public/storage
+storage/*.key
+.env
+.env.*
+vendor
+docker-compose.yml
+Dockerfile
+npm-debug.log
+yarn-error.log
+.idea
+.vscode
+tests
+.git
+.gitignore
+*.md
+*.log
+phpunit.xml
+composer.phar
+package-lock.json
+docker/
