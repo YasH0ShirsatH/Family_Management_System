@@ -37,13 +37,13 @@ RUN sed -i 's/^user = .*/user = www-data/' /usr/local/etc/php-fpm.d/www.conf
 
 WORKDIR /var/www/html
 
-# Copy built app, vendor, and assets from build stage
-COPY --from=build /app ./
-
-# Nginx & Supervisor configs, entrypoint
+# Nginx & Supervisor configs, entrypoint (copy before app files)
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+# Copy built app, vendor, and assets from build stage
+COPY --from=build /app ./
 
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh && \
     chown -R www-data:www-data /var/www/html && \
