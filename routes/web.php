@@ -24,7 +24,7 @@ Route::post('/dashboard/admin-profile/deactivateHead', [AuthController::class, '
 Route::post('/dashboard/admin-profile/activatemember', [AuthController::class, 'activateMember'])->name('activatemember.member')->middleware('auth.check');
 Route::post('/dashboard/admin-profile/activatemember2/{id}', [AdminController::class, 'activateMember'])->name('admin-member.activate')->middleware('auth.check');
 Route::post('/dashboard/admin-profile/deactivatemember/{id}', [AdminController::class, 'deactivateMember'])->name('admin-member.deactivate')->middleware('auth.check');
-Route::get('/dashboard/admin-profile/deactivatemember2/{id}', [AdminController::class, 'deactivateMember'])->name('admin-member.deactivate')->middleware('auth.check');
+Route::get('/dashboard/admin-profile/deactivatemember2/{id}', [AdminController::class, 'deactivateMember'])->name('admin-member.deactivate-get')->middleware('auth.check');
 
 //Update city state of selective head whose city/state has been deleted
 Route::get('/dashboard/admin-profile/updateCityState/{id}', [AdminController::class, 'updateCityState'])->name('admin-member.updateCityState')->middleware('auth.check');
